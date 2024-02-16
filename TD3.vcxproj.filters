@@ -13,10 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Class">
+      <UniqueIdentifier>{934f1268-e08d-4d3a-bf3f-6dc1989cb865}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class\Scene">
+      <UniqueIdentifier>{d2ae4609-af0f-4b98-9e82-7c678957b528}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Class\Scene\Sample.cpp">
+      <Filter>Class\Scene</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Class\Scene\Sample.h">
+      <Filter>Class\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
