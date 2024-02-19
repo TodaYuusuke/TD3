@@ -115,6 +115,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)DirectXGame\x64\Debug;$(SolutionDir)DirectXGame\Externals\DirectXTex\lib\Debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>DirectXGame.lib;DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Manifest>
+      <AdditionalManifestFiles>resources/system/manifest/DpiAwarenessPerMonitorV2.manifest %(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
