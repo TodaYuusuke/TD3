@@ -148,10 +148,19 @@ void Sample::Initialize() {
 		return data->elapsedFrame > 180 ? true : false;
 	};
 	particle->isActive = true;
+
+	// 追従カメラ
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->Initialize();
+	followCamera_->SetTarget(&sphere->transform);
 }
 
 // 更新
 void Sample::Update() {
+	// 追従カメラ
+	followCamera_->Update();
+	mainCamera->transform = followCamera_->viewProjection_.transform;
+
 	// ポストプロセスの切り替え
 	if (Keyboard::GetTrigger(DIK_SPACE)) {
 		mainCamera->isUsePostProcess = !mainCamera->isUsePostProcess;

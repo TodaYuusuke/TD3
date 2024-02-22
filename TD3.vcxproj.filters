@@ -27,10 +27,16 @@
     <ClCompile Include="Class\Scene\Sample.cpp">
       <Filter>Class\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Class\FollowCamera\FollowCamera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Scene\Sample.h">
       <Filter>Class\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\FollowCamera\FollowCamera.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
