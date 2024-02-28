@@ -27,7 +27,7 @@
     <ClCompile Include="Class\Scene\Sample.cpp">
       <Filter>Class\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Components\FollowCamera\FollowCamera.cpp">
+    <ClCompile Include="Game\Objects\FollowCamera\FollowCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Game\Objects\Object.cpp">
@@ -41,7 +41,7 @@
     <ClInclude Include="Class\Scene\Sample.h">
       <Filter>Class\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Components\FollowCamera\FollowCamera.h">
+    <ClInclude Include="Game\Objects\FollowCamera\FollowCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
