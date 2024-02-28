@@ -151,7 +151,6 @@
   <ItemGroup>
     <ClCompile Include="Class\Scene\Sample.cpp" />
     <ClCompile Include="Game\Objects\FollowCamera\FollowCamera.cpp" />
-    <ClCompile Include="Game\Objects\Object.cpp" />
     <ClCompile Include="Game\Scenes\TitleScene.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
