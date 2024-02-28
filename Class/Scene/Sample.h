@@ -1,6 +1,6 @@
 #pragma once
 #include <scene/IScene.h>
-#include "Game/Components/FollowCamera/FollowCamera.h"
+#include "Game/Objects/FollowCamera/FollowCamera.h"
 
 class Sample final
 	: public IScene {
