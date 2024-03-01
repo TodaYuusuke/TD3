@@ -11,7 +11,6 @@ void Player::Initialize()
 	// ƒ‚ƒfƒ‹“Ç‚İ‚İ
 	demoModel = LWP::Resource::LoadModel("cube/cube.obj");
 	demoModel->transform.Parent(&world_);
-	demoModel->transform.scale = { 5.0f,5.0f, 0.05f };
 	demoModel->isActive = true;
 	demoModel->name = "Player";
 
@@ -70,22 +69,22 @@ void Player::Update()
 void Player::MoveFront()
 {
 	// Œü‚¢‚Ä‚¢‚é•ûŒü‚Ö•ÏŠ·‚·‚é‚Ì‚Å’Pƒ‚É‚µ‚Ä‚¢‚é
-	destinate_.z += cPLAYERSPEED_;
+	destinate_.z += 1.0f;
 }
 
 void Player::MoveBack()
 {
-	destinate_.z -= cPLAYERSPEED_;
+	destinate_.z -= 1.0f;
 }
 
 void Player::MoveLeft()
 {
-	destinate_.x -= cPLAYERSPEED_;
+	destinate_.x -= 1.0f;
 }
 
 void Player::MoveRight()
 {
-	destinate_.x += cPLAYERSPEED_;
+	destinate_.x += 1.0f;
 }
 
 void Player::UpdateRoot()
@@ -94,5 +93,6 @@ void Player::UpdateRoot()
 
 void Player::UpdateMove()
 {
-	world_.translation += destinate_;
+	world_.translation += destinate_ * cPLAYERSPEED_;
+	destinate_ = { 0.0,0.0,0.0 };
 }

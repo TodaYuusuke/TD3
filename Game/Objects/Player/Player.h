@@ -72,7 +72,7 @@ private: //*** プライベート変数 ***//
 
 private: //*** 外部から設定する変数 ***//
 
-	float cPLAYERSPEED_ = 0.0f;
+	float cPLAYERSPEED_ = 1.0f;
 
 private: //*** 計算に使う ***//
 
