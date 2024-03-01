@@ -153,12 +153,18 @@
     <ClCompile Include="Game\Objects\FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="Game\Objects\Object.cpp" />
     <ClCompile Include="Game\Scenes\TitleScene.cpp" />
+    <ClCompile Include="Game\Objects\Player\Commands\PlayerCommand.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Game\Objects\Player\Player.cpp" />
+    <ClCompile Include="Game\Objects\Player\Commands\PlayerInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Scene\Sample.h" />
     <ClInclude Include="Game\Objects\FollowCamera\FollowCamera.h" />
     <ClInclude Include="Game\Scenes\TitleScene.h" />
+    <ClInclude Include="Game\Objects\Player\Player.h" />
+    <ClInclude Include="Game\Objects\Player\Commands\PlayerCommand.h" />
+    <ClInclude Include="Game\Objects\Player\Commands\PlayerInput.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

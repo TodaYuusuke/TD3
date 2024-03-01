@@ -1,6 +1,7 @@
 #pragma once
 #include <scene/IScene.h>
 #include "Game/Objects/FollowCamera/FollowCamera.h"
+#include "Game/Objects/Player/Player.h"
 
 class TItleScene final
 	: public IScene
@@ -42,4 +43,8 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 	LWP::Object::Particle* particle;
 
 	bool useMonsterBall = true;
+
+	// プレイヤー
+	std::unique_ptr<Player> player_;
+
 };

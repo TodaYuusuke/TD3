@@ -154,14 +154,25 @@ void TItleScene::Initialize()
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
-	followCamera_->SetTarget(&sphere->transform);
+
+	// プレイヤー
+	player_ = std::make_unique<Player>();
+	player_->Initialize();
+	
+	followCamera_->SetTarget(player_->GetWorldTransform());
+
 }
 
 // 更新
 void TItleScene::Update()
 {
+
+	// プレイヤー
+	player_->Update();
+
 	// 追従カメラ
 	followCamera_->Update();
+
 	mainCamera->transform = followCamera_->viewProjection_.transform;
 
 	// ポストプロセスの切り替え
@@ -170,20 +181,20 @@ void TItleScene::Update()
 		mainCamera->isUsePostProcess = !mainCamera->isUsePostProcess;
 	}
 
-	// Tキーを押すとテクスチャ切り替え
-	if (Keyboard::GetTrigger(DIK_T))
-	{
-		if (!useMonsterBall)
-		{
-			sphere->texture = monsterBall;
-			useMonsterBall = true;
-		}
-		else
-		{
-			sphere->texture = uvTexture;
-			useMonsterBall = false;
-		}
-	}
+	//// Tキーを押すとテクスチャ切り替え
+	//if (Keyboard::GetTrigger(DIK_T))
+	//{
+	//	if (!useMonsterBall)
+	//	{
+	//		sphere->texture = monsterBall;
+	//		useMonsterBall = true;
+	//	}
+	//	else
+	//	{
+	//		sphere->texture = uvTexture;
+	//		useMonsterBall = false;
+	//	}
+	//}
 
 	if (Keyboard::GetTrigger(DIK_1))
 	{
@@ -203,11 +214,11 @@ void TItleScene::Update()
 	{
 		mainCamera->ReCreateShader();
 	}
-	// パーティクル呼び出し
-	if (Keyboard::GetTrigger(DIK_P))
-	{
-		particle->Add(16);
-	}
+	//// パーティクル呼び出し
+	//if (Keyboard::GetTrigger(DIK_P))
+	//{
+	//	particle->Add(16);
+	//}
 	// プログラム終了
 	if (Keyboard::GetTrigger(DIK_O))
 	{
