@@ -150,16 +150,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Class\Scene\Sample.cpp" />
-    <ClCompile Include="Game\Objects\Enemy\Enemy.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\NormalEnemy\NormalEnemy.cpp" />
     <ClCompile Include="Game\Objects\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.cpp" />
     <ClCompile Include="Game\Objects\FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="Game\Scenes\TitleScene.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Scene\Sample.h" />
-    <ClInclude Include="Game\Objects\Enemy\Enemy.h" />
+    <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.h" />
+    <ClInclude Include="Game\Objects\Enemy\NormalEnemy\NormalEnemy.h" />
+    <ClInclude Include="Game\Objects\Enemy\IEnemy\IEnemy.h" />
     <ClInclude Include="Game\Objects\Enemy\EnemyManager.h" />
+    <ClInclude Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.h" />
     <ClInclude Include="Game\Objects\FollowCamera\FollowCamera.h" />
     <ClInclude Include="Game\Scenes\TitleScene.h" />
   </ItemGroup>

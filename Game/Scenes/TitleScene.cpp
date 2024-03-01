@@ -157,7 +157,7 @@ void TItleScene::Initialize()
 	followCamera_->SetTarget(&sphere->transform);
 
 	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->Initialize();
+	enemyManager_->Init();
 }
 
 // 更新
