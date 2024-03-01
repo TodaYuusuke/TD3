@@ -106,4 +106,5 @@ void Player::UpdateMove()
 
 	world_.translation += moveVector;
 	destinate_ = { 0.0,0.0,0.0 };
+	reqBehavior_ = Behavior::Root;
 }

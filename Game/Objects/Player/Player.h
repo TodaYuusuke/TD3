@@ -79,6 +79,7 @@ private: //*** プライベート変数 ***//
 
 private: //*** 外部から設定する変数 ***//
 
+	// プレイヤーの通常移動
 	float cPLAYERSPEED_ = 2.0f;
 
 
@@ -107,6 +108,7 @@ private: //*** 計算に使う ***//
 	std::optional<Behavior> reqBehavior_ = std::nullopt;
 
 	// 次に移動する速度
+	// これは通常移動くらいでしか使わない
 	LWP::Math::Vector3 destinate_;
 
 };
