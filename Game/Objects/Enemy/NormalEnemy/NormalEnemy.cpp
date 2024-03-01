@@ -13,5 +13,10 @@ void NormalEnemy::Update()
 
 void NormalEnemy::Move(LWP::Math::Vector3 MoveVec)
 {
-	models_[0]->transform.translation += MoveVec;
+	models_[0]->transform.translation += MoveVec * LWP::Info::GetDeltaTime();
+}
+
+void NormalEnemy::Attack()
+{
+
 }

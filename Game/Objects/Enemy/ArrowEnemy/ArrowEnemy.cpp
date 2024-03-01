@@ -13,5 +13,10 @@ void ArrowEnemy::Update()
 
 void ArrowEnemy::Move(LWP::Math::Vector3 MoveVec)
 {
-	models_[0]->transform.translation.x -= MoveVec.y;
+	models_[0]->transform.translation.x -= MoveVec.y * LWP::Info::GetDeltaTime();
+}
+
+void ArrowEnemy::Attack()
+{
+
 }

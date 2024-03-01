@@ -22,11 +22,14 @@ void TItleScene::Initialize()
 
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->Init();
+	LWP::Info::ChangeShowDebugGUI();
 }
 
 // 更新
 void TItleScene::Update()
 {
+
+
 	// 追従カメラ
 	followCamera_->Update();
 	mainCamera->transform = followCamera_->viewProjection_.transform;
