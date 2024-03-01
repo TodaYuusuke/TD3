@@ -1,44 +1,49 @@
 #pragma once
 #include <scene/IScene.h>
+
+#pragma region GameInclude
 #include "Game/Objects/FollowCamera/FollowCamera.h"
+#include "Game/Objects/Enemy/EnemyManager.h"
+#pragma endregion
 
 class TItleScene final
 	: public IScene
 {
 public:
-	TItleScene() = default;	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Í©—R‚É’è‹`‰Â”\
+	TItleScene() = default;	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯è‡ªç”±ã«å®šç¾©å¯èƒ½
 	~TItleScene() = default;
 
-	//*** ƒˆ‰¼‘zŠÖ”‚ÌÀ‘ÌéŒ¾ ***//
+	//*** ç´”ç²‹ä»®æƒ³é–¢æ•°ã®å®Ÿä½“å®£è¨€ ***//
 
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	void Initialize() override;
-	// XV
+	// æ›´æ–°
 	void Update() override;
 
-	// scene‘JˆÚ‚µ‚½‚¢ê‡AISceneƒ|ƒCƒ“ƒ^Œ^‚ÌnextScene‚ÉŸ‚ÌƒV[ƒ“‚ÌÀ‘Ì‚ğ‘ã“ü
+	// sceneé·ç§»ã—ãŸã„å ´åˆã€ISceneãƒã‚¤ãƒ³ã‚¿å‹ã®nextSceneã«æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®å®Ÿä½“ã‚’ä»£å…¥
 
-private: //*** ‚±‚ê‚æ‚èæ‚É•K—v‚Èˆ—‚â•Ï”‚ğ‹Lq ***//
+private: //*** ã“ã‚Œã‚ˆã‚Šå…ˆã«å¿…è¦ãªå‡¦ç†ã‚„å¤‰æ•°ã‚’è¨˜è¿° ***//
 
 	LWP::Primitive::Triangle* tri[2];
 	LWP::Primitive::Surface* surface;
 	LWP::Primitive::Sphere* sphere;
 
 	LWP::Primitive::Mesh* cubeModel;
-	LWP::Primitive::Mesh* stressTestModel;	// •`‰æ•‰‰×ŒŸØ—pƒ‚ƒfƒ‹
+	LWP::Primitive::Mesh* stressTestModel;	// æç”»è² è·æ¤œè¨¼ç”¨ãƒ¢ãƒ‡ãƒ«
 
 	LWP::Resource::Texture* uvTexture;
 	LWP::Resource::Texture* monsterBall;
 
-	// SEƒf[ƒ^
+	// SEãƒ‡ãƒ¼ã‚¿
 	LWP::Resource::Audio* audio;
 
-	// ƒTƒuƒJƒƒ‰
+	// ã‚µãƒ–ã‚«ãƒ¡ãƒ©
 	LWP::Object::Camera* subCamera;
-	// ’Ç]ƒJƒƒ‰
+	// è¿½å¾“ã‚«ãƒ¡ãƒ©
 	std::unique_ptr<FollowCamera> followCamera_;
+	std::unique_ptr<EnemyManager> enemyManager_;
 
-	// ƒp[ƒeƒBƒNƒ‹
+	// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«
 	LWP::Object::Particle* particle;
 
 	bool useMonsterBall = true;
