@@ -6,32 +6,32 @@ using namespace LWP::Primitive;
 using namespace LWP::Math;
 using namespace LWP::Utility;
 
-// ‰Šú‰»
+// åˆæœŸåŒ–
 void TItleScene::Initialize()
 {
-	// ƒfƒoƒbƒOî•ñ•\¦
+	// ãƒ‡ãƒãƒƒã‚°æƒ…å ±è¡¨ç¤º
 	Info::ChangeShowDebugGUI();
 
-	// ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	uvTexture = LWP::Resource::LoadTextureLongPath("resources/system/texture/uvChecker.png");
 	monsterBall = LWP::Resource::LoadTextureLongPath("resources/system/texture/monsterBall.png");
 
-	// ƒTƒuƒJƒƒ‰‚ğ¶¬
+	// ã‚µãƒ–ã‚«ãƒ¡ãƒ©ã‚’ç”Ÿæˆ
 	subCamera = LWP::Object::CreateInstance<LWP::Object::Camera>();
 	LWP::Object::CreateRenderTexture(subCamera, 640, 360);
 	subCamera->transform.translation = { 5.9f,4.5f,-10.0f };
 	subCamera->transform.rotation = { 0.4f,-0.5f,0.0f };
-	// ƒ|ƒXƒgƒvƒƒZƒXƒeƒXƒg
+	// ãƒã‚¹ãƒˆãƒ—ãƒ­ã‚»ã‚¹ãƒ†ã‚¹ãƒˆ
 	subCamera->isUsePostProcess = true;
 	subCamera->isActive = true;
 
-	// ƒTƒuƒJƒƒ‰‚ğ¶¬
+	// ã‚µãƒ–ã‚«ãƒ¡ãƒ©ã‚’ç”Ÿæˆ
 	LWP::Object::Camera* c = LWP::Object::CreateInstance<LWP::Object::Camera>();
 	c->shaderPath = "postProcess/SSAO.PS.hlsl";
 	LWP::Object::CreateRenderTexture(c, 640, 360);
 	c->transform.translation = { -5.9f,4.5f,-10.0f };
 	c->transform.rotation = { 0.4f,0.5f,0.0f };
-	// ƒ|ƒXƒgƒvƒƒZƒXƒeƒXƒg
+	// ãƒã‚¹ãƒˆãƒ—ãƒ­ã‚»ã‚¹ãƒ†ã‚¹ãƒˆ
 	c->isUsePostProcess = true;
 	c->isActive = true;
 
@@ -40,7 +40,7 @@ void TItleScene::Initialize()
 	mainCamera->ReCreateShader();
 	//SetMainRenderCamera(subCamera);
 
-	// ’n–Ê
+	// åœ°é¢
 	Mesh* ground = LWP::Resource::LoadModel("cube/cube.obj");
 	ground->transform.translation.y = -1.5f;
 	ground->transform.scale = { 10.0f,0.1f, 10.0f };
@@ -48,7 +48,7 @@ void TItleScene::Initialize()
 	ground->name = "Ground";
 	//ground->commonColor = new Color()
 
-	// OŠpŒ`
+	// ä¸‰è§’å½¢
 	for (int i = 0; i < 2; i++)
 	{
 		tri[i] = LWP::Primitive::CreateInstance<Triangle>();
@@ -59,13 +59,13 @@ void TItleScene::Initialize()
 	tri[1]->transform.rotation.y = 1.0f;
 	tri[1]->texture = uvTexture;
 
-	// •½–Ê
+	// å¹³é¢
 	surface = LWP::Primitive::CreateInstance<Surface>();
 	surface->transform.translation.x = -0.7f;
 	surface->texture = uvTexture;
 	surface->isActive = false;
 
-	// ‹…
+	// çƒ
 	sphere = LWP::Primitive::CreateInstance<Sphere>();
 	sphere->Radius(0.3f);
 	sphere->transform.translation.x = -1.0f;
@@ -74,7 +74,7 @@ void TItleScene::Initialize()
 	sphere->material.shininess = 40.0f;
 	sphere->texture = uvTexture;
 
-	// ƒ‚ƒfƒ‹“Ç‚İ‚İ
+	// ãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿
 	cubeModel = LWP::Resource::LoadModel("cube/cube.obj");
 	cubeModel->transform.translation.y = -3.0f;
 	cubeModel->transform.scale = { 5.0f,5.0f, 0.05f };
@@ -83,7 +83,7 @@ void TItleScene::Initialize()
 	//stressTestModel = LWP::Resource::LoadModel("RGM-96XJesta_13_td.obj");
 	//stressTestModel->material.enableLighting = true;
 	//stressTestModel->isActive = true;
-	// ¶‘¤‚É•Ç‚ğ’u‚­
+	// å·¦å´ã«å£ã‚’ç½®ã
 	Primitive::Mesh* cube2 = LWP::Resource::LoadModel("cube/cube.obj");
 	cube2->transform.translation = { -2.1f, -3.0f, -2.0f };
 	cube2->transform.rotation.y = -1.54f;
@@ -91,12 +91,12 @@ void TItleScene::Initialize()
 	cube2->isActive = true;
 
 
-	// •½sŒõŒ¹
+	// å¹³è¡Œå…‰æº
 	Object::DirectionLight* dirLight = Object::CreateInstance<Object::DirectionLight>();
 	dirLight->isActive = true;
 	dirLight->intensity = 0.3f;
 
-	// “_ŒõŒ¹
+	// ç‚¹å…‰æº
 	Object::PointLight* pL1 = Object::CreateInstance<Object::PointLight>();
 	pL1->transform.translation = { 1.6f,0.0f,-0.1f };
 	pL1->intensity = 0.3f;
@@ -106,7 +106,7 @@ void TItleScene::Initialize()
 	pL2->intensity = 0.3f;
 	pL2->isActive = true;
 
-	// •¡”‰æ–Ê•`‰æ‚ÌŒ‹‰Ê‚ğ’£‚è•t‚¯‚éƒXƒvƒ‰ƒCƒg
+	// è¤‡æ•°ç”»é¢æç”»ã®çµæœã‚’å¼µã‚Šä»˜ã‘ã‚‹ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
 	Sprite* s = LWP::Primitive::CreateInstance<Sprite>();
 	s->texture = subCamera->GetRenderTexture();
 	s->isUI = true;
@@ -116,7 +116,7 @@ void TItleScene::Initialize()
 	s2->isUI = true;
 
 
-	// ƒp[ƒeƒBƒNƒ‹ƒeƒXƒg
+	// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ãƒ†ã‚¹ãƒˆ
 	particle = Object::CreateInstance<Object::Particle>();
 	particle->primitive = LWP::Resource::LoadModel("cube/cube.obj");
 	particle->initFunction = [](Primitive::IPrimitive* primitive) {
@@ -125,63 +125,63 @@ void TItleScene::Initialize()
 		newData.wtf.rotation = primitive->transform.rotation;
 		newData.wtf.scale = primitive->transform.scale;
 
-		// ‘¬“xƒxƒNƒgƒ‹‚ğ¶¬
+		// é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
 		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
 		int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
 		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
-		// ”­Ë‚ÌƒxƒNƒgƒ‹
+		// ç™ºå°„ã®ãƒ™ã‚¯ãƒˆãƒ«
 		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
 		newData.velocity = dir.Normalize() * 0.2f;
 
-		// ƒp[ƒeƒBƒNƒ‹’Ç‰Á
+		// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«è¿½åŠ 
 		return newData;
 		};
 	particle->updateFunction = [](Object::ParticleData* data) {
-		// Œo‰ßƒtƒŒ[ƒ€’Ç‰Á
+		// çµŒéãƒ•ãƒ¬ãƒ¼ãƒ è¿½åŠ 
 		data->elapsedFrame++;
 
-		data->wtf.translation += data->velocity;	// ‘¬“xƒxƒNƒgƒ‹‚ğ‰ÁZ
-		data->wtf.rotation += data->velocity;	// ‚Â‚¢‚Å‚É‰ñ“]‚³‚¹‚Æ‚­
-		data->wtf.translation.y += -9.8f / 100.0f;	// d—Í‚ğ‰ÁZ
+		data->wtf.translation += data->velocity;	// é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«ã‚’åŠ ç®—
+		data->wtf.rotation += data->velocity;	// ã¤ã„ã§ã«å›è»¢ã•ã›ã¨ã
+		data->wtf.translation.y += -9.8f / 100.0f;	// é‡åŠ›ã‚’åŠ ç®—
 
-		// ‘¬“xƒxƒNƒgƒ‹‚ğã‚ß‚é
+		// é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¼±ã‚ã‚‹
 		data->velocity *= 0.9f;
 
 		return data->elapsedFrame > 180 ? true : false;
 		};
 	particle->isActive = true;
 
-	// ’Ç]ƒJƒƒ‰
+	// è¿½å¾“ã‚«ãƒ¡ãƒ©
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
 
-	// ƒvƒŒƒCƒ„[
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
 	
 	followCamera_->SetTarget(player_->GetWorldTransform());
-
+	player_->SetCameraPointer(mainCamera);
 }
 
-// XV
+// æ›´æ–°
 void TItleScene::Update()
 {
 
-	// ƒvƒŒƒCƒ„[
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 	player_->Update();
 
-	// ’Ç]ƒJƒƒ‰
+	// è¿½å¾“ã‚«ãƒ¡ãƒ©
 	followCamera_->Update();
 
 	mainCamera->transform = followCamera_->viewProjection_.transform;
 
-	// ƒ|ƒXƒgƒvƒƒZƒX‚ÌØ‚è‘Ö‚¦
+	// ãƒã‚¹ãƒˆãƒ—ãƒ­ã‚»ã‚¹ã®åˆ‡ã‚Šæ›¿ãˆ
 	if (Keyboard::GetTrigger(DIK_SPACE))
 	{
 		mainCamera->isUsePostProcess = !mainCamera->isUsePostProcess;
 	}
 
-	//// TƒL[‚ğ‰Ÿ‚·‚ÆƒeƒNƒXƒ`ƒƒØ‚è‘Ö‚¦
+	//// Tã‚­ãƒ¼ã‚’æŠ¼ã™ã¨ãƒ†ã‚¯ã‚¹ãƒãƒ£åˆ‡ã‚Šæ›¿ãˆ
 	//if (Keyboard::GetTrigger(DIK_T))
 	//{
 	//	if (!useMonsterBall)
@@ -209,29 +209,29 @@ void TItleScene::Update()
 		LWP::Window::ChangeBorderlessWindowMode();
 	}
 
-	// ƒVƒF[ƒ_[ì‚è’¼‚µ
+	// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ä½œã‚Šç›´ã—
 	if (Keyboard::GetTrigger(DIK_R))
 	{
 		mainCamera->ReCreateShader();
 	}
-	//// ƒp[ƒeƒBƒNƒ‹ŒÄ‚Ño‚µ
+	//// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«å‘¼ã³å‡ºã—
 	//if (Keyboard::GetTrigger(DIK_P))
 	//{
 	//	particle->Add(16);
 	//}
-	// ƒvƒƒOƒ‰ƒ€I—¹
+	// ãƒ—ãƒ­ã‚°ãƒ©ãƒ çµ‚äº†
 	if (Keyboard::GetTrigger(DIK_O))
 	{
 		LWP::System::End();
 	}
 
-	// ESCƒL[‚ÅƒfƒoƒbƒOî•ñ•\¦Ø‚è‘Ö‚¦
+	// ESCã‚­ãƒ¼ã§ãƒ‡ãƒãƒƒã‚°æƒ…å ±è¡¨ç¤ºåˆ‡ã‚Šæ›¿ãˆ
 	if (Keyboard::GetTrigger(DIK_ESCAPE))
 	{
 		Info::ChangeShowDebugGUI();
 	}
 
-	// ENTERƒL[‚ğ‰Ÿ‚·‚ÆƒV[ƒ“Ø‚è‘Ö‚¦
+	// ENTERã‚­ãƒ¼ã‚’æŠ¼ã™ã¨ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆ
 	if (Keyboard::GetTrigger(DIK_N))
 	{
 		//nextScene_ = new SampleGameScene();

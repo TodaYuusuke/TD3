@@ -10,21 +10,21 @@ class Player final
 {
 private:
 
-	//*** Behaivior ‚ÅŠÇ—‚·‚é ***//
+	//*** Behaivior ã§ç®¡ç†ã™ã‚‹ ***//
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[s“®
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼è¡Œå‹•
 	/// </summary>
 	enum class Behavior : size_t
 	{
-		Root = 0u,	// ‘Ò‹@ó‘Ô
-		Move,		// ˆÚ“®
-		//Attack,		// ‹‡UŒ‚
+		Root = 0u,	// å¾…æ©ŸçŠ¶æ…‹
+		Move,		// ç§»å‹•
+		//Attack,		// å±…åˆæ”»æ’ƒ
 
-		_COUNT,		// ó‘ÔÅ‘å”
+		_COUNT,		// çŠ¶æ…‹æœ€å¤§æ•°
 	};
 
-	//*** Še Behavior ‚Åg‚¤î•ñ ***//
+	//*** å„ Behavior ã§ä½¿ã†æƒ…å ± ***//
 
 	struct IData
 	{
@@ -41,59 +41,72 @@ private:
 
 	};
 
-public:
+public: //*** ãƒ‘ãƒ–ãƒªãƒƒã‚¯é–¢æ•° ***//
 
 	Player() {}
 	~Player();
 
-
 	void Initialize();
-
-	// ƒvƒŒƒCƒ„[‚Ì‘€ì‚ğó‚¯•t‚¯‚é
-	void UpdateInput();
-	// XV
+	// æ›´æ–°
 	void Update();
 
-	lwp::WorldTransform* GetWorldTransform() { return &world_; }
+	// ã‚»ãƒƒã‚¿ãƒ¼ã‚²ãƒƒã‚¿ãƒ¼
 
-public: //*** ƒRƒ}ƒ“ƒh‘€ì‚ÅŒÄ‚Ño‚³‚ê‚éŠÖ” ***//
+	lwp::WorldTransform* GetWorldTransform() { return &world_; }
+	void SetCameraPointer(const lwp::Camera* p) { camera_ = p; }
+
+private: //*** ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆé–¢æ•° ***//
+
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ“ä½œã‚’å—ã‘ä»˜ã‘ã‚‹
+	void UpdateInput();
+
+
+public: //*** ã‚³ãƒãƒ³ãƒ‰æ“ä½œã§å‘¼ã³å‡ºã•ã‚Œã‚‹é–¢æ•° ***//
 
 	void MoveFront();
 	void MoveBack();
 	void MoveLeft();
 	void MoveRight();
 
-private: //*** Behavior ŠÇ—‚Ég‚¤ŠÖ” ***//
+private: //*** Behavior ç®¡ç†ã«ä½¿ã†é–¢æ•° ***//
 
 	void UpdateRoot();
 	void UpdateMove();
 
-private: //*** ƒvƒ‰ƒCƒx[ƒg•Ï” ***//
 
-private: //*** ŠO•”‚©‚çİ’è‚·‚é•Ï” ***//
+private: //*** ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆå¤‰æ•° ***//
 
-	float cPLAYERSPEED_ = 1.0f;
 
-private: //*** ŒvZ‚Ég‚¤ ***//
+private: //*** å¤–éƒ¨ã‹ã‚‰è¨­å®šã™ã‚‹å¤‰æ•° ***//
 
-	// ƒvƒŒƒCƒ„[‚ÌƒCƒ“ƒvƒbƒg‚ğˆ—‚·‚é
+	float cPLAYERSPEED_ = 2.0f;
+
+
+	// ãƒ—ãƒ­ã‚°ãƒ©ãƒ å†…ã ã‘ã©å¤–éƒ¨ã®ã‚„ã¤
+	const LWP::Object::Camera* camera_ = nullptr;
+
+
+
+private: //*** è¨ˆç®—ã«ä½¿ã† ***//
+
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¤ãƒ³ãƒ—ãƒƒãƒˆã‚’å‡¦ç†ã™ã‚‹
 	PlayerInput* pInput_ = nullptr;
-	// ó‚¯æ‚éƒRƒ}ƒ“ƒh
-	// •¡”“ü—Í‚É‘Î‰‚³‚¹‚½‚¢
+	// å—ã‘å–ã‚‹ã‚³ãƒãƒ³ãƒ‰
+	// è¤‡æ•°å…¥åŠ›ã«å¯¾å¿œã•ã›ãŸã„
 	IPlayerCommand* pCommand_ = nullptr;
 
-	// ƒvƒŒƒCƒ„[‚Ìƒ‚ƒfƒ‹
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ¢ãƒ‡ãƒ«
 	LWP::Primitive::Mesh* demoModel;
 
-	// ƒ[ƒ‹ƒhÀ•W
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™
 	LWP::Object::WorldTransform world_;
 
-	// Œ»İ‚Ìó‘Ô
+	// ç¾åœ¨ã®çŠ¶æ…‹
 	Behavior behavior_ = Behavior::Root;
-	// ó‘Ô‚Ì—\–ñ
+	// çŠ¶æ…‹ã®äºˆç´„
 	std::optional<Behavior> reqBehavior_ = std::nullopt;
 
-	// Ÿ‚ÉˆÚ“®‚·‚é‘¬“x
+	// æ¬¡ã«ç§»å‹•ã™ã‚‹é€Ÿåº¦
 	LWP::Math::Vector3 destinate_;
 
 };

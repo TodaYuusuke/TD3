@@ -8,13 +8,13 @@ Player::~Player()
 void Player::Initialize()
 {
 	world_.Initialize();
-	// ���f���ǂݍ���
+	// モデル読み込み
 	demoModel = LWP::Resource::LoadModel("cube/cube.obj");
 	demoModel->transform.Parent(&world_);
 	demoModel->isActive = true;
 	demoModel->name = "Player";
 
-	// ���̓n���h����������
+	// 入力ハンドルを初期化
 	pInput_ = new PlayerInput();
 	pInput_->AssignMoveCommandToPressKey();
 }
@@ -28,6 +28,12 @@ void Player::UpdateInput()
 		pCommand_->Exec(*this);
 		reqBehavior_ = Behavior::Move;
 	}
+	// コントローラーの入力を合わせる
+	float x = LWP::Input::Controller::GetLStick().x;
+	float y = LWP::Input::Controller::GetLStick().y;
+	destinate_.x += x;
+	destinate_.z += y;
+	destinate_ = destinate_.Normalize();
 }
 
 void Player::Update()
@@ -68,7 +74,7 @@ void Player::Update()
 
 void Player::MoveFront()
 {
-	// �����Ă�������֕ϊ�����̂ŒP���ɂ��Ă���
+	// 向いている方向へ変換するので単純にしている
 	destinate_.z += 1.0f;
 }
 
@@ -93,6 +99,11 @@ void Player::UpdateRoot()
 
 void Player::UpdateMove()
 {
-	world_.translation += destinate_ * cPLAYERSPEED_;
+	// 移動方向をカメラに合わせる
+	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
+	moveVector.y = 0.0f;
+	moveVector = moveVector.Normalize() * cPLAYERSPEED_ * lwp::GetDeltaTime();
+
+	world_.translation += moveVector;
 	destinate_ = { 0.0,0.0,0.0 };
 }
