@@ -11,10 +11,12 @@ public:
 
 private:
 
-	void AssinngCommandToPressKeyW();
-	void AssinngCommandToPressKeyS();
-	void AssinngCommandToPressKeyA();
-	void AssinngCommandToPressKeyD();
+	void AssignCommandToPressKeyW();
+	void AssignCommandToPressKeyS();
+	void AssignCommandToPressKeyA();
+	void AssignCommandToPressKeyD();
+
+	void AssignCommandToTriggerSPACE();
 
 private:
 	IPlayerCommand* pressKeyW_;
@@ -22,5 +24,6 @@ private:
 	IPlayerCommand* pressKeyS_;
 	IPlayerCommand* pressKeyD_;
 
+	IPlayerCommand* triggerKeySPACE_;
 };
 

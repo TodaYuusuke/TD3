@@ -176,10 +176,10 @@ void TItleScene::Update()
 	mainCamera->transform = followCamera_->viewProjection_.transform;
 
 	// ポストプロセスの切り替え
-	if (Keyboard::GetTrigger(DIK_SPACE))
-	{
-		mainCamera->isUsePostProcess = !mainCamera->isUsePostProcess;
-	}
+	//if (Keyboard::GetTrigger(DIK_SPACE))
+	//{
+	//	mainCamera->isUsePostProcess = !mainCamera->isUsePostProcess;
+	//}
 
 	//// Tキーを押すとテクスチャ切り替え
 	//if (Keyboard::GetTrigger(DIK_T))
@@ -210,10 +210,10 @@ void TItleScene::Update()
 	}
 
 	// シェーダー作り直し
-	if (Keyboard::GetTrigger(DIK_R))
-	{
-		mainCamera->ReCreateShader();
-	}
+	//if (Keyboard::GetTrigger(DIK_R))
+	//{
+	//	mainCamera->ReCreateShader();
+	//}
 	//// パーティクル呼び出し
 	//if (Keyboard::GetTrigger(DIK_P))
 	//{

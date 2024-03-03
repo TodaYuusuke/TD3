@@ -2,6 +2,7 @@
 
 #include "Adapter.h"
 
+#include <array>
 #include <optional>
 
 #include "Commands/PlayerInput.h"
@@ -19,47 +20,51 @@ private:
 	{
 		Root = 0u,	// 待機状態
 		Move,		// 移動
-		//Attack,		// 居合攻撃
+		Slash,		// 居合攻撃
 
-		_COUNT,		// 状態最大数
+		_COUNT,		// 状態最大数 : 使用禁止
 	};
 
 	//*** 各 Behavior で使う情報 ***//
 
-	struct IData
+	// 共通データ
+	struct BaseData
+	{
+		uint32_t frame_ = 0u;		// 状態に入ってから経過したフレーム
+		uint32_t cMAXFRAME = 0u;	// 状態の最大フレーム : 条件で抜けるときもあるかもしれない
+	};
+
+	struct RootData : public BaseData
 	{
 
 	};
 
-	struct RootData : public IData
+	struct MoveData : public BaseData
 	{
 
 	};
 
-	struct MoveData : public IData
+	// 居合攻撃で使うデータ
+	struct SlashData : public BaseData
 	{
-
 	};
 
 public: //*** パブリック関数 ***//
 
-	Player() {}
+	// コンストラクタ
+	Player();
+	// デストラクタ
 	~Player();
 
+	// 初期化
 	void Initialize();
 	// 更新
 	void Update();
 
-	// セッターゲッター
+public:	//*** セッター,ゲッター ***//
 
 	lwp::WorldTransform* GetWorldTransform() { return &world_; }
 	void SetCameraPointer(const lwp::Camera* p) { camera_ = p; }
-
-private: //*** プライベート関数 ***//
-
-	// プレイヤーの操作を受け付ける
-	void UpdateInput();
-
 
 public: //*** コマンド操作で呼び出される関数 ***//
 
@@ -67,20 +72,42 @@ public: //*** コマンド操作で呼び出される関数 ***//
 	void MoveBack();
 	void MoveLeft();
 	void MoveRight();
+	void Slash();
 
 private: //*** Behavior 管理に使う関数 ***//
 
 	void UpdateRoot();
 	void UpdateMove();
+	void UpdateSlash();
+
+private: //*** プライベート関数 ***//
+
+	// データの情報を取得する
+	void InitDatas();
+	// 状態の値を取得
+	BaseData* InitRootData();
+	BaseData* InitMoveData();
+	BaseData* InitSlashData();
+
+	// プレイヤーの操作を受け付ける
+	void UpdateInput();
+
 
 
 private: //*** プライベート変数 ***//
 
 
-private: //*** 外部から設定する変数 ***//
+	//*** 外部から設定する変数 ***//
 
 	// プレイヤーの通常移動
-	float cPLAYERSPEED_ = 2.0f;
+	float cMOVESPEED_ = 2.0f;
+
+	// プレイヤーの通常移動
+	float cSLASHSPEED_ = 40.0f;
+
+	// 各状態毎のデータ
+	// 固定されているデータを外部から取得
+	std::array<std::unique_ptr<BaseData>, static_cast<size_t>(Behavior::_COUNT)> behaviorDatas_;
 
 
 	// プログラム内だけど外部のやつ
@@ -88,7 +115,7 @@ private: //*** 外部から設定する変数 ***//
 
 
 
-private: //*** 計算に使う ***//
+	//*** 計算に使う ***//
 
 	// プレイヤーのインプットを処理する
 	PlayerInput* pInput_ = nullptr;
@@ -97,7 +124,7 @@ private: //*** 計算に使う ***//
 	IPlayerCommand* pCommand_ = nullptr;
 
 	// プレイヤーのモデル
-	LWP::Primitive::Mesh* demoModel;
+	LWP::Primitive::Mesh* demoModel = nullptr;
 
 	// ワールド座標
 	LWP::Object::WorldTransform world_;
@@ -106,6 +133,9 @@ private: //*** 計算に使う ***//
 	Behavior behavior_ = Behavior::Root;
 	// 状態の予約
 	std::optional<Behavior> reqBehavior_ = std::nullopt;
+	// 現在の状態のデータ
+	BaseData* currentData_ = nullptr;
+
 
 	// 次に移動する速度
 	// これは通常移動くらいでしか使わない

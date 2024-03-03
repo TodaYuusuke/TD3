@@ -29,3 +29,10 @@ class PlayerMoveRightCommand : public IPlayerCommand
 public:
 	void Exec(Player& player) override;
 };
+
+// 居合攻撃
+class PlayerSlashCommand : public IPlayerCommand
+{
+public:
+	void Exec(Player& player) override;
+};

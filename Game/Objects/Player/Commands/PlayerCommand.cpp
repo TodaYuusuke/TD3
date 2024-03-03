@@ -21,3 +21,8 @@ void PlayerMoveRightCommand::Exec(Player& player)
 {
 	player.MoveRight();
 }
+
+void PlayerSlashCommand::Exec(Player& player)
+{
+	player.Slash();
+}
