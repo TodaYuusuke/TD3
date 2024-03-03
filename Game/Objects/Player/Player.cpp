@@ -46,6 +46,8 @@ void Player::Update()
 			break;
 		case Player::Behavior::Slash:
 			break;
+		case Player::Behavior::Moment:
+			break;
 		default:
 			break;
 		}
@@ -61,6 +63,9 @@ void Player::Update()
 		break;
 	case Player::Behavior::Slash:
 		UpdateSlash();
+		break;
+	case Player::Behavior::Moment:
+		UpdateMoment();
 		break;
 	default:
 		break;
@@ -134,13 +139,28 @@ void Player::UpdateSlash()
 	if (currentData_->cMAXFRAME <= currentData_->frame_)
 	{
 		//destinate_ = { 0.0,0.0,0.0 };
-		reqBehavior_ = Behavior::Root;
+		reqBehavior_ = Behavior::Moment;
 	}
 	currentData_->frame_++;
 
 	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
 	moveVector.y = 0.0f;
 	moveVector = moveVector.Normalize() * cSLASHSPEED_ * lwp::GetDeltaTime();
+
+	world_.translation += moveVector;
+}
+
+void Player::UpdateMoment()
+{
+	if (currentData_->cMAXFRAME <= currentData_->frame_)
+	{
+		//destinate_ = { 0.0,0.0,0.0 };
+		reqBehavior_ = Behavior::Root;
+	}
+	currentData_->frame_++;
+	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
+	moveVector.y = 0.0f;
+	moveVector = moveVector.Normalize() * cSLASHSPEED_ * 0.01f * lwp::GetDeltaTime();
 
 	world_.translation += moveVector;
 }
@@ -154,6 +174,7 @@ void Player::InitDatas()
 	behaviorDatas_[static_cast<size_t>(Behavior::Root)].reset(InitRootData());
 	behaviorDatas_[static_cast<size_t>(Behavior::Move)].reset(InitMoveData());
 	behaviorDatas_[static_cast<size_t>(Behavior::Slash)].reset(InitSlashData());
+	behaviorDatas_[static_cast<size_t>(Behavior::Moment)].reset(InitMomentData());
 
 	// 今の状態を設定
 	currentData_ = behaviorDatas_[static_cast<size_t>(behavior_)].get();
@@ -177,6 +198,14 @@ Player::BaseData* Player::InitSlashData()
 {
 	BaseData* data = new SlashData;
 	data->cMAXFRAME = 10;
+
+	return data;
+}
+
+Player::BaseData* Player::InitMomentData()
+{
+	BaseData* data = new MomentData;
+	data->cMAXFRAME = 20;
 
 	return data;
 }

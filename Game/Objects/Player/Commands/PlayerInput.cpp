@@ -8,7 +8,7 @@ std::list<IPlayerCommand*>* PlayerInput::HandleInput()
 
 	// 入力的にこっちが早い方がいい?
 	// 居合攻撃
-	if (LWP::Input::Keyboard::GetTrigger(DIK_SPACE))
+	if (LWP::Input::Keyboard::GetPress(DIK_SPACE))
 	{
 		commands_.push_back(triggerKeySPACE_);
 		//return triggerKeySPACE_;

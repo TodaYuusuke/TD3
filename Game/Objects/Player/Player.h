@@ -21,12 +21,15 @@ private:
 		Root = 0u,	// 待機状態
 		Move,		// 移動
 		Slash,		// 居合攻撃
+		Moment,		// とりあえず居合の後隙
 
 		_COUNT,		// 状態最大数 : 使用禁止
 	};
 
 	/// <summary>
 	/// プレイヤー行動
+	/// 実際にコマンドとして入力したものが対象
+	/// 後隙への状態遷移は含まない
 	/// コマンドを溜める
 	/// 移動がどうするか迷う
 	/// 一応下にあるほど優先度が高いと思いたい
@@ -70,6 +73,12 @@ private:
 		lwp::Vector3 vector_;
 	};
 
+
+	// 後隙で使うデータ
+	struct MomentData : public BaseData
+	{
+	};
+
 public: //*** パブリック関数 ***//
 
 	// コンストラクタ
@@ -100,6 +109,7 @@ private: //*** Behavior 管理に使う関数 ***//
 	void UpdateRoot();
 	void UpdateMove();
 	void UpdateSlash();
+	void UpdateMoment();
 
 private: //*** プライベート関数 ***//
 
@@ -109,6 +119,7 @@ private: //*** プライベート関数 ***//
 	BaseData* InitRootData();
 	BaseData* InitMoveData();
 	BaseData* InitSlashData();
+	BaseData* InitMomentData();
 
 	// プレイヤーの操作を受け付ける
 	void UpdateInput();
