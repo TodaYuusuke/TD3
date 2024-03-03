@@ -2,32 +2,41 @@
 
 #include "Adapter.h"
 
-IPlayerCommand* PlayerInput::HandleInput()
+std::list<IPlayerCommand*>* PlayerInput::HandleInput()
 {
-	if (LWP::Input::Keyboard::GetPress(DIK_W))
-	{
-		return pressKeyW_;
-	}
-	if (LWP::Input::Keyboard::GetPress(DIK_S))
-	{
-		return pressKeyS_;
-	}
-	if (LWP::Input::Keyboard::GetPress(DIK_A))
-	{
-		return pressKeyA_;
-	}
-	if (LWP::Input::Keyboard::GetPress(DIK_D))
-	{
-		return pressKeyD_;
-	}
+	commands_.clear();
 
+	// 入力的にこっちが早い方がいい?
 	// 居合攻撃
 	if (LWP::Input::Keyboard::GetTrigger(DIK_SPACE))
 	{
-		return triggerKeySPACE_;
+		commands_.push_back(triggerKeySPACE_);
+		//return triggerKeySPACE_;
+	}
+	// 移動
+	if (LWP::Input::Keyboard::GetPress(DIK_W))
+	{
+		commands_.push_back(pressKeyW_);
+		//return pressKeyW_;
+	}
+	if (LWP::Input::Keyboard::GetPress(DIK_S))
+	{
+		commands_.push_back(pressKeyS_);
+		//return pressKeyS_;
+	}
+	if (LWP::Input::Keyboard::GetPress(DIK_A))
+	{
+		commands_.push_back(pressKeyA_);
+		//return pressKeyA_;
+	}
+	if (LWP::Input::Keyboard::GetPress(DIK_D))
+	{
+		commands_.push_back(pressKeyD_);
+		//return pressKeyD_;
 	}
 
-	return nullptr;
+
+	return &commands_;
 }
 
 void PlayerInput::AssignMoveCommandToPressKey()

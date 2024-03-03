@@ -1,11 +1,13 @@
 #pragma once
 
+#include <list>
+
 #include "PlayerCommand.h"
 
 class PlayerInput
 {
 public:
-	IPlayerCommand* HandleInput();
+	std::list<IPlayerCommand*>* HandleInput();
 
 	void AssignMoveCommandToPressKey();
 
@@ -19,6 +21,10 @@ private:
 	void AssignCommandToTriggerSPACE();
 
 private:
+
+	// コマンドを積み重ねる
+	std::list<IPlayerCommand*> commands_;
+
 	IPlayerCommand* pressKeyW_;
 	IPlayerCommand* pressKeyA_;
 	IPlayerCommand* pressKeyS_;

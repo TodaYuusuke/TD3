@@ -25,6 +25,25 @@ private:
 		_COUNT,		// 状態最大数 : 使用禁止
 	};
 
+	/// <summary>
+	/// プレイヤー行動
+	/// コマンドを溜める
+	/// 移動がどうするか迷う
+	/// 一応下にあるほど優先度が高いと思いたい
+	/// </summary>
+	enum class Command : size_t
+	{
+		toMoveF = 0u,	// 前移動
+		toMoveB,		// 後ろ移動
+		toMoveL,		// 左移動
+		toMoveR,		// 右移動
+		toSlash,		// 居合攻撃
+
+		_COUNT,		// 状態最大数 : 使用禁止
+	};
+
+
+
 	//*** 各 Behavior で使う情報 ***//
 
 	// 共通データ
@@ -47,6 +66,8 @@ private:
 	// 居合攻撃で使うデータ
 	struct SlashData : public BaseData
 	{
+		// 向かう方向
+		lwp::Vector3 vector_;
 	};
 
 public: //*** パブリック関数 ***//
@@ -121,7 +142,9 @@ private: //*** プライベート変数 ***//
 	PlayerInput* pInput_ = nullptr;
 	// 受け取るコマンド
 	// 複数入力に対応させたい
-	IPlayerCommand* pCommand_ = nullptr;
+	std::list<IPlayerCommand*> pCommand_;
+	// コマンドを積み重ねる
+	std::list<IPlayerCommand*>* pCommands_;
 
 	// プレイヤーのモデル
 	LWP::Primitive::Mesh* demoModel = nullptr;
@@ -137,9 +160,15 @@ private: //*** プライベート変数 ***//
 	BaseData* currentData_ = nullptr;
 
 
-	// 次に移動する速度
+	// 次に移動する方向
 	// これは通常移動くらいでしか使わない
 	LWP::Math::Vector3 destinate_;
+
+	// 入力したコマンドを一括で管理する
+	std::list<Command> commands_;
+	// 最終的に行動するコマンド
+	Command* command_ = nullptr;
+
 
 };
 
