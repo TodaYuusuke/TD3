@@ -15,6 +15,6 @@ void EnemyManager::Update()
 
 	for (std::unique_ptr<IEnemy>& enemy_ : enemys_) {
 		enemy_->Update();
-		enemy_->Move({0.0f,1.0f,0.0f});
+		//enemy_->Move({0.0f,1.0f,0.0f});
 	}
 }
