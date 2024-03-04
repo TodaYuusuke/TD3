@@ -34,22 +34,23 @@ private:
 	/// 移動がどうするか迷う
 	/// 一応下にあるほど優先度が高いと思いたい
 	/// </summary>
-	enum class Command : size_t
-	{
-		toMoveF = 0u,	// 前移動
-		toMoveB,		// 後ろ移動
-		toMoveL,		// 左移動
-		toMoveR,		// 右移動
-		toSlash,		// 居合攻撃
+	//enum class Command : size_t
+	//{
+	//	toMoveF = 0u,	// 前移動
+	//	toMoveB,		// 後ろ移動
+	//	toMoveL,		// 左移動
+	//	toMoveR,		// 右移動
+	//	toSlash,		// 居合攻撃
 
-		_COUNT,		// 状態最大数 : 使用禁止
-	};
+	//	_COUNT,		// 状態最大数 : 使用禁止
+	//};
 
 
 
 	//*** 各 Behavior で使う情報 ***//
 
 	// 共通データ
+	// まったくもって参照できないからつかわん
 	struct BaseData
 	{
 		uint32_t frame_ = 0u;		// 状態に入ってから経過したフレーム
@@ -58,12 +59,10 @@ private:
 
 	struct RootData : public BaseData
 	{
-
 	};
 
 	struct MoveData : public BaseData
 	{
-
 	};
 
 	// 居合攻撃で使うデータ
@@ -116,15 +115,15 @@ private: //*** プライベート関数 ***//
 	// データの情報を取得する
 	void InitDatas();
 	// 状態の値を取得
-	BaseData* InitRootData();
-	BaseData* InitMoveData();
-	BaseData* InitSlashData();
-	BaseData* InitMomentData();
+	RootData* InitRootData();
+	MoveData* InitMoveData();
+	SlashData* InitSlashData();
+	MomentData* InitMomentData();
 
 	// プレイヤーの操作を受け付ける
 	void UpdateInput();
 
-
+	void DebugWindow();
 
 private: //*** プライベート変数 ***//
 
@@ -139,8 +138,11 @@ private: //*** プライベート変数 ***//
 
 	// 各状態毎のデータ
 	// 固定されているデータを外部から取得
-	std::array<std::unique_ptr<BaseData>, static_cast<size_t>(Behavior::_COUNT)> behaviorDatas_;
-
+	//std::array<std::unique_ptr<BaseData>, static_cast<size_t>(Behavior::_COUNT)> behaviorDatas_;
+	std::unique_ptr<RootData> rootData_;
+	std::unique_ptr<MoveData> moveData_;
+	std::unique_ptr<SlashData> slashData_;
+	std::unique_ptr<MomentData> momentData_;
 
 	// プログラム内だけど外部のやつ
 	const LWP::Object::Camera* camera_ = nullptr;
@@ -153,7 +155,6 @@ private: //*** プライベート変数 ***//
 	PlayerInput* pInput_ = nullptr;
 	// 受け取るコマンド
 	// 複数入力に対応させたい
-	std::list<IPlayerCommand*> pCommand_;
 	// コマンドを積み重ねる
 	std::list<IPlayerCommand*>* pCommands_;
 
@@ -168,17 +169,17 @@ private: //*** プライベート変数 ***//
 	// 状態の予約
 	std::optional<Behavior> reqBehavior_ = std::nullopt;
 	// 現在の状態のデータ
-	BaseData* currentData_ = nullptr;
+	//BaseData* currentData_ = nullptr;
 
 
 	// 次に移動する方向
 	// これは通常移動くらいでしか使わない
-	LWP::Math::Vector3 destinate_;
+	LWP::Math::Vector3 destinate_ = { 0.0f,0.0f,1.0f };
 
 	// 入力したコマンドを一括で管理する
-	std::list<Command> commands_;
+	std::list<Behavior> commands_;
 	// 最終的に行動するコマンド
-	Command* command_ = nullptr;
+	Behavior* command_ = nullptr;
 
 
 };

@@ -51,7 +51,7 @@ private:
 	IPlayerCommand* pressKeyS_;
 	IPlayerCommand* pressKeyD_;
 
-	IPlayerCommand* pressKeySPACE_;
+	IPlayerCommand* triggerKeySPACE_;
 
 	//*** パッド入力 ***//
 

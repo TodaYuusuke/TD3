@@ -22,16 +22,17 @@ void PlayerInput::HandleInputKey()
 {
 	// 入力的にこっちが早い方がいい? ← 関係なくなった
 	// 居合攻撃
-	if (LWP::Input::Keyboard::GetPress(DIK_SPACE))
+	if (LWP::Input::Keyboard::GetTrigger(DIK_SPACE))
 	{
-		commands_.push_back(pressKeySPACE_);
+		commands_.push_back(triggerKeySPACE_);
 	}
 	// 移動
+	// 相反する入力を受け付けない
 	if (LWP::Input::Keyboard::GetPress(DIK_W))
 	{
 		commands_.push_back(pressKeyW_);
 	}
-	if (LWP::Input::Keyboard::GetPress(DIK_S))
+	else if (LWP::Input::Keyboard::GetPress(DIK_S))
 	{
 		commands_.push_back(pressKeyS_);
 	}
@@ -39,7 +40,7 @@ void PlayerInput::HandleInputKey()
 	{
 		commands_.push_back(pressKeyA_);
 	}
-	if (LWP::Input::Keyboard::GetPress(DIK_D))
+	else if (LWP::Input::Keyboard::GetPress(DIK_D))
 	{
 		commands_.push_back(pressKeyD_);
 	}
@@ -110,8 +111,10 @@ void PlayerInput::AssignCommandToPressKeyD()
 void PlayerInput::AssignCommandToTriggerSPACE()
 {
 	IPlayerCommand* command = new PlayerSlashCommand();
-	this->pressKeySPACE_ = command;
+	this->triggerKeySPACE_ = command;
 }
+
+
 
 void PlayerInput::AssginCommandToPressPadA()
 {
