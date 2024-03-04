@@ -58,5 +58,4 @@ void NormalEnemy::Attack()
 			attackEndWork.flag = false;
 		}
 	}
-
 }

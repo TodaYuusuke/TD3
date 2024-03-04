@@ -10,4 +10,5 @@ public:
 private:
 	void Move(LWP::Math::Vector3 MoveVec)override;
 	void Attack()override;
+
 };

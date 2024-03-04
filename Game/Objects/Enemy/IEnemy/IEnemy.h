@@ -1,5 +1,13 @@
 #pragma once
 #include <Adapter.h>
+
+struct AnimeWork {
+	lwp::Vector3 targetpoint;//目標地点
+	float t;//媒介変数
+	float speed;//媒介変数の増えるスピード
+	bool flag = false;//再生のフラグ
+};
+
 class IEnemy
 {
 public:
