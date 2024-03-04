@@ -20,7 +20,7 @@ void Player::Initialize()
 
 	// 入力ハンドルを初期化
 	pInput_ = new PlayerInput();
-	pInput_->AssignMoveCommandToPressKey();
+	pInput_->AssignCommands();
 
 	// 状態の情報を設定
 	InitDatas();
