@@ -29,9 +29,14 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	// デバッグ表示
 	DebugWindow();
 
+	// コマンド動作を確認
 	UpdateInput();
+
+	// 状態を変えるか判別
+	CheckBehavior();
 
 	if (reqBehavior_)
 	{
@@ -42,16 +47,23 @@ void Player::Update()
 		{
 		case Player::Behavior::Root:
 			rootData_->frame_ = 0;
+			rootData_->maxFrame_ = rootData_->cBASEFRAME;
+			slashData_->relationSlash_ = 0;
 			break;
 		case Player::Behavior::Move:
 			moveData_->frame_ = 0;
+			moveData_->maxFrame_ = moveData_->cBASEFRAME;
 			break;
 		case Player::Behavior::Slash:
 			slashData_->frame_ = 0;
 			slashData_->vector_ = destinate_;
+			slashData_->maxFrame_ = slashData_->cBASEFRAME;
 			break;
 		case Player::Behavior::Moment:
 			momentData_->frame_ = 0;
+			momentData_->relationSlash_ = slashData_->relationSlash_;
+			momentData_->maxFrame_ = momentData_->cBASEFRAME + (momentData_->relationSlash_ * 30u);
+			slashData_->relationSlash_++;
 			break;
 		default:
 			break;
@@ -115,7 +127,7 @@ void Player::Slash()
 
 void Player::UpdateRoot()
 {
-	if (rootData_->cMAXFRAME <= rootData_->frame_)
+	if (rootData_->maxFrame_ <= rootData_->frame_)
 	{
 		reqBehavior_ = Behavior::Root;
 	}
@@ -124,7 +136,7 @@ void Player::UpdateRoot()
 
 void Player::UpdateMove()
 {
-	if (moveData_->cMAXFRAME <= moveData_->frame_)
+	if (moveData_->maxFrame_ <= moveData_->frame_)
 	{
 		//destinate_ = { 0.0,0.0,0.0 };
 		reqBehavior_ = Behavior::Root;
@@ -141,7 +153,7 @@ void Player::UpdateMove()
 
 void Player::UpdateSlash()
 {
-	if (slashData_->cMAXFRAME <= slashData_->frame_)
+	if (slashData_->maxFrame_ <= slashData_->frame_)
 	{
 		//destinate_ = { 0.0,0.0,0.0 };
 		reqBehavior_ = Behavior::Moment;
@@ -157,17 +169,20 @@ void Player::UpdateSlash()
 
 void Player::UpdateMoment()
 {
-	if (momentData_->cMAXFRAME <= momentData_->frame_)
+	if (momentData_->maxFrame_ <= momentData_->frame_)
 	{
 		//destinate_ = { 0.0,0.0,0.0 };
 		reqBehavior_ = Behavior::Root;
 	}
 	momentData_->frame_++;
-	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
-	moveVector.y = 0.0f;
-	moveVector = moveVector.Normalize() * cSLASHSPEED_ * 0.01f * (float)lwp::GetDeltaTime();
+	if (isInputMove_)
+	{
+		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
+		moveVector.y = 0.0f;
+		moveVector = moveVector.Normalize() * cSLASHSPEED_ * 0.01f * (float)lwp::GetDeltaTime();
 
-	world_.translation += moveVector;
+		world_.translation += moveVector;
+	}
 }
 
 void Player::InitDatas()
@@ -193,30 +208,40 @@ void Player::InitDatas()
 Player::RootData* Player::InitRootData()
 {
 	RootData* data = new RootData;
-	data->cMAXFRAME = 1;
+	data->cBASEFRAME = 1;
+	data->frame_ = 0;
+	data->maxFrame_ = 0;
 	return data;
 }
 
 Player::MoveData* Player::InitMoveData()
 {
 	MoveData* data = new MoveData;
-	data->cMAXFRAME = 5;
+	data->cBASEFRAME = 5;
+	data->frame_ = 0;
+	data->maxFrame_ = 0;
 	return data;
 }
 
 Player::SlashData* Player::InitSlashData()
 {
 	SlashData* data = new SlashData;
-	data->cMAXFRAME = 10;
-
+	data->cBASEFRAME = 10;
+	data->vector_ = { 0.0f,0.0f,1.0f };
+	data->frame_ = 0;
+	data->maxFrame_ = 0;
+	data->relationSlash_ = 0;
+	data->MaxRelation_ = 3;
 	return data;
 }
 
 Player::MomentData* Player::InitMomentData()
 {
 	MomentData* data = new MomentData;
-	data->cMAXFRAME = 20;
-
+	data->cBASEFRAME = 20;
+	data->frame_ = 0;
+	data->maxFrame_ = 0;
+	data->relationSlash_ = 0;
 	return data;
 }
 
@@ -232,6 +257,7 @@ void Player::UpdateInput()
 	}*/
 	// クリア
 	commands_.clear();
+	isInputMove_ = false;
 
 	// 方向を作成
 	lwp::Vector3 direct = destinate_;
@@ -249,8 +275,6 @@ void Player::UpdateInput()
 	destinate_ = destinate_.Normalize() * 0.75f;
 
 	// コントローラーの入力を合わせる
-	// ここもコマンドにしたい--
-	// 移動方向のみなので円状の Vector2 を使いたい
 	float x = LWP::Input::Controller::GetLStick().x;
 	float y = LWP::Input::Controller::GetLStick().y;
 	if ((destinate_.x < 0 ? -destinate_.x : destinate_.x)
@@ -272,7 +296,10 @@ void Player::UpdateInput()
 	{
 		destinate_ = direct.Normalize();
 	}
+}
 
+void Player::CheckBehavior()
+{
 	// コマンドの初期化
 	command_ = nullptr;
 
@@ -300,14 +327,19 @@ void Player::UpdateInput()
 		switch (*command_)
 		{
 		case Behavior::Move:
-			if (behavior_ == Behavior::Root)
+			// 移動キーが入力されている時通る
+			isInputMove_ = true;
+			// 移動は待機状態からの派生とか
+			if (behavior_ == Behavior::Root ||
+				behavior_ == Behavior::Move)
 			{
 				reqBehavior_ = Behavior::Move;
 			}
 			break;
 		case Behavior::Slash:
+			// 居合に入る条件を記述
 			if (behavior_ != Behavior::Slash &&
-				behavior_ != Behavior::Moment)
+				slashData_->relationSlash_ < slashData_->MaxRelation_)
 			{
 				reqBehavior_ = Behavior::Slash;
 			}
@@ -328,6 +360,42 @@ void Player::DebugWindow()
 	ImGui::Text("SPACE or ABXY  : SLASH");
 
 	ImGui::Separator();
+
+	ImGui::Text("Behavior : ");
+	ImGui::SameLine();
+	switch (behavior_)
+	{
+	case Player::Behavior::Root:
+		ImGui::Text("ROOT");
+		ImGui::Text("BaseFrame : %d", rootData_->cBASEFRAME);
+		ImGui::Text("MaxFrame  : %d", rootData_->maxFrame_);
+		ImGui::Text("Frame     : %d", rootData_->frame_);
+		break;
+	case Player::Behavior::Move:
+		ImGui::Text("MOVE");
+		ImGui::Text("BaseFrame : %d", moveData_->cBASEFRAME);
+		ImGui::Text("MaxFrame  : %d", moveData_->maxFrame_);
+		ImGui::Text("Frame     : %d", moveData_->frame_);
+		break;
+	case Player::Behavior::Slash:
+		ImGui::Text("SLASH");
+		ImGui::Text("BaseFrame : %d", slashData_->cBASEFRAME);
+		ImGui::Text("MaxFrame  : %d", slashData_->maxFrame_);
+		ImGui::Text("Frame     : %d", slashData_->frame_);
+		break;
+	case Player::Behavior::Moment:
+		ImGui::Text("MOMENT");
+		ImGui::Text("BaseFrame : %d", momentData_->cBASEFRAME);
+		ImGui::Text("MaxFrame  : %d", momentData_->maxFrame_);
+		ImGui::Text("Frame     : %d", momentData_->frame_);
+		break;
+	default:
+		break;
+	}
+
+	ImGui::Separator();
+
+	ImGui::Text("SlashRelation : %d", slashData_->relationSlash_);
 
 	ImGui::End();
 }

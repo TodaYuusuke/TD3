@@ -54,7 +54,8 @@ private:
 	struct BaseData
 	{
 		uint32_t frame_ = 0u;		// 状態に入ってから経過したフレーム
-		uint32_t cMAXFRAME = 0u;	// 状態の最大フレーム : 条件で抜けるときもあるかもしれない
+		uint32_t cBASEFRAME = 0u;	// 状態の基本フレーム : 基本となるフレーム数
+		uint32_t maxFrame_ = 0u;	// 状態の最大フレーム : 条件で抜けるときもあるかもしれない
 	};
 
 	struct RootData : public BaseData
@@ -68,14 +69,16 @@ private:
 	// 居合攻撃で使うデータ
 	struct SlashData : public BaseData
 	{
-		// 向かう方向
-		lwp::Vector3 vector_;
+		lwp::Vector3 vector_;		// 向かう方向
+		uint32_t relationSlash_;	// 連続居合回数 : 二回以降+1
+		uint32_t MaxRelation_;		// 最大居合回数 : Max
 	};
 
 
 	// 後隙で使うデータ
 	struct MomentData : public BaseData
 	{
+		uint32_t relationSlash_;	// 連続居合回数 : 二回以降+1
 	};
 
 public: //*** パブリック関数 ***//
@@ -97,6 +100,7 @@ public:	//*** セッター,ゲッター ***//
 
 public: //*** コマンド操作で呼び出される関数 ***//
 
+	// ここではまだ実際に行動に移さない
 	void MoveFront();
 	void MoveBack();
 	void MoveLeft();
@@ -122,6 +126,8 @@ private: //*** プライベート関数 ***//
 
 	// プレイヤーの操作を受け付ける
 	void UpdateInput();
+	// 受け付けた入力を判別して実際の行動に反映する
+	void CheckBehavior();
 
 	void DebugWindow();
 
@@ -175,6 +181,9 @@ private: //*** プライベート変数 ***//
 	// 次に移動する方向
 	// これは通常移動くらいでしか使わない
 	LWP::Math::Vector3 destinate_ = { 0.0f,0.0f,1.0f };
+	// キーまたはスティックでの移動が入力されたか
+	bool isInputMove_ = false;
+
 
 	// 入力したコマンドを一括で管理する
 	std::list<Behavior> commands_;
