@@ -137,10 +137,13 @@ private: //*** プライベート変数 ***//
 	//*** 外部から設定する変数 ***//
 
 	// プレイヤーの通常移動
-	float cMOVESPEED_ = 2.0f;
+	float cSPEEDMOVE_ = 2.0f;
 
 	// プレイヤーの通常移動
-	float cSLASHSPEED_ = 40.0f;
+	float cSPEEDSLASH_ = 40.0f;
+
+	// 居合による後隙の加算分
+	uint32_t cFRAMEINCREMENTMOMENT_ = 30u;
 
 	// 各状態毎のデータ
 	// 固定されているデータを外部から取得

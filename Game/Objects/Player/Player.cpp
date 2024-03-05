@@ -48,6 +48,7 @@ void Player::Update()
 		case Player::Behavior::Root:
 			rootData_->frame_ = 0;
 			rootData_->maxFrame_ = rootData_->cBASEFRAME;
+			// 居合回数のリセット
 			slashData_->relationSlash_ = 0;
 			break;
 		case Player::Behavior::Move:
@@ -62,7 +63,9 @@ void Player::Update()
 		case Player::Behavior::Moment:
 			momentData_->frame_ = 0;
 			momentData_->relationSlash_ = slashData_->relationSlash_;
-			momentData_->maxFrame_ = momentData_->cBASEFRAME + (momentData_->relationSlash_ * 30u);
+			// 回数分フレームを加算
+			momentData_->maxFrame_ = momentData_->cBASEFRAME + (momentData_->relationSlash_ * cFRAMEINCREMENTMOMENT_);
+			// 居合回数加算
 			slashData_->relationSlash_++;
 			break;
 		default:
@@ -145,7 +148,7 @@ void Player::UpdateMove()
 	// 移動方向をカメラに合わせる
 	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
 	moveVector.y = 0.0f;
-	moveVector = moveVector.Normalize() * cMOVESPEED_ * (float)lwp::GetDeltaTime();
+	moveVector = moveVector.Normalize() * cSPEEDMOVE_ * (float)lwp::GetDeltaTime();
 
 	world_.translation += moveVector;
 }
@@ -162,7 +165,7 @@ void Player::UpdateSlash()
 
 	lwp::Vector3 moveVector = slashData_->vector_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
 	moveVector.y = 0.0f;
-	moveVector = moveVector.Normalize() * cSLASHSPEED_ * (float)lwp::GetDeltaTime();
+	moveVector = moveVector.Normalize() * cSPEEDSLASH_ * (float)lwp::GetDeltaTime();
 
 	world_.translation += moveVector;
 }
@@ -179,7 +182,7 @@ void Player::UpdateMoment()
 	{
 		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
 		moveVector.y = 0.0f;
-		moveVector = moveVector.Normalize() * cSLASHSPEED_ * 0.01f * (float)lwp::GetDeltaTime();
+		moveVector = moveVector.Normalize() * cSPEEDSLASH_ * 0.01f * (float)lwp::GetDeltaTime();
 
 		world_.translation += moveVector;
 	}
