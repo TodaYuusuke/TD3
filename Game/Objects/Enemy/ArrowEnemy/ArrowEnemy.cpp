@@ -25,7 +25,7 @@ void ArrowEnemy::Update()
 	}
 #endif // _DEBUG
 	// ‘_‚¤
-	Aim();
+	//Aim();
 
 	// –î‚ÌXVˆ—
 	for (std::unique_ptr<Arrow>& arrows : arrows_) {
