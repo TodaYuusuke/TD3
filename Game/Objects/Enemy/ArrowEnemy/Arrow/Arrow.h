@@ -6,7 +6,7 @@ class Arrow
 {
 public:
 	
-	void Init(lwp::WorldTransform transform);
+	void Init(std::vector<LWP::Primitive::IPrimitive*> models,lwp::WorldTransform transform);
 	void Update();
 	void Attack();
 
@@ -15,5 +15,6 @@ private:
 
 	AnimeWork attackWork{
 		.speed = 0.1f,
+		.flag = false,
 	};
 };

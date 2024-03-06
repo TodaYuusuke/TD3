@@ -11,6 +11,6 @@ public:
 private:
 	void Move(LWP::Math::Vector3 MoveVec)override;
 	void Attack()override;
-
-	std::list<std::unique_ptr<Arrow>>arrows_;
+	std::vector<LWP::Primitive::IPrimitive*>arrowmodels_;
+	std::list<Arrow*>arrows_;
 };
