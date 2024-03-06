@@ -11,13 +11,13 @@ private:
 	void Move(LWP::Math::Vector3 MoveVec)override;
 	void Attack()override;
 
-	AnimeWork attackWork = {
+	MotionWork attackWork = {
 		.speed = 0.05f,
 	};
-	AnimeWork attackStanbyWork = {
+	MotionWork attackStanbyWork = {
 		.speed = 0.05f,
 	};
-	AnimeWork attackEndWork = {
+	MotionWork attackEndWork = {
 		.speed = 0.1f,
 	};
 };

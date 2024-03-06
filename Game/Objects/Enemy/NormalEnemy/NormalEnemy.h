@@ -12,14 +12,14 @@ private:
 	void Attack()override;
 
 	lwp::Vector3 PlayerRot;
-	AnimeWork attackWork = {
+	MotionWork attackWork = {
 	.targetpoint = 1.0f,
 	.speed = 0.05f,
 	}; 
-	AnimeWork attackStanbyWork = {
+	MotionWork attackStanbyWork = {
 	.speed = 0.02f,
 	};
-	AnimeWork attackEndWork = {
+	MotionWork attackEndWork = {
 	.targetpoint = 0.0f,
 	.speed = 0.1f,
 	};

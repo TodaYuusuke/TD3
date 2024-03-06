@@ -3,21 +3,40 @@
 void ArrowEnemy::Init()
 {
 	models_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
-	arrowmodels_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
 	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
 }
 
 void ArrowEnemy::Update()
 {
+#ifdef _DEBUG
+	// ñÓÇÃî≠éÀ
 	if (lwp::Keyboard::GetTrigger(DIK_SPACE)) {
 		Arrow* arrow = new Arrow();
- 		arrow->Init(arrowmodels_, models_[0]->transform.translation);
-		arrows_.push_back(arrow);
+		arrow->Init(models_[0]->transform);
+		arrows_.emplace_back(arrow);
 	}
+	// ëÃÇÃå¸Ç´ÇïœÇ¶ÇÈ
+	if (lwp::Keyboard::GetPress(DIK_A)) {
+		models_[0]->transform.rotation.y += 0.01f;
+	}
+	if (lwp::Keyboard::GetPress(DIK_D)) {
+		models_[0]->transform.rotation.y -= 0.01f;
+	}
+#endif // _DEBUG
 
-	for (Arrow* arrows : arrows_) {
+	ImGui::Begin("arrow");
+	// ñÓÇÃçXêVèàóù
+	for (std::unique_ptr<Arrow>& arrows : arrows_) {
 		arrows->Update();
 	}
+	ImGui::End();
+	arrows_.remove_if([](std::unique_ptr<Arrow>& arrow) {
+		if (!arrow->GetIsAlive()) {
+			arrow.reset();
+			return true;
+		}
+		return false;
+		});
 }
 
 void ArrowEnemy::Move(LWP::Math::Vector3 MoveVec)
@@ -27,5 +46,5 @@ void ArrowEnemy::Move(LWP::Math::Vector3 MoveVec)
 
 void ArrowEnemy::Attack()
 {
-	
+
 }

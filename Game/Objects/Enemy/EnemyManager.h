@@ -11,7 +11,7 @@ public:
 	void Init();
 	void Update();
 
-	void SetPlayer(Player* player) {player_ = player;}
+	void SetPlayer(Player* player) { player_ = player; }
 
 private:
 	std::list<std::unique_ptr<IEnemy>>enemys_;

@@ -1,7 +1,7 @@
 #pragma once
 #include <Adapter.h>
 
-struct AnimeWork {
+struct MotionWork {
 	lwp::Vector3 targetpoint;//目標地点
 	float t;//媒介変数
 	float speed;//媒介変数の増えるスピード
@@ -17,7 +17,6 @@ public:
 	virtual void Attack() = 0;
 
 protected:
-
 	std::vector<LWP::Primitive::IPrimitive*>models_;
 
 };
