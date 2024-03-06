@@ -1,7 +1,11 @@
 #pragma once
 #include <scene/IScene.h>
+
+#pragma region GameInclude
 #include "Game/Objects/FollowCamera/FollowCamera.h"
 #include "Game/Objects/Player/Player.h"
+#include "Game/Objects/Enemy/EnemyManager.h"
+#pragma endregion
 
 class TItleScene final
 	: public IScene
@@ -38,6 +42,7 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 	LWP::Object::Camera* subCamera;
 	// 追従カメラ
 	std::unique_ptr<FollowCamera> followCamera_;
+	std::unique_ptr<EnemyManager> enemyManager_;
 
 	// パーティクル
 	LWP::Object::Particle* particle;
