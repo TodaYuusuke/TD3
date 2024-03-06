@@ -98,6 +98,8 @@ void Player::MoveFront()
 	destinate_.z = 1.0f;
 	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
+	// 移動キーが入力されている時通る
+	isInputMove_ = true;
 }
 
 void Player::MoveBack()
@@ -105,6 +107,8 @@ void Player::MoveBack()
 	destinate_.z = -1.0f;
 	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
+	// 移動キーが入力されている時通る
+	isInputMove_ = true;
 }
 
 void Player::MoveLeft()
@@ -112,6 +116,8 @@ void Player::MoveLeft()
 	destinate_.x = -1.0f;
 	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
+	// 移動キーが入力されている時通る
+	isInputMove_ = true;
 }
 
 void Player::MoveRight()
@@ -119,6 +125,8 @@ void Player::MoveRight()
 	destinate_.x = 1.0f;
 	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
+	// 移動キーが入力されている時通る
+	isInputMove_ = true;
 }
 
 void Player::Slash()
@@ -141,7 +149,6 @@ void Player::UpdateMove()
 {
 	if (moveData_->maxFrame_ <= moveData_->frame_)
 	{
-		//destinate_ = { 0.0,0.0,0.0 };
 		reqBehavior_ = Behavior::Root;
 	}
 	moveData_->frame_++;
@@ -162,7 +169,6 @@ void Player::UpdateSlash()
 {
 	if (slashData_->maxFrame_ <= slashData_->frame_)
 	{
-		//destinate_ = { 0.0,0.0,0.0 };
 		reqBehavior_ = Behavior::Moment;
 	}
 	slashData_->frame_++;
@@ -182,7 +188,6 @@ void Player::UpdateMoment()
 {
 	if (momentData_->maxFrame_ <= momentData_->frame_)
 	{
-		//destinate_ = { 0.0,0.0,0.0 };
 		reqBehavior_ = Behavior::Root;
 	}
 	momentData_->frame_++;
@@ -297,12 +302,16 @@ void Player::UpdateInput()
 	{
 		destinate_.x = x;
 		commands_.push_back(Behavior::Move);
+		// 移動キーが入力されている時通る
+		isInputMove_ = true;
 	}
 	if ((destinate_.z < 0 ? -destinate_.z : destinate_.z)
 		< (y < 0 ? -y : y))
 	{
 		destinate_.z = y;
 		commands_.push_back(Behavior::Move);
+		// 移動キーが入力されている時通る
+		isInputMove_ = true;
 	}
 	destinate_ = destinate_.Normalize();
 
@@ -342,8 +351,6 @@ void Player::CheckBehavior()
 		switch (*command_)
 		{
 		case Behavior::Move:
-			// 移動キーが入力されている時通る
-			isInputMove_ = true;
 			// 移動は待機状態からの派生とか
 			if (behavior_ == Behavior::Root ||
 				behavior_ == Behavior::Move)
