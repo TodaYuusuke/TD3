@@ -6,6 +6,7 @@
 #include <optional>
 
 #include "Commands/PlayerInput.h"
+#include "Game/Objects/Player/Weapon/Weapon.h"
 
 class Player final
 {
@@ -51,6 +52,7 @@ private:
 
 	// 共通データ
 	// まったくもって参照できないからつかわん
+	// 絶対に継承した先のインスタンスを使う
 	struct BaseData
 	{
 		uint32_t frame_ = 0u;		// 状態に入ってから経過したフレーム
@@ -168,10 +170,12 @@ private: //*** プライベート変数 ***//
 	std::list<IPlayerCommand*>* pCommands_;
 
 	// プレイヤーのモデル
-	LWP::Primitive::Mesh* demoModel = nullptr;
-
+	LWP::Primitive::Mesh* demoModel_ = nullptr;
 	// ワールド座標
 	LWP::Object::WorldTransform world_;
+	// 武器
+	std::unique_ptr<Weapon> weapon_;
+
 
 	// 現在の状態
 	Behavior behavior_ = Behavior::Root;
@@ -193,6 +197,8 @@ private: //*** プライベート変数 ***//
 	// 最終的に行動するコマンド
 	Behavior* command_ = nullptr;
 
+	// イージング
+	float t = 0.0f;
 
 };
 

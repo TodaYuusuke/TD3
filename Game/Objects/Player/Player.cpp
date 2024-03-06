@@ -13,10 +13,16 @@ void Player::Initialize()
 {
 	world_.Initialize();
 	// モデル読み込み
-	demoModel = LWP::Resource::LoadModel("cube/cube.obj");
-	demoModel->transform.Parent(&world_);
-	demoModel->isActive = true;
-	demoModel->name = "Player";
+	demoModel_ = LWP::Resource::LoadModel("cube/cube.obj");
+	demoModel_->transform.Parent(&world_);
+	demoModel_->isActive = true;
+	demoModel_->name = "Player";
+
+	// 武器を作成
+	weapon_.reset(new Weapon);
+	weapon_->Initialize();
+	weapon_->SetParent(&world_);
+	weapon_->SetTPointer(&t);
 
 	// 入力ハンドルを初期化
 	pInput_ = new PlayerInput();
@@ -41,6 +47,7 @@ void Player::Update()
 	if (reqBehavior_)
 	{
 		behavior_ = reqBehavior_.value();
+		t = 0.0f;
 		//currentData_ = behaviorDatas_[static_cast<size_t>(behavior_)].get();
 		//currentData_->frame_ = 0;
 		switch (behavior_)
@@ -50,6 +57,7 @@ void Player::Update()
 			rootData_->maxFrame_ = rootData_->cBASEFRAME;
 			// 居合回数のリセット
 			slashData_->relationSlash_ = 0;
+			weapon_->SetBehavior(Weapon::Behavior::Root);
 			break;
 		case Player::Behavior::Move:
 			moveData_->frame_ = 0;
@@ -59,6 +67,7 @@ void Player::Update()
 			slashData_->frame_ = 0;
 			slashData_->vector_ = destinate_;
 			slashData_->maxFrame_ = slashData_->cBASEFRAME;
+			weapon_->SetBehavior(Weapon::Behavior::Slash);
 			break;
 		case Player::Behavior::Moment:
 			momentData_->frame_ = 0;
@@ -67,6 +76,7 @@ void Player::Update()
 			momentData_->maxFrame_ = momentData_->cBASEFRAME + (momentData_->relationSlash_ * cFRAMEINCREMENTMOMENT_);
 			// 居合回数加算
 			slashData_->relationSlash_++;
+			weapon_->SetBehavior(Weapon::Behavior::Moment);
 			break;
 		default:
 			break;
@@ -90,6 +100,8 @@ void Player::Update()
 	default:
 		break;
 	}
+
+	weapon_->Update();
 }
 
 void Player::MoveFront()
@@ -98,6 +110,8 @@ void Player::MoveFront()
 	destinate_.z = 1.0f;
 	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
+	// 移動キーが入力されている時通る
+	isInputMove_ = true;
 }
 
 void Player::MoveBack()
@@ -105,6 +119,8 @@ void Player::MoveBack()
 	destinate_.z = -1.0f;
 	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
+	// 移動キーが入力されている時通る
+	isInputMove_ = true;
 }
 
 void Player::MoveLeft()
@@ -112,6 +128,8 @@ void Player::MoveLeft()
 	destinate_.x = -1.0f;
 	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
+	// 移動キーが入力されている時通る
+	isInputMove_ = true;
 }
 
 void Player::MoveRight()
@@ -119,6 +137,8 @@ void Player::MoveRight()
 	destinate_.x = 1.0f;
 	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
+	// 移動キーが入力されている時通る
+	isInputMove_ = true;
 }
 
 void Player::Slash()
@@ -141,13 +161,16 @@ void Player::UpdateMove()
 {
 	if (moveData_->maxFrame_ <= moveData_->frame_)
 	{
-		//destinate_ = { 0.0,0.0,0.0 };
 		reqBehavior_ = Behavior::Root;
 	}
 	moveData_->frame_++;
 	// 移動方向をカメラに合わせる
 	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
 	moveVector.y = 0.0f;
+
+	// モデル回転
+	world_.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+	
 	moveVector = moveVector.Normalize() * cSPEEDMOVE_ * (float)lwp::GetDeltaTime();
 
 	world_.translation += moveVector;
@@ -158,23 +181,26 @@ void Player::UpdateSlash()
 {
 	if (slashData_->maxFrame_ <= slashData_->frame_)
 	{
-		//destinate_ = { 0.0,0.0,0.0 };
 		reqBehavior_ = Behavior::Moment;
 	}
 	slashData_->frame_++;
 
 	lwp::Vector3 moveVector = slashData_->vector_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
 	moveVector.y = 0.0f;
+
+	// モデル回転
+	world_.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+
 	moveVector = moveVector.Normalize() * cSPEEDSLASH_ * (float)lwp::GetDeltaTime();
 
 	world_.translation += moveVector;
+	t = (slashData_->frame_ / (float)slashData_->maxFrame_);
 }
 
 void Player::UpdateMoment()
 {
 	if (momentData_->maxFrame_ <= momentData_->frame_)
 	{
-		//destinate_ = { 0.0,0.0,0.0 };
 		reqBehavior_ = Behavior::Root;
 	}
 	momentData_->frame_++;
@@ -182,10 +208,15 @@ void Player::UpdateMoment()
 	{
 		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
 		moveVector.y = 0.0f;
+
+		// モデル回転
+		world_.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+
 		moveVector = moveVector.Normalize() * cSPEEDSLASH_ * 0.01f * (float)lwp::GetDeltaTime();
 
 		world_.translation += moveVector;
 	}
+	t = (momentData_->frame_ / (float)momentData_->maxFrame_);
 }
 
 void Player::InitDatas()
@@ -285,12 +316,16 @@ void Player::UpdateInput()
 	{
 		destinate_.x = x;
 		commands_.push_back(Behavior::Move);
+		// 移動キーが入力されている時通る
+		isInputMove_ = true;
 	}
 	if ((destinate_.z < 0 ? -destinate_.z : destinate_.z)
 		< (y < 0 ? -y : y))
 	{
 		destinate_.z = y;
 		commands_.push_back(Behavior::Move);
+		// 移動キーが入力されている時通る
+		isInputMove_ = true;
 	}
 	destinate_ = destinate_.Normalize();
 
@@ -330,8 +365,6 @@ void Player::CheckBehavior()
 		switch (*command_)
 		{
 		case Behavior::Move:
-			// 移動キーが入力されている時通る
-			isInputMove_ = true;
 			// 移動は待機状態からの派生とか
 			if (behavior_ == Behavior::Root ||
 				behavior_ == Behavior::Move)

@@ -51,5 +51,5 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 
 	// プレイヤー
 	std::unique_ptr<Player> player_;
-
+	
 };
