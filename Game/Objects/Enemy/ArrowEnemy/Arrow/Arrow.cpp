@@ -1,5 +1,7 @@
 #include "Arrow.h"
 
+using namespace LWP::Object::Collider;
+
 void Arrow::Init(lwp::WorldTransform transform)
 {
 	// モデルの作成
@@ -11,6 +13,15 @@ void Arrow::Init(lwp::WorldTransform transform)
 	lwp::Vector3 point = { 0.0f,0.0f,1.0f };
 	attackWork.targetpoint = point * lwp::Matrix4x4::CreateRotateXYZMatrix(transform.rotation);
 	attackWork.targetpoint = attackWork.targetpoint.Normalize();
+
+	// 当たり判定を設定
+	AABB* aabb = LWP::Common::CreateInstance<AABB>();
+	aabb->CreateFromPrimitive(model_);
+	aabb->SetOnCollisionLambda([](ICollider* self, ICollider* hit, OnCollisionState state) {
+		self;
+		hit;
+		state;
+	});
 }
 
 void Arrow::Update()
