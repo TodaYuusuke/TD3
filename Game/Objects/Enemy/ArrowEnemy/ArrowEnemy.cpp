@@ -14,7 +14,7 @@ void ArrowEnemy::Update()
 	if (lwp::Keyboard::GetTrigger(DIK_V)) {
 		Arrow* arrow = new Arrow();
 		arrow->Init(models_[0]->transform);
-		arrows_.emplace_back(arrow);
+		arrows_.push_back(arrow);
 	}
 	// ‘Ì‚ÌŒü‚«‚ğ•Ï‚¦‚é
 	if (lwp::Keyboard::GetPress(DIK_A)) {
@@ -28,13 +28,13 @@ void ArrowEnemy::Update()
 	//Aim();
 
 	// –î‚ÌXVˆ—
-	for (std::unique_ptr<Arrow>& arrows : arrows_) {
-		arrows->Update();
+	for (Arrow* arrow : arrows_) {
+		arrow->Update();
 	}
 
-	arrows_.remove_if([](std::unique_ptr<Arrow>& arrow) {
+	arrows_.remove_if([](Arrow* arrow) {
 		if (!arrow->GetIsAlive()) {
-			arrow.reset();
+			delete arrow;
 			return true;
 		}
 		return false;

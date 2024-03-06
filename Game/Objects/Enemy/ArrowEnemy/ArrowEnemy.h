@@ -33,7 +33,7 @@ private:// プライベートなメンバ関数
 	void Aim();
 
 private:// メンバ変数
-	std::list<std::unique_ptr<Arrow>> arrows_;
+	std::list<Arrow*> arrows_;
 	// 狙う対象
 	LWP::Math::Vector3* target_;
 };
