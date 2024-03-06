@@ -11,7 +11,7 @@ void ArrowEnemy::Update()
 {
 #ifdef _DEBUG
 	// –î‚Ì”­ŽË
-	if (lwp::Keyboard::GetTrigger(DIK_SPACE)) {
+	if (lwp::Keyboard::GetTrigger(DIK_V)) {
 		Arrow* arrow = new Arrow();
 		arrow->Init(models_[0]->transform);
 		arrows_.emplace_back(arrow);
