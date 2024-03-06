@@ -148,6 +148,10 @@ void Player::UpdateMove()
 	// 移動方向をカメラに合わせる
 	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
 	moveVector.y = 0.0f;
+
+	// モデル回転
+	world_.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+	
 	moveVector = moveVector.Normalize() * cSPEEDMOVE_ * (float)lwp::GetDeltaTime();
 
 	world_.translation += moveVector;
@@ -165,6 +169,10 @@ void Player::UpdateSlash()
 
 	lwp::Vector3 moveVector = slashData_->vector_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
 	moveVector.y = 0.0f;
+
+	// モデル回転
+	world_.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+
 	moveVector = moveVector.Normalize() * cSPEEDSLASH_ * (float)lwp::GetDeltaTime();
 
 	world_.translation += moveVector;
@@ -182,6 +190,10 @@ void Player::UpdateMoment()
 	{
 		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
 		moveVector.y = 0.0f;
+
+		// モデル回転
+		world_.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+
 		moveVector = moveVector.Normalize() * cSPEEDSLASH_ * 0.01f * (float)lwp::GetDeltaTime();
 
 		world_.translation += moveVector;
