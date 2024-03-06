@@ -157,6 +157,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Game\Objects\Player\Player.cpp" />
     <ClCompile Include="Game\Objects\Player\Commands\PlayerInput.cpp" />
+    <ClCompile Include="Game\Objects\Player\Weapon\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Scene\Sample.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Game\Objects\Player\Player.h" />
     <ClInclude Include="Game\Objects\Player\Commands\PlayerCommand.h" />
     <ClInclude Include="Game\Objects\Player\Commands\PlayerInput.h" />
+    <ClInclude Include="Game\Objects\Player\Weapon\Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

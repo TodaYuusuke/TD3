@@ -13,10 +13,16 @@ void Player::Initialize()
 {
 	world_.Initialize();
 	// モデル読み込み
-	demoModel = LWP::Resource::LoadModel("cube/cube.obj");
-	demoModel->transform.Parent(&world_);
-	demoModel->isActive = true;
-	demoModel->name = "Player";
+	demoModel_ = LWP::Resource::LoadModel("cube/cube.obj");
+	demoModel_->transform.Parent(&world_);
+	demoModel_->isActive = true;
+	demoModel_->name = "Player";
+
+	// 武器を作成
+	weapon_.reset(new Weapon);
+	weapon_->Initialize();
+	weapon_->SetParent(&world_);
+	weapon_->SetTPointer(&t);
 
 	// 入力ハンドルを初期化
 	pInput_ = new PlayerInput();
@@ -41,6 +47,7 @@ void Player::Update()
 	if (reqBehavior_)
 	{
 		behavior_ = reqBehavior_.value();
+		t = 0.0f;
 		//currentData_ = behaviorDatas_[static_cast<size_t>(behavior_)].get();
 		//currentData_->frame_ = 0;
 		switch (behavior_)
@@ -50,6 +57,7 @@ void Player::Update()
 			rootData_->maxFrame_ = rootData_->cBASEFRAME;
 			// 居合回数のリセット
 			slashData_->relationSlash_ = 0;
+			weapon_->SetBehavior(Weapon::Behavior::Root);
 			break;
 		case Player::Behavior::Move:
 			moveData_->frame_ = 0;
@@ -59,6 +67,7 @@ void Player::Update()
 			slashData_->frame_ = 0;
 			slashData_->vector_ = destinate_;
 			slashData_->maxFrame_ = slashData_->cBASEFRAME;
+			weapon_->SetBehavior(Weapon::Behavior::Slash);
 			break;
 		case Player::Behavior::Moment:
 			momentData_->frame_ = 0;
@@ -67,6 +76,7 @@ void Player::Update()
 			momentData_->maxFrame_ = momentData_->cBASEFRAME + (momentData_->relationSlash_ * cFRAMEINCREMENTMOMENT_);
 			// 居合回数加算
 			slashData_->relationSlash_++;
+			weapon_->SetBehavior(Weapon::Behavior::Moment);
 			break;
 		default:
 			break;
@@ -90,6 +100,8 @@ void Player::Update()
 	default:
 		break;
 	}
+
+	weapon_->Update();
 }
 
 void Player::MoveFront()
@@ -182,6 +194,7 @@ void Player::UpdateSlash()
 	moveVector = moveVector.Normalize() * cSPEEDSLASH_ * (float)lwp::GetDeltaTime();
 
 	world_.translation += moveVector;
+	t = (slashData_->frame_ / (float)slashData_->maxFrame_);
 }
 
 void Player::UpdateMoment()
@@ -203,6 +216,7 @@ void Player::UpdateMoment()
 
 		world_.translation += moveVector;
 	}
+	t = (momentData_->frame_ / (float)momentData_->maxFrame_);
 }
 
 void Player::InitDatas()
