@@ -1,4 +1,5 @@
 #include "ArrowEnemy.h"
+#include <math.h>
 
 void ArrowEnemy::Init()
 {
@@ -23,13 +24,14 @@ void ArrowEnemy::Update()
 		models_[0]->transform.rotation.y -= 0.01f;
 	}
 #endif // _DEBUG
+	// ‘_‚¤
+	Aim();
 
-	ImGui::Begin("arrow");
 	// –î‚ÌXVˆ—
 	for (std::unique_ptr<Arrow>& arrows : arrows_) {
 		arrows->Update();
 	}
-	ImGui::End();
+
 	arrows_.remove_if([](std::unique_ptr<Arrow>& arrow) {
 		if (!arrow->GetIsAlive()) {
 			arrow.reset();
@@ -47,4 +49,11 @@ void ArrowEnemy::Move(LWP::Math::Vector3 MoveVec)
 void ArrowEnemy::Attack()
 {
 
+}
+
+void ArrowEnemy::Aim()
+{
+	// ‘_‚¤‘ÎÛ‚Ég‘Ì‚ğŒü‚¯‚é
+	float radian = atan2(target_->x - models_[0]->transform.translation.x, target_->y - models_[0]->transform.translation.y);
+	models_[0]->transform.rotation.y = radian;
 }
