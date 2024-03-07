@@ -7,6 +7,7 @@
 
 #include "Commands/PlayerInput.h"
 #include "Game/Objects/Player/Weapon/Weapon.h"
+#include "Game/Objects/Player/SlashPanel.h"
 
 class Player final
 {
@@ -199,6 +200,9 @@ private: //*** プライベート変数 ***//
 
 	// イージング
 	float t = 0.0f;
+
+	// 居合攻撃を描画
+	std::unique_ptr<SlashPanel> slashPanel_;
 
 };
 

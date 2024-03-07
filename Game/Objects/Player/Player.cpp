@@ -31,6 +31,9 @@ void Player::Initialize()
 	// 状態の情報を設定
 	InitDatas();
 
+	// 居合攻撃の UI
+	slashPanel_.reset(new SlashPanel);
+	slashPanel_->Initialize();
 }
 
 void Player::Update()
@@ -58,6 +61,8 @@ void Player::Update()
 			// 居合回数のリセット
 			slashData_->relationSlash_ = 0;
 			weapon_->SetBehavior(Weapon::Behavior::Root);
+			// UI に反映
+			slashPanel_->Reset();
 			break;
 		case Player::Behavior::Move:
 			moveData_->frame_ = 0;
@@ -68,6 +73,8 @@ void Player::Update()
 			slashData_->vector_ = destinate_;
 			slashData_->maxFrame_ = slashData_->cBASEFRAME;
 			weapon_->SetBehavior(Weapon::Behavior::Slash);
+			// UI に反映
+			slashPanel_->Slash();
 			break;
 		case Player::Behavior::Moment:
 			momentData_->frame_ = 0;
@@ -102,6 +109,7 @@ void Player::Update()
 	}
 
 	weapon_->Update();
+	slashPanel_->Update();
 }
 
 void Player::MoveFront()
@@ -272,7 +280,7 @@ Player::SlashData* Player::InitSlashData()
 Player::MomentData* Player::InitMomentData()
 {
 	MomentData* data = new MomentData;
-	data->cBASEFRAME = 20;
+	data->cBASEFRAME = 30;
 	data->frame_ = 0;
 	data->maxFrame_ = 0;
 	data->relationSlash_ = 0;
