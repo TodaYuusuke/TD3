@@ -36,6 +36,9 @@ void Player::Initialize()
 	playerCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
 	// 武器との当たり判定を取る
 	playerCollision_->CreateFromPrimitive(demoModel_);
+	// マスク
+	playerCollision_->mask.SetBelongFrag(MaskLayer::Player);
+	playerCollision_->mask.SetHitFrag(MaskLayer::Enemy);
 	// 今のところは何もしていない
 	playerCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		data;
@@ -45,6 +48,9 @@ void Player::Initialize()
 	weaponCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
 	// 武器との当たり判定を取る
 	weaponCollision_->CreateFromPrimitive(weapon_->GetMesh());
+	// マスク
+	weaponCollision_->mask.SetBelongFrag(MaskLayer::Player);
+	weaponCollision_->mask.SetHitFrag(MaskLayer::Enemy);
 	// 今のところは何もしていない
 	weaponCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		data;
@@ -102,8 +108,8 @@ void Player::Update()
 			// 居合回数加算
 			slashData_->relationSlash_++;
 			weapon_->SetBehavior(Weapon::Behavior::Moment);
-			playerCollision_->isActive = false;
-			weaponCollision_->isActive = false;
+			//playerCollision_->isActive = false;
+			//weaponCollision_->isActive = false;
 			break;
 		default:
 			break;

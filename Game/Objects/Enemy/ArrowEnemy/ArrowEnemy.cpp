@@ -54,6 +54,9 @@ void ArrowEnemy::CreateCollider()
 	collider_ = LWP::Common::CreateInstance<AABB>();
 	// 当たり判定を取る
 	collider_->CreateFromPrimitive(models_[0]);
+	// マスク処理
+	collider_->mask.SetBelongFrag(MaskLayer::Enemy);
+	collider_->mask.SetHitFrag(MaskLayer::Player);
 	// 今のところは何もしていない
 	collider_->SetOnCollisionLambda([this](HitData data) {
 		data;
