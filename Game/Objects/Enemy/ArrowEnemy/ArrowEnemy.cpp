@@ -10,21 +10,6 @@ void ArrowEnemy::Init()
 
 	isActive_ = true;
 
-	// 当たり判定を設定
-	collider_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
-	// 当たり判定を取る
-	collider_->CreateFromPrimitive(models_[0]);
-	// 今のところは何もしていない
-	collider_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
-		data;
-		if (data.state == OnCollisionState::Trigger && isActive_)
-		{
-			isActive_ = false;
-			models_[0]->isActive = false;
-			collider_->isActive = false;
-		}
-		});
-
 }
 
 void ArrowEnemy::Update()

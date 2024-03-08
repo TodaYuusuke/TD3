@@ -14,6 +14,8 @@ public:
 	// デストラクタ
 	virtual ~IEnemy() = default;
 
+	void Initialize();
+
 	virtual void Init() = 0;
 	virtual void Update() = 0;
 	virtual void Move(LWP::Math::Vector3 MoveVec) = 0;
@@ -22,6 +24,11 @@ public:
 public: //*** ゲッターセッター ***//
 
 	bool GetIsActive() const { return isActive_; }
+
+protected: //*** 継承クラスで呼び出す共通処理 ***//
+
+	virtual void CreateCollider();
+
 
 protected:
 	std::vector<LWP::Primitive::IPrimitive*> models_;
