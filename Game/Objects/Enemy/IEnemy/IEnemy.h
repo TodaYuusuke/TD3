@@ -11,6 +11,9 @@ struct MotionWork {
 class IEnemy
 {
 public:
+	// デストラクタ
+	virtual ~IEnemy() = default;
+
 	virtual void Init() = 0;
 	virtual void Update() = 0;
 	virtual void Move(LWP::Math::Vector3 MoveVec) = 0;
