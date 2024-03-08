@@ -6,22 +6,6 @@ call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDe
 
 cd "DirectXGame"
 
-REM 変更をすべて取り消す
-git reset --hard
-REM Gitで最新のコードを取得
-git pull origin LWP_20231213
-if ERRORLEVEL 1 (
-    REM ここにエラー発生時の処理を記述します
-    echo.
-    echo git command could not be executed.
-    echo Please check if git is installed.
-    echo Please ask your administrator for error details.
-    echo.
-    pause
-    exit /b
-)
-
-
 REM Debugでビルド
 MSBuild "DirectXGame.sln" /t:clean;rebuild /p:ConfigurationType=StaticLibrary;Configuration=Debug;MultiProcessorCompilation=true
 REM Releaseでビルド
