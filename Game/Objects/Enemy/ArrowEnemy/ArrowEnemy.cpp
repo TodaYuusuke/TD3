@@ -5,18 +5,30 @@ void ArrowEnemy::Init()
 {
 	models_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
 	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
+
+	// å½“ãŸã‚Šåˆ¤å®šã‚’è¨­å®š
+	lwp::Collider::AABB* aabb = LWP::Common::CreateInstance<lwp::Collider::AABB>();
+	// å½“ãŸã‚Šåˆ¤å®šã‚’å–ã‚‹
+	aabb->CreateFromPrimitive(models_[0]);
+	// ä»Šã®ã¨ã“ã‚ã¯ä½•ã‚‚ã—ã¦ã„ãªã„
+	aabb->SetOnCollisionLambda([](lwp::Collider::ICollider* self, lwp::Collider::ICollider* hit, lwp::Collider::OnCollisionState state) {
+		self;
+		hit;
+		state;
+		});
+
 }
 
 void ArrowEnemy::Update()
 {
 #ifdef _DEBUG
-	// –î‚Ì”­Ë
+	// çŸ¢ã®ç™ºå°„
 	if (lwp::Keyboard::GetTrigger(DIK_V)) {
 		Arrow* arrow = new Arrow();
 		arrow->Init(models_[0]->transform);
 		arrows_.push_back(arrow);
 	}
-	// ‘Ì‚ÌŒü‚«‚ğ•Ï‚¦‚é
+	// ä½“ã®å‘ãã‚’å¤‰ãˆã‚‹
 	if (lwp::Keyboard::GetPress(DIK_A)) {
 		models_[0]->transform.rotation.y += 0.01f;
 	}
@@ -24,10 +36,10 @@ void ArrowEnemy::Update()
 		models_[0]->transform.rotation.y -= 0.01f;
 	}
 #endif // _DEBUG
-	// ‘_‚¤
+	// ç‹™ã†
 	//Aim();
 
-	// –î‚ÌXVˆ—
+	// çŸ¢ã®æ›´æ–°å‡¦ç†
 	for (Arrow* arrow : arrows_) {
 		arrow->Update();
 	}
@@ -53,7 +65,7 @@ void ArrowEnemy::Attack()
 
 void ArrowEnemy::Aim()
 {
-	// ‘_‚¤‘ÎÛ‚Ég‘Ì‚ğŒü‚¯‚é
+	// ç‹™ã†å¯¾è±¡ã«èº«ä½“ã‚’å‘ã‘ã‚‹
 	float radian = atan2(target_->x - models_[0]->transform.translation.x, target_->y - models_[0]->transform.translation.y);
 	models_[0]->transform.rotation.y = radian;
 }

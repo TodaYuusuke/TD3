@@ -2,18 +2,30 @@
 
 void EnemyManager::Init()
 {
-	//enemys_.push_back(std::make_unique<NormalEnemy>());
-	//enemys_.push_back(std::make_unique<ShieldEnemy>());
-	enemys_.push_back(std::make_unique<ArrowEnemy>());
-	for (std::unique_ptr<IEnemy>& enemy_ : enemys_) {
+	//enemys_.push_back(new NormalEnemy);
+	//enemys_.push_back(new ShieldEnemy);
+	enemys_.push_back(new ArrowEnemy);
+	for (IEnemy*& enemy_ : enemys_)
+	{
 		enemy_->Init();
 	}
 }
 
 void EnemyManager::Update()
 {
-	for (std::unique_ptr<IEnemy>& enemy_ : enemys_) {
-		enemy_->Update();
-		//enemy_->Move({0.0f,1.0f,0.0f});
+	// 消しながら更新
+	for (std::list<IEnemy*>::iterator itr = enemys_.begin(); itr != enemys_.end();)
+	{
+		// 消えているなら
+		if (!(*itr)->GetIsActive())
+		{
+			itr = enemys_.erase(itr);
+			continue;
+		}
+		// 更新
+		(*itr)->Update();
+
+		// 次へ
+		++itr;
 	}
 }

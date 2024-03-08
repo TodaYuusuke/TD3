@@ -16,7 +16,13 @@ public:
 	virtual void Move(LWP::Math::Vector3 MoveVec) = 0;
 	virtual void Attack() = 0;
 
+public: //*** ゲッターセッター ***//
+
+	bool GetIsActive() const { return isActive_; }
+
 protected:
-	std::vector<LWP::Primitive::IPrimitive*>models_;
+	std::vector<LWP::Primitive::IPrimitive*> models_;
+
+	bool isActive_ = false;
 
 };

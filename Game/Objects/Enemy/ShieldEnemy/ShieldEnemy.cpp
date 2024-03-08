@@ -4,6 +4,16 @@ void ShieldEnemy::Init()
 {
 	models_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
 	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::CYAN);
+	// 当たり判定を設定
+	lwp::Collider::AABB* aabb = LWP::Common::CreateInstance<lwp::Collider::AABB>();
+	// 当たり判定を取る
+	aabb->CreateFromPrimitive(models_[0]);
+	// 今のところは何もしていない
+	aabb->SetOnCollisionLambda([](lwp::Collider::ICollider* self, lwp::Collider::ICollider* hit, lwp::Collider::OnCollisionState state) {
+		self;
+		hit;
+		state;
+		});
 }
 
 void ShieldEnemy::Update()

@@ -4,7 +4,7 @@
 
 class ArrowEnemy : public IEnemy
 {
-public:// ƒpƒuƒŠƒbƒN‚Èƒƒ“ƒoŠÖ”
+public:// ãƒ‘ãƒ–ãƒªãƒƒã‚¯ãªãƒ¡ãƒ³ãƒé–¢æ•°
 	/// 
 	/// Default Method
 	/// 
@@ -17,23 +17,23 @@ public:// ƒpƒuƒŠƒbƒN‚Èƒƒ“ƒoŠÖ”
 	/// 
 
 	/// Getter
-	// ‘_‚¤‘ÎÛ‚ğæ“¾
+	// ç‹™ã†å¯¾è±¡ã‚’å–å¾—
 	const LWP::Math::Vector3& GetAimTarget() { return *target_; }
 
 	/// Setter
-	// ‘_‚¤‘ÎÛ‚ğİ’è
+	// ç‹™ã†å¯¾è±¡ã‚’è¨­å®š
 	void SetAimTarget(LWP::Math::Vector3* target) { target_ = target; }
 
-private:// ƒvƒ‰ƒCƒx[ƒg‚Èƒƒ“ƒoŠÖ”
-	// ˆÚ“®
+private:// ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆãªãƒ¡ãƒ³ãƒé–¢æ•°
+	// ç§»å‹•
 	void Move(LWP::Math::Vector3 MoveVec)override;
-	// UŒ‚
+	// æ”»æ’ƒ
 	void Attack()override;
-	// ‘ÎÛ‚ğ‘_‚¤
+	// å¯¾è±¡ã‚’ç‹™ã†
 	void Aim();
 
-private:// ƒƒ“ƒo•Ï”
+private:// ãƒ¡ãƒ³ãƒå¤‰æ•°
 	std::list<Arrow*> arrows_;
-	// ‘_‚¤‘ÎÛ
+	// ç‹™ã†å¯¾è±¡
 	LWP::Math::Vector3* target_;
 };
