@@ -98,7 +98,7 @@ public: //*** パブリック関数 ***//
 
 public:	//*** セッター,ゲッター ***//
 
-	lwp::WorldTransform* GetWorldTransform() { return &world_; }
+	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
 	void SetCameraPointer(const lwp::Camera* p) { camera_ = p; }
 
 public: //*** コマンド操作で呼び出される関数 ***//
@@ -172,8 +172,6 @@ private: //*** プライベート変数 ***//
 
 	// プレイヤーのモデル
 	LWP::Primitive::Mesh* demoModel_ = nullptr;
-	// ワールド座標
-	LWP::Object::WorldTransform world_;
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
 

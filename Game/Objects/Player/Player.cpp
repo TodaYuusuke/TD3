@@ -11,17 +11,16 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	world_.Initialize();
 	// モデル読み込み
 	demoModel_ = LWP::Resource::LoadModel("cube/cube.obj");
-	demoModel_->transform.Parent(&world_);
+	//demoModel_->transform.Parent(&world_);
 	demoModel_->isActive = true;
 	demoModel_->name = "Player";
 
 	// 武器を作成
 	weapon_.reset(new Weapon);
 	weapon_->Initialize();
-	weapon_->SetParent(&world_);
+	weapon_->SetParent(&demoModel_->transform);
 	weapon_->SetTPointer(&t);
 
 	// 入力ハンドルを初期化
@@ -34,6 +33,17 @@ void Player::Initialize()
 	// 居合攻撃の UI
 	slashPanel_.reset(new SlashPanel);
 	slashPanel_->Initialize();
+
+	// 当たり判定を設定
+	lwp::Collider::AABB* aabb = LWP::Common::CreateInstance<lwp::Collider::AABB>();
+	// 武器との当たり判定を取る
+	aabb->CreateFromPrimitive(weapon_->GetMesh());
+	// 今のところは何もしていない
+	aabb->SetOnCollisionLambda([](lwp::Collider::ICollider* self, lwp::Collider::ICollider* hit, lwp::Collider::OnCollisionState state) {
+		self;
+		hit;
+		state;
+		});
 }
 
 void Player::Update()
@@ -177,11 +187,11 @@ void Player::UpdateMove()
 	moveVector.y = 0.0f;
 
 	// モデル回転
-	world_.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 	
 	moveVector = moveVector.Normalize() * cSPEEDMOVE_ * (float)lwp::GetDeltaTime();
 
-	world_.translation += moveVector;
+	demoModel_->transform.translation += moveVector;
 }
 
 
@@ -197,11 +207,11 @@ void Player::UpdateSlash()
 	moveVector.y = 0.0f;
 
 	// モデル回転
-	world_.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 	moveVector = moveVector.Normalize() * cSPEEDSLASH_ * (float)lwp::GetDeltaTime();
 
-	world_.translation += moveVector;
+	demoModel_->transform.translation += moveVector;
 	t = (slashData_->frame_ / (float)slashData_->maxFrame_);
 }
 
@@ -218,11 +228,11 @@ void Player::UpdateMoment()
 		moveVector.y = 0.0f;
 
 		// モデル回転
-		world_.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+		demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 		moveVector = moveVector.Normalize() * cSPEEDSLASH_ * 0.01f * (float)lwp::GetDeltaTime();
 
-		world_.translation += moveVector;
+		demoModel_->transform.translation += moveVector;
 	}
 	t = (momentData_->frame_ / (float)momentData_->maxFrame_);
 }
