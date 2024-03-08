@@ -19,6 +19,7 @@ void EnemyManager::Update()
 		// 消えているなら
 		if (!(*itr)->GetIsActive())
 		{
+			delete* itr;
 			itr = enemys_.erase(itr);
 			continue;
 		}

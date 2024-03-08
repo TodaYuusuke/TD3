@@ -1,20 +1,28 @@
 #include "ArrowEnemy.h"
 #include <math.h>
 
+using namespace LWP::Object::Collider;
+
 void ArrowEnemy::Init()
 {
 	models_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
 	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
 
+	isActive_ = true;
+
 	// 当たり判定を設定
-	lwp::Collider::AABB* aabb = LWP::Common::CreateInstance<lwp::Collider::AABB>();
+	collider_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
 	// 当たり判定を取る
-	aabb->CreateFromPrimitive(models_[0]);
+	collider_->CreateFromPrimitive(models_[0]);
 	// 今のところは何もしていない
-	aabb->SetOnCollisionLambda([](lwp::Collider::ICollider* self, lwp::Collider::ICollider* hit, lwp::Collider::OnCollisionState state) {
-		self;
-		hit;
-		state;
+	collider_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
+		data;
+		if (data.state == OnCollisionState::Trigger && isActive_)
+		{
+			isActive_ = false;
+			models_[0]->isActive = false;
+			collider_->isActive = false;
+		}
 		});
 
 }
