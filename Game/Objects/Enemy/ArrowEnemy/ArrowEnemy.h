@@ -25,6 +25,10 @@ public:// パブリックなメンバ関数
 	void SetAimTarget(LWP::Math::Vector3* target) { target_ = target; }
 
 private:// プライベートなメンバ関数
+
+	// コライダーを生成
+	void CreateCollider() override;
+
 	// 移動
 	void Move(LWP::Math::Vector3 MoveVec)override;
 	// 攻撃

@@ -8,8 +8,10 @@ void ArrowEnemy::Init()
 	models_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
 	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
 
+	// 最初から描画
 	isActive_ = true;
-
+	// 当たり判定は Initialize() 関数で呼び出しているので
+	// 条件を変えたいなら CreateCollider() 関数をオーバーライドする
 }
 
 void ArrowEnemy::Update()
@@ -43,6 +45,24 @@ void ArrowEnemy::Update()
 			return true;
 		}
 		return false;
+		});
+}
+
+void ArrowEnemy::CreateCollider()
+{
+	// 当たり判定を設定
+	collider_ = LWP::Common::CreateInstance<AABB>();
+	// 当たり判定を取る
+	collider_->CreateFromPrimitive(models_[0]);
+	// 今のところは何もしていない
+	collider_->SetOnCollisionLambda([this](HitData data) {
+		data;
+		if (data.state == OnCollisionState::Trigger && isActive_)
+		{
+			isActive_ = false;
+			models_[0]->isActive = false;
+			collider_->isActive = false;
+		}
 		});
 }
 
