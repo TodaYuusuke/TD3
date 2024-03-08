@@ -202,5 +202,8 @@ private: //*** プライベート変数 ***//
 	// 居合攻撃を描画
 	std::unique_ptr<SlashPanel> slashPanel_;
 
+	// 当たり判定をオンオフするための変数
+	lwp::Collider::AABB* playerCollision_ = nullptr;
+	lwp::Collider::AABB* weaponCollision_ = nullptr;
 };
 

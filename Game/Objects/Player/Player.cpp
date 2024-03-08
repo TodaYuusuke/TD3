@@ -31,15 +31,27 @@ void Player::Initialize()
 	slashPanel_->Initialize();
 
 	// 当たり判定を設定
-	lwp::Collider::AABB* aabb = LWP::Common::CreateInstance<lwp::Collider::AABB>();
+	playerCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
 	// 武器との当たり判定を取る
-	aabb->CreateFromPrimitive(weapon_->GetMesh());
+	playerCollision_->CreateFromPrimitive(demoModel_);
 	// 今のところは何もしていない
-	aabb->SetOnCollisionLambda([](lwp::Collider::ICollider* self, lwp::Collider::ICollider* hit, lwp::Collider::OnCollisionState state) {
+	playerCollision_->SetOnCollisionLambda([](lwp::Collider::ICollider* self, lwp::Collider::ICollider* hit, lwp::Collider::OnCollisionState state) {
 		self;
 		hit;
 		state;
 		});
+	playerCollision_->isActive = false;
+	// 当たり判定を設定
+	weaponCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
+	// 武器との当たり判定を取る
+	weaponCollision_->CreateFromPrimitive(weapon_->GetMesh());
+	// 今のところは何もしていない
+	weaponCollision_->SetOnCollisionLambda([](lwp::Collider::ICollider* self, lwp::Collider::ICollider* hit, lwp::Collider::OnCollisionState state) {
+		self;
+		hit;
+		state;
+		});
+	weaponCollision_->isActive = false;
 }
 
 void Player::Update()
@@ -81,6 +93,8 @@ void Player::Update()
 			weapon_->SetBehavior(Weapon::Behavior::Slash);
 			// UI に反映
 			slashPanel_->Slash();
+			playerCollision_->isActive = true;
+			weaponCollision_->isActive = true;
 			break;
 		case Player::Behavior::Moment:
 			momentData_->frame_ = 0;
@@ -90,6 +104,8 @@ void Player::Update()
 			// 居合回数加算
 			slashData_->relationSlash_++;
 			weapon_->SetBehavior(Weapon::Behavior::Moment);
+			playerCollision_->isActive = false;
+			weaponCollision_->isActive = false;
 			break;
 		default:
 			break;
