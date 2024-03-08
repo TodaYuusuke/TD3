@@ -1,13 +1,4 @@
 #include "Weapon.h"
-
-Weapon::Weapon()
-{
-}
-
-Weapon::~Weapon()
-{
-}
-
 void Weapon::Initialize()
 {
 	// モデル読み込み

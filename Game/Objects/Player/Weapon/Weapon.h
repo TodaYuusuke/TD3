@@ -50,7 +50,7 @@ private:
 public: //*** パブリック関数 ***//
 
 	// コンストラクタ
-	Weapon();
+	Weapon() = default;
 	// デストラクタ
 	~Weapon();
 

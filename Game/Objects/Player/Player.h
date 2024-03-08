@@ -87,9 +87,9 @@ private:
 public: //*** パブリック関数 ***//
 
 	// コンストラクタ
-	Player();
+	Player() = default;
 	// デストラクタ
-	~Player();
+	~Player() = default;
 
 	// 初期化
 	void Initialize();
