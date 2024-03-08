@@ -140,7 +140,7 @@ private: //*** プライベート変数 ***//
 	//*** 外部から設定する変数 ***//
 
 	// プレイヤーの通常移動
-	float cSPEEDMOVE_ = 2.0f;
+	float cSPEEDMOVE_ = 4.0f;
 
 	// プレイヤーの通常移動
 	float cSPEEDSLASH_ = 40.0f;
