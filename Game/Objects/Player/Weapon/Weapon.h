@@ -52,7 +52,7 @@ public: //*** パブリック関数 ***//
 	// コンストラクタ
 	Weapon() = default;
 	// デストラクタ
-	~Weapon();
+	~Weapon() = default;
 
 	// 初期化
 	void Initialize();

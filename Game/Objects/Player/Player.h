@@ -89,7 +89,7 @@ public: //*** パブリック関数 ***//
 	// コンストラクタ
 	Player() = default;
 	// デストラクタ
-	~Player() = default;
+	~Player();
 
 	// 初期化
 	void Initialize();

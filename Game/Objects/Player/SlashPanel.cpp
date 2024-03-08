@@ -11,9 +11,9 @@ void SlashPanel::Initialize()
 		data.anchor_ = { 0.5f,0.5f };
 		// 中心からの位置
 		data.transform_.x = kWINDOW_WIDTH_HALF_ + 256 * (-1 + i);
-		// 刀製造
+		// 刀生成
 		katanaPanels_.emplace_back(CreateUIPanel(data));
-		// 鞘製造
+		// 鞘生成
 		data.fileName_ = "saya128.png";
 		sayaPanels_.emplace_back(CreateUIPanel(data));
 	}
