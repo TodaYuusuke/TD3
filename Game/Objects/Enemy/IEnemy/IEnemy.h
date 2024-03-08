@@ -26,6 +26,8 @@ public: //*** ゲッターセッター ***//
 protected:
 	std::vector<LWP::Primitive::IPrimitive*> models_;
 
+	// 敵の当たり判定
+	lwp::Collider::AABB* collider_ = nullptr;
 	bool isActive_ = false;
 
 };

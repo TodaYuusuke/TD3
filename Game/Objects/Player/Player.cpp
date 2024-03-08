@@ -13,6 +13,8 @@ void Player::Initialize()
 	demoModel_->isActive = true;
 	demoModel_->name = "Player";
 
+	demoModel_->transform.translation.z = -4.0f;
+
 	// 武器を作成
 	weapon_.reset(new Weapon);
 	weapon_->Initialize();
@@ -35,10 +37,8 @@ void Player::Initialize()
 	// 武器との当たり判定を取る
 	playerCollision_->CreateFromPrimitive(demoModel_);
 	// 今のところは何もしていない
-	playerCollision_->SetOnCollisionLambda([](lwp::Collider::ICollider* self, lwp::Collider::ICollider* hit, lwp::Collider::OnCollisionState state) {
-		self;
-		hit;
-		state;
+	playerCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
+		data;
 		});
 	playerCollision_->isActive = false;
 	// 当たり判定を設定
@@ -46,10 +46,8 @@ void Player::Initialize()
 	// 武器との当たり判定を取る
 	weaponCollision_->CreateFromPrimitive(weapon_->GetMesh());
 	// 今のところは何もしていない
-	weaponCollision_->SetOnCollisionLambda([](lwp::Collider::ICollider* self, lwp::Collider::ICollider* hit, lwp::Collider::OnCollisionState state) {
-		self;
-		hit;
-		state;
+	weaponCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
+		data;
 		});
 	weaponCollision_->isActive = false;
 }

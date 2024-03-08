@@ -17,11 +17,9 @@ void Arrow::Init(lwp::WorldTransform transform)
 	// 当たり判定を設定
 	AABB* aabb = LWP::Common::CreateInstance<AABB>();
 	aabb->CreateFromPrimitive(model_);
-	aabb->SetOnCollisionLambda([](ICollider* self, ICollider* hit, OnCollisionState state) {
-		self;
-		hit;
-		state;
-	});
+	aabb->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
+		data;
+		});
 }
 
 void Arrow::Update()
