@@ -152,6 +152,7 @@
     <ClCompile Include="Class\Scene\Sample.cpp" />
     <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.cpp" />
     <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\Arrow\Arrow.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\IEnemy\IEnemy.cpp" />
     <ClCompile Include="Game\Objects\Enemy\NormalEnemy\NormalEnemy.cpp" />
     <ClCompile Include="Game\Objects\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.cpp" />
