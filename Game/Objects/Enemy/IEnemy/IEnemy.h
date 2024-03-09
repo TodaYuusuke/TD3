@@ -8,6 +8,7 @@ struct MotionWork {
 	bool flag = false;//再生のフラグ
 };
 
+class Player;
 class IEnemy
 {
 public:
@@ -15,8 +16,11 @@ public:
 	virtual void Update() = 0;
 	virtual void Move(LWP::Math::Vector3 MoveVec) = 0;
 	virtual void Attack() = 0;
+	// 狙う対象をセット(今回は自機をセットする)
+	virtual void SetTarget(Player* player) { player_ = player; }
 
 protected:
 	std::vector<LWP::Primitive::IPrimitive*>models_;
-
+	// 
+	Player* player_;
 };

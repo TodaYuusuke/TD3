@@ -1,4 +1,5 @@
 #include "ArrowEnemy.h"
+#include "../../Player/Player.h"
 #include <math.h>
 
 void ArrowEnemy::Init()
@@ -10,30 +11,31 @@ void ArrowEnemy::Init()
 void ArrowEnemy::Update()
 {
 #ifdef _DEBUG
-	// –î‚Ì”­ŽË
+	// çŸ¢ã®ç™ºå°„
 	if (lwp::Keyboard::GetTrigger(DIK_V)) {
 		Arrow* arrow = new Arrow();
 		arrow->Init(models_[0]->transform);
 		arrows_.push_back(arrow);
 	}
-	// ‘Ì‚ÌŒü‚«‚ð•Ï‚¦‚é
-	if (lwp::Keyboard::GetPress(DIK_A)) {
-		models_[0]->transform.rotation.y += 0.01f;
-	}
-	if (lwp::Keyboard::GetPress(DIK_D)) {
-		models_[0]->transform.rotation.y -= 0.01f;
-	}
+	//// ä½“ã®å‘ãã‚’å¤‰ãˆã‚‹
+	//if (lwp::Keyboard::GetPress(DIK_A)) {
+	//	models_[0]->transform.rotation.y += 0.01f;
+	//}
+	//if (lwp::Keyboard::GetPress(DIK_D)) {
+	//	models_[0]->transform.rotation.y -= 0.01f;
+	//}
 #endif // _DEBUG
-	// ‘_‚¤
-	//Aim();
+	// ç‹™ã†
+	Aim();
 
-	// –î‚ÌXVˆ—
+	// çŸ¢ã®æ›´æ–°å‡¦ç†
 	for (Arrow* arrow : arrows_) {
 		arrow->Update();
 	}
 
 	arrows_.remove_if([](Arrow* arrow) {
 		if (!arrow->GetIsAlive()) {
+			arrow->SetIsCollision(false);
 			delete arrow;
 			return true;
 		}
@@ -53,7 +55,7 @@ void ArrowEnemy::Attack()
 
 void ArrowEnemy::Aim()
 {
-	// ‘_‚¤‘ÎÛ‚Ég‘Ì‚ðŒü‚¯‚é
-	float radian = atan2(target_->x - models_[0]->transform.translation.x, target_->y - models_[0]->transform.translation.y);
+	// ç‹™ã†å¯¾è±¡ã«èº«ä½“ã‚’å‘ã‘ã‚‹
+	float radian = atan2(player_->GetWorldPosition().x - models_[0]->transform.translation.x, player_->GetWorldPosition().z - models_[0]->transform.translation.z);
 	models_[0]->transform.rotation.y = radian;
 }

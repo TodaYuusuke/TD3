@@ -8,12 +8,24 @@ class Player;
 class EnemyManager
 {
 public:
+	/// 
+	/// Default Method
+	/// 
+	
 	void Init();
 	void Update();
 
+	/// 
+	/// User Method
+	/// 
+
+	/// Getter
+
+	/// Setter
+	// 自機のアドレスを設定
 	void SetPlayer(Player* player) { player_ = player; }
 
 private:
-	std::list<std::unique_ptr<IEnemy>>enemys_;
+	std::list<IEnemy*>enemys_;
 	Player* player_;
 };

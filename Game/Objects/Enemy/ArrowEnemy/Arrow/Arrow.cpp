@@ -1,7 +1,5 @@
 #include "Arrow.h"
 
-using namespace LWP::Object::Collider;
-
 void Arrow::Init(lwp::WorldTransform transform)
 {
 	// モデルの作成
@@ -15,9 +13,9 @@ void Arrow::Init(lwp::WorldTransform transform)
 	attackWork.targetpoint = attackWork.targetpoint.Normalize();
 
 	// 当たり判定を設定
-	AABB* aabb = LWP::Common::CreateInstance<AABB>();
-	aabb->CreateFromPrimitive(model_);
-	aabb->SetOnCollisionLambda([](ICollider* self, ICollider* hit, OnCollisionState state) {
+	aabb_ = LWP::Common::CreateInstance<AABB>();
+	aabb_->CreateFromPrimitive(model_);
+	aabb_->SetOnCollisionLambda([](ICollider* self, ICollider* hit, OnCollisionState state) {
 		self;
 		hit;
 		state;
@@ -33,6 +31,7 @@ void Arrow::Update()
 	if (deadTimer_ >= kLifeTime) {
 		attackWork.flag = false;
 		model_->isActive = false;
+		aabb_->isActive = false;
 	}
 	// 寿命を進める
 	deadTimer_++;
