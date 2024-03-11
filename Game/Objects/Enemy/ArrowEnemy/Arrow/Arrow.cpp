@@ -1,7 +1,5 @@
 #include "Arrow.h"
 
-using namespace LWP::Object::Collider;
-
 void Arrow::Init(lwp::WorldTransform transform)
 {
 	// モデルの作成
@@ -31,6 +29,7 @@ void Arrow::Update()
 	if (deadTimer_ >= kLifeTime) {
 		attackWork.flag = false;
 		model_->isActive = false;
+		aabb_->isActive = false;
 	}
 	// 寿命を進める
 	deadTimer_++;

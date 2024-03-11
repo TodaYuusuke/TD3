@@ -27,6 +27,7 @@ void TItleScene::Initialize()
 	player_->SetCameraPointer(mainCamera);
 
 	enemyManager_ = std::make_unique<EnemyManager>();
+	enemyManager_->SetPlayer(player_.get());
 	enemyManager_->Init();
 }
 
