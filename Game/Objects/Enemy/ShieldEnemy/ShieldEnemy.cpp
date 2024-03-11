@@ -11,41 +11,9 @@ void ShieldEnemy::Init()
 
 void ShieldEnemy::Update()
 {
-	if (CheckAttackRange()) {
-		Attack();
-	}
-	if (attackWaitTime_ >= 0) {
-		attackWaitTime_--;
-	}
-
-	ImGui::Begin("Enemy");
-	ImGui::Text("attackWaitTime:%d", attackWaitTime_);
-	ImGui::End();
-}
-
-void ShieldEnemy::Move(LWP::Math::Vector3 MoveVec)
-{
-	models_[0]->transform.translation.x += MoveVec.y * LWP::Info::GetDeltaTime();
-}
-
-void ShieldEnemy::Attack()
-{
-	if (attackWaitTime_ <= 0) {
-		attackWork.flag = true;
-		lwp::Vector3 point{ 0.0f,0.0f,-1.0f };
-		attackWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0]->transform.rotation)) * -1/*ベクトルを反転*/;
-		attackWork.targetpoint = attackWork.targetpoint.Normalize();
-		attackEndWork.targetpoint = attackWork.targetpoint * -1/*ベクトルを反転*/;
-		attackWaitTime_ = kAttackWaitTime;
-	}
-
-	//if (lwp::Keyboard::GetPress(DIK_SPACE)) {
-	//	attackWork.flag = true;
-	//	lwp::Vector3 point{ 0.0f,0.0f,-1.0f };
-	//	attackWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0]->transform.rotation)) * -1/*ベクトルを反転*/;
-	//	attackWork.targetpoint = attackWork.targetpoint.Normalize();
-	//	attackEndWork.targetpoint = attackWork.targetpoint * -1/*ベクトルを反転*/;
-	//}
+	// 攻撃処理
+	Attack();
+	// 攻撃アニメーション
 	if (attackWork.flag) {
 		if (attackWork.t < 1.0f) {
 			attackWork.t += attackWork.speed;
@@ -70,7 +38,7 @@ void ShieldEnemy::Attack()
 	if (attackEndWork.flag) {
 		if (attackEndWork.t < 1.0f) {
 			attackEndWork.t += attackEndWork.speed;
-			
+
 			models_[0]->transform.translation += attackEndWork.targetpoint * LWP::Info::GetDeltaTime() * 10.0f;
 		}
 		else if (attackEndWork.t >= 1.0f) {
@@ -78,6 +46,29 @@ void ShieldEnemy::Attack()
 			attackEndWork.t = 0.0f;
 
 			attackEndWork.flag = false;
+		}
+	}
+
+	if (attackWaitTime_ >= 0) {
+		attackWaitTime_--;
+	}
+}
+
+void ShieldEnemy::Move(LWP::Math::Vector3 MoveVec)
+{
+	models_[0]->transform.translation.x += MoveVec.y * LWP::Info::GetDeltaTime();
+}
+
+void ShieldEnemy::Attack()
+{
+	if (CheckAttackRange()) {
+		if (attackWaitTime_ <= 0) {
+			attackWork.flag = true;
+			lwp::Vector3 point{ 0.0f,0.0f,-1.0f };
+			attackWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0]->transform.rotation)) * -1/*ベクトルを反転*/;
+			attackWork.targetpoint = attackWork.targetpoint.Normalize();
+			attackEndWork.targetpoint = attackWork.targetpoint * -1/*ベクトルを反転*/;
+			attackWaitTime_ = kAttackWaitTime;
 		}
 	}
 }

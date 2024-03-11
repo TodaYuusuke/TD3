@@ -11,35 +11,14 @@ void NormalEnemy::Init()
 
 void NormalEnemy::Update()
 {
-	if (CheckAttackRange()) {
-		Attack();
-	}
-	if (attackWaitTime_ >= 0) {
-		attackWaitTime_--;
-	}
-}
-
-void NormalEnemy::Move(LWP::Math::Vector3 MoveVec)
-{
-	models_[0]->transform.translation += MoveVec * LWP::Info::GetDeltaTime();
-}
-
-void NormalEnemy::Attack()
-{
-	if (attackWaitTime_ <= 0) {
-		attackWork.flag = true;
-		PlayerRot = models_[0]->transform.rotation;
-		attackWaitTime_ = kAttackWaitTime;
-	}
-	//if (lwp::Keyboard::GetPress(DIK_SPACE)) {
-	//	attackWork.flag = true;
-	//	PlayerRot = models_[0]->transform.rotation;
-	//}
+	// 攻撃処理
+	Attack();
+	// 攻撃アニメーション
 	lwp::Vector3 point = { 0.0f,0.0f,0.0f };
 	if (attackWork.flag) {
 		if (attackWork.t < 1.0f) {
 			attackWork.t += attackWork.speed;
-			point = lwp::Vector3::Lerp(PlayerRot,attackWork.targetpoint,attackWork.t);
+			point = lwp::Vector3::Lerp(PlayerRot, attackWork.targetpoint, attackWork.t);
 			models_[0]->transform.rotation = point;
 		}
 		else if (attackWork.t >= 1.0f) {
@@ -69,6 +48,26 @@ void NormalEnemy::Attack()
 			attackEndWork.t = 0.0f;
 
 			attackEndWork.flag = false;
+		}
+	}
+
+	if (attackWaitTime_ >= 0) {
+		attackWaitTime_--;
+	}
+}
+
+void NormalEnemy::Move(LWP::Math::Vector3 MoveVec)
+{
+	models_[0]->transform.translation += MoveVec * LWP::Info::GetDeltaTime();
+}
+
+void NormalEnemy::Attack()
+{
+	if (CheckAttackRange()) {
+		if (attackWaitTime_ <= 0) {
+			attackWork.flag = true;
+			PlayerRot = models_[0]->transform.rotation;
+			attackWaitTime_ = kAttackWaitTime;
 		}
 	}
 }

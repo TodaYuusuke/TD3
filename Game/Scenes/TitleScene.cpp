@@ -9,6 +9,7 @@ using namespace LWP::Utility;
 // 初期化
 void TItleScene::Initialize()
 {
+	uvTexture = LWP::Resource::LoadTextureLongPath("resources/system/texture/uvChecker.png");
 	// 球
 	sphere = LWP::Primitive::CreateInstance<Sphere>();
 	sphere->Radius(0.3f);
@@ -29,6 +30,13 @@ void TItleScene::Initialize()
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->SetPlayer(player_.get());
 	enemyManager_->Init();
+
+	// 地面
+	Mesh* ground = LWP::Resource::LoadModel("ground/ground.obj");
+	ground->transform.translation.y = -0.5f;
+	ground->transform.scale = { 10.0f,0.1f, 10.0f };
+	//ground->material.enableLighting = true;
+	ground->name = "ground";
 }
 
 // 更新

@@ -35,6 +35,4 @@ public:// 定数
 private:// メンバ変数
 	// 矢
 	std::list<Arrow*> arrows_;
-
-	MotionWork attackWork_;
 };
