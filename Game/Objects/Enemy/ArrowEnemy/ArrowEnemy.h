@@ -29,9 +29,12 @@ private:// プライベートなメンバ関数
 	void Aim();
 
 public:// 定数
-
+	// 攻撃のクールタイム
+	const int kAttackWaitTime = 120;
 
 private:// メンバ変数
 	// 矢
 	std::list<Arrow*> arrows_;
+
+	MotionWork attackWork_;
 };

@@ -1,14 +1,22 @@
 #include "NormalEnemy.h"
+#include "../../Player/Player.h"
 
 void NormalEnemy::Init()
 {
 	models_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
 	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
+
+	attackWaitTime_ = kAttackWaitTime;
 }
 
 void NormalEnemy::Update()
 {
-	Attack();
+	if (CheckAttackRange()) {
+		Attack();
+	}
+	if (attackWaitTime_ >= 0) {
+		attackWaitTime_--;
+	}
 }
 
 void NormalEnemy::Move(LWP::Math::Vector3 MoveVec)
@@ -18,10 +26,15 @@ void NormalEnemy::Move(LWP::Math::Vector3 MoveVec)
 
 void NormalEnemy::Attack()
 {
-	if (lwp::Keyboard::GetPress(DIK_SPACE)) {
+	if (attackWaitTime_ <= 0) {
 		attackWork.flag = true;
 		PlayerRot = models_[0]->transform.rotation;
+		attackWaitTime_ = kAttackWaitTime;
 	}
+	//if (lwp::Keyboard::GetPress(DIK_SPACE)) {
+	//	attackWork.flag = true;
+	//	PlayerRot = models_[0]->transform.rotation;
+	//}
 	lwp::Vector3 point = { 0.0f,0.0f,0.0f };
 	if (attackWork.flag) {
 		if (attackWork.t < 1.0f) {
@@ -58,4 +71,17 @@ void NormalEnemy::Attack()
 			attackEndWork.flag = false;
 		}
 	}
+}
+
+bool NormalEnemy::CheckAttackRange() {
+	// Ž©‹@‚Æ‚Ì‹——£
+	float distance = (models_[0]->transform.translation - player_->GetWorldPosition()).Length();
+	if (distance <= kAttackRange) {
+		return true;
+	}
+	return false;
+}
+
+LWP::Math::Vector3 NormalEnemy::GetDirectVel() {
+	return (models_[0]->transform.translation - player_->GetWorldPosition()).Normalize();
 }

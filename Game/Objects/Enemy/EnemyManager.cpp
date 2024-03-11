@@ -3,9 +3,9 @@
 
 void EnemyManager::Init()
 {
-	//enemys_.push_back(std::make_unique<NormalEnemy>());
-	//enemys_.push_back(std::make_unique<ShieldEnemy>());
-	enemys_.push_back(new ArrowEnemy());
+	enemys_.push_back(new NormalEnemy());
+	//enemys_.push_back(new ShieldEnemy());
+	//enemys_.push_back(new ArrowEnemy());
 	
 	for (IEnemy* enemy : enemys_) {
 		enemy->Init();

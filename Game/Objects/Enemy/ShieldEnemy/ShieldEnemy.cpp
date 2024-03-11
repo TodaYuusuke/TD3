@@ -1,14 +1,26 @@
 #include "ShieldEnemy.h"
+#include "../../Player/Player.h"
 
 void ShieldEnemy::Init()
 {
 	models_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
 	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::CYAN);
+
+	attackWaitTime_ = kAttackWaitTime;
 }
 
 void ShieldEnemy::Update()
 {
-	Attack();
+	if (CheckAttackRange()) {
+		Attack();
+	}
+	if (attackWaitTime_ >= 0) {
+		attackWaitTime_--;
+	}
+
+	ImGui::Begin("Enemy");
+	ImGui::Text("attackWaitTime:%d", attackWaitTime_);
+	ImGui::End();
 }
 
 void ShieldEnemy::Move(LWP::Math::Vector3 MoveVec)
@@ -18,13 +30,22 @@ void ShieldEnemy::Move(LWP::Math::Vector3 MoveVec)
 
 void ShieldEnemy::Attack()
 {
-	if (lwp::Keyboard::GetPress(DIK_SPACE)) {
+	if (attackWaitTime_ <= 0) {
 		attackWork.flag = true;
 		lwp::Vector3 point{ 0.0f,0.0f,-1.0f };
 		attackWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0]->transform.rotation)) * -1/*ベクトルを反転*/;
 		attackWork.targetpoint = attackWork.targetpoint.Normalize();
 		attackEndWork.targetpoint = attackWork.targetpoint * -1/*ベクトルを反転*/;
+		attackWaitTime_ = kAttackWaitTime;
 	}
+
+	//if (lwp::Keyboard::GetPress(DIK_SPACE)) {
+	//	attackWork.flag = true;
+	//	lwp::Vector3 point{ 0.0f,0.0f,-1.0f };
+	//	attackWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0]->transform.rotation)) * -1/*ベクトルを反転*/;
+	//	attackWork.targetpoint = attackWork.targetpoint.Normalize();
+	//	attackEndWork.targetpoint = attackWork.targetpoint * -1/*ベクトルを反転*/;
+	//}
 	if (attackWork.flag) {
 		if (attackWork.t < 1.0f) {
 			attackWork.t += attackWork.speed;
@@ -59,4 +80,17 @@ void ShieldEnemy::Attack()
 			attackEndWork.flag = false;
 		}
 	}
+}
+
+bool ShieldEnemy::CheckAttackRange() {
+	// 自機との距離
+	float distance = (models_[0]->transform.translation - player_->GetWorldPosition()).Length();
+	if (distance <= kAttackRange) {
+		return true;
+	}
+	return false;
+}
+
+LWP::Math::Vector3 ShieldEnemy::GetDirectVel() {
+	return (models_[0]->transform.translation - player_->GetWorldPosition()).Normalize();
 }

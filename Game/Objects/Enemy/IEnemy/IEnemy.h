@@ -23,4 +23,6 @@ protected:
 	std::vector<LWP::Primitive::IPrimitive*>models_;
 	// 
 	Player* player_;
+	// 攻撃のクールタイム
+	int attackWaitTime_;
 };
