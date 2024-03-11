@@ -42,13 +42,13 @@ void Weapon::Update()
 	{
 	case Weapon::Behavior::Root:
 		// アニメーション来るまで放置
-		//UpdateRoot();
+		UpdateRoot();
 		break;
 	case Weapon::Behavior::Slash:
-		//UpdateSlash();
+		UpdateSlash();
 		break;
 	case Weapon::Behavior::Moment:
-		//UpdateMoment();
+		UpdateMoment();
 		break;
 	default:
 		break;

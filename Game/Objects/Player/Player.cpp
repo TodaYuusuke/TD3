@@ -22,7 +22,7 @@ void Player::Initialize()
 	weapon_.reset(new Weapon);
 	weapon_->Initialize();
 	weapon_->SetParent(&demoModel_->transform);
-	weapon_->SetTPointer(&t);
+	weapon_->SetTPointer(&easeT_);
 
 	// 入力ハンドルを初期化
 	pInput_ = new PlayerInput();
@@ -53,6 +53,7 @@ void Player::Update()
 	{
 		behavior_ = reqBehavior_.value();
 		t = 0.0f;
+		easeT_ = 0.0f;
 		switch (behavior_)
 		{
 		case Player::Behavior::Root:
@@ -176,6 +177,7 @@ void Player::UpdateRoot()
 	{
 		reqBehavior_ = Behavior::Root;
 	}
+	easeT_ = t / rootData_->maxTime_;
 	//rootData_->time_ += lwp::GetDeltaTime();
 }
 
@@ -185,6 +187,7 @@ void Player::UpdateMove()
 	{
 		reqBehavior_ = Behavior::Root;
 	}
+	easeT_ = t / moveData_->maxTime_;
 	//moveData_->time_ += lwp::GetDeltaTime();
 	// 移動距離とモーション用の更新
 	//t = (moveData_->time_ / (float)moveData_->maxTime_);
@@ -211,6 +214,7 @@ void Player::UpdateSlash()
 	{
 		reqBehavior_ = Behavior::Moment;
 	}
+	easeT_ = t / slashData_->maxTime_;
 	//slashData_->time_ += lwp::GetDeltaTime();
 	// 移動距離とモーション用の更新
 	//t = (slashData_->time_ / (float)slashData_->maxTime_);
@@ -233,6 +237,7 @@ void Player::UpdateMoment()
 	{
 		reqBehavior_ = Behavior::Root;
 	}
+	easeT_ = t / momentData_->maxTime_;
 	//momentData_->time_ += lwp::GetDeltaTime();
 	// 移動距離とモーション用の更新
 	//t = (momentData_->time_ / (float)momentData_->maxTime_);

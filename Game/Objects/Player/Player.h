@@ -214,6 +214,8 @@ private: //*** プライベート変数 ***//
 
 	// 秒数
 	float t = 0.0f;
+	// イージング
+	float easeT_ = 0.0f;
 
 	// 居合攻撃を描画
 	std::unique_ptr<SlashPanel> slashPanel_;
