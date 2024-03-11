@@ -41,13 +41,13 @@ void Weapon::Update()
 	switch (behavior_)
 	{
 	case Weapon::Behavior::Root:
-		UpdateRoot();
+		//UpdateRoot();
 		break;
 	case Weapon::Behavior::Slash:
-		UpdateSlash();
+		//UpdateSlash();
 		break;
 	case Weapon::Behavior::Moment:
-		UpdateMoment();
+		//UpdateMoment();
 		break;
 	default:
 		break;

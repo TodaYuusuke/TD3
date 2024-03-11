@@ -50,40 +50,38 @@ void Player::Update()
 	{
 		behavior_ = reqBehavior_.value();
 		t = 0.0f;
-		//currentData_ = behaviorDatas_[static_cast<size_t>(behavior_)].get();
-		//currentData_->frame_ = 0;
 		switch (behavior_)
 		{
 		case Player::Behavior::Root:
-			rootData_->frame_ = 0;
-			rootData_->maxFrame_ = rootData_->cBASEFRAME;
+			//rootData_->time_ = 0.0f;
+			rootData_->maxTime_ = rootData_->cBASETIME;
 			// 居合回数のリセット
-			slashData_->relationSlash_ = 0;
+			slashData_->relationSlash_ = 0u;
 			weapon_->SetBehavior(Weapon::Behavior::Root);
 			// UI に反映
 			slashPanel_->Reset();
 			break;
 		case Player::Behavior::Move:
-			moveData_->frame_ = 0;
-			moveData_->maxFrame_ = moveData_->cBASEFRAME;
+			//moveData_->time_ = 0.0f;
+			moveData_->maxTime_ = moveData_->cBASETIME;
 			break;
 		case Player::Behavior::Slash:
-			slashData_->frame_ = 0;
+			//slashData_->time_ = 0.0f;
 			slashData_->vector_ = destinate_;
-			slashData_->maxFrame_ = slashData_->cBASEFRAME;
+			slashData_->maxTime_ = slashData_->cBASETIME;
 			weapon_->SetBehavior(Weapon::Behavior::Slash);
+			// 居合回数加算
+			slashData_->relationSlash_++;
 			// UI に反映
 			slashPanel_->Slash();
 			playerCollision_->isActive = true;
 			weaponCollision_->isActive = true;
 			break;
 		case Player::Behavior::Moment:
-			momentData_->frame_ = 0;
+			//momentData_->time_ = 0.0f;
 			momentData_->relationSlash_ = slashData_->relationSlash_;
 			// 回数分フレームを加算
-			momentData_->maxFrame_ = momentData_->cBASEFRAME + (momentData_->relationSlash_ * cFRAMEINCREMENTMOMENT_);
-			// 居合回数加算
-			slashData_->relationSlash_++;
+			momentData_->maxTime_ = momentData_->cBASETIME + (momentData_->relationSlash_ * cTIMEINCREMENTMOMENT_);
 			weapon_->SetBehavior(Weapon::Behavior::Moment);
 			//playerCollision_->isActive = false;
 			//weaponCollision_->isActive = false;
@@ -110,7 +108,7 @@ void Player::Update()
 	default:
 		break;
 	}
-
+	t += lwp::GetDeltaTime();
 	weapon_->Update();
 	slashPanel_->Update();
 }
@@ -161,44 +159,44 @@ void Player::Slash()
 
 void Player::UpdateRoot()
 {
-	if (rootData_->maxFrame_ <= rootData_->frame_)
+	if (rootData_->maxTime_ <= t)
 	{
 		reqBehavior_ = Behavior::Root;
 	}
-	rootData_->frame_++;
+	//rootData_->time_ += lwp::GetDeltaTime();
 }
 
 void Player::UpdateMove()
 {
-	if (moveData_->maxFrame_ <= moveData_->frame_)
+	if (moveData_->maxTime_ <= t)
 	{
 		reqBehavior_ = Behavior::Root;
 	}
-	moveData_->frame_++;
+	//moveData_->time_ += lwp::GetDeltaTime();
 	// 移動距離とモーション用の更新
-	t = (moveData_->frame_ / (float)moveData_->maxFrame_);
+	//t = (moveData_->time_ / (float)moveData_->maxTime_);
 	// 移動方向をカメラに合わせる
 	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
 	moveVector.y = 0.0f;
 
 	// モデル回転
 	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
-	
-	moveVector = moveVector.Normalize() * cSPEEDMOVE_ * (float)lwp::GetDeltaTime();
+
+	//moveVector = moveVector.Normalize() * cSPEEDMOVE_ * max(min(t / moveData_->maxTime_, 1.0f), 0.0f);
+	moveVector = moveVector.Normalize() * (cSPEEDMOVE_ / moveData_->maxTime_) * lwp::GetDeltaTime();
 
 	demoModel_->transform.translation += moveVector;
 }
 
-
 void Player::UpdateSlash()
 {
-	if (slashData_->maxFrame_ <= slashData_->frame_)
+	if (slashData_->maxTime_ <= t)
 	{
 		reqBehavior_ = Behavior::Moment;
 	}
-	slashData_->frame_++;
+	//slashData_->time_ += lwp::GetDeltaTime();
 	// 移動距離とモーション用の更新
-	t = (slashData_->frame_ / (float)slashData_->maxFrame_);
+	//t = (slashData_->time_ / (float)slashData_->maxTime_);
 
 	lwp::Vector3 moveVector = slashData_->vector_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
 	moveVector.y = 0.0f;
@@ -206,20 +204,21 @@ void Player::UpdateSlash()
 	// モデル回転
 	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
-	moveVector = moveVector.Normalize() * cSPEEDSLASH_ * (float)lwp::GetDeltaTime();
+	//moveVector = moveVector.Normalize() * cSPEEDSLASH_ * max(min(t / slashData_->maxTime_, 1.0f), 0.0f);
+	moveVector = moveVector.Normalize() * (cSPEEDSLASH_/ slashData_->maxTime_) * lwp::GetDeltaTime();
 
 	demoModel_->transform.translation += moveVector;
 }
 
 void Player::UpdateMoment()
 {
-	if (momentData_->maxFrame_ <= momentData_->frame_)
+	if (momentData_->maxTime_ <= t)
 	{
 		reqBehavior_ = Behavior::Root;
 	}
-	momentData_->frame_++;
+	//momentData_->time_ += lwp::GetDeltaTime();
 	// 移動距離とモーション用の更新
-	t = (momentData_->frame_ / (float)momentData_->maxFrame_);
+	//t = (momentData_->time_ / (float)momentData_->maxTime_);
 	if (isInputMove_)
 	{
 		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
@@ -228,7 +227,8 @@ void Player::UpdateMoment()
 		// モデル回転
 		demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
-		moveVector = moveVector.Normalize() * cSPEEDSLASH_ * 0.01f * (float)lwp::GetDeltaTime();
+		//moveVector = moveVector.Normalize() * cSPEEDSLASH_ * 0.01f * max(min(t / momentData_->maxTime_, 1.0f), 0.0f);
+		moveVector = moveVector.Normalize() * (cSPEEDMOMENT_ / momentData_->maxTime_) * lwp::GetDeltaTime();
 
 		demoModel_->transform.translation += moveVector;
 	}
@@ -240,10 +240,6 @@ void Player::InitDatas()
 	behavior_ = Behavior::Root;
 
 	// 状態を設定
-	//behaviorDatas_[static_cast<size_t>(Behavior::Root)].reset(InitRootData());
-	//behaviorDatas_[static_cast<size_t>(Behavior::Move)].reset(InitMoveData());
-	//behaviorDatas_[static_cast<size_t>(Behavior::Slash)].reset(InitSlashData());
-	//behaviorDatas_[static_cast<size_t>(Behavior::Moment)].reset(InitMomentData());
 	rootData_.reset(InitRootData());
 	moveData_.reset(InitMoveData());
 	slashData_.reset(InitSlashData());
@@ -257,40 +253,40 @@ void Player::InitDatas()
 Player::RootData* Player::InitRootData()
 {
 	RootData* data = new RootData;
-	data->cBASEFRAME = 1;
-	data->frame_ = 0;
-	data->maxFrame_ = 0;
+	data->cBASETIME = 0.5f;
+	//data->time_ = 0.0f;
+	data->maxTime_ = 0.0f;
 	return data;
 }
 
 Player::MoveData* Player::InitMoveData()
 {
 	MoveData* data = new MoveData;
-	data->cBASEFRAME = 5;
-	data->frame_ = 0;
-	data->maxFrame_ = 0;
+	data->cBASETIME = 0.1f;
+	//data->time_ = 0.0f;
+	data->maxTime_ = 0.0f;
 	return data;
 }
 
 Player::SlashData* Player::InitSlashData()
 {
 	SlashData* data = new SlashData;
-	data->cBASEFRAME = 10;
+	data->cBASETIME = 0.5f;
 	data->vector_ = { 0.0f,0.0f,1.0f };
-	data->frame_ = 0;
-	data->maxFrame_ = 0;
-	data->relationSlash_ = 0;
-	data->MaxRelation_ = 3;
+	//data->time_ = 0.0f;
+	data->maxTime_ = 0.0f;
+	data->relationSlash_ = 0u;
+	data->MaxRelation_ = 3u;
 	return data;
 }
 
 Player::MomentData* Player::InitMomentData()
 {
 	MomentData* data = new MomentData;
-	data->cBASEFRAME = 30;
-	data->frame_ = 0;
-	data->maxFrame_ = 0;
-	data->relationSlash_ = 0;
+	data->cBASETIME = 0.5f;
+	//data->time_ = 0.0f;
+	data->maxTime_ = 0.0f;
+	data->relationSlash_ = 0u;
 	return data;
 }
 
@@ -340,11 +336,6 @@ void Player::UpdateInput()
 	// コマンドを積み重ねたものを取得
 	pCommands_ = pInput_->HandleInput();
 
-	// 操作が無いなら終了
-	/*if (pCommands_->empty())
-	{
-		return;
-	}*/
 	// クリア
 	commands_.clear();
 	isInputMove_ = false;
@@ -459,35 +450,39 @@ void Player::DebugWindow()
 	{
 	case Player::Behavior::Root:
 		ImGui::Text("ROOT");
-		ImGui::Text("BaseFrame : %d", rootData_->cBASEFRAME);
-		ImGui::Text("MaxFrame  : %d", rootData_->maxFrame_);
-		ImGui::Text("Frame     : %d", rootData_->frame_);
+		ImGui::Text("BaseFrame : %.3f", rootData_->cBASETIME);
+		ImGui::Text("MaxFrame  : %.3f", rootData_->maxTime_);
+		//ImGui::Text("Frame     : %d", rootData_->time_);
 		break;
 	case Player::Behavior::Move:
 		ImGui::Text("MOVE");
-		ImGui::Text("BaseFrame : %d", moveData_->cBASEFRAME);
-		ImGui::Text("MaxFrame  : %d", moveData_->maxFrame_);
-		ImGui::Text("Frame     : %d", moveData_->frame_);
+		ImGui::Text("BaseFrame : %.3f", moveData_->cBASETIME);
+		ImGui::Text("MaxFrame  : %.3f", moveData_->maxTime_);
+		//ImGui::Text("Frame     : %d", moveData_->time_);
 		break;
 	case Player::Behavior::Slash:
 		ImGui::Text("SLASH");
-		ImGui::Text("BaseFrame : %d", slashData_->cBASEFRAME);
-		ImGui::Text("MaxFrame  : %d", slashData_->maxFrame_);
-		ImGui::Text("Frame     : %d", slashData_->frame_);
+		ImGui::Text("BaseFrame : %.3f", slashData_->cBASETIME);
+		ImGui::Text("MaxFrame  : %.3f", slashData_->maxTime_);
+		//ImGui::Text("Frame     : %d", slashData_->time_);
 		break;
 	case Player::Behavior::Moment:
 		ImGui::Text("MOMENT");
-		ImGui::Text("BaseFrame : %d", momentData_->cBASEFRAME);
-		ImGui::Text("MaxFrame  : %d", momentData_->maxFrame_);
-		ImGui::Text("Frame     : %d", momentData_->frame_);
+		ImGui::Text("BaseFrame : %.3f", momentData_->cBASETIME);
+		ImGui::Text("MaxFrame  : %.3f", momentData_->maxTime_);
+		//ImGui::Text("Frame     : %d", momentData_->time_);
 		break;
 	default:
 		break;
 	}
 
+	ImGui::Text("t : %.3f", t);
+
 	ImGui::Separator();
 
-	ImGui::Text("SlashRelation : %d", slashData_->relationSlash_);
+	ImGui::Text("SlashRelation / MaxRelation");
+	ImGui::Text("%d / %d", slashData_->relationSlash_,slashData_->MaxRelation_);
+	ImGui::Text("INCREMENTMOMENT : %.3f", cTIMEINCREMENTMOMENT_);
 
 	ImGui::End();
 }

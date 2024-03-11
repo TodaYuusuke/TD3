@@ -56,9 +56,9 @@ private:
 	// 絶対に継承した先のインスタンスを使う
 	struct BaseData
 	{
-		uint32_t frame_ = 0u;		// 状態に入ってから経過したフレーム
-		uint32_t cBASEFRAME = 0u;	// 状態の基本フレーム : 基本となるフレーム数
-		uint32_t maxFrame_ = 0u;	// 状態の最大フレーム : 条件で抜けるときもあるかもしれない
+		//float time_ = 0.0f;		// 状態に入ってから経過した時間(second)
+		float cBASETIME = 0.0f;	// 状態の基本時間 : 基本となる秒数
+		float maxTime_ = 0.0f;	// 状態の最大時間 : 条件で抜けるときもあるかもしれない
 	};
 
 	struct RootData : public BaseData
@@ -145,18 +145,20 @@ private: //*** プライベート変数 ***//
 
 	// プレイヤーの通常移動
 	// 移動する距離
-	float cSPEEDMOVE_ = 4.0f;
+	float cSPEEDMOVE_ = 0.5f;
 
 	// プレイヤーの居合
 	// 移動する距離
 	float cSPEEDSLASH_ = 40.0f;
+	// プレイヤーの後隙
+	// 移動する距離
+	float cSPEEDMOMENT_ = 2.0f;
 
 	// 居合による後隙の加算分
-	uint32_t cFRAMEINCREMENTMOMENT_ = 30u;
+	float cTIMEINCREMENTMOMENT_ = 0.25f;
 
 	// 各状態毎のデータ
 	// 固定されているデータを外部から取得
-	//std::array<std::unique_ptr<BaseData>, static_cast<size_t>(Behavior::_COUNT)> behaviorDatas_;
 	std::unique_ptr<RootData> rootData_;
 	std::unique_ptr<MoveData> moveData_;
 	std::unique_ptr<SlashData> slashData_;
@@ -204,7 +206,7 @@ private: //*** プライベート変数 ***//
 	// 最終的に行動するコマンド
 	Behavior* command_ = nullptr;
 
-	// イージング
+	// 秒数
 	float t = 0.0f;
 
 	// 居合攻撃を描画
