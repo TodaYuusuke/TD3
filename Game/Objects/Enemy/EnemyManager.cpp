@@ -32,3 +32,11 @@ void EnemyManager::Update()
 		++itr;
 	}
 }
+
+void EnemyManager::EnemySpown()
+{
+	//ランダム生成用
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
+
+}

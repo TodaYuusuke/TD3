@@ -3,6 +3,8 @@
 #include "NormalEnemy/NormalEnemy.h"
 #include "ShieldEnemy/ShieldEnemy.h"
 #include "ArrowEnemy/ArrowEnemy.h"
+#include <random>
+#include <numbers>
 
 class Player;
 class EnemyManager
@@ -18,6 +20,8 @@ public:
 	/// 
 	/// User Method
 	/// 
+
+	void EnemySpown();
 
 	/// Getter
 

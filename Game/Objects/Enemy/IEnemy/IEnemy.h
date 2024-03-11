@@ -21,12 +21,15 @@ public:
 	virtual void Update() = 0;
 	virtual void Move(LWP::Math::Vector3 MoveVec) = 0;
 	virtual void Attack() = 0;
-	// 狙う対象をセット(今回は自機をセットする)
-	virtual void SetTarget(Player* player) { player_ = player; }
+
 
 public: //*** ゲッターセッター ***//
 
 	bool GetIsActive() const { return isActive_; }
+
+	// 狙う対象をセット(今回は自機をセットする)
+	virtual void SetTarget(Player* player) { player_ = player; }
+	virtual void SetPosition(lwp::Vector3 pos) { models_[0]->transform.translation = pos; }
 
 protected: //*** 継承クラスで呼び出す共通処理 ***//
 
