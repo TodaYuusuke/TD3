@@ -16,7 +16,7 @@ void EnemyManager::Init()
 void EnemyManager::Update()
 {
 	Flame++;
-	if (Flame >= 200) {
+	if (Flame >= 120) {
 		EnemySpown();
 		Flame = 0;
 	}
@@ -61,9 +61,9 @@ void EnemyManager::EnemySpown()
 void EnemyManager::NormalEnemySpown(std::mt19937& randomEngine)
 {
 	std::uniform_real_distribution<float> distribution(5.0f, 10.0f);
-	lwp::Vector3 pos = { distribution(randomEngine) , 0.0f , distribution(randomEngine) };
+	lwp::Vector3 pos = { distribution(randomEngine) , 0.5f , distribution(randomEngine) };
 	NormalEnemy* NEnemy = new NormalEnemy();
-	NEnemy->Init();
+	NEnemy->Initialize();
 	NEnemy->SetPosition(pos);
 	NEnemy->SetTarget(player_);
 	enemys_.push_back(NEnemy);
@@ -72,9 +72,9 @@ void EnemyManager::NormalEnemySpown(std::mt19937& randomEngine)
 void EnemyManager::ShieldEnemySpown(std::mt19937& randomEngine)
 {
 	std::uniform_real_distribution<float> distribution(5.0f, 10.0f);
-	lwp::Vector3 pos = { distribution(randomEngine) , 0.0f , distribution(randomEngine) };
+	lwp::Vector3 pos = { distribution(randomEngine) , 0.5f , distribution(randomEngine) };
 	ShieldEnemy* NEnemy = new ShieldEnemy();
-	NEnemy->Init();
+	NEnemy->Initialize();
 	NEnemy->SetPosition(pos);
 	NEnemy->SetTarget(player_);
 	enemys_.push_back(NEnemy);
@@ -83,9 +83,9 @@ void EnemyManager::ShieldEnemySpown(std::mt19937& randomEngine)
 void EnemyManager::ArrowEnemySpown(std::mt19937& randomEngine)
 {
 	std::uniform_real_distribution<float> distribution(5.0f, 10.0f);
-	lwp::Vector3 pos = { distribution(randomEngine) , 0.0f , distribution(randomEngine) };
+	lwp::Vector3 pos = { distribution(randomEngine) , 0.5f , distribution(randomEngine) };
 	ArrowEnemy* NEnemy = new ArrowEnemy();
-	NEnemy->Init();
+	NEnemy->Initialize();
 	NEnemy->SetPosition(pos);
 	NEnemy->SetTarget(player_);
 	enemys_.push_back(NEnemy);
