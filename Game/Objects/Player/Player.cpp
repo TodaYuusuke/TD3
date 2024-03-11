@@ -336,8 +336,8 @@ void Player::CreateJustCollision()
 	justCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
 	justCollision_->Create(demoModel_->transform.translation);
 	// サイズ
-	justCollision_->max = playerCollision_->max + lwp::Vector3(1.0f, 1.0f, 1.0f);
-	justCollision_->min = playerCollision_->min - lwp::Vector3(1.0f, 1.0f, 1.0f);
+	justCollision_->max = playerCollision_->max + lwp::Vector3(2.0f, 2.0f, 2.0f);
+	justCollision_->min = playerCollision_->min - lwp::Vector3(2.0f, 2.0f, 2.0f);
 	// マスク
 	justCollision_->mask.SetBelongFrag(MaskLayer::Player);
 	justCollision_->mask.SetHitFrag(MaskLayer::Layer2);
