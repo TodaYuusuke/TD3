@@ -53,7 +53,6 @@ void Player::Update()
 	{
 		behavior_ = reqBehavior_.value();
 		t = 0.0f;
-		LWP::Info::SetDeltaTimeMultiply(1.0f);
 		switch (behavior_)
 		{
 		case Player::Behavior::Root:
@@ -71,6 +70,8 @@ void Player::Update()
 			moveData_->maxTime_ = moveData_->cBASETIME;
 			break;
 		case Player::Behavior::Slash:
+			// デルタタイム変更
+			LWP::Info::SetDeltaTimeMultiply(1.0f);
 			//slashData_->time_ = 0.0f;
 			slashData_->vector_ = destinate_;
 			slashData_->maxTime_ = slashData_->cBASETIME;
@@ -81,7 +82,8 @@ void Player::Update()
 			slashPanel_->Slash();
 			// 当たり判定を消去
 			playerCollision_->isActive = false;
-			weaponCollision_->isActive = false;
+			// 武器の当たり判定を出す
+			weaponCollision_->isActive = true;
 			// ジャスト判定を作る
 			justCollision_->Create(demoModel_->transform.translation);
 			// サイズ
@@ -317,13 +319,16 @@ void Player::CreateCollision()
 	playerCollision_->mask.SetHitFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 	// 今のところは何もしていない
 	playerCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
-		data;
+		if (data.state == OnCollisionState::Trigger)
+		{
+			reqBehavior_ = Behavior::Moment;
+		}
 		});
-	playerCollision_->isActive = false;
+	playerCollision_->isActive = true;
 	// 当たり判定を設定
 	weaponCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
 	// 武器との当たり判定を取る
-	weaponCollision_->CreateFromPrimitive(demoModel_);
+	weaponCollision_->CreateFromPrimitive(weapon_->GetMesh());
 	// マスク
 	weaponCollision_->mask.SetBelongFrag(MaskLayer::Layer2);
 	weaponCollision_->mask.SetHitFrag(MaskLayer::Enemy);

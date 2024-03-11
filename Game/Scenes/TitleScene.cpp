@@ -31,6 +31,16 @@ void TItleScene::Initialize()
 // 更新
 void TItleScene::Update()
 {
+	// スローを確認
+	if (isJustSlash_)
+	{
+		time_ += lwp::GetDeltaTime();
+		if (cTIMESLOW_ <= time_)
+		{
+			isJustSlash_ = false;
+			LWP::Info::SetDeltaTimeMultiply(1.0f);
+		}
+	}
 
 	// プレイヤー
 	player_->Update();
@@ -47,5 +57,6 @@ void TItleScene::Update()
 void TItleScene::StartJustSlash()
 {
 	isJustSlash_ = true;
+	time_ = 0.0f;
 	LWP::Info::SetDeltaTimeMultiply(0.1f);
 }

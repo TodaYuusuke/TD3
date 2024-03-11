@@ -61,4 +61,10 @@ private: //*** 変数群 ***//
 
 	// ジャスト抜刀
 	bool isJustSlash_ = false;
+
+	// ジャストからの時間
+	float time_ = 0.0f;
+
+	// スローモーションになる時間
+	float cTIMESLOW_ = 0.5f;
 };
