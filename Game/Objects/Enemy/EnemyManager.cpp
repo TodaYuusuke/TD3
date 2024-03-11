@@ -3,10 +3,10 @@
 
 void EnemyManager::Init()
 {
-	//enemys_.push_back(new NormalEnemy);
-	//enemys_.push_back(new ShieldEnemy);
+	enemys_.push_back(new NormalEnemy);
+	enemys_.push_back(new ShieldEnemy);
 	enemys_.push_back(new ArrowEnemy);
-	for (IEnemy*& enemy_ : enemys_)
+	for (IEnemy* enemy_ : enemys_)
 	{
 		enemy_->Initialize();
 		enemy_->SetTarget(player_);
