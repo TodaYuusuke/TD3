@@ -84,6 +84,6 @@ void ArrowEnemy::Attack()
 void ArrowEnemy::Aim()
 {
 	// 狙う対象に身体を向ける
-	float radian = atan2(player_->GetWorldPosition().x - models_[0]->transform.translation.x, player_->GetWorldPosition().z - models_[0]->transform.translation.z);
+	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0]->transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0]->transform.translation.z);
 	models_[0]->transform.rotation.y = radian;
 }

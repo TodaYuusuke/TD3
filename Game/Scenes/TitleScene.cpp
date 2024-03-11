@@ -9,11 +9,6 @@ using namespace LWP::Utility;
 // 初期化
 void TItleScene::Initialize()
 {
-	// 球
-	sphere = LWP::Primitive::CreateInstance<Sphere>();
-	sphere->Radius(0.3f);
-	sphere->material.shininess = 40.0f;
-	sphere->texture = uvTexture;
 
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
