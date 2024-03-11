@@ -41,6 +41,7 @@ void Weapon::Update()
 	switch (behavior_)
 	{
 	case Weapon::Behavior::Root:
+		// アニメーション来るまで放置
 		//UpdateRoot();
 		break;
 	case Weapon::Behavior::Slash:
