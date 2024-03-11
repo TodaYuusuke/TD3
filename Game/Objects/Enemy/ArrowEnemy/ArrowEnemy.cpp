@@ -7,7 +7,7 @@ using namespace LWP::Object::Collider;
 void ArrowEnemy::Init()
 {
 	models_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
-	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
+	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::GREEN);
 
 	// 最初から描画
 	isActive_ = true;
