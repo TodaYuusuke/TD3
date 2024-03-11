@@ -22,9 +22,9 @@ public:
 	/// 
 
 	void EnemySpown();
-	void NormalEnemySpown(std::mt19937& randomEngine);
-	void ShieldEnemySpown(std::mt19937& randomEngine);
-	void ArrowEnemySpown(std::mt19937& randomEngine);
+	void NormalEnemySpown(lwp::Vector3 pos);
+	void ShieldEnemySpown(lwp::Vector3 pos);
+	void ArrowEnemySpown(lwp::Vector3 pos);
 
 	/// Getter
 

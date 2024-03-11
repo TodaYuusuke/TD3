@@ -50,6 +50,11 @@ void ArrowEnemy::Update()
 		});
 }
 
+void ArrowEnemy::SetPosition(lwp::Vector3 pos)
+{
+	models_[0]->transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+}
+
 void ArrowEnemy::CreateCollider()
 {
 	// 当たり判定を設定
