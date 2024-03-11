@@ -39,6 +39,4 @@ void TItleScene::Update()
 	mainCamera->transform = followCamera_->viewProjection_.transform;
 
 	enemyManager_->Update();
-
-	
 }

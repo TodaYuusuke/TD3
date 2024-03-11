@@ -22,6 +22,9 @@ public:
 	/// 
 
 	void EnemySpown();
+	void NormalEnemySpown(std::mt19937& randomEngine);
+	void ShieldEnemySpown(std::mt19937& randomEngine);
+	void ArrowEnemySpown(std::mt19937& randomEngine);
 
 	/// Getter
 
@@ -32,4 +35,6 @@ public:
 private:
 	std::list<IEnemy*> enemys_;
 	Player* player_;
+
+	int Flame = 0;
 };
