@@ -9,6 +9,7 @@ void EnemyManager::Init()
 	for (IEnemy*& enemy_ : enemys_)
 	{
 		enemy_->Initialize();
+		enemy_->SetTarget(player_);
 	}
 }
 

@@ -34,7 +34,6 @@ protected: //*** 継承クラスで呼び出す共通処理 ***//
 
 
 protected:
-	std::vector<LWP::Primitive::IPrimitive*>models_;
 	// 
 	Player* player_;
 	std::vector<LWP::Primitive::IPrimitive*> models_;
