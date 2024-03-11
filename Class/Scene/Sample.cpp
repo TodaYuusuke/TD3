@@ -65,7 +65,7 @@ void Sample::Initialize() {
 
 	// 球
 	sphere = LWP::Primitive::CreateInstance<Sphere>();
-	sphere->Radius(0.3f);
+	//sphere->Radius(0.3f);
 	sphere->transform.translation.x = -1.0f;
 	sphere->transform.translation.z = -1.0f;
 	//sphere->material.enableLighting = true;
