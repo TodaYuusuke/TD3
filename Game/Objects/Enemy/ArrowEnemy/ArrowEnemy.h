@@ -17,12 +17,8 @@ public:// パブリックなメンバ関数
 	/// 
 
 	/// Getter
-	// 狙う対象を取得
-	const LWP::Math::Vector3& GetAimTarget() { return *target_; }
 
 	/// Setter
-	// 狙う対象を設定
-	void SetAimTarget(LWP::Math::Vector3* target) { target_ = target; }
 
 private:// プライベートなメンバ関数
 
@@ -36,8 +32,10 @@ private:// プライベートなメンバ関数
 	// 対象を狙う
 	void Aim();
 
+public:// 定数
+
+
 private:// メンバ変数
+	// 矢
 	std::list<Arrow*> arrows_;
-	// 狙う対象
-	LWP::Math::Vector3* target_;
 };

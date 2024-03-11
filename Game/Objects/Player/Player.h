@@ -100,6 +100,7 @@ public:	//*** セッター,ゲッター ***//
 
 	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
 	void SetCameraPointer(const lwp::Camera* p) { camera_ = p; }
+	LWP::Math::Vector3 GetWorldPosition() { return world_.GetWorldPosition(); }
 
 public: //*** コマンド操作で呼び出される関数 ***//
 

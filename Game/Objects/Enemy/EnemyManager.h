@@ -8,9 +8,21 @@ class Player;
 class EnemyManager
 {
 public:
+	/// 
+	/// Default Method
+	/// 
+	
 	void Init();
 	void Update();
 
+	/// 
+	/// User Method
+	/// 
+
+	/// Getter
+
+	/// Setter
+	// 自機のアドレスを設定
 	void SetPlayer(Player* player) { player_ = player; }
 
 private:
