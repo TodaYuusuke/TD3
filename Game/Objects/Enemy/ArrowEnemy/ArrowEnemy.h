@@ -11,6 +11,7 @@ public:// パブリックなメンバ関数
 
 	void Init()override;
 	void Update()override;
+	void SetPosition(lwp::Vector3 pos)override;
 
 	///
 	/// User Method

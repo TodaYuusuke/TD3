@@ -1,4 +1,5 @@
 #include "ShieldEnemy.h"
+#include "Game/Objects/Player/Player.h"
 
 using namespace LWP::Object::Collider;
 
@@ -13,6 +14,11 @@ void ShieldEnemy::Init()
 void ShieldEnemy::Update()
 {
 	Attack();
+}
+
+void ShieldEnemy::SetPosition(lwp::Vector3 pos)
+{
+	models_[0]->transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 }
 
 void ShieldEnemy::Move(LWP::Math::Vector3 MoveVec)

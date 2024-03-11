@@ -46,47 +46,47 @@ void EnemyManager::EnemySpown()
 	std::mt19937 randomEngine(seedGenerator());
 	std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
 	float number = 	distribution(randomEngine);
-
+	std::uniform_real_distribution<float> distribution2(8.0f, 10.0f);
+	float PtoE = distribution2(randomEngine);
+	std::uniform_real_distribution<float> distribution3(0.0f, 1.0f);
+	float divideX = distribution3(randomEngine);
+	float divideZ = 1.0f - divideX;
+	lwp::Vector3 pos = { PtoE * divideX , 0.5f , PtoE * divideZ };
 	if (number <= 0.5f) {
-		NormalEnemySpown(randomEngine);
+		NormalEnemySpown(pos);
 	}
 	else if (number <= 0.8f) {
-		ShieldEnemySpown(randomEngine);
+		ShieldEnemySpown(pos);
 	}
 	else {
-		ArrowEnemySpown(randomEngine);
+		ArrowEnemySpown(pos);
 	}
 }
 
-void EnemyManager::NormalEnemySpown(std::mt19937& randomEngine)
+void EnemyManager::NormalEnemySpown(lwp::Vector3 pos)
 {
-	std::uniform_real_distribution<float> distribution(5.0f, 10.0f);
-	lwp::Vector3 pos = { distribution(randomEngine) , 0.5f , distribution(randomEngine) };
 	NormalEnemy* NEnemy = new NormalEnemy();
 	NEnemy->Initialize();
-	NEnemy->SetPosition(pos);
 	NEnemy->SetTarget(player_);
+	NEnemy->SetPosition(pos);
 	enemys_.push_back(NEnemy);
 }
 
-void EnemyManager::ShieldEnemySpown(std::mt19937& randomEngine)
+void EnemyManager::ShieldEnemySpown(lwp::Vector3 pos)
 {
-	std::uniform_real_distribution<float> distribution(5.0f, 10.0f);
-	lwp::Vector3 pos = { distribution(randomEngine) , 0.5f , distribution(randomEngine) };
 	ShieldEnemy* NEnemy = new ShieldEnemy();
 	NEnemy->Initialize();
-	NEnemy->SetPosition(pos);
 	NEnemy->SetTarget(player_);
+	NEnemy->SetPosition(pos);
 	enemys_.push_back(NEnemy);
 }
 
-void EnemyManager::ArrowEnemySpown(std::mt19937& randomEngine)
+void EnemyManager::ArrowEnemySpown(lwp::Vector3 pos)
 {
-	std::uniform_real_distribution<float> distribution(5.0f, 10.0f);
-	lwp::Vector3 pos = { distribution(randomEngine) , 0.5f , distribution(randomEngine) };
+	
 	ArrowEnemy* NEnemy = new ArrowEnemy();
 	NEnemy->Initialize();
-	NEnemy->SetPosition(pos);
 	NEnemy->SetTarget(player_);
+	NEnemy->SetPosition(pos);
 	enemys_.push_back(NEnemy);
 }

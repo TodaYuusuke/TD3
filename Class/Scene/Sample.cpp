@@ -63,11 +63,11 @@ void Sample::Initialize() {
 	surface->texture = uvTexture;
 	surface->isActive = false;
 
-	// 球
-	sphere = LWP::Primitive::CreateInstance<Sphere>();
+	//// 球
+	//sphere = LWP::Primitive::CreateInstance<Sphere>();
 	//sphere->Radius(0.3f);
-	sphere->transform.translation.x = -1.0f;
-	sphere->transform.translation.z = -1.0f;
+	//sphere->transform.translation.x = -1.0f;
+	//sphere->transform.translation.z = -1.0f;
 	//sphere->material.enableLighting = true;
 	sphere->material.shininess = 40.0f;
 	sphere->texture = uvTexture;
