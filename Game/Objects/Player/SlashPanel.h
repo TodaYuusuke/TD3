@@ -22,6 +22,9 @@ private:
 
 public:
 
+	// デストラクタ
+	~SlashPanel();
+
 	// 初期化
 	void Initialize();
 

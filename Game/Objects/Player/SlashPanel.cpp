@@ -1,5 +1,16 @@
 #include "SlashPanel.h"
 
+SlashPanel::~SlashPanel()
+{
+	for (size_t i = 0; i < katanaPanels_.size(); i++)
+	{
+		delete katanaPanels_[i];
+		delete sayaPanels_[i];
+	}
+	katanaPanels_.clear();
+	sayaPanels_.clear();
+}
+
 void SlashPanel::Initialize()
 {
 
