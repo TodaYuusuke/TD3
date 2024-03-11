@@ -17,7 +17,9 @@ void TItleScene::Initialize()
 	// プレイヤー
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
-	
+	player_->SetScene(this);
+
+
 	followCamera_->SetTarget(player_->GetWorldTransform());
 	player_->SetCameraPointer(mainCamera);
 
@@ -40,10 +42,9 @@ void TItleScene::Update()
 
 	enemyManager_->Update();
 
-	
 }
 
 void TItleScene::StartJustSlash()
 {
-
+	isJustSlash_ = true;
 }

@@ -130,6 +130,8 @@ private: //*** プライベート関数 ***//
 
 	// 当たり判定の作成
 	void CreateCollision();
+	// ジャスト居合の生成
+	void CreateJustCollision();
 
 	// プレイヤーの操作を受け付ける
 	void UpdateInput();
@@ -169,7 +171,7 @@ private: //*** プライベート変数 ***//
 	const LWP::Object::Camera* pCamera_ = nullptr;
 
 	// 今のシーン
-	const IScene* pScene_ = nullptr;
+	IScene* pScene_ = nullptr;
 
 	//*** 計算に使う ***//
 

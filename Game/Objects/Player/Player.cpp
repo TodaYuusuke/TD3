@@ -1,5 +1,8 @@
 #include "Player.h"
 
+// ゲームシーン
+#include "Game/Scenes/TitleScene.h"
+
 Player::~Player()
 {
 	delete pInput_;
@@ -37,6 +40,7 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	justCollision_->isActive = false;
 	// デバッグ表示
 	DebugWindow();
 
@@ -76,6 +80,9 @@ void Player::Update()
 			slashPanel_->Slash();
 			playerCollision_->isActive = true;
 			weaponCollision_->isActive = true;
+			// ジャスト判定を作る
+			justCollision_->Create(demoModel_->transform.translation);
+			justCollision_->isActive = true;
 			break;
 		case Player::Behavior::Moment:
 			//momentData_->time_ = 0.0f;
@@ -317,18 +324,33 @@ void Player::CreateCollision()
 		});
 	weaponCollision_->isActive = false;
 
+	CreateJustCollision();
+}
+
+void Player::CreateJustCollision()
+{
 	// ジャスト居合
 	justCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
-	justCollision_->CreateFromPrimitive(demoModel_);
+	justCollision_->Create(demoModel_->transform.translation);
+	// サイズ
+	justCollision_->max = playerCollision_->max + lwp::Vector3(1.0f, 1.0f, 1.0f);
+	justCollision_->min = playerCollision_->min - lwp::Vector3(1.0f, 1.0f, 1.0f);
 	// マスク
 	justCollision_->mask.SetBelongFrag(MaskLayer::Player);
-	justCollision_->mask.SetHitFrag(MaskLayer::Enemy & MaskLayer::Layer2);
-	// 今のところは何もしていない
+	justCollision_->mask.SetHitFrag(MaskLayer::Layer2);
+	// ジャスト居合したことを通知
 	justCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
-		data;
+		if (data.state == OnCollisionState::Trigger)
+		{
+			TItleScene* const scene = dynamic_cast<TItleScene*>(pScene_);
+			assert(scene);
+			scene->StartJustSlash();
+		}
 		});
 	// フラグオフ
 	justCollision_->isActive = false;
+
+	justCollision_->name = "Just";
 }
 
 void Player::UpdateInput()

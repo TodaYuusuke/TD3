@@ -25,12 +25,12 @@ public:
 
 private: //*** これより先に必要な処理や変数を記述 ***//
 
-	//*** 関数群 ***//
+public: //*** 関数群 ***//
 
 	// ジャスト抜刀
 	void StartJustSlash();
 
-	//*** 変数群 ***//
+private: //*** 変数群 ***//
 
 	LWP::Primitive::Triangle* tri[2];
 	LWP::Primitive::Surface* surface;
@@ -58,5 +58,7 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 
 	// プレイヤー
 	std::unique_ptr<Player> player_;
-	
+
+	// ジャスト抜刀
+	bool isJustSlash_ = false;
 };

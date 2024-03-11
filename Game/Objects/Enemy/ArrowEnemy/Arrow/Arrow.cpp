@@ -13,11 +13,14 @@ void Arrow::Init(lwp::WorldTransform transform)
 	attackWork.targetpoint = attackWork.targetpoint.Normalize();
 
 	// 当たり判定を設定
-	AABB* aabb = LWP::Common::CreateInstance<AABB>();
-	aabb->CreateFromPrimitive(model_);
-	aabb->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
+	aabb_ = LWP::Common::CreateInstance<AABB>();
+	aabb_->CreateFromPrimitive(model_);
+	aabb_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+	aabb_->mask.SetHitFrag(MaskLayer::Player);
+	aabb_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		data;
 		});
+	aabb_->isActive = true;
 }
 
 void Arrow::Update()
