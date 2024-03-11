@@ -46,3 +46,8 @@ void TItleScene::Update()
 
 	
 }
+
+void TItleScene::StartJustSlash()
+{
+
+}

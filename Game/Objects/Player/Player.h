@@ -99,7 +99,8 @@ public: //*** パブリック関数 ***//
 public:	//*** セッター,ゲッター ***//
 
 	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
-	void SetCameraPointer(const lwp::Camera* p) { camera_ = p; }
+	void SetCameraPointer(const lwp::Camera* p) { pCamera_ = p; }
+	void SetScene(IScene* p) { pScene_ = p; }
 
 public: //*** コマンド操作で呼び出される関数 ***//
 
@@ -127,6 +128,9 @@ private: //*** プライベート関数 ***//
 	SlashData* InitSlashData();
 	MomentData* InitMomentData();
 
+	// 当たり判定の作成
+	void CreateCollision();
+
 	// プレイヤーの操作を受け付ける
 	void UpdateInput();
 	// 受け付けた入力を判別して実際の行動に反映する
@@ -140,9 +144,11 @@ private: //*** プライベート変数 ***//
 	//*** 外部から設定する変数 ***//
 
 	// プレイヤーの通常移動
+	// 移動する距離
 	float cSPEEDMOVE_ = 4.0f;
 
-	// プレイヤーの通常移動
+	// プレイヤーの居合
+	// 移動する距離
 	float cSPEEDSLASH_ = 40.0f;
 
 	// 居合による後隙の加算分
@@ -157,9 +163,11 @@ private: //*** プライベート変数 ***//
 	std::unique_ptr<MomentData> momentData_;
 
 	// プログラム内だけど外部のやつ
-	const LWP::Object::Camera* camera_ = nullptr;
+	// カメラ
+	const LWP::Object::Camera* pCamera_ = nullptr;
 
-
+	// 今のシーン
+	const IScene* pScene_ = nullptr;
 
 	//*** 計算に使う ***//
 
@@ -203,7 +211,11 @@ private: //*** プライベート変数 ***//
 	std::unique_ptr<SlashPanel> slashPanel_;
 
 	// 当たり判定をオンオフするための変数
+	// プレイヤー自身の当たり判定
 	lwp::Collider::AABB* playerCollision_ = nullptr;
+	// 武器の当たり判定
 	lwp::Collider::AABB* weaponCollision_ = nullptr;
+	// ジャスト居合したいときの大きめの判定
+	lwp::Collider::AABB* justCollision_ = nullptr;
 };
 

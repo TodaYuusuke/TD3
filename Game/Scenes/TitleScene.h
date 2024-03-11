@@ -25,6 +25,13 @@ public:
 
 private: //*** これより先に必要な処理や変数を記述 ***//
 
+	//*** 関数群 ***//
+
+	// ジャスト抜刀
+	void StartJustSlash();
+
+	//*** 変数群 ***//
+
 	LWP::Primitive::Triangle* tri[2];
 	LWP::Primitive::Surface* surface;
 	LWP::Primitive::Sphere* sphere;

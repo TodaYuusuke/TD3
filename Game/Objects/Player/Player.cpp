@@ -32,30 +32,7 @@ void Player::Initialize()
 	slashPanel_.reset(new SlashPanel);
 	slashPanel_->Initialize();
 
-	// 当たり判定を設定
-	playerCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
-	// 武器との当たり判定を取る
-	playerCollision_->CreateFromPrimitive(demoModel_);
-	// マスク
-	playerCollision_->mask.SetBelongFrag(MaskLayer::Player);
-	playerCollision_->mask.SetHitFrag(MaskLayer::Enemy);
-	// 今のところは何もしていない
-	playerCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
-		data;
-		});
-	playerCollision_->isActive = false;
-	// 当たり判定を設定
-	weaponCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
-	// 武器との当たり判定を取る
-	weaponCollision_->CreateFromPrimitive(weapon_->GetMesh());
-	// マスク
-	weaponCollision_->mask.SetBelongFrag(MaskLayer::Player);
-	weaponCollision_->mask.SetHitFrag(MaskLayer::Enemy);
-	// 今のところは何もしていない
-	weaponCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
-		data;
-		});
-	weaponCollision_->isActive = false;
+	CreateCollision();
 }
 
 void Player::Update()
@@ -198,8 +175,10 @@ void Player::UpdateMove()
 		reqBehavior_ = Behavior::Root;
 	}
 	moveData_->frame_++;
+	// 移動距離とモーション用の更新
+	t = (moveData_->frame_ / (float)moveData_->maxFrame_);
 	// 移動方向をカメラに合わせる
-	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
+	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
 	moveVector.y = 0.0f;
 
 	// モデル回転
@@ -218,8 +197,10 @@ void Player::UpdateSlash()
 		reqBehavior_ = Behavior::Moment;
 	}
 	slashData_->frame_++;
+	// 移動距離とモーション用の更新
+	t = (slashData_->frame_ / (float)slashData_->maxFrame_);
 
-	lwp::Vector3 moveVector = slashData_->vector_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
+	lwp::Vector3 moveVector = slashData_->vector_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
 	moveVector.y = 0.0f;
 
 	// モデル回転
@@ -228,7 +209,6 @@ void Player::UpdateSlash()
 	moveVector = moveVector.Normalize() * cSPEEDSLASH_ * (float)lwp::GetDeltaTime();
 
 	demoModel_->transform.translation += moveVector;
-	t = (slashData_->frame_ / (float)slashData_->maxFrame_);
 }
 
 void Player::UpdateMoment()
@@ -238,9 +218,11 @@ void Player::UpdateMoment()
 		reqBehavior_ = Behavior::Root;
 	}
 	momentData_->frame_++;
+	// 移動距離とモーション用の更新
+	t = (momentData_->frame_ / (float)momentData_->maxFrame_);
 	if (isInputMove_)
 	{
-		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
+		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
 		moveVector.y = 0.0f;
 
 		// モデル回転
@@ -250,7 +232,6 @@ void Player::UpdateMoment()
 
 		demoModel_->transform.translation += moveVector;
 	}
-	t = (momentData_->frame_ / (float)momentData_->maxFrame_);
 }
 
 void Player::InitDatas()
@@ -311,6 +292,47 @@ Player::MomentData* Player::InitMomentData()
 	data->maxFrame_ = 0;
 	data->relationSlash_ = 0;
 	return data;
+}
+
+void Player::CreateCollision()
+{
+	// 当たり判定を設定
+	playerCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
+	// 武器との当たり判定を取る
+	playerCollision_->CreateFromPrimitive(demoModel_);
+	// マスク
+	playerCollision_->mask.SetBelongFrag(MaskLayer::Player);
+	playerCollision_->mask.SetHitFrag(MaskLayer::Enemy);
+	// 今のところは何もしていない
+	playerCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
+		data;
+		});
+	playerCollision_->isActive = false;
+	// 当たり判定を設定
+	weaponCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
+	// 武器との当たり判定を取る
+	weaponCollision_->CreateFromPrimitive(weapon_->GetMesh());
+	// マスク
+	weaponCollision_->mask.SetBelongFrag(MaskLayer::Player | MaskLayer::Layer2);
+	weaponCollision_->mask.SetHitFrag(MaskLayer::Enemy);
+	// 今のところは何もしていない
+	weaponCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
+		data;
+		});
+	weaponCollision_->isActive = false;
+
+	// ジャスト居合
+	justCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
+	justCollision_->CreateFromPrimitive(demoModel_);
+	// マスク
+	justCollision_->mask.SetBelongFrag(MaskLayer::Player);
+	justCollision_->mask.SetHitFrag(MaskLayer::Enemy & MaskLayer::Layer2);
+	// 今のところは何もしていない
+	justCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
+		data;
+		});
+	// フラグオフ
+	justCollision_->isActive = false;
 }
 
 void Player::UpdateInput()
