@@ -47,4 +47,5 @@ void TItleScene::Update()
 void TItleScene::StartJustSlash()
 {
 	isJustSlash_ = true;
+	LWP::Info::SetDeltaTimeMultiply(0.1f);
 }

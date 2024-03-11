@@ -34,6 +34,8 @@ public: //*** 外部からセット ***//
 	void Slash();
 	// 全部リセット
 	void Reset();
+	// ジャストを検知
+	void Just();
 
 private: //*** プライベート関数 ***//
 
@@ -43,9 +45,9 @@ private: //*** プライベート関数 ***//
 private: //*** プライベート変数 ***//
 
 	// 刀アイコン
-	std::vector<std::unique_ptr<UIPanel>> katanaPanels_;
+	std::vector<UIPanel*> katanaPanels_;
 	// 鞘アイコン
-	std::vector<std::unique_ptr<UIPanel>> sayaPanels_;
+	std::vector<UIPanel*> sayaPanels_;
 
 	// 添え字
 	// 常にプラス一で計算したい

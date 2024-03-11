@@ -74,7 +74,8 @@ private:
 	{
 		lwp::Vector3 vector_;		// 向かう方向
 		uint32_t relationSlash_;	// 連続居合回数 : 二回以降+1
-		uint32_t MaxRelation_;		// 最大居合回数 : Max
+		uint32_t maxRelation_;		// 最大居合回数 : Max
+		uint32_t cMAXRELATION_;
 	};
 
 

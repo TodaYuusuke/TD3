@@ -54,6 +54,7 @@ void Player::Update()
 	{
 		behavior_ = reqBehavior_.value();
 		t = 0.0f;
+		LWP::Info::SetDeltaTimeMultiply(1.0f);
 		switch (behavior_)
 		{
 		case Player::Behavior::Root:
@@ -61,6 +62,7 @@ void Player::Update()
 			rootData_->maxTime_ = rootData_->cBASETIME;
 			// 居合回数のリセット
 			slashData_->relationSlash_ = 0u;
+			slashData_->maxRelation_ = slashData_->cMAXRELATION_; 
 			weapon_->SetBehavior(Weapon::Behavior::Root);
 			// UI に反映
 			slashPanel_->Reset();
@@ -278,12 +280,13 @@ Player::MoveData* Player::InitMoveData()
 Player::SlashData* Player::InitSlashData()
 {
 	SlashData* data = new SlashData;
-	data->cBASETIME = 0.5f;
+	data->cBASETIME = 0.25f;
 	data->vector_ = { 0.0f,0.0f,1.0f };
 	//data->time_ = 0.0f;
 	data->maxTime_ = 0.0f;
 	data->relationSlash_ = 0u;
-	data->MaxRelation_ = 3u;
+	data->cMAXRELATION_ = 3u;
+	data->maxRelation_ = 0u;
 	return data;
 }
 
@@ -345,6 +348,8 @@ void Player::CreateJustCollision()
 			TItleScene* const scene = dynamic_cast<TItleScene*>(pScene_);
 			assert(scene);
 			scene->StartJustSlash();
+			slashData_->maxRelation_++;
+			slashPanel_->Just();
 		}
 		});
 	// フラグオフ
@@ -444,7 +449,7 @@ void Player::CheckBehavior()
 		case Behavior::Slash:
 			// 居合に入る条件を記述
 			if (behavior_ != Behavior::Slash &&
-				slashData_->relationSlash_ < slashData_->MaxRelation_)
+				slashData_->relationSlash_ < slashData_->maxRelation_)
 			{
 				reqBehavior_ = Behavior::Slash;
 			}
@@ -503,7 +508,7 @@ void Player::DebugWindow()
 	ImGui::Separator();
 
 	ImGui::Text("SlashRelation / MaxRelation");
-	ImGui::Text("%d / %d", slashData_->relationSlash_,slashData_->MaxRelation_);
+	ImGui::Text("%d / %d", slashData_->relationSlash_,slashData_->maxRelation_);
 	ImGui::Text("INCREMENTMOMENT : %.3f", cTIMEINCREMENTMOMENT_);
 
 	ImGui::End();
