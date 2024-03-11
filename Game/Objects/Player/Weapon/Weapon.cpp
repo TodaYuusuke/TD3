@@ -87,7 +87,7 @@ Weapon::RootData* Weapon::InitRootData()
 {
 	RootData* data = new RootData;
 	data->scale_.start_ = { 0.5f,0.5f,0.8f };
-	data->scale_.end_ = { 0.3f,0.5f,0.8f };
+	data->scale_.end_ = { 0.5f,0.5f,0.8f };
 	data->rotate_.start_ = { 0.0f,0.0f,0.0f };
 	data->rotate_.end_ = { 0.0f,0.0f,0.0f };
 	data->translate_.start_ = { 0.5f,0.0f,0.0f };
@@ -111,7 +111,7 @@ Weapon::MomentData* Weapon::InitMomentData()
 {
 	MomentData* data = new MomentData;
 	data->scale_.start_ = { 0.5f,0.5f,1.0f };
-	data->scale_.end_ = { 0.3f,0.5f,0.8f };
+	data->scale_.end_ = { 0.5f,0.5f,0.8f };
 	data->rotate_.start_ = { 0.0f,0.0f,0.0f };
 	data->rotate_.end_ = { 0.0f,0.0f,0.0f };
 	data->translate_.start_ = { 0.0f,0.0f,0.0f };
