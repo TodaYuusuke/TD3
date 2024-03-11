@@ -160,6 +160,9 @@ private: //*** プライベート変数 ***//
 	// 居合による後隙の加算分
 	float cTIMEINCREMENTMOMENT_ = 0.25f;
 
+	// ジャスト居合を取る時間
+	float cTIMEJUSTSLASH_ = 0.1f;
+
 	// 各状態毎のデータ
 	// 固定されているデータを外部から取得
 	std::unique_ptr<RootData> rootData_;
@@ -222,5 +225,6 @@ private: //*** プライベート変数 ***//
 	lwp::Collider::AABB* weaponCollision_ = nullptr;
 	// ジャスト居合したいときの大きめの判定
 	lwp::Collider::AABB* justCollision_ = nullptr;
+
 };
 

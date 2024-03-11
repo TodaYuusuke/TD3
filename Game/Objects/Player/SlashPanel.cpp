@@ -46,7 +46,7 @@ void SlashPanel::Just()
 {
 	index_++;
 	//sayaPanels_[index_]->SetIsActive(false);
-	katanaPanels_[index_]->SetIsActive(true);
+	katanaPanels_.back()->SetIsActive(true);
 	sayaPanels_[index_ - 1]->SetIsActive(true);
 }
 

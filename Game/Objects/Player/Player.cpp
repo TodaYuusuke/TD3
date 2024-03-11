@@ -40,7 +40,6 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	justCollision_->isActive = false;
 	// デバッグ表示
 	DebugWindow();
 
@@ -80,11 +79,14 @@ void Player::Update()
 			slashData_->relationSlash_++;
 			// UI に反映
 			slashPanel_->Slash();
-			playerCollision_->isActive = true;
-			weaponCollision_->isActive = true;
+			// 当たり判定を消去
+			playerCollision_->isActive = false;
+			weaponCollision_->isActive = false;
 			// ジャスト判定を作る
 			justCollision_->Create(demoModel_->transform.translation);
-			justCollision_->isActive = true;
+			// サイズ
+			justCollision_->max = playerCollision_->max + lwp::Vector3(1.0f, 1.0f, 1.0f);
+			justCollision_->min = playerCollision_->min - lwp::Vector3(1.0f, 1.0f, 1.0f);
 			break;
 		case Player::Behavior::Moment:
 			//momentData_->time_ = 0.0f;
@@ -92,8 +94,8 @@ void Player::Update()
 			// 回数分フレームを加算
 			momentData_->maxTime_ = momentData_->cBASETIME + (momentData_->relationSlash_ * cTIMEINCREMENTMOMENT_);
 			weapon_->SetBehavior(Weapon::Behavior::Moment);
-			//playerCollision_->isActive = false;
-			//weaponCollision_->isActive = false;
+			// 武器の判定を消す
+			weaponCollision_->isActive = false;
 			break;
 		default:
 			break;
@@ -199,6 +201,10 @@ void Player::UpdateMove()
 
 void Player::UpdateSlash()
 {
+	// ジャスト居合時間中は無敵
+	playerCollision_->isActive = cTIMEJUSTSLASH_ <= t;
+	// 判定を取れるようにする
+	justCollision_->isActive = t < cTIMEJUSTSLASH_;
 	if (slashData_->maxTime_ <= t)
 	{
 		reqBehavior_ = Behavior::Moment;
@@ -308,7 +314,7 @@ void Player::CreateCollision()
 	playerCollision_->CreateFromPrimitive(demoModel_);
 	// マスク
 	playerCollision_->mask.SetBelongFrag(MaskLayer::Player);
-	playerCollision_->mask.SetHitFrag(MaskLayer::Enemy);
+	playerCollision_->mask.SetHitFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 	// 今のところは何もしていない
 	playerCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		data;
@@ -317,9 +323,9 @@ void Player::CreateCollision()
 	// 当たり判定を設定
 	weaponCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
 	// 武器との当たり判定を取る
-	weaponCollision_->CreateFromPrimitive(weapon_->GetMesh());
+	weaponCollision_->CreateFromPrimitive(demoModel_);
 	// マスク
-	weaponCollision_->mask.SetBelongFrag(MaskLayer::Player | MaskLayer::Layer2);
+	weaponCollision_->mask.SetBelongFrag(MaskLayer::Layer2);
 	weaponCollision_->mask.SetHitFrag(MaskLayer::Enemy);
 	// 今のところは何もしていない
 	weaponCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
@@ -336,14 +342,15 @@ void Player::CreateJustCollision()
 	justCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
 	justCollision_->Create(demoModel_->transform.translation);
 	// サイズ
-	justCollision_->max = playerCollision_->max + lwp::Vector3(2.0f, 2.0f, 2.0f);
-	justCollision_->min = playerCollision_->min - lwp::Vector3(2.0f, 2.0f, 2.0f);
+	//justCollision_->max = playerCollision_->max + lwp::Vector3(1.0f, 1.0f, 1.0f);
+	//justCollision_->min = playerCollision_->min - lwp::Vector3(1.0f, 1.0f, 1.0f);
 	// マスク
 	justCollision_->mask.SetBelongFrag(MaskLayer::Player);
 	justCollision_->mask.SetHitFrag(MaskLayer::Layer2);
 	// ジャスト居合したことを通知
 	justCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
-		if (data.state == OnCollisionState::Trigger)
+		if (data.state == OnCollisionState::Trigger &&
+			slashData_->maxRelation_ <= slashData_->cMAXRELATION_)
 		{
 			TItleScene* const scene = dynamic_cast<TItleScene*>(pScene_);
 			assert(scene);
