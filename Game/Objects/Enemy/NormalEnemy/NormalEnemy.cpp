@@ -1,11 +1,12 @@
 #include "NormalEnemy.h"
+#include "Game/Objects/Player/Player.h"
 
 using namespace LWP::Object::Collider;
 void NormalEnemy::Init()
 {
 	models_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
 	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
-	
+
 	isActive_ = true;
 
 }
@@ -13,6 +14,11 @@ void NormalEnemy::Init()
 void NormalEnemy::Update()
 {
 	Attack();
+}
+
+void NormalEnemy::SetPosition(lwp::Vector3 pos)
+{
+	models_[0]->transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 }
 
 void NormalEnemy::Move(LWP::Math::Vector3 MoveVec)

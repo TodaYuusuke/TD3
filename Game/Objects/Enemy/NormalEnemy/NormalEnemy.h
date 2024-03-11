@@ -6,6 +6,7 @@ class NormalEnemy: public IEnemy
 public:
 	void Init()override;
 	void Update()override;
+	void SetPosition(lwp::Vector3 pos)override;
 
 private:
 	void Move(LWP::Math::Vector3 MoveVec)override;

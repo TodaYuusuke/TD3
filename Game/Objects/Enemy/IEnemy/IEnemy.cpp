@@ -7,6 +7,7 @@ void IEnemy::Initialize()
 	Init();
 
 	CreateCollider();
+	collider_->mask.SetBelongFrag(MaskLayer::Enemy);
 }
 
 void IEnemy::CreateCollider()
