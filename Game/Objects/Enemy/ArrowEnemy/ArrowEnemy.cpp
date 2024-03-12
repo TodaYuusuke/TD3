@@ -18,19 +18,17 @@ void ArrowEnemy::Init()
 
 void ArrowEnemy::Update()
 {
-#ifdef _DEBUG
-	// 矢の発射
-	if (lwp::Keyboard::GetTrigger(DIK_V)) {
-		Arrow* arrow = new Arrow();
-		arrow->Init(models_[0]->transform);
-		arrows_.push_back(arrow);
+	if (CheckAttackRange()) {
+		IsAttackFkag = true;
 	}
-#endif // _DEBUG
-	// 狙う
-	Aim();
-
-	// 攻撃
-	Attack();
+	if (IsAttackFkag) {
+		// 攻撃処理
+		Attack();
+	}
+	else {
+		Aim();
+		Move();
+	}
 	if (attackWaitTime_ >= 0) {
 		attackWaitTime_--;
 	}
@@ -48,6 +46,8 @@ void ArrowEnemy::Update()
 		}
 		return false;
 		});
+
+
 }
 
 void ArrowEnemy::SetPosition(lwp::Vector3 pos)
@@ -76,9 +76,12 @@ void ArrowEnemy::CreateCollider()
 		});
 }
 
-void ArrowEnemy::Move(LWP::Math::Vector3 MoveVec)
+void ArrowEnemy::Move()
 {
-	models_[0]->transform.translation.x -= MoveVec.y * LWP::Info::GetDeltaTime();
+	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0]->transform.translation;
+	MoveVec = MoveVec.Normalize();
+	MoveVec.y = 0.0f;
+	models_[0]->transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
 }
 
 void ArrowEnemy::Attack()
@@ -89,6 +92,7 @@ void ArrowEnemy::Attack()
 		arrow->Init(models_[0]->transform);
 		arrows_.push_back(arrow);
 		attackWaitTime_ = kAttackWaitTime;
+		IsAttackFkag = false;
 	}
 }
 
@@ -97,4 +101,13 @@ void ArrowEnemy::Aim()
 	// 狙う対象に身体を向ける
 	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0]->transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0]->transform.translation.z);
 	models_[0]->transform.rotation.y = radian;
+}
+
+bool ArrowEnemy::CheckAttackRange() {
+	// 自機との距離
+	float distance = (models_[0]->transform.translation - player_->GetWorldTransform()->translation).Length();
+	if (distance <= kAttackRange) {
+		return true;
+	}
+	return false;
 }

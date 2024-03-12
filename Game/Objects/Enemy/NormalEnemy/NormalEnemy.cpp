@@ -15,8 +15,23 @@ void NormalEnemy::Init()
 
 void NormalEnemy::Update()
 {
-	Attack();
-	AttackAnimetion();
+	if (CheckAttackRange()) {
+		IsAttackFkag = true;
+	}
+	if (IsAttackFkag) {
+		// 攻撃処理
+		Attack();
+		// 攻撃アニメーション
+		AttackAnimetion();
+	}
+	else {
+		Aim();
+		Move();
+	}
+
+	if (attackWaitTime_ >= 0) {
+		attackWaitTime_--;
+	}
 }
 
 void NormalEnemy::SetPosition(lwp::Vector3 pos)
@@ -24,19 +39,21 @@ void NormalEnemy::SetPosition(lwp::Vector3 pos)
 	models_[0]->transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 }
 
-void NormalEnemy::Move(LWP::Math::Vector3 MoveVec)
+void NormalEnemy::Move()
 {
-	models_[0]->transform.translation += MoveVec * LWP::Info::GetDeltaTime();
+	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0]->transform.translation;
+	MoveVec = MoveVec.Normalize();
+	MoveVec.y = 0.0f;
+	models_[0]->transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
 }
 
 void NormalEnemy::Attack()
 {
-	if (CheckAttackRange()) {
-		if (attackWaitTime_ <= 0) {
-			attackWork.flag = true;
-			PlayerRot = models_[0]->transform.rotation;
-			attackWaitTime_ = kAttackWaitTime;
-		}
+	if (attackWaitTime_ <= 0) {
+		attackWork.flag = true;
+		PlayerRot = models_[0]->transform.rotation;
+		attackWaitTime_ = kAttackWaitTime;
+		Aim();
 	}
 }
 
@@ -74,14 +91,11 @@ void NormalEnemy::AttackAnimetion()
 		else if (attackEndWork.t >= 1.0f) {
 			attackEndWork.flag = false;
 			attackEndWork.t = 0.0f;
-
-			attackEndWork.flag = false;
+			IsAttackFkag = false;
 		}
 	}
 
-	if (attackWaitTime_ >= 0) {
-		attackWaitTime_--;
-	}
+
 }
 
 bool NormalEnemy::CheckAttackRange() {
@@ -95,4 +109,11 @@ bool NormalEnemy::CheckAttackRange() {
 
 LWP::Math::Vector3 NormalEnemy::GetDirectVel() {
 	return (models_[0]->transform.translation - player_->GetWorldTransform()->translation).Normalize();
+}
+
+void NormalEnemy::Aim()
+{
+	// 狙う対象に身体を向ける
+	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0]->transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0]->transform.translation.z);
+	models_[0]->transform.rotation.y = radian;
 }

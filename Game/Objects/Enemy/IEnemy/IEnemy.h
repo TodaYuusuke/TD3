@@ -19,7 +19,7 @@ public:
 
 	virtual void Init() = 0;
 	virtual void Update() = 0;
-	virtual void Move(LWP::Math::Vector3 MoveVec) = 0;
+	virtual void Move() = 0;
 	virtual void Attack() = 0;
 
 
@@ -46,4 +46,5 @@ protected:
 	Player* player_;
 	// 攻撃のクールタイム
 	int attackWaitTime_;
+	bool IsAttackFkag = false;
 };
