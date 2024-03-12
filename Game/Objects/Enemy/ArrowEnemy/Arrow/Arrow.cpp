@@ -41,8 +41,9 @@ void Arrow::Update()
 	}
 	// 寿命を進める
 	deadTimer_++;
-
+#ifdef DEMO
 	ImGui::Text("isAlive : %d", attackWork.flag);
+#endif
 }
 
 void Arrow::Attack()

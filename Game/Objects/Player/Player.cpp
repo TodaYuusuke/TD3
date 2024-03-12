@@ -40,8 +40,10 @@ void Player::Initialize()
 
 void Player::Update()
 {
+#ifdef DEMO
 	// デバッグ表示
 	DebugWindow();
+#endif
 
 	// コマンド動作を確認
 	UpdateInput();
