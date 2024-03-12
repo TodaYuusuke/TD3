@@ -151,7 +151,7 @@ private: //*** プライベート変数 ***//
 
 	// プレイヤーの通常移動
 	// 移動する距離
-	float cSPEEDMOVE_ = 1.5f;
+	float cSPEEDMOVE_ = 1.0f;
 
 	// プレイヤーの居合
 	// 移動する距離

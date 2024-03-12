@@ -9,7 +9,14 @@ void EnemyManager::Update()
 {
 	Flame++;
 	if (Flame >= 120) {
-		EnemySpown();
+		//ランダム生成用
+		std::random_device seedGenerator;
+		std::mt19937 randomEngine(seedGenerator());
+		std::uniform_int_distribution<int> distribution(1, 3);
+		int Spown = distribution(randomEngine);
+		for (int It = 0; It < Spown; It++) {
+			EnemySpown();
+		}
 		Flame = 0;
 	}
 
