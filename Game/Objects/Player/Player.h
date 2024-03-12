@@ -169,6 +169,12 @@ private: //*** プライベート変数 ***//
 	// ジャスト居合に加えて無敵時間
 	float cTIMEADDINCVINCIBLE_ = 0.1f;
 
+	// 武器の半径
+	float cRADIUSWEAPONCOLLISION_ = 1.0f;
+
+	// 居合時の武器の補正
+	float cPLUSWEAPONCORRECTION_ = 6.0f;
+
 	// 各状態毎のデータ
 	// 固定されているデータを外部から取得
 	std::unique_ptr<RootData> rootData_;
@@ -230,7 +236,7 @@ private: //*** プライベート変数 ***//
 	// プレイヤー自身の当たり判定
 	lwp::Collider::AABB* playerCollision_ = nullptr;
 	// 武器の当たり判定
-	lwp::Collider::AABB* weaponCollision_ = nullptr;
+	lwp::Collider::Capsule* weaponCollision_ = nullptr;
 	// ジャスト居合したいときの大きめの判定
 	lwp::Collider::AABB* justCollision_ = nullptr;
 

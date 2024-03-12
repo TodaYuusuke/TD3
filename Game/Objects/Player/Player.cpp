@@ -74,9 +74,10 @@ void Player::Update()
 			// デルタタイム変更
 			EndJust();
 			//slashData_->time_ = 0.0f;
-			lwp::Vector3 vetor = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
-			vetor.y = 0.0f;
-			slashData_->vector_ = vetor.Normalize();
+			lwp::Vector3 vector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
+			vector.y = 0.0f;
+			vector = vector.Normalize();
+			slashData_->vector_ = vector;
 			slashData_->maxTime_ = slashData_->cBASETIME;
 			weapon_->SetBehavior(Weapon::Behavior::Slash);
 			// 居合回数加算
@@ -86,6 +87,11 @@ void Player::Update()
 			// 当たり判定を消去
 			playerCollision_->isActive = false;
 			// 武器の当たり判定を出す
+			// カプセルの設定
+			lwp::Vector3 start = demoModel_->transform.translation;
+			lwp::Vector3 end = demoModel_->transform.translation;
+			weaponCollision_->Create(start, end);
+			weaponCollision_->radius = cRADIUSWEAPONCOLLISION_;
 			weaponCollision_->isActive = true;
 			// ジャスト判定を作る
 			justCollision_->Create(demoModel_->transform.translation);
@@ -222,6 +228,8 @@ void Player::UpdateSlash()
 	playerCollision_->isActive = (!isJustSlashing_ && cTIMEJUSTSLASH_ + cTIMEADDINCVINCIBLE_ < t);
 	// 判定を取れるようにする
 	justCollision_->isActive = t < cTIMEJUSTSLASH_;
+	// 武器の判定を伸ばす
+	weaponCollision_->end = demoModel_->transform.translation + slashData_->vector_ * cPLUSWEAPONCORRECTION_;
 	if (slashData_->maxTime_ <= t)
 	{
 		reqBehavior_ = Behavior::Moment;
@@ -345,9 +353,10 @@ void Player::CreateCollision()
 		});
 	playerCollision_->isActive = true;
 	// 当たり判定を設定
-	weaponCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
+	weaponCollision_ = LWP::Common::CreateInstance<lwp::Collider::Capsule>();
 	// 武器との当たり判定を取る
-	weaponCollision_->CreateFromPrimitive(weapon_->GetMesh());
+	weaponCollision_->Create({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f });
+	weaponCollision_->radius = cRADIUSWEAPONCOLLISION_;
 	// マスク
 	weaponCollision_->mask.SetBelongFrag(MaskLayer::Layer3);
 	weaponCollision_->mask.SetHitFrag(MaskLayer::Enemy);
