@@ -14,10 +14,23 @@ void ShieldEnemy::Init()
 
 void ShieldEnemy::Update()
 {
-	// 攻撃処理
-	Attack();
-	// 攻撃アニメーション
-	AttackAnimetion();
+	if (CheckAttackRange()) {
+		IsAttackFkag = true;
+	}
+	if (IsAttackFkag) {
+		// 攻撃処理
+		Attack();
+		// 攻撃アニメーション
+		AttackAnimetion();
+	}
+	else {
+		Aim();
+		Move();
+	}
+
+	if (attackWaitTime_ >= 0) {
+		attackWaitTime_--;
+	}
 }
 
 void ShieldEnemy::SetPosition(lwp::Vector3 pos)
@@ -25,22 +38,24 @@ void ShieldEnemy::SetPosition(lwp::Vector3 pos)
 	models_[0]->transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 }
 
-void ShieldEnemy::Move(LWP::Math::Vector3 MoveVec)
+void ShieldEnemy::Move()
 {
-	models_[0]->transform.translation.x += MoveVec.y * LWP::Info::GetDeltaTime();
+	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0]->transform.translation;
+	MoveVec = MoveVec.Normalize();
+	MoveVec.y = 0.0f;
+	models_[0]->transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
 }
 
 void ShieldEnemy::Attack()
 {
-	if (CheckAttackRange()) {
-		if (attackWaitTime_ <= 0) {
-			attackWork.flag = true;
+	if (attackWaitTime_ <= 0) {
+		attackWork.flag = true;
 			lwp::Vector3 point{ 0.0f,0.0f,-1.0f };
-			attackWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0]->transform.rotation)) * -1/*ベクトルを反転*/;
-			attackWork.targetpoint = attackWork.targetpoint.Normalize();
-			attackEndWork.targetpoint = attackWork.targetpoint * -1/*ベクトルを反転*/;
-			attackWaitTime_ = kAttackWaitTime;
-		}
+		attackWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0]->transform.rotation)) * -1/*ベクトルを反転*/;
+		attackWork.targetpoint = attackWork.targetpoint.Normalize();
+		attackEndWork.targetpoint = attackWork.targetpoint * -1/*ベクトルを反転*/;
+		attackWaitTime_ = kAttackWaitTime;
+		Aim();
 	}
 }
 
@@ -77,14 +92,10 @@ void ShieldEnemy::AttackAnimetion()
 		else if (attackEndWork.t >= 1.0f) {
 			attackEndWork.flag = false;
 			attackEndWork.t = 0.0f;
-
-			attackEndWork.flag = false;
+			IsAttackFkag = false;
 		}
 	}
 
-	if (attackWaitTime_ >= 0) {
-		attackWaitTime_--;
-	}
 }
 
 bool ShieldEnemy::CheckAttackRange() {
@@ -98,4 +109,11 @@ bool ShieldEnemy::CheckAttackRange() {
 
 LWP::Math::Vector3 ShieldEnemy::GetDirectVel() {
 	return (models_[0]->transform.translation - player_->GetWorldTransform()->translation).Normalize();
+}
+
+void ShieldEnemy::Aim()
+{
+	// 狙う対象に身体を向ける
+	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0]->transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0]->transform.translation.z);
+	models_[0]->transform.rotation.y = radian;
 }

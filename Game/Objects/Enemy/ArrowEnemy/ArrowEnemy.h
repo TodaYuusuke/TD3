@@ -27,13 +27,16 @@ private:// プライベートなメンバ関数
 	void CreateCollider() override;
 
 	// 移動
-	void Move(LWP::Math::Vector3 MoveVec)override;
+	void Move()override;
 	// 攻撃
 	void Attack()override;
 	// 対象を狙う
 	void Aim();
+	bool CheckAttackRange();
 
 public:// 定数
+	// 攻撃する範囲
+	const float kAttackRange = 20.0f;
 	// 攻撃のクールタイム
 	const int kAttackWaitTime = 120;
 
