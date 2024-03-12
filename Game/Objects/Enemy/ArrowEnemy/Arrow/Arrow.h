@@ -19,7 +19,7 @@ public:
 
 private:// 定数
 	// 弾の寿命
-	const int kLifeTime = 120;
+	const int kLifeTime = 600;
 
 private:
 	// 矢のモデル
@@ -29,7 +29,7 @@ private:
 	AABB* aabb_;
 
 	MotionWork attackWork{
-		.speed = 0.5f,
+		.speed = 5.0f,
 		.flag = false,
 	};
 

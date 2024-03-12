@@ -47,7 +47,7 @@ void Arrow::Update()
 
 void Arrow::Attack()
 {
-	model_->transform.translation += attackWork.targetpoint * LWP::Info::GetDeltaTime();
+	model_->transform.translation += attackWork.targetpoint * attackWork.speed * LWP::Info::GetDeltaTime();
 	attackWork.flag = true;
 }
 

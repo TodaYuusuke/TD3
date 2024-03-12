@@ -379,7 +379,9 @@ void Player::CreateJustCollision()
 	// フラグオフ
 	justCollision_->isActive = false;
 
+#ifdef DEMO
 	justCollision_->name = "Just";
+#endif
 }
 
 void Player::UpdateInput()
