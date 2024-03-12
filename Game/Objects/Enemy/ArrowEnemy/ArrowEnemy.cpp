@@ -20,7 +20,8 @@ void ArrowEnemy::Update()
 {
 #ifdef _DEBUG
 	// 矢の発射
-	if (lwp::Keyboard::GetTrigger(DIK_V)) {
+	if (lwp::Keyboard::GetTrigger(DIK_V))
+	{
 		Arrow* arrow = new Arrow();
 		arrow->Init(models_[0]->transform);
 		arrows_.push_back(arrow);
@@ -31,18 +32,21 @@ void ArrowEnemy::Update()
 
 	// 攻撃
 	Attack();
-	if (attackWaitTime_ >= 0) {
+	if (attackWaitTime_ >= 0)
+	{
 		attackWaitTime_--;
 	}
 
 	// 矢の更新処理
-	for (Arrow* arrow : arrows_) {
+	for (Arrow* arrow : arrows_)
+	{
 		arrow->Update();
 	}
 
 	arrows_.remove_if([](Arrow* arrow) {
-		if (!arrow->GetIsAlive()) {
-			arrow->SetIsCollision(false);
+		if (!arrow->GetIsAlive())
+		{
+			arrow->Death();
 			delete arrow;
 			return true;
 		}
@@ -62,16 +66,23 @@ void ArrowEnemy::CreateCollider()
 	// 当たり判定を取る
 	collider_->CreateFromPrimitive(models_[0]);
 	// マスク処理
-	collider_->mask.SetBelongFrag(MaskLayer::Enemy);
-	collider_->mask.SetHitFrag(MaskLayer::Player);
+	collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+	collider_->mask.SetHitFrag(MaskLayer::Layer3);
 	// 今のところは何もしていない
 	collider_->SetOnCollisionLambda([this](HitData data) {
 		data;
-		if (data.state == OnCollisionState::Trigger && isActive_)
+		if (data.state == OnCollisionState::Trigger && isActive_ &&
+			data.hit &&
+			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3))
 		{
 			isActive_ = false;
 			models_[0]->isActive = false;
 			collider_->isActive = false;
+			arrows_.remove_if([](Arrow* arrow) {
+				arrow->Death();
+				delete arrow;
+				return true;
+				});
 		}
 		});
 }
@@ -84,7 +95,8 @@ void ArrowEnemy::Move(LWP::Math::Vector3 MoveVec)
 void ArrowEnemy::Attack()
 {
 	// 矢の発射
-	if (attackWaitTime_ <= 0) {
+	if (attackWaitTime_ <= 0)
+	{
 		Arrow* arrow = new Arrow();
 		arrow->Init(models_[0]->transform);
 		arrows_.push_back(arrow);

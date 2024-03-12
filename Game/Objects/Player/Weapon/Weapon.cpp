@@ -102,8 +102,8 @@ Weapon::SlashData* Weapon::InitSlashData()
 	data->scale_.end_ = { 0.5f,0.5f,1.0f };
 	data->rotate_.start_ = { 0.0f,0.0f,0.0f };
 	data->rotate_.end_ = { 0.0f,0.0f,0.0f };
-	data->translate_.start_ = { -2.0f,0.5f,3.0f };
-	data->translate_.end_ = { 2.0f,0.0f,1.0f };
+	data->translate_.start_ = { -0.5f,0.5f,3.0f };
+	data->translate_.end_ = { 0.5f,0.0f,1.0f };
 	return data;
 }
 

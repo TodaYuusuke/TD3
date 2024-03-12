@@ -19,6 +19,12 @@ void Arrow::Init(lwp::WorldTransform transform)
 	aabb_->mask.SetHitFrag(MaskLayer::Player);
 	aabb_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		data;
+		if (!(data.state == OnCollisionState::None) &&
+			data.hit &&
+			(data.hit->mask.GetBelongFrag() & MaskLayer::Player))
+		{
+			Death();
+		}
 		});
 	aabb_->isActive = true;
 }
@@ -29,10 +35,9 @@ void Arrow::Update()
 	Attack();
 
 	// 弾が生存時間を越えていたら死ぬ
-	if (deadTimer_ >= kLifeTime) {
-		attackWork.flag = false;
-		model_->isActive = false;
-		aabb_->isActive = false;
+	if (deadTimer_ >= kLifeTime)
+	{
+		Death();
 	}
 	// 寿命を進める
 	deadTimer_++;
@@ -44,5 +49,12 @@ void Arrow::Attack()
 {
 	model_->transform.translation += attackWork.targetpoint * LWP::Info::GetDeltaTime();
 	attackWork.flag = true;
+}
+
+void Arrow::Death()
+{
+	attackWork.flag = false;
+	model_->isActive = false;
+	aabb_->isActive = false;
 }
 

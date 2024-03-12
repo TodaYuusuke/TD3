@@ -61,7 +61,7 @@ void Player::Update()
 			rootData_->maxTime_ = rootData_->cBASETIME;
 			// 居合回数のリセット
 			slashData_->relationSlash_ = 0u;
-			slashData_->maxRelation_ = slashData_->cMAXRELATION_; 
+			slashData_->maxRelation_ = slashData_->cMAXRELATION_;
 			weapon_->SetBehavior(Weapon::Behavior::Root);
 			// UI に反映
 			slashPanel_->Reset();
@@ -72,9 +72,11 @@ void Player::Update()
 			break;
 		case Player::Behavior::Slash:
 			// デルタタイム変更
-			LWP::Info::SetDeltaTimeMultiply(1.0f);
+			LWP::Info::SetDeltaTimeMultiply(0.9f);
 			//slashData_->time_ = 0.0f;
-			slashData_->vector_ = destinate_;
+			lwp::Vector3 vetor = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
+			vetor.y = 0.0f;
+			slashData_->vector_ = vetor.Normalize();
 			slashData_->maxTime_ = slashData_->cBASETIME;
 			weapon_->SetBehavior(Weapon::Behavior::Slash);
 			// 居合回数加算
@@ -219,14 +221,14 @@ void Player::UpdateSlash()
 	// 移動距離とモーション用の更新
 	//t = (slashData_->time_ / (float)slashData_->maxTime_);
 
-	lwp::Vector3 moveVector = slashData_->vector_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
-	moveVector.y = 0.0f;
+	//lwp::Vector3 moveVector = slashData_->vector_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
+	lwp::Vector3 moveVector = slashData_->vector_;
 
 	// モデル回転
 	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 	//moveVector = moveVector.Normalize() * cSPEEDSLASH_ * max(min(t / slashData_->maxTime_, 1.0f), 0.0f);
-	moveVector = moveVector.Normalize() * (cSPEEDSLASH_/ slashData_->maxTime_) * lwp::GetDeltaTime();
+	moveVector = moveVector * (cSPEEDSLASH_ / slashData_->maxTime_) * lwp::GetDeltaTime();
 
 	demoModel_->transform.translation += moveVector;
 }
@@ -321,6 +323,7 @@ void Player::CreateCollision()
 	playerCollision_->CreateFromPrimitive(demoModel_);
 	// マスク
 	playerCollision_->mask.SetBelongFrag(MaskLayer::Player);
+	// 敵または敵の攻撃
 	playerCollision_->mask.SetHitFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 	// 今のところは何もしていない
 	playerCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
@@ -335,7 +338,7 @@ void Player::CreateCollision()
 	// 武器との当たり判定を取る
 	weaponCollision_->CreateFromPrimitive(weapon_->GetMesh());
 	// マスク
-	weaponCollision_->mask.SetBelongFrag(MaskLayer::Layer2);
+	weaponCollision_->mask.SetBelongFrag(MaskLayer::Layer3);
 	weaponCollision_->mask.SetHitFrag(MaskLayer::Enemy);
 	// 今のところは何もしていない
 	weaponCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
@@ -359,8 +362,10 @@ void Player::CreateJustCollision()
 	justCollision_->mask.SetHitFrag(MaskLayer::Layer2);
 	// ジャスト居合したことを通知
 	justCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
-		if (data.state == OnCollisionState::Trigger &&
-			slashData_->maxRelation_ <= slashData_->cMAXRELATION_)
+		if (!(data.state == OnCollisionState::None) &&
+			slashData_->maxRelation_ <= slashData_->cMAXRELATION_ &&
+			data.hit &&
+			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer2))
 		{
 			TItleScene* const scene = dynamic_cast<TItleScene*>(pScene_);
 			assert(scene);
@@ -525,7 +530,7 @@ void Player::DebugWindow()
 	ImGui::Separator();
 
 	ImGui::Text("SlashRelation / MaxRelation");
-	ImGui::Text("%d / %d", slashData_->relationSlash_,slashData_->maxRelation_);
+	ImGui::Text("%d / %d", slashData_->relationSlash_, slashData_->maxRelation_);
 	ImGui::Text("INCREMENTMOMENT : %.3f", cTIMEINCREMENTMOMENT_);
 
 	ImGui::End();

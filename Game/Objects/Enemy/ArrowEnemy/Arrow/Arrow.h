@@ -15,6 +15,8 @@ public:
 	void SetIsCollision(bool isActive) { aabb_->isActive = isActive; }
 public:
 
+	void Death();
+
 private:// 定数
 	// 弾の寿命
 	const int kLifeTime = 120;
