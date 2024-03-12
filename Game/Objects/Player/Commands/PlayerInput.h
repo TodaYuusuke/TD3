@@ -34,10 +34,10 @@ private:
 
 	//*** パッド入力 ***//
 
-	void AssginCommandToPressPadA();
-	void AssginCommandToPressPadB();
-	void AssginCommandToPressPadX();
-	void AssginCommandToPressPadY();
+	void AssginCommandToTriggerPadA();
+	void AssginCommandToTriggerPadB();
+	void AssginCommandToTriggerPadX();
+	void AssginCommandToTriggerPadY();
 
 private:
 
@@ -55,10 +55,10 @@ private:
 
 	//*** パッド入力 ***//
 
-	IPlayerCommand* pressPadA_;
-	IPlayerCommand* pressPadB_;
-	IPlayerCommand* pressPadX_;
-	IPlayerCommand* pressPadY_;
+	IPlayerCommand* triggerPadA_;
+	IPlayerCommand* triggerPadB_;
+	IPlayerCommand* triggerPadX_;
+	IPlayerCommand* triggerPadY_;
 
 };
 

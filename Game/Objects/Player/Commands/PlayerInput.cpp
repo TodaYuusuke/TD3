@@ -48,21 +48,21 @@ void PlayerInput::HandleInputKey()
 
 void PlayerInput::HandleInputPad()
 {
-	if (LWP::Input::Pad::GetPress(XINPUT_GAMEPAD_A))
+	if (LWP::Input::Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
-		commands_.push_back(pressPadA_);
+		commands_.push_back(triggerPadA_);
 	}
-	if (LWP::Input::Pad::GetPress(XINPUT_GAMEPAD_B))
+	if (LWP::Input::Pad::GetTrigger(XINPUT_GAMEPAD_B))
 	{
-		commands_.push_back(pressPadB_);
+		commands_.push_back(triggerPadB_);
 	}
-	if (LWP::Input::Pad::GetPress(XINPUT_GAMEPAD_X))
+	if (LWP::Input::Pad::GetTrigger(XINPUT_GAMEPAD_X))
 	{
-		commands_.push_back(pressPadX_);
+		commands_.push_back(triggerPadX_);
 	}
-	if (LWP::Input::Pad::GetPress(XINPUT_GAMEPAD_Y))
+	if (LWP::Input::Pad::GetTrigger(XINPUT_GAMEPAD_Y))
 	{
-		commands_.push_back(pressPadY_);
+		commands_.push_back(triggerPadY_);
 	}
 }
 
@@ -78,10 +78,10 @@ void PlayerInput::AssignCommandToKey()
 
 void PlayerInput::AssignCommandToPad()
 {
-	AssginCommandToPressPadA();
-	AssginCommandToPressPadB();
-	AssginCommandToPressPadX();
-	AssginCommandToPressPadY();
+	AssginCommandToTriggerPadA();
+	AssginCommandToTriggerPadB();
+	AssginCommandToTriggerPadX();
+	AssginCommandToTriggerPadY();
 }
 
 void PlayerInput::AssignCommandToPressKeyW()
@@ -116,26 +116,26 @@ void PlayerInput::AssignCommandToTriggerSPACE()
 
 
 
-void PlayerInput::AssginCommandToPressPadA()
+void PlayerInput::AssginCommandToTriggerPadA()
 {
 	IPlayerCommand* command = new PlayerSlashCommand();
-	this->pressPadA_ = command;
+	this->triggerPadA_ = command;
 }
 
-void PlayerInput::AssginCommandToPressPadB()
+void PlayerInput::AssginCommandToTriggerPadB()
 {
 	IPlayerCommand* command = new PlayerSlashCommand();
-	this->pressPadB_ = command;
+	this->triggerPadB_ = command;
 }
 
-void PlayerInput::AssginCommandToPressPadX()
+void PlayerInput::AssginCommandToTriggerPadX()
 {
 	IPlayerCommand* command = new PlayerSlashCommand();
-	this->pressPadX_ = command;
+	this->triggerPadX_ = command;
 }
 
-void PlayerInput::AssginCommandToPressPadY()
+void PlayerInput::AssginCommandToTriggerPadY()
 {
 	IPlayerCommand* command = new PlayerSlashCommand();
-	this->pressPadY_ = command;
+	this->triggerPadY_ = command;
 }
