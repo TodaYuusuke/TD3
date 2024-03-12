@@ -20,7 +20,7 @@ public:
 
 	/// Getter
 	/// ビュープロジェクションを取得
-	const LWP::Math::Matrix4x4& GetViewProjection() { return viewProjection_.GetViewProjection(); }
+	const LWP::Math::Matrix4x4& GetViewProjection() { return camera_->GetViewProjection(); }
 	
 	/// Setter
 	// 追従する対象を設定
@@ -35,7 +35,7 @@ private:// プライベートな関数
 	LWP::Math::Vector3 TransformNormal(const LWP::Math::Vector3& vector, const LWP::Math::Matrix4x4& matrix);
 
 public:// パブリックな変数
-	LWP::Object::Camera viewProjection_;
+	LWP::Object::Camera* camera_;
 
 private:// メンバ変数
 	// 追従対象

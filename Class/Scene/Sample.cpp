@@ -65,7 +65,7 @@ void Sample::Initialize() {
 
 	// 球
 	sphere = LWP::Primitive::CreateInstance<Sphere>();
-	sphere->Radius(0.3f);
+	//sphere->Radius(0.3f);
 	sphere->transform.translation.x = -1.0f;
 	sphere->transform.translation.z = -1.0f;
 	//sphere->material.enableLighting = true;
@@ -153,13 +153,13 @@ void Sample::Initialize() {
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
 	followCamera_->SetTarget(&sphere->transform);
+	mainCamera->transform.Parent(&followCamera_->camera_->transform);
 }
 
 // 更新
 void Sample::Update() {
 	// 追従カメラ
 	followCamera_->Update();
-	mainCamera->transform = followCamera_->viewProjection_.transform;
 
 	// ポストプロセスの切り替え
 	if (Keyboard::GetTrigger(DIK_SPACE)) {

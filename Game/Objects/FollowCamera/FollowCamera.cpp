@@ -6,7 +6,8 @@ using namespace LWP::Input;
 using namespace LWP::Input::Pad;
 
 void FollowCamera::Initialize() {
-	viewProjection_.Initialize();
+	camera_ = new LWP::Object::Camera();
+	camera_->Initialize();
 	// 追従対象からカメラまでのオフセット
 	offset_ = { 0.0f, 0.0f, -10.0f };
 }
@@ -19,21 +20,21 @@ void FollowCamera::Update() {
 	if (target_) {
 		Vector3 offset = offset_;
 		// カメラの角度から回転行列を計算
-		Matrix4x4 rotateMatrix = LWP::Math::Matrix4x4::CreateRotateXYZMatrix(viewProjection_.transform.rotation);
+		Matrix4x4 rotateMatrix = LWP::Math::Matrix4x4::CreateRotateXYZMatrix(camera_->transform.rotation);
 
 		// オフセットをカメラの回転に合わせて回転
 		offset = TransformNormal(offset, rotateMatrix);
 
 		// 座標をコピーしてオフセット分ずらす。ただしx座標はずらさない
-		viewProjection_.transform.translation = target_->translation + offset;
+		camera_->transform.translation = target_->translation + offset;
 	}
 
 #ifdef _DEBUG
 	ImGui::Begin("followCamera");
 	ImGui::Text("Key Info  Arrow:Angle");
 	if (ImGui::TreeNode("WorldTransform")) {
-		ImGui::DragFloat3("translation", &viewProjection_.transform.translation.x, 0.01f, -100, 100);
-		ImGui::DragFloat3("rotation", &viewProjection_.transform.rotation.x, 0.001f, -6.28f, 6.28f);
+		ImGui::DragFloat3("translation", &camera_->transform.translation.x, 0.01f, -100, 100);
+		ImGui::DragFloat3("rotation", &camera_->transform.rotation.x, 0.001f, -6.28f, 6.28f);
 		ImGui::TreePop();
 	}
 	ImGui::DragFloat3("offset", &offset_.x, 0.01f, -100, 100);
@@ -44,12 +45,12 @@ void FollowCamera::Update() {
 void FollowCamera::InputAngle() {
 	// rotationが2πより大きかったら(もしくは-2πより小さ勝ったら)0にリセット
 	// Y軸
-	if (viewProjection_.transform.rotation.y >= 6.28f || viewProjection_.transform.rotation.y <= -6.28f) {
-		viewProjection_.transform.rotation.y = 0.0f;
+	if (camera_->transform.rotation.y >= 6.28f || camera_->transform.rotation.y <= -6.28f) {
+		camera_->transform.rotation.y = 0.0f;
 	}
 	// X軸
-	if (viewProjection_.transform.rotation.x >= 6.28f || viewProjection_.transform.rotation.x <= -6.28f) {
-		viewProjection_.transform.rotation.x = 0.0f;
+	if (camera_->transform.rotation.x >= 6.28f || camera_->transform.rotation.x <= -6.28f) {
+		camera_->transform.rotation.x = 0.0f;
 	}
 
 	// 入力感度
@@ -58,25 +59,25 @@ void FollowCamera::InputAngle() {
 #pragma  region キーボード入力
 	// Y軸
 	if (LWP::Input::Keyboard::GetPress(DIK_RIGHT)) {
-		viewProjection_.transform.rotation.y -= sensitivity.x;
+		camera_->transform.rotation.y -= sensitivity.x;
 	}
 	if (LWP::Input::Keyboard::GetPress(DIK_LEFT)) {
-		viewProjection_.transform.rotation.y += sensitivity.x;
+		camera_->transform.rotation.y += sensitivity.x;
 	}
 	// X軸
 	if (LWP::Input::Keyboard::GetPress(DIK_UP)) {
-		viewProjection_.transform.rotation.x += sensitivity.y;
+		camera_->transform.rotation.x += sensitivity.y;
 	}
 	if (LWP::Input::Keyboard::GetPress(DIK_DOWN)) {
-		viewProjection_.transform.rotation.x -= sensitivity.y;
+		camera_->transform.rotation.x -= sensitivity.y;
 	}
 #pragma endregion
 
 #pragma  region ゲームパッド入力
 	// Y軸
-	viewProjection_.transform.rotation.y += Controller::GetRStick().x * sensitivity.x;
+	camera_->transform.rotation.y += Controller::GetRStick().x * sensitivity.x;
 	// X軸
-	viewProjection_.transform.rotation.x -= Controller::GetRStick().y * sensitivity.y;
+	camera_->transform.rotation.x -= Controller::GetRStick().y * sensitivity.y;
 #pragma endregion
 }
 

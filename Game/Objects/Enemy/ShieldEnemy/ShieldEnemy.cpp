@@ -56,6 +56,9 @@ void ShieldEnemy::Update()
 
 void ShieldEnemy::Move(LWP::Math::Vector3 MoveVec)
 {
+	// 狙う対象に身体を向ける
+	float radian = atan2(player_->GetWorldPosition().x - models_[0]->transform.translation.x, player_->GetWorldPosition().z - models_[0]->transform.translation.z);
+	models_[0]->transform.rotation.y = radian;
 	models_[0]->transform.translation.x += MoveVec.y * LWP::Info::GetDeltaTime();
 }
 

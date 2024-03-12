@@ -13,13 +13,13 @@ void Arrow::Init(lwp::WorldTransform transform)
 	attackWork.targetpoint = attackWork.targetpoint.Normalize();
 
 	// 当たり判定を設定
-	aabb_ = LWP::Common::CreateInstance<AABB>();
-	aabb_->CreateFromPrimitive(model_);
-	aabb_->SetOnCollisionLambda([](ICollider* self, ICollider* hit, OnCollisionState state) {
-		self;
-		hit;
-		state;
-	});
+	//aabb_ = LWP::Common::CreateInstance<AABB>();
+	//aabb_->CreateFromPrimitive(model_);
+	//aabb_->SetOnCollisionLambda([](ICollider* self, ICollider* hit, OnCollisionState state) {
+	//	self;
+	//	hit;
+	//	state;
+	//});
 }
 
 void Arrow::Update()
