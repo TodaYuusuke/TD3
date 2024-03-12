@@ -71,6 +71,7 @@ void NormalEnemy::AttackAnimetion()
 			attackWork.t = 0.0f;
 
 			attackStanbyWork.flag = true;
+			collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 		}
 	}
 	if (attackStanbyWork.flag) {
@@ -92,6 +93,7 @@ void NormalEnemy::AttackAnimetion()
 			attackEndWork.flag = false;
 			attackEndWork.t = 0.0f;
 			IsAttackFkag = false;
+			collider_->mask.SetBelongFrag(MaskLayer::Enemy);
 		}
 	}
 
