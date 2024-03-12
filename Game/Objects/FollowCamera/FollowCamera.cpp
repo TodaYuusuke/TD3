@@ -8,7 +8,7 @@ using namespace LWP::Input::Pad;
 void FollowCamera::Initialize() {
 	viewProjection_.Initialize();
 	// 追従対象からカメラまでのオフセット
-	offset_ = { 0.0f, 0.0f, -20.0f };
+	offset_ = { 0.0f, 0.0f, -30.0f };
 }
 
 void FollowCamera::Update() {
