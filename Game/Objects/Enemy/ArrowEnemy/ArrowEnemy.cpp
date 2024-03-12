@@ -13,6 +13,7 @@ void ArrowEnemy::Init()
 	isActive_ = true;
 	// 当たり判定は Initialize() 関数で呼び出しているので
 	// 条件を変えたいなら CreateCollider() 関数をオーバーライドする
+	attackWaitTime_ = kAttackWaitTime;
 }
 
 void ArrowEnemy::Update()
@@ -24,16 +25,15 @@ void ArrowEnemy::Update()
 		arrow->Init(models_[0]->transform);
 		arrows_.push_back(arrow);
 	}
-	//// 体の向きを変える
-	//if (lwp::Keyboard::GetPress(DIK_A)) {
-	//	models_[0]->transform.rotation.y += 0.01f;
-	//}
-	//if (lwp::Keyboard::GetPress(DIK_D)) {
-	//	models_[0]->transform.rotation.y -= 0.01f;
-	//}
 #endif // _DEBUG
 	// 狙う
 	Aim();
+
+	// 攻撃
+	Attack();
+	if (attackWaitTime_ >= 0) {
+		attackWaitTime_--;
+	}
 
 	// 矢の更新処理
 	for (Arrow* arrow : arrows_) {
@@ -83,7 +83,13 @@ void ArrowEnemy::Move(LWP::Math::Vector3 MoveVec)
 
 void ArrowEnemy::Attack()
 {
-
+	// 矢の発射
+	if (attackWaitTime_ <= 0) {
+		Arrow* arrow = new Arrow();
+		arrow->Init(models_[0]->transform);
+		arrows_.push_back(arrow);
+		attackWaitTime_ = kAttackWaitTime;
+	}
 }
 
 void ArrowEnemy::Aim()

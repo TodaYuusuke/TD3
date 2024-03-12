@@ -9,11 +9,14 @@ void NormalEnemy::Init()
 
 	isActive_ = true;
 
+	attackWaitTime_ = kAttackWaitTime;
+
 }
 
 void NormalEnemy::Update()
 {
 	Attack();
+	AttackAnimetion();
 }
 
 void NormalEnemy::SetPosition(lwp::Vector3 pos)
@@ -28,15 +31,22 @@ void NormalEnemy::Move(LWP::Math::Vector3 MoveVec)
 
 void NormalEnemy::Attack()
 {
-	if (lwp::Keyboard::GetPress(DIK_SPACE)) {
-		attackWork.flag = true;
-		PlayerRot = models_[0]->transform.rotation;
+	if (CheckAttackRange()) {
+		if (attackWaitTime_ <= 0) {
+			attackWork.flag = true;
+			PlayerRot = models_[0]->transform.rotation;
+			attackWaitTime_ = kAttackWaitTime;
+		}
 	}
+}
+
+void NormalEnemy::AttackAnimetion()
+{
 	lwp::Vector3 point = { 0.0f,0.0f,0.0f };
 	if (attackWork.flag) {
 		if (attackWork.t < 1.0f) {
 			attackWork.t += attackWork.speed;
-			point = lwp::Vector3::Lerp(PlayerRot,attackWork.targetpoint,attackWork.t);
+			point = lwp::Vector3::Lerp(PlayerRot, attackWork.targetpoint, attackWork.t);
 			models_[0]->transform.rotation = point;
 		}
 		else if (attackWork.t >= 1.0f) {
@@ -68,4 +78,21 @@ void NormalEnemy::Attack()
 			attackEndWork.flag = false;
 		}
 	}
+
+	if (attackWaitTime_ >= 0) {
+		attackWaitTime_--;
+	}
+}
+
+bool NormalEnemy::CheckAttackRange() {
+	// 自機との距離
+	float distance = (models_[0]->transform.translation - player_->GetWorldTransform()->translation).Length();
+	if (distance <= kAttackRange) {
+		return true;
+	}
+	return false;
+}
+
+LWP::Math::Vector3 NormalEnemy::GetDirectVel() {
+	return (models_[0]->transform.translation - player_->GetWorldTransform()->translation).Normalize();
 }

@@ -3,14 +3,6 @@
 
 void EnemyManager::Init()
 {
-	//enemys_.push_back(new NormalEnemy);
-	//enemys_.push_back(new ShieldEnemy);
-	//enemys_.push_back(new ArrowEnemy);
-	for (IEnemy* enemy_ : enemys_)
-	{
-		enemy_->Initialize();
-		enemy_->SetTarget(player_);
-	}
 }
 
 void EnemyManager::Update()
@@ -78,7 +70,6 @@ void EnemyManager::EnemySpown()
 		ArrowEnemySpown(pos);
 	}
 }
-
 void EnemyManager::NormalEnemySpown(lwp::Vector3 pos)
 {
 	NormalEnemy* NEnemy = new NormalEnemy();
@@ -87,7 +78,6 @@ void EnemyManager::NormalEnemySpown(lwp::Vector3 pos)
 	NEnemy->SetPosition(pos);
 	enemys_.push_back(NEnemy);
 }
-
 void EnemyManager::ShieldEnemySpown(lwp::Vector3 pos)
 {
 	ShieldEnemy* NEnemy = new ShieldEnemy();
@@ -96,7 +86,6 @@ void EnemyManager::ShieldEnemySpown(lwp::Vector3 pos)
 	NEnemy->SetPosition(pos);
 	enemys_.push_back(NEnemy);
 }
-
 void EnemyManager::ArrowEnemySpown(lwp::Vector3 pos)
 {
 	

@@ -21,7 +21,7 @@ void TItleScene::Initialize()
 
 	// 地面
 	Mesh* ground = LWP::Resource::LoadModel("ground/ground.obj");
-	ground->transform.translation.y = -1.5f;
+	ground->transform.translation.y = -0.5f;
 	ground->transform.scale = { 10.0f,0.1f, 10.0f };
 	ground->name = "Ground";
 

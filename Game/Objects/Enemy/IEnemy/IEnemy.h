@@ -44,4 +44,6 @@ protected:
 	bool isActive_ = false;
 	// 
 	Player* player_;
+	// 攻撃のクールタイム
+	int attackWaitTime_;
 };
