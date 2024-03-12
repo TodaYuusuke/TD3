@@ -46,12 +46,28 @@ void EnemyManager::EnemySpown()
 	std::mt19937 randomEngine(seedGenerator());
 	std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
 	float number = 	distribution(randomEngine);
+	//方向を決める
+	float divideX = distribution(randomEngine);
+	float divideZ = 1.0f - divideX;
+	float signX = distribution(randomEngine);
+	float signY = distribution(randomEngine);
+		if (signX <= 0.5f) {
+			signX = 1;
+		}
+		else {
+			signX = -1;
+		}
+		if (signY <= 0.5f) {
+			signY = 1;
+		}
+		else {
+			signY = -1;
+		}
+
 	std::uniform_real_distribution<float> distribution2(8.0f, 10.0f);
 	float PtoE = distribution2(randomEngine);
-	std::uniform_real_distribution<float> distribution3(0.0f, 1.0f);
-	float divideX = distribution3(randomEngine);
-	float divideZ = 1.0f - divideX;
-	lwp::Vector3 pos = { PtoE * divideX , 0.5f , PtoE * divideZ };
+
+	lwp::Vector3 pos = { PtoE * divideX * signX , 0.5f , PtoE * divideZ * signY };
 	if (number <= 0.5f) {
 		NormalEnemySpown(pos);
 	}
