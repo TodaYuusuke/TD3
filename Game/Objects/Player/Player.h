@@ -98,7 +98,7 @@ public: //*** パブリック関数 ***//
 	void Update();
 
 	// ジャスト終了
-	void EndJust() { isJustSlashing_ = false; }
+	void EndJust();
 
 public:	//*** セッター,ゲッター ***//
 
@@ -165,6 +165,9 @@ private: //*** プライベート変数 ***//
 
 	// ジャスト居合を取る時間
 	float cTIMEJUSTSLASH_ = 0.1f;
+
+	// ジャスト居合に加えて無敵時間
+	float cTIMEADDINCVINCIBLE_ = 0.1f;
 
 	// 各状態毎のデータ
 	// 固定されているデータを外部から取得

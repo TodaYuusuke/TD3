@@ -45,7 +45,6 @@ void TItleScene::Update()
 		{
 			isJustSlash_ = false;
 			player_->EndJust();
-			LWP::Info::SetDeltaTimeMultiply(1.0f);
 		}
 	}
 

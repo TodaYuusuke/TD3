@@ -72,8 +72,7 @@ void Player::Update()
 			break;
 		case Player::Behavior::Slash:
 			// デルタタイム変更
-			LWP::Info::SetDeltaTimeMultiply(0.9f);
-			isJustSlashing_ = false;
+			EndJust();
 			//slashData_->time_ = 0.0f;
 			lwp::Vector3 vetor = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
 			vetor.y = 0.0f;
@@ -128,6 +127,14 @@ void Player::Update()
 	t += lwp::GetDeltaTime();
 	weapon_->Update();
 	slashPanel_->Update();
+}
+
+void Player::EndJust()
+{
+	LWP::Info::SetDeltaTimeMultiply(1.0f);
+	isJustSlashing_ = false;
+	// 無敵切れは次の居合時にもなる
+	playerCollision_->isActive = true;
 }
 
 void Player::MoveFront()
@@ -210,7 +217,9 @@ void Player::UpdateMove()
 void Player::UpdateSlash()
 {
 	// 無敵時間
-	playerCollision_->isActive = cTIMEJUSTSLASH_ <= t;
+	// ジャスト成立中
+	//　無敵時間中
+	playerCollision_->isActive = (!isJustSlashing_ && cTIMEJUSTSLASH_ + cTIMEADDINCVINCIBLE_ < t);
 	// 判定を取れるようにする
 	justCollision_->isActive = t < cTIMEJUSTSLASH_;
 	if (slashData_->maxTime_ <= t)
@@ -326,11 +335,12 @@ void Player::CreateCollision()
 	playerCollision_->mask.SetBelongFrag(MaskLayer::Player);
 	// 敵または敵の攻撃
 	playerCollision_->mask.SetHitFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	// 今のところは何もしていない
+	// チョットした後隙
 	playerCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		if (data.state == OnCollisionState::Trigger)
 		{
 			reqBehavior_ = Behavior::Moment;
+			EndJust();
 		}
 		});
 	playerCollision_->isActive = true;
@@ -364,16 +374,18 @@ void Player::CreateJustCollision()
 	// ジャスト居合したことを通知
 	justCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		if (!(data.state == OnCollisionState::None) &&
-			slashData_->maxRelation_ <= slashData_->cMAXRELATION_ &&
 			data.hit &&
 			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer2))
 		{
 			TItleScene* const scene = dynamic_cast<TItleScene*>(pScene_);
 			assert(scene);
 			scene->StartJustSlash();
-			slashData_->maxRelation_++;
-			slashPanel_->Just();
 			isJustSlashing_ = true;
+			if (slashData_->maxRelation_ <= slashData_->cMAXRELATION_)
+			{
+				slashData_->maxRelation_++;
+				slashPanel_->Just();
+			}
 		}
 		});
 	// フラグオフ
