@@ -73,6 +73,7 @@ void Player::Update()
 		case Player::Behavior::Slash:
 			// デルタタイム変更
 			LWP::Info::SetDeltaTimeMultiply(0.9f);
+			isJustSlashing_ = false;
 			//slashData_->time_ = 0.0f;
 			lwp::Vector3 vetor = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
 			vetor.y = 0.0f;
@@ -208,7 +209,7 @@ void Player::UpdateMove()
 
 void Player::UpdateSlash()
 {
-	// ジャスト居合時間中は無敵
+	// 無敵時間
 	playerCollision_->isActive = cTIMEJUSTSLASH_ <= t;
 	// 判定を取れるようにする
 	justCollision_->isActive = t < cTIMEJUSTSLASH_;
@@ -372,6 +373,7 @@ void Player::CreateJustCollision()
 			scene->StartJustSlash();
 			slashData_->maxRelation_++;
 			slashPanel_->Just();
+			isJustSlashing_ = true;
 		}
 		});
 	// フラグオフ
@@ -470,7 +472,7 @@ void Player::CheckBehavior()
 			break;
 		case Behavior::Slash:
 			// 居合に入る条件を記述
-			if (behavior_ != Behavior::Slash &&
+			if ((behavior_ != Behavior::Slash || isJustSlashing_) &&
 				slashData_->relationSlash_ < slashData_->maxRelation_)
 			{
 				reqBehavior_ = Behavior::Slash;

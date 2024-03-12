@@ -97,6 +97,9 @@ public: //*** パブリック関数 ***//
 	// 更新
 	void Update();
 
+	// ジャスト終了
+	void EndJust() { isJustSlashing_ = false; }
+
 public:	//*** セッター,ゲッター ***//
 
 	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
@@ -227,6 +230,9 @@ private: //*** プライベート変数 ***//
 	lwp::Collider::AABB* weaponCollision_ = nullptr;
 	// ジャスト居合したいときの大きめの判定
 	lwp::Collider::AABB* justCollision_ = nullptr;
+
+	// ジャスト中か
+	bool isJustSlashing_ = false;
 
 };
 
