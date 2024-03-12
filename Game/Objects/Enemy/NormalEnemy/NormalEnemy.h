@@ -28,6 +28,7 @@ private:// 定数
 
 private:
 	lwp::Vector3 PlayerRot;
+	lwp::Vector3 PlayerEndRot;
 	MotionWork attackWork = {
 	.targetpoint = 1.0f,
 	.speed = 0.05f,

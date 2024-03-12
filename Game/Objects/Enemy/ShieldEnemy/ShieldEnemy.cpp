@@ -51,7 +51,7 @@ void ShieldEnemy::Attack()
 	if (attackWaitTime_ <= 0) {
 		attackWork.flag = true;
 			lwp::Vector3 point{ 0.0f,0.0f,-1.0f };
-		attackWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0]->transform.rotation)) * -1/*ベクトルを反転*/;
+		attackWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0]->transform.rotation))/*ベクトルを反転*/;
 		attackWork.targetpoint = attackWork.targetpoint.Normalize();
 		attackEndWork.targetpoint = attackWork.targetpoint * -1/*ベクトルを反転*/;
 		attackWaitTime_ = kAttackWaitTime;

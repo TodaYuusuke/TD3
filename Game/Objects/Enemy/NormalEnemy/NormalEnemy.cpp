@@ -51,7 +51,11 @@ void NormalEnemy::Attack()
 {
 	if (attackWaitTime_ <= 0) {
 		attackWork.flag = true;
+
 		PlayerRot = models_[0]->transform.rotation;
+		attackWork.targetpoint = PlayerRot;
+		attackWork.targetpoint.x += -0.5f;
+		PlayerEndRot = attackWork.targetpoint;
 		attackWaitTime_ = kAttackWaitTime;
 		Aim();
 	}
@@ -86,7 +90,7 @@ void NormalEnemy::AttackAnimetion()
 	if (attackEndWork.flag) {
 		if (attackEndWork.t < 1.0f) {
 			attackEndWork.t += attackEndWork.speed;
-			point = lwp::Vector3::Lerp(PlayerRot, attackEndWork.targetpoint, attackEndWork.t);
+			point = lwp::Vector3::Lerp(PlayerEndRot, PlayerRot, attackEndWork.t);
 			models_[0]->transform.rotation = point;
 		}
 		else if (attackEndWork.t >= 1.0f) {
