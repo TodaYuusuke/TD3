@@ -69,7 +69,7 @@ void ArrowEnemy::CreateCollider()
 	// 今のところは何もしていない
 	collider_->SetOnCollisionLambda([this](HitData data) {
 		data;
-		if (data.state == OnCollisionState::Trigger && isActive_ &&
+		if (data.state == OnCollisionState::Press && isActive_ &&
 			data.hit &&
 			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3))
 		{
