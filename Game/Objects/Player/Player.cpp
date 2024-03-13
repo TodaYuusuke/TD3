@@ -193,13 +193,11 @@ void Player::InitSlash()
 	weaponCollision_->radius = cRADIUSWEAPONCOLLISION_;
 	weaponCollision_->isActive = true;
 	// ジャスト判定を作る
-	justCollision_->Create(demoModel_->transform.translation);
+	justCollision_->Create(start, end);
 	// サイズ
-	// ミンマックス
-	lwp::Vector3 max = playerCollision_->max + (playerCollision_->GetWorldPosition() - demoModel_->transform.translation);
-	lwp::Vector3 min = playerCollision_->min + (playerCollision_->GetWorldPosition() - demoModel_->transform.translation);
-	justCollision_->max = max + lwp::Vector3(1.0f, 1.0f, 1.0f);
-	justCollision_->min = min - lwp::Vector3(1.0f, 1.0f, 1.0f);
+	justCollision_->radius = cRADIUSJUSTCOLLISION_;
+	justCollision_->end = demoModel_->transform.translation + slashData_->vector_* cRANGEJUSTENABLE_;
+	weaponCollision_->isActive = true;
 }
 
 void Player::InitMoment()
@@ -399,8 +397,8 @@ void Player::CreateCollision()
 void Player::CreateJustCollision()
 {
 	// ジャスト居合
-	justCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
-	justCollision_->Create(demoModel_->transform.translation);
+	justCollision_ = LWP::Common::CreateInstance<lwp::Collider::Capsule>();
+	justCollision_->Create(demoModel_->transform.translation, demoModel_->transform.translation);
 	// サイズ
 	//justCollision_->max = playerCollision_->max + lwp::Vector3(1.0f, 1.0f, 1.0f);
 	//justCollision_->min = playerCollision_->min - lwp::Vector3(1.0f, 1.0f, 1.0f);
