@@ -9,6 +9,7 @@ void FollowCamera::Initialize() {
 	viewProjection_.Initialize();
 	// 追従対象からカメラまでのオフセット
 	offset_ = { 0.0f, 0.0f, -30.0f };
+	viewProjection_.transform.rotation.x = 0.2f;
 }
 
 void FollowCamera::Update() {
