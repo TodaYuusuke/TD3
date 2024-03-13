@@ -110,8 +110,7 @@ void Player::EndJust()
 	isJustSlashing_ = false;
 	// 無敵切れは次の居合時にもなる
 	playerCollision_->isActive = true;
-	// カメラのFOVを戻す
-	pCamera_->fov = 90.0f;
+	pCamera_->ResetFov();
 }
 
 #pragma region CommandFunction
@@ -187,7 +186,7 @@ void Player::InitSlash()
 	// デルタタイム変更
 	EndJust();
 	//slashData_->time_ = 0.0f;
-	lwp::Vector3 vector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
+	lwp::Vector3 vector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->pCamera_->transform.rotation);
 	vector.y = 0.0f;
 	vector = vector.Normalize();
 	slashData_->vector_ = vector;
@@ -256,7 +255,7 @@ void Player::UpdateMove()
 	// 移動距離とモーション用の更新
 	//t = (moveData_->time_ / (float)moveData_->maxTime_);
 	// 移動方向をカメラに合わせる
-	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
+	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->pCamera_->transform.rotation);
 	moveVector.y = 0.0f;
 
 	// モデル回転
@@ -276,9 +275,6 @@ void Player::UpdateSlash()
 	playerCollision_->isActive = (!isJustSlashing_ && cTIMEJUSTSLASH_ + cTIMEADDINCVINCIBLE_ < t);
 	// 判定を取れるようにする
 	justCollision_->isActive = t < cTIMEJUSTSLASH_;
-
-	// カメラのFOVを上げる
-	pCamera_->fov = isJustSlashing_ ? t < cTIMEJUSTSLASH_ / 1.5f ? pCamera_->fov - 1 : pCamera_->fov : pCamera_->fov;
 
 	// 武器の判定を伸ばす
 	weaponCollision_->end = demoModel_->transform.translation + slashData_->vector_ * cPLUSWEAPONCORRECTION_;
@@ -315,7 +311,7 @@ void Player::UpdateMoment()
 	//t = (momentData_->time_ / (float)momentData_->maxTime_);
 	if (isInputMove_)
 	{
-		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
+		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->pCamera_->transform.rotation);
 		moveVector.y = 0.0f;
 
 		// モデル回転
@@ -468,6 +464,7 @@ void Player::CreateJustCollision()
 			TItleScene* const scene = dynamic_cast<TItleScene*>(pScene_);
 			assert(scene);
 			scene->StartJustSlash();
+			pCamera_->ReduceFov();
 			// 居合回数獲得(一回のみ)
 			if (slashData_->maxRelation_ <= slashData_->cMAXRELATION_)
 			{

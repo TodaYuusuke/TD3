@@ -9,11 +9,6 @@ using namespace LWP::Utility;
 // 初期化
 void TItleScene::Initialize()
 {
-
-	// 追従カメラ
-	followCamera_ = std::make_unique<FollowCamera>();
-	followCamera_->Initialize();
-
 	// プレイヤー
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
@@ -25,9 +20,12 @@ void TItleScene::Initialize()
 	ground->transform.scale = { 10.0f,0.1f, 10.0f };
 	ground->name = "Ground";
 
-
+	// 追従カメラ
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->SetCameraAddress(mainCamera);
 	followCamera_->SetTarget(player_->GetWorldTransform());
-	player_->SetCameraPointer(mainCamera);
+	//followCamera_->camera_.transform.Parent(&mainCamera->transform);
+	player_->SetCameraPointer(followCamera_.get());
 
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->SetPlayer(player_.get());
@@ -54,10 +52,9 @@ void TItleScene::Update()
 	// 追従カメラ
 	followCamera_->Update();
 
-	mainCamera->transform = followCamera_->viewProjection_.transform;
+	//mainCamera->transform = followCamera_->camera_.transform;
 
 	enemyManager_->Update();
-
 }
 
 void TItleScene::StartJustSlash()
