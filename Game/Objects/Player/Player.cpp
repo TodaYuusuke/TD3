@@ -71,6 +71,9 @@ void Player::Update()
 		case Player::Behavior::Moment:
 			InitMoment();
 			break;
+		case Player::Behavior::Damage:
+			InitDamage();
+			break;
 		default:
 			break;
 		}
@@ -90,6 +93,9 @@ void Player::Update()
 	case Player::Behavior::Moment:
 		UpdateMoment();
 		break;
+	case Player::Behavior::Damage:
+		UpdateDamage();
+		break;
 	default:
 		break;
 	}
@@ -104,7 +110,11 @@ void Player::EndJust()
 	isJustSlashing_ = false;
 	// 無敵切れは次の居合時にもなる
 	playerCollision_->isActive = true;
+	// カメラのFOVを戻す
+	pCamera_->fov = 90.0f;
 }
+
+#pragma region CommandFunction
 
 void Player::MoveFront()
 {
@@ -149,6 +159,10 @@ void Player::Slash()
 	//reqBehavior_ = Behavior::Slash;
 	commands_.push_back(Behavior::Slash);
 }
+// CommandFunc
+#pragma endregion
+
+#pragma region BehaviorFunc
 
 void Player::InitRoot()
 {
@@ -196,12 +210,14 @@ void Player::InitSlash()
 	justCollision_->Create(start, end);
 	// サイズ
 	justCollision_->radius = cRADIUSJUSTCOLLISION_;
-	justCollision_->end = demoModel_->transform.translation + slashData_->vector_* cRANGEJUSTENABLE_;
+	justCollision_->end = demoModel_->transform.translation + slashData_->vector_ * cRANGEJUSTENABLE_;
 	weaponCollision_->isActive = true;
 }
 
 void Player::InitMoment()
 {
+	// デルタタイム変更
+	EndJust();
 	//momentData_->time_ = 0.0f;
 	momentData_->relationSlash_ = slashData_->relationSlash_;
 	// 回数分フレームを加算
@@ -209,6 +225,14 @@ void Player::InitMoment()
 	weapon_->SetBehavior(Weapon::Behavior::Moment);
 	// 武器の判定を消す
 	weaponCollision_->isActive = false;
+}
+
+void Player::InitDamage()
+{
+	// デルタタイム変更
+	EndJust();
+	playerCollision_->isActive = false;
+	damageData_->maxTime_ = damageData_->cBASETIME;
 }
 
 void Player::UpdateRoot()
@@ -252,6 +276,10 @@ void Player::UpdateSlash()
 	playerCollision_->isActive = (!isJustSlashing_ && cTIMEJUSTSLASH_ + cTIMEADDINCVINCIBLE_ < t);
 	// 判定を取れるようにする
 	justCollision_->isActive = t < cTIMEJUSTSLASH_;
+
+	// カメラのFOVを上げる
+	pCamera_->fov = isJustSlashing_ ? t < cTIMEJUSTSLASH_ / 1.5f ? pCamera_->fov - 1 : pCamera_->fov : pCamera_->fov;
+
 	// 武器の判定を伸ばす
 	weaponCollision_->end = demoModel_->transform.translation + slashData_->vector_ * cPLUSWEAPONCORRECTION_;
 	if (slashData_->maxTime_ <= t)
@@ -300,6 +328,17 @@ void Player::UpdateMoment()
 	}
 }
 
+void Player::UpdateDamage()
+{
+	if (damageData_->maxTime_ <= t)
+	{
+		reqBehavior_ = Behavior::Root;
+	}
+	easeT_ = t / damageData_->maxTime_;
+}
+
+#pragma region BehaviorData
+
 void Player::InitDatas()
 {
 	// 状態を初期状態に設定
@@ -310,7 +349,7 @@ void Player::InitDatas()
 	moveData_.reset(InitMoveData());
 	slashData_.reset(InitSlashData());
 	momentData_.reset(InitMomentData());
-
+	damageData_.reset(InitDamageData());
 
 	// 今の状態を設定
 	//currentData_ = behaviorDatas_[static_cast<size_t>(behavior_)].get();
@@ -337,7 +376,7 @@ Player::MoveData* Player::InitMoveData()
 Player::SlashData* Player::InitSlashData()
 {
 	SlashData* data = new SlashData;
-	data->cBASETIME = 0.25f;
+	data->cBASETIME = 0.1f;
 	data->vector_ = { 0.0f,0.0f,1.0f };
 	//data->time_ = 0.0f;
 	data->maxTime_ = 0.0f;
@@ -357,6 +396,19 @@ Player::MomentData* Player::InitMomentData()
 	return data;
 }
 
+Player::DamageData* Player::InitDamageData()
+{
+	DamageData* data = new DamageData;
+	data->cBASETIME = 0.5f;
+	data->maxTime_ = 0.0f;
+	return data;
+}
+// BeheviorData
+#pragma endregion
+
+// BehaviorFunc
+#pragma endregion
+
 void Player::CreateCollision()
 {
 	// 当たり判定を設定
@@ -371,8 +423,7 @@ void Player::CreateCollision()
 	playerCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		if (data.state == OnCollisionState::Trigger)
 		{
-			reqBehavior_ = Behavior::Moment;
-			EndJust();
+			reqBehavior_ = Behavior::Damage;
 		}
 		});
 	playerCollision_->isActive = true;
@@ -408,13 +459,15 @@ void Player::CreateJustCollision()
 	// ジャスト居合したことを通知
 	justCollision_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		if (!(data.state == OnCollisionState::None) &&
-			data.hit &&
+			!isJustSlashing_ && data.hit &&
 			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer2))
 		{
+			// ジャスト判定の一瞬のみを取得している
+			isJustSlashing_ = true;
+			// ここをゲームシーンに変える
 			TItleScene* const scene = dynamic_cast<TItleScene*>(pScene_);
 			assert(scene);
 			scene->StartJustSlash();
-			isJustSlashing_ = true;
 			// 居合回数獲得(一回のみ)
 			if (slashData_->maxRelation_ <= slashData_->cMAXRELATION_)
 			{
@@ -450,6 +503,7 @@ void Player::UpdateInput()
 		itr != pCommands_->end(); ++itr)
 	{
 		(*itr)->Exec(*this);
+
 	}
 
 	// キーボード入力として区別させる
@@ -485,8 +539,15 @@ void Player::UpdateInput()
 
 void Player::CheckBehavior()
 {
-	// コマンドの初期化
-	command_ = nullptr;
+	// コマンドを設定
+	if (reqBehavior_)
+	{
+		command_ = &reqBehavior_.value();
+	}
+	else
+	{
+		command_ = nullptr;
+	}
 
 	// 積み重ねたコマンドから実際の行動を決定する
 	for (std::list<Behavior>::iterator itr = commands_.begin();
@@ -570,6 +631,12 @@ void Player::DebugWindow()
 		ImGui::Text("MOMENT");
 		ImGui::Text("BaseFrame : %.3f", momentData_->cBASETIME);
 		ImGui::Text("MaxFrame  : %.3f", momentData_->maxTime_);
+		//ImGui::Text("Frame     : %d", momentData_->time_);
+		break;
+	case Player::Behavior::Damage:
+		ImGui::Text("DAMAGE");
+		ImGui::Text("BaseFrame : %.3f", damageData_->cBASETIME);
+		ImGui::Text("MaxFrame  : %.3f", damageData_->maxTime_);
 		//ImGui::Text("Frame     : %d", momentData_->time_);
 		break;
 	default:

@@ -24,6 +24,7 @@ private:
 		Move,		// 移動
 		Slash,		// 居合攻撃
 		Moment,		// とりあえず居合の後隙
+		Damage,		// 攻撃を受けた時
 
 		_COUNT,		// 状態最大数 : 使用禁止
 	};
@@ -85,6 +86,12 @@ private:
 		uint32_t relationSlash_;	// 連続居合回数 : 二回以降+1
 	};
 
+	// 被弾
+	struct DamageData : public BaseData
+	{
+
+	};
+
 public: //*** パブリック関数 ***//
 
 	// コンストラクタ
@@ -103,7 +110,7 @@ public: //*** パブリック関数 ***//
 public:	//*** セッター,ゲッター ***//
 
 	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
-	void SetCameraPointer(const lwp::Camera* p) { pCamera_ = p; }
+	void SetCameraPointer(lwp::Camera* p) { pCamera_ = p; }
 	void SetScene(IScene* p) { pScene_ = p; }
 
 public: //*** コマンド操作で呼び出される関数 ***//
@@ -121,11 +128,13 @@ private: //*** Behavior 管理に使う関数 ***//
 	void InitMove();
 	void InitSlash();
 	void InitMoment();
+	void InitDamage();
 
 	void UpdateRoot();
 	void UpdateMove();
 	void UpdateSlash();
 	void UpdateMoment();
+	void UpdateDamage();
 
 private: //*** プライベート関数 ***//
 
@@ -136,6 +145,7 @@ private: //*** プライベート関数 ***//
 	MoveData* InitMoveData();
 	SlashData* InitSlashData();
 	MomentData* InitMomentData();
+	DamageData* InitDamageData();
 
 	// 当たり判定の作成
 	void CreateCollision();
@@ -187,10 +197,11 @@ private: //*** プライベート変数 ***//
 	std::unique_ptr<MoveData> moveData_;
 	std::unique_ptr<SlashData> slashData_;
 	std::unique_ptr<MomentData> momentData_;
+	std::unique_ptr<DamageData> damageData_;
 
 	// プログラム内だけど外部のやつ
 	// カメラ
-	const LWP::Object::Camera* pCamera_ = nullptr;
+	LWP::Object::Camera* pCamera_ = nullptr;
 
 	// 今のシーン
 	IScene* pScene_ = nullptr;
