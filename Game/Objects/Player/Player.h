@@ -117,6 +117,11 @@ public: //*** コマンド操作で呼び出される関数 ***//
 
 private: //*** Behavior 管理に使う関数 ***//
 
+	void InitRoot();
+	void InitMove();
+	void InitSlash();
+	void InitMoment();
+
 	void UpdateRoot();
 	void UpdateMove();
 	void UpdateSlash();
@@ -152,7 +157,6 @@ private: //*** プライベート変数 ***//
 	// プレイヤーの通常移動
 	// 移動する距離
 	float cSPEEDMOVE_ = 1.0f;
-
 	// プレイヤーの居合
 	// 移動する距離
 	float cSPEEDSLASH_ = 20.0f;
@@ -162,18 +166,20 @@ private: //*** プライベート変数 ***//
 
 	// 居合による後隙の加算分
 	float cTIMEINCREMENTMOMENT_ = 0.25f;
-
 	// ジャスト居合を取る時間
 	float cTIMEJUSTSLASH_ = 0.1f;
-
 	// ジャスト居合に加えて無敵時間
 	float cTIMEADDINCVINCIBLE_ = 0.1f;
 
 	// 武器の半径
 	float cRADIUSWEAPONCOLLISION_ = 1.0f;
+	// 居合時の武器の前側への補正
+	float cPLUSWEAPONCORRECTION_ = 4.0f;
+	// ジャストの半径
+	float cRADIUSJUSTCOLLISION_ = 1.5f;
+	// 敵の攻撃からの有効範囲
+	float cRANGEJUSTENABLE_ = 2.0f;
 
-	// 居合時の武器の補正
-	float cPLUSWEAPONCORRECTION_ = 6.0f;
 
 	// 各状態毎のデータ
 	// 固定されているデータを外部から取得
@@ -238,7 +244,7 @@ private: //*** プライベート変数 ***//
 	// 武器の当たり判定
 	lwp::Collider::Capsule* weaponCollision_ = nullptr;
 	// ジャスト居合したいときの大きめの判定
-	lwp::Collider::AABB* justCollision_ = nullptr;
+	lwp::Collider::Capsule* justCollision_ = nullptr;
 
 	// ジャスト中か
 	bool isJustSlashing_ = false;

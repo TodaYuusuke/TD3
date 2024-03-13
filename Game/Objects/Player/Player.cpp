@@ -35,6 +35,7 @@ void Player::Initialize()
 	slashPanel_.reset(new SlashPanel);
 	slashPanel_->Initialize();
 
+	// コライダー生成
 	CreateCollision();
 }
 
@@ -59,56 +60,16 @@ void Player::Update()
 		switch (behavior_)
 		{
 		case Player::Behavior::Root:
-			//rootData_->time_ = 0.0f;
-			rootData_->maxTime_ = rootData_->cBASETIME;
-			// 居合回数のリセット
-			slashData_->relationSlash_ = 0u;
-			slashData_->maxRelation_ = slashData_->cMAXRELATION_;
-			weapon_->SetBehavior(Weapon::Behavior::Root);
-			// UI に反映
-			slashPanel_->Reset();
+			InitRoot();
 			break;
 		case Player::Behavior::Move:
-			//moveData_->time_ = 0.0f;
-			moveData_->maxTime_ = moveData_->cBASETIME;
+			InitMove();
 			break;
 		case Player::Behavior::Slash:
-			// デルタタイム変更
-			EndJust();
-			//slashData_->time_ = 0.0f;
-			lwp::Vector3 vector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
-			vector.y = 0.0f;
-			vector = vector.Normalize();
-			slashData_->vector_ = vector;
-			slashData_->maxTime_ = slashData_->cBASETIME;
-			weapon_->SetBehavior(Weapon::Behavior::Slash);
-			// 居合回数加算
-			slashData_->relationSlash_++;
-			// UI に反映
-			slashPanel_->Slash();
-			// 当たり判定を消去
-			playerCollision_->isActive = false;
-			// 武器の当たり判定を出す
-			// カプセルの設定
-			lwp::Vector3 start = demoModel_->transform.translation;
-			lwp::Vector3 end = demoModel_->transform.translation;
-			weaponCollision_->Create(start, end);
-			weaponCollision_->radius = cRADIUSWEAPONCOLLISION_;
-			weaponCollision_->isActive = true;
-			// ジャスト判定を作る
-			justCollision_->Create(demoModel_->transform.translation);
-			// サイズ
-			justCollision_->max = playerCollision_->max + lwp::Vector3(1.0f, 1.0f, 1.0f);
-			justCollision_->min = playerCollision_->min - lwp::Vector3(1.0f, 1.0f, 1.0f);
+			InitSlash();
 			break;
 		case Player::Behavior::Moment:
-			//momentData_->time_ = 0.0f;
-			momentData_->relationSlash_ = slashData_->relationSlash_;
-			// 回数分フレームを加算
-			momentData_->maxTime_ = momentData_->cBASETIME + (momentData_->relationSlash_ * cTIMEINCREMENTMOMENT_);
-			weapon_->SetBehavior(Weapon::Behavior::Moment);
-			// 武器の判定を消す
-			weaponCollision_->isActive = false;
+			InitMoment();
 			break;
 		default:
 			break;
@@ -187,6 +148,67 @@ void Player::Slash()
 	//destinate_.z += 1.0f;
 	//reqBehavior_ = Behavior::Slash;
 	commands_.push_back(Behavior::Slash);
+}
+
+void Player::InitRoot()
+{
+	//rootData_->time_ = 0.0f;
+	rootData_->maxTime_ = rootData_->cBASETIME;
+	// 居合回数のリセット
+	slashData_->relationSlash_ = 0u;
+	slashData_->maxRelation_ = slashData_->cMAXRELATION_;
+	weapon_->SetBehavior(Weapon::Behavior::Root);
+	// UI に反映
+	slashPanel_->Reset();
+}
+
+void Player::InitMove()
+{
+	//moveData_->time_ = 0.0f;
+	moveData_->maxTime_ = moveData_->cBASETIME;
+}
+
+void Player::InitSlash()
+{
+	// デルタタイム変更
+	EndJust();
+	//slashData_->time_ = 0.0f;
+	lwp::Vector3 vector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
+	vector.y = 0.0f;
+	vector = vector.Normalize();
+	slashData_->vector_ = vector;
+	slashData_->maxTime_ = slashData_->cBASETIME;
+	weapon_->SetBehavior(Weapon::Behavior::Slash);
+	// 居合回数加算
+	slashData_->relationSlash_++;
+	// UI に反映
+	slashPanel_->Slash();
+	// 当たり判定を消去
+	playerCollision_->isActive = false;
+	// 武器の当たり判定を出す
+	// カプセルの設定
+	lwp::Vector3 start = demoModel_->transform.translation;
+	lwp::Vector3 end = demoModel_->transform.translation;
+	weaponCollision_->Create(start, end);
+	weaponCollision_->radius = cRADIUSWEAPONCOLLISION_;
+	weaponCollision_->isActive = true;
+	// ジャスト判定を作る
+	justCollision_->Create(start, end);
+	// サイズ
+	justCollision_->radius = cRADIUSJUSTCOLLISION_;
+	justCollision_->end = demoModel_->transform.translation + slashData_->vector_* cRANGEJUSTENABLE_;
+	weaponCollision_->isActive = true;
+}
+
+void Player::InitMoment()
+{
+	//momentData_->time_ = 0.0f;
+	momentData_->relationSlash_ = slashData_->relationSlash_;
+	// 回数分フレームを加算
+	momentData_->maxTime_ = momentData_->cBASETIME + (momentData_->relationSlash_ * cTIMEINCREMENTMOMENT_);
+	weapon_->SetBehavior(Weapon::Behavior::Moment);
+	// 武器の判定を消す
+	weaponCollision_->isActive = false;
 }
 
 void Player::UpdateRoot()
@@ -368,14 +390,15 @@ void Player::CreateCollision()
 		});
 	weaponCollision_->isActive = false;
 
+	// ジャスト判定
 	CreateJustCollision();
 }
 
 void Player::CreateJustCollision()
 {
 	// ジャスト居合
-	justCollision_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
-	justCollision_->Create(demoModel_->transform.translation);
+	justCollision_ = LWP::Common::CreateInstance<lwp::Collider::Capsule>();
+	justCollision_->Create(demoModel_->transform.translation, demoModel_->transform.translation);
 	// サイズ
 	//justCollision_->max = playerCollision_->max + lwp::Vector3(1.0f, 1.0f, 1.0f);
 	//justCollision_->min = playerCollision_->min - lwp::Vector3(1.0f, 1.0f, 1.0f);
@@ -392,6 +415,7 @@ void Player::CreateJustCollision()
 			assert(scene);
 			scene->StartJustSlash();
 			isJustSlashing_ = true;
+			// 居合回数獲得(一回のみ)
 			if (slashData_->maxRelation_ <= slashData_->cMAXRELATION_)
 			{
 				slashData_->maxRelation_++;
