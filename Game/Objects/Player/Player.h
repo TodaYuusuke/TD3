@@ -117,6 +117,11 @@ public: //*** コマンド操作で呼び出される関数 ***//
 
 private: //*** Behavior 管理に使う関数 ***//
 
+	void InitRoot();
+	void InitMove();
+	void InitSlash();
+	void InitMoment();
+
 	void UpdateRoot();
 	void UpdateMove();
 	void UpdateSlash();
