@@ -32,29 +32,9 @@ public: //*** 関数群 ***//
 
 private: //*** 変数群 ***//
 
-	LWP::Primitive::Triangle* tri[2];
-	LWP::Primitive::Surface* surface;
-	LWP::Primitive::Sphere* sphere;
-
-	LWP::Primitive::Mesh* cubeModel;
-	LWP::Primitive::Mesh* stressTestModel;	// 描画負荷検証用モデル
-
-	LWP::Resource::Texture* uvTexture;
-	LWP::Resource::Texture* monsterBall;
-
-	// SEデータ
-	LWP::Resource::Audio* audio;
-
-	// サブカメラ
-	LWP::Object::Camera* subCamera;
 	// 追従カメラ
 	std::unique_ptr<FollowCamera> followCamera_;
 	std::unique_ptr<EnemyManager> enemyManager_;
-
-	// パーティクル
-	LWP::Object::Particle* particle;
-
-	bool useMonsterBall = true;
 
 	// プレイヤー
 	std::unique_ptr<Player> player_;

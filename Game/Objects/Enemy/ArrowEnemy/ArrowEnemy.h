@@ -38,7 +38,7 @@ public:// 定数
 	// 攻撃する範囲
 	const float kAttackRange = 20.0f;
 	// 攻撃のクールタイム
-	const int kAttackWaitTime = 120;
+	const int kAttackWaitTime = 240;
 
 private:// メンバ変数
 	// 矢
