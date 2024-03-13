@@ -8,6 +8,7 @@
 #include "Commands/PlayerInput.h"
 #include "Game/Objects/Player/Weapon/Weapon.h"
 #include "Game/Objects/Player/SlashPanel.h"
+#include "../FollowCamera/FollowCamera.h"
 
 class Player final
 {
@@ -103,7 +104,7 @@ public: //*** パブリック関数 ***//
 public:	//*** セッター,ゲッター ***//
 
 	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
-	void SetCameraPointer(const lwp::Camera* p) { pCamera_ = p; }
+	void SetCameraPointer(FollowCamera* p) { pCamera_ = p; }
 	void SetScene(IScene* p) { pScene_ = p; }
 
 public: //*** コマンド操作で呼び出される関数 ***//
@@ -184,7 +185,7 @@ private: //*** プライベート変数 ***//
 
 	// プログラム内だけど外部のやつ
 	// カメラ
-	const LWP::Object::Camera* pCamera_ = nullptr;
+	FollowCamera* pCamera_ = nullptr;
 
 	// 今のシーン
 	IScene* pScene_ = nullptr;

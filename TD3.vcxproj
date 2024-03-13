@@ -120,6 +120,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)DirectXGame\x64\Debug;$(SolutionDir)DirectXGame\Externals\DirectXTex\lib\Debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>DirectXGame.lib;DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>resources/system/manifest/DpiAwarenessPerMonitorV2.manifest %(AdditionalManifestFiles)</AdditionalManifestFiles>

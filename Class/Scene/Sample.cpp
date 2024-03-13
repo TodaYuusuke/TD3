@@ -151,7 +151,6 @@ void Sample::Initialize() {
 
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
-	followCamera_->Initialize();
 	followCamera_->SetTarget(&sphere->transform);
 }
 
@@ -159,7 +158,6 @@ void Sample::Initialize() {
 void Sample::Update() {
 	// 追従カメラ
 	followCamera_->Update();
-	mainCamera->transform = followCamera_->viewProjection_.transform;
 
 	// ポストプロセスの切り替え
 	if (Keyboard::GetTrigger(DIK_SPACE)) {

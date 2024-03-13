@@ -76,7 +76,7 @@ void Player::Update()
 			// デルタタイム変更
 			EndJust();
 			//slashData_->time_ = 0.0f;
-			lwp::Vector3 vector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
+			lwp::Vector3 vector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->pCamera_->transform.rotation);
 			vector.y = 0.0f;
 			vector = vector.Normalize();
 			slashData_->vector_ = vector;
@@ -143,6 +143,7 @@ void Player::EndJust()
 	isJustSlashing_ = false;
 	// 無敵切れは次の居合時にもなる
 	playerCollision_->isActive = true;
+	pCamera_->ResetFov();
 }
 
 void Player::MoveFront()
@@ -210,7 +211,7 @@ void Player::UpdateMove()
 	// 移動距離とモーション用の更新
 	//t = (moveData_->time_ / (float)moveData_->maxTime_);
 	// 移動方向をカメラに合わせる
-	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
+	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->pCamera_->transform.rotation);
 	moveVector.y = 0.0f;
 
 	// モデル回転
@@ -265,7 +266,7 @@ void Player::UpdateMoment()
 	//t = (momentData_->time_ / (float)momentData_->maxTime_);
 	if (isInputMove_)
 	{
-		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
+		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->pCamera_->transform.rotation);
 		moveVector.y = 0.0f;
 
 		// モデル回転
@@ -392,6 +393,7 @@ void Player::CreateJustCollision()
 			assert(scene);
 			scene->StartJustSlash();
 			isJustSlashing_ = true;
+			pCamera_->ReduceFov();
 			if (slashData_->maxRelation_ <= slashData_->cMAXRELATION_)
 			{
 				slashData_->maxRelation_++;
