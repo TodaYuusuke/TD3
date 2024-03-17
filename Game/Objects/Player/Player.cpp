@@ -107,7 +107,8 @@ void Player::Update()
 void Player::EndJust()
 {
 	LWP::Info::SetDeltaTimeMultiply(1.0f);
-	isJustSlashing_ = false;
+	//isJustSlashing_ = false;
+	flag_.isJustSlashing_ = false;
 	// 無敵切れは次の居合時にもなる
 	colliders_.player_->isActive = true;
 	pCamera_->ResetFov();
@@ -122,7 +123,7 @@ void Player::MoveFront()
 	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
 	// 移動キーが入力されている時通る
-	isInputMove_ = true;
+	flag_.isInputMove_ = true;
 }
 
 void Player::MoveBack()
@@ -131,7 +132,7 @@ void Player::MoveBack()
 	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
 	// 移動キーが入力されている時通る
-	isInputMove_ = true;
+	flag_.isInputMove_ = true;
 }
 
 void Player::MoveLeft()
@@ -140,7 +141,7 @@ void Player::MoveLeft()
 	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
 	// 移動キーが入力されている時通る
-	isInputMove_ = true;
+	flag_.isInputMove_ = true;
 }
 
 void Player::MoveRight()
@@ -149,7 +150,7 @@ void Player::MoveRight()
 	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
 	// 移動キーが入力されている時通る
-	isInputMove_ = true;
+	flag_.isInputMove_ = true;
 }
 
 void Player::Slash()
@@ -278,7 +279,7 @@ void Player::UpdateSlash()
 	// ジャスト成立中
 	//　無敵時間中
 	//colliders_.player_->isActive = (!isJustSlashing_ && cTIMEJUSTSLASH_ + cTIMEADDINCVINCIBLE_ < t);
-	colliders_.player_->isActive = (!isJustSlashing_ && config_.Time_.TAKEJUSTSLASH_ + config_.Time_.ADDINCVINCIBLE_ < t);
+	colliders_.player_->isActive = (!flag_.isJustSlashing_ && config_.Time_.TAKEJUSTSLASH_ + config_.Time_.ADDINCVINCIBLE_ < t);
 	// 判定を取れるようにする
 	//colliders_.justSlash_->isActive = t < cTIMEJUSTSLASH_;
 	colliders_.justSlash_->isActive = t < config_.Time_.TAKEJUSTSLASH_;
@@ -317,7 +318,7 @@ void Player::UpdateMoment()
 	//momentData_.time_ += lwp::GetDeltaTime();
 	// 移動距離とモーション用の更新
 	//t = (momentData_.time_ / (float)momentData_.maxTime_);
-	if (isInputMove_)
+	if (flag_.isInputMove_)
 	{
 		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->pCamera_->transform.rotation);
 		moveVector.y = 0.0f;
@@ -509,11 +510,11 @@ void Player::OnCollisionWeapon(lwp::Collider::HitData& data)
 void Player::OnCollisionJust(lwp::Collider::HitData& data)
 {
 	if (!(data.state == OnCollisionState::None) &&
-		!isJustSlashing_ && data.hit &&
+		!flag_.isJustSlashing_ && data.hit &&
 		(data.hit->mask.GetBelongFrag() & MaskLayer::Layer2))
 	{
 		// ジャスト判定の一瞬のみを取得している
-		isJustSlashing_ = true;
+		flag_.isJustSlashing_ = true;
 		// ここをゲームシーンに変える
 		TItleScene* const scene = dynamic_cast<TItleScene*>(pScene_);
 		assert(scene);
@@ -535,7 +536,7 @@ void Player::UpdateInput()
 
 	// クリア
 	commands_.clear();
-	isInputMove_ = false;
+	flag_.isInputMove_ = false;
 
 	// 方向を作成
 	lwp::Vector3 direct = destinate_;
@@ -562,7 +563,7 @@ void Player::UpdateInput()
 		destinate_.x = x;
 		commands_.push_back(Behavior::Move);
 		// 移動キーが入力されている時通る
-		isInputMove_ = true;
+		flag_.isInputMove_ = true;
 	}
 	if ((destinate_.z < 0 ? -destinate_.z : destinate_.z)
 		< (y < 0 ? -y : y))
@@ -570,7 +571,7 @@ void Player::UpdateInput()
 		destinate_.z = y;
 		commands_.push_back(Behavior::Move);
 		// 移動キーが入力されている時通る
-		isInputMove_ = true;
+		flag_.isInputMove_ = true;
 	}
 	destinate_ = destinate_.Normalize();
 
@@ -626,7 +627,7 @@ void Player::CheckBehavior()
 			break;
 		case Behavior::Slash:
 			// 居合に入る条件を記述
-			if ((behavior_ != Behavior::Slash || isJustSlashing_) &&
+			if ((behavior_ != Behavior::Slash || flag_.isJustSlashing_) &&
 				slashData_.relationSlash_ < slashData_.maxRelation_)
 			{
 				reqBehavior_ = Behavior::Slash;

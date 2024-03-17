@@ -313,7 +313,7 @@ private: //*** プライベート変数 ***//
 	// これは通常移動くらいでしか使わない
 	LWP::Math::Vector3 destinate_ = { 0.0f,0.0f,1.0f };
 	// キーまたはスティックでの移動が入力されたか
-	bool isInputMove_ = false;
+	//bool isInputMove_ = false;
 
 	// 秒数
 	float t = 0.0f;
@@ -334,7 +334,11 @@ private: //*** プライベート変数 ***//
 	//lwp::Collider::Capsule* justCollision_ = nullptr;
 
 	// ジャスト中か
-	bool isJustSlashing_ = false;
+	//bool isJustSlashing_ = false;
+
+
+	// フラグ
+	Flags flag_;
 
 };
 
