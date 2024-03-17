@@ -265,6 +265,7 @@ private: //*** プライベート変数 ***//
 	// 敵の攻撃からの有効範囲
 	float cRANGEJUSTENABLE_ = 2.0f;
 
+	// 情報
 	Configs config_;
 
 	//*** 各状態毎のデータ ***//
@@ -323,12 +324,14 @@ private: //*** プライベート変数 ***//
 	std::unique_ptr<SlashPanel> slashPanel_;
 
 	// 当たり判定をオンオフするための変数
+	Colliders colliders_;
+	// 当たり判定をオンオフするための変数
 	// プレイヤー自身の当たり判定
-	lwp::Collider::AABB* playerCollision_ = nullptr;
+	//lwp::Collider::AABB* playerCollision_ = nullptr;
 	// 武器の当たり判定
-	lwp::Collider::Capsule* weaponCollision_ = nullptr;
+	//lwp::Collider::Capsule* weaponCollision_ = nullptr;
 	// ジャスト抜刀したいときの大きめの判定
-	lwp::Collider::Capsule* justCollision_ = nullptr;
+	//lwp::Collider::Capsule* justCollision_ = nullptr;
 
 	// ジャスト中か
 	bool isJustSlashing_ = false;
