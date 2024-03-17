@@ -64,6 +64,8 @@ void FollowCamera::InputAngle() {
 	pCamera_->transform.rotation.x -= Controller::GetRStick().y * sensitivity.y;
 #pragma endregion
 
+#ifdef DEMO
+
 	ImGui::Begin("TTT");
 	ImGui::DragInt("value", &hhhh);
 	ImGui::End();
@@ -74,6 +76,8 @@ void FollowCamera::InputAngle() {
 	if (LWP::Input::Keyboard::GetPress(DIK_2)) {
 		ResetFov();
 	}
+
+#endif
 }
 
 void FollowCamera::ReduceFov() {

@@ -24,6 +24,8 @@ void TItleScene::Initialize()
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->SetCameraAddress(mainCamera);
 	followCamera_->SetTarget(player_->GetWorldTransform());
+	// カメラを少し上に上げる
+	followCamera_->pCamera_->transform.rotation.x = 0.3f;
 	//followCamera_->camera_.transform.Parent(&mainCamera->transform);
 	player_->SetCameraPointer(followCamera_.get());
 
