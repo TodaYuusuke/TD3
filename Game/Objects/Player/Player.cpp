@@ -120,7 +120,6 @@ void Player::MoveFront()
 {
 	// 向いている方向へ変換するので単純にしている
 	destinate_.z = 1.0f;
-	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
 	// 移動キーが入力されている時通る
 	flag_.isInputMove_ = true;
@@ -129,7 +128,6 @@ void Player::MoveFront()
 void Player::MoveBack()
 {
 	destinate_.z = -1.0f;
-	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
 	// 移動キーが入力されている時通る
 	flag_.isInputMove_ = true;
@@ -138,7 +136,6 @@ void Player::MoveBack()
 void Player::MoveLeft()
 {
 	destinate_.x = -1.0f;
-	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
 	// 移動キーが入力されている時通る
 	flag_.isInputMove_ = true;
@@ -147,7 +144,6 @@ void Player::MoveLeft()
 void Player::MoveRight()
 {
 	destinate_.x = 1.0f;
-	//reqBehavior_ = Behavior::Move;
 	commands_.push_back(Behavior::Move);
 	// 移動キーが入力されている時通る
 	flag_.isInputMove_ = true;
@@ -155,8 +151,6 @@ void Player::MoveRight()
 
 void Player::Slash()
 {
-	//destinate_.z += 1.0f;
-	//reqBehavior_ = Behavior::Slash;
 	commands_.push_back(Behavior::Slash);
 }
 // CommandFunc
@@ -178,7 +172,6 @@ void Player::InitRoot()
 
 void Player::InitMove()
 {
-	//moveData_.time_ = 0.0f;
 	moveData_.maxTime_ = moveData_.cBASETIME;
 }
 
@@ -186,7 +179,6 @@ void Player::InitSlash()
 {
 	// デルタタイム変更
 	EndJust();
-	//slashData_.time_ = 0.0f;
 	lwp::Vector3 vector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->pCamera_->transform.rotation);
 	vector.y = 0.0f;
 	vector = vector.Normalize();
@@ -199,21 +191,17 @@ void Player::InitSlash()
 	slashPanel_->Slash();
 	// 当たり判定を消去
 	colliders_.player_->isActive = false;
-	//playerCollision_->isActive = false;
 	// 武器の当たり判定を出す
 	// カプセルの設定
 	lwp::Vector3 start = demoModel_->transform.translation;
 	lwp::Vector3 end = demoModel_->transform.translation;
 	colliders_.weapon_->Create(start, end);
-	//colliders_.weapon_->radius = cRADIUSWEAPONCOLLISION_;
 	colliders_.weapon_->radius = config_.Length_.RADIUSWEAPONCOLLISION_;
 	colliders_.weapon_->isActive = true;
 	// ジャスト判定を作る
 	colliders_.justSlash_->Create(start, end);
 	// サイズ
-	//colliders_.justSlash_->radius = cRADIUSJUSTCOLLISION_;
 	colliders_.justSlash_->radius = config_.Length_.RADIUSJUSTCOLLISION_;
-	//colliders_.justSlash_->end = demoModel_->transform.translation + slashData_.vector_ * cRANGEJUSTENABLE_;
 	colliders_.justSlash_->end = demoModel_->transform.translation + slashData_.vector_ * config_.Length_.RANGEJUSTENABLE_;
 	colliders_.justSlash_->isActive = true;
 }
@@ -222,10 +210,8 @@ void Player::InitMoment()
 {
 	// デルタタイム変更
 	EndJust();
-	//momentData_.time_ = 0.0f;
 	momentData_.relationSlash_ = slashData_.relationSlash_;
 	// 回数分フレームを加算
-	//momentData_.maxTime_ = momentData_.cBASETIME + (momentData_.relationSlash_ * cTIMEINCREMENTMOMENT_);
 	momentData_.maxTime_ = momentData_.cBASETIME + (momentData_.relationSlash_ * config_.Time_.INCREMENTMOMENT_);
 	weapon_->SetBehavior(Weapon::Behavior::Moment);
 	// 武器の判定を消す
@@ -247,7 +233,6 @@ void Player::UpdateRoot()
 		reqBehavior_ = Behavior::Root;
 	}
 	easeT_ = t / rootData_.maxTime_;
-	//rootData_.time_ += lwp::GetDeltaTime();
 }
 
 void Player::UpdateMove()
@@ -257,9 +242,6 @@ void Player::UpdateMove()
 		reqBehavior_ = Behavior::Root;
 	}
 	easeT_ = t / moveData_.maxTime_;
-	//moveData_.time_ += lwp::GetDeltaTime();
-	// 移動距離とモーション用の更新
-	//t = (moveData_.time_ / (float)moveData_.maxTime_);
 	// 移動方向をカメラに合わせる
 	lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->pCamera_->transform.rotation);
 	moveVector.y = 0.0f;
@@ -267,7 +249,6 @@ void Player::UpdateMove()
 	// モデル回転
 	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
-	//moveVector = moveVector.Normalize() * (cSPEEDMOVE_ / moveData_.maxTime_) * lwp::GetDeltaTime();
 	moveVector = moveVector.Normalize() * (config_.Speed_.MOVE_ / moveData_.maxTime_) * lwp::GetDeltaTime();
 
 	demoModel_->transform.translation += moveVector;
@@ -278,31 +259,24 @@ void Player::UpdateSlash()
 	// 無敵時間
 	// ジャスト成立中
 	//　無敵時間中
-	//colliders_.player_->isActive = (!isJustSlashing_ && cTIMEJUSTSLASH_ + cTIMEADDINCVINCIBLE_ < t);
 	colliders_.player_->isActive = (!flag_.isJustSlashing_ && config_.Time_.TAKEJUSTSLASH_ + config_.Time_.ADDINCVINCIBLE_ < t);
 	// 判定を取れるようにする
-	//colliders_.justSlash_->isActive = t < cTIMEJUSTSLASH_;
 	colliders_.justSlash_->isActive = t < config_.Time_.TAKEJUSTSLASH_;
 
 	// 武器の判定を伸ばす
-	//colliders_.weapon_->end = demoModel_->transform.translation + slashData_.vector_ * cPLUSWEAPONCORRECTION_;
 	colliders_.weapon_->end = demoModel_->transform.translation + slashData_.vector_ * config_.Length_.CORRECTIONPLUSWEAPON_;
 	if (slashData_.maxTime_ <= t)
 	{
 		reqBehavior_ = Behavior::Moment;
 	}
 	easeT_ = t / slashData_.maxTime_;
-	//slashData_.time_ += lwp::GetDeltaTime();
-	// 移動距離とモーション用の更新
-	//t = (slashData_.time_ / (float)slashData_.maxTime_);
-
-	//lwp::Vector3 moveVector = slashData_.vector_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
+	
+	// 一定方向を向く
 	lwp::Vector3 moveVector = slashData_.vector_;
 
 	// モデル回転
 	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
-	//moveVector = moveVector * (cSPEEDSLASH_ / slashData_.maxTime_) * lwp::GetDeltaTime();
 	moveVector = moveVector * (config_.Speed_.SLASH_ / slashData_.maxTime_) * lwp::GetDeltaTime();
 
 	demoModel_->transform.translation += moveVector;
@@ -315,9 +289,8 @@ void Player::UpdateMoment()
 		reqBehavior_ = Behavior::Root;
 	}
 	easeT_ = t / momentData_.maxTime_;
-	//momentData_.time_ += lwp::GetDeltaTime();
-	// 移動距離とモーション用の更新
-	//t = (momentData_.time_ / (float)momentData_.maxTime_);
+
+	// 移動入力がされている時
 	if (flag_.isInputMove_)
 	{
 		lwp::Vector3 moveVector = destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->pCamera_->transform.rotation);
@@ -358,9 +331,6 @@ void Player::InitDatas()
 	InitSlashData();
 	InitMomentData();
 	InitDamageData();
-
-	// 今の状態を設定
-	//currentData_ = behaviorDatas_[static_cast<size_t>(behavior_)].get();
 }
 
 void Player::InitConfigs()
@@ -385,14 +355,12 @@ void Player::InitLengths()
 void Player::InitRootData()
 {
 	rootData_.cBASETIME = 0.5f;
-	//data->time_ = 0.0f;
 	rootData_.maxTime_ = 0.0f;
 }
 
 void Player::InitMoveData()
 {
 	moveData_.cBASETIME = 0.1f;
-	//data->time_ = 0.0f;
 	moveData_.maxTime_ = 0.0f;
 }
 
@@ -400,7 +368,6 @@ void Player::InitSlashData()
 {
 	slashData_.cBASETIME = 0.1f;
 	slashData_.vector_ = { 0.0f,0.0f,1.0f };
-	//data->time_ = 0.0f;
 	slashData_.maxTime_ = 0.0f;
 	slashData_.relationSlash_ = 0u;
 	slashData_.cMAXRELATION_ = 3u;
@@ -410,7 +377,6 @@ void Player::InitSlashData()
 void Player::InitMomentData()
 {
 	momentData_.cBASETIME = 0.5f;
-	//data->time_ = 0.0f;
 	momentData_.maxTime_ = 0.0f;
 	momentData_.relationSlash_ = 0u;
 }
@@ -459,7 +425,6 @@ void Player::CreateWeaponCollision()
 	colliders_.weapon_ = LWP::Common::CreateInstance<lwp::Collider::Capsule>();
 	// 武器との当たり判定を取る
 	colliders_.weapon_->Create({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f });
-	//colliders_.weapon_->radius = cRADIUSWEAPONCOLLISION_;
 	colliders_.weapon_->radius = config_.Length_.RADIUSWEAPONCOLLISION_;
 	// マスク
 	colliders_.weapon_->mask.SetBelongFrag(MaskLayer::Layer3);
@@ -477,9 +442,6 @@ void Player::CreateJustCollision()
 	// ジャスト居合
 	colliders_.justSlash_ = LWP::Common::CreateInstance<lwp::Collider::Capsule>();
 	colliders_.justSlash_->Create(demoModel_->transform.translation, demoModel_->transform.translation);
-	// サイズ
-	//justCollision_->max = playerCollision_->max + lwp::Vector3(1.0f, 1.0f, 1.0f);
-	//justCollision_->min = playerCollision_->min - lwp::Vector3(1.0f, 1.0f, 1.0f);
 	// マスク
 	colliders_.justSlash_->mask.SetBelongFrag(MaskLayer::Player);
 	colliders_.justSlash_->mask.SetHitFrag(MaskLayer::Layer2);
@@ -658,31 +620,26 @@ void Player::DebugWindow()
 		ImGui::Text("ROOT");
 		ImGui::Text("BaseFrame : %.3f", rootData_.cBASETIME);
 		ImGui::Text("MaxFrame  : %.3f", rootData_.maxTime_);
-		//ImGui::Text("Frame     : %d", rootData_.time_);
 		break;
 	case Player::Behavior::Move:
 		ImGui::Text("MOVE");
 		ImGui::Text("BaseFrame : %.3f", moveData_.cBASETIME);
 		ImGui::Text("MaxFrame  : %.3f", moveData_.maxTime_);
-		//ImGui::Text("Frame     : %d", moveData_.time_);
 		break;
 	case Player::Behavior::Slash:
 		ImGui::Text("SLASH");
 		ImGui::Text("BaseFrame : %.3f", slashData_.cBASETIME);
 		ImGui::Text("MaxFrame  : %.3f", slashData_.maxTime_);
-		//ImGui::Text("Frame     : %d", slashData_.time_);
 		break;
 	case Player::Behavior::Moment:
 		ImGui::Text("MOMENT");
 		ImGui::Text("BaseFrame : %.3f", momentData_.cBASETIME);
 		ImGui::Text("MaxFrame  : %.3f", momentData_.maxTime_);
-		//ImGui::Text("Frame     : %d", momentData_.time_);
 		break;
 	case Player::Behavior::Damage:
 		ImGui::Text("DAMAGE");
 		ImGui::Text("BaseFrame : %.3f", damageData_.cBASETIME);
 		ImGui::Text("MaxFrame  : %.3f", damageData_.maxTime_);
-		//ImGui::Text("Frame     : %d", momentData_.time_);
 		break;
 	default:
 		break;
@@ -694,7 +651,6 @@ void Player::DebugWindow()
 
 	ImGui::Text("SlashRelation / MaxRelation");
 	ImGui::Text("%d / %d", slashData_.relationSlash_, slashData_.maxRelation_);
-	//ImGui::Text("INCREMENTMOMENT : %.3f", cTIMEINCREMENTMOMENT_);
 	ImGui::Text("INCREMENTMOMENT : %.3f", config_.Time_.INCREMENTMOMENT_);
 
 	ImGui::End();

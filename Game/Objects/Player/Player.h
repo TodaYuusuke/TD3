@@ -239,32 +239,6 @@ private: //*** プライベート変数 ***//
 
 	//*** 外部から設定する変数 ***//
 
-	// プレイヤーの通常移動
-	//// 移動する距離
-	//float cSPEEDMOVE_ = 1.0f;
-	//// プレイヤーの居合
-	//// 移動する距離
-	//float cSPEEDSLASH_ = 20.0f;
-	//// プレイヤーの後隙
-	//// 移動する距離
-	//float cSPEEDMOMENT_ = 2.0f;
-
-	//// 居合による後隙の加算分
-	//float cTIMEINCREMENTMOMENT_ = 0.25f;
-	//// ジャスト居合を取る時間
-	//float cTIMEJUSTSLASH_ = 0.1f;
-	//// ジャスト居合に加えて無敵時間
-	//float cTIMEADDINCVINCIBLE_ = 0.1f;
-
-	//// 武器の半径
-	//float cRADIUSWEAPONCOLLISION_ = 1.0f;
-	//// 居合時の武器の前側への補正
-	//float cPLUSWEAPONCORRECTION_ = 4.0f;
-	//// ジャストの半径
-	//float cRADIUSJUSTCOLLISION_ = 1.5f;
-	//// 敵の攻撃からの有効範囲
-	//float cRANGEJUSTENABLE_ = 2.0f;
-
 	// 情報
 	Configs config_;
 
@@ -291,7 +265,6 @@ private: //*** プライベート変数 ***//
 	// プレイヤーのインプットを処理する
 	PlayerInput* pInput_ = nullptr;
 	// 受け取るコマンド
-	// 複数入力に対応させたい
 	// コマンドを積み重ねる
 	std::list<IPlayerCommand*>* pCommands_;
 	// 入力したコマンドを一括で管理する
@@ -312,8 +285,6 @@ private: //*** プライベート変数 ***//
 	// 次に移動する方向
 	// これは通常移動くらいでしか使わない
 	LWP::Math::Vector3 destinate_ = { 0.0f,0.0f,1.0f };
-	// キーまたはスティックでの移動が入力されたか
-	//bool isInputMove_ = false;
 
 	// 秒数
 	float t = 0.0f;
@@ -325,17 +296,6 @@ private: //*** プライベート変数 ***//
 
 	// 当たり判定をオンオフするための変数
 	Colliders colliders_;
-	// 当たり判定をオンオフするための変数
-	// プレイヤー自身の当たり判定
-	//lwp::Collider::AABB* playerCollision_ = nullptr;
-	// 武器の当たり判定
-	//lwp::Collider::Capsule* weaponCollision_ = nullptr;
-	// ジャスト抜刀したいときの大きめの判定
-	//lwp::Collider::Capsule* justCollision_ = nullptr;
-
-	// ジャスト中か
-	//bool isJustSlashing_ = false;
-
 
 	// フラグ
 	Flags flag_;
