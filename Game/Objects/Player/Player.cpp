@@ -204,13 +204,16 @@ void Player::InitSlash()
 	lwp::Vector3 start = demoModel_->transform.translation;
 	lwp::Vector3 end = demoModel_->transform.translation;
 	colliders_.weapon_->Create(start, end);
-	colliders_.weapon_->radius = cRADIUSWEAPONCOLLISION_;
+	//colliders_.weapon_->radius = cRADIUSWEAPONCOLLISION_;
+	colliders_.weapon_->radius = config_.Length_.RADIUSWEAPONCOLLISION_;
 	colliders_.weapon_->isActive = true;
 	// ジャスト判定を作る
 	colliders_.justSlash_->Create(start, end);
 	// サイズ
-	colliders_.justSlash_->radius = cRADIUSJUSTCOLLISION_;
-	colliders_.justSlash_->end = demoModel_->transform.translation + slashData_.vector_ * cRANGEJUSTENABLE_;
+	//colliders_.justSlash_->radius = cRADIUSJUSTCOLLISION_;
+	colliders_.justSlash_->radius = config_.Length_.RADIUSJUSTCOLLISION_;
+	//colliders_.justSlash_->end = demoModel_->transform.translation + slashData_.vector_ * cRANGEJUSTENABLE_;
+	colliders_.justSlash_->end = demoModel_->transform.translation + slashData_.vector_ * config_.Length_.RANGEJUSTENABLE_;
 	colliders_.justSlash_->isActive = true;
 }
 
@@ -221,7 +224,8 @@ void Player::InitMoment()
 	//momentData_.time_ = 0.0f;
 	momentData_.relationSlash_ = slashData_.relationSlash_;
 	// 回数分フレームを加算
-	momentData_.maxTime_ = momentData_.cBASETIME + (momentData_.relationSlash_ * cTIMEINCREMENTMOMENT_);
+	//momentData_.maxTime_ = momentData_.cBASETIME + (momentData_.relationSlash_ * cTIMEINCREMENTMOMENT_);
+	momentData_.maxTime_ = momentData_.cBASETIME + (momentData_.relationSlash_ * config_.Time_.INCREMENTMOMENT_);
 	weapon_->SetBehavior(Weapon::Behavior::Moment);
 	// 武器の判定を消す
 	colliders_.weapon_->isActive = false;
@@ -262,8 +266,8 @@ void Player::UpdateMove()
 	// モデル回転
 	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
-	//moveVector = moveVector.Normalize() * cSPEEDMOVE_ * max(min(t / moveData_.maxTime_, 1.0f), 0.0f);
-	moveVector = moveVector.Normalize() * (cSPEEDMOVE_ / moveData_.maxTime_) * lwp::GetDeltaTime();
+	//moveVector = moveVector.Normalize() * (cSPEEDMOVE_ / moveData_.maxTime_) * lwp::GetDeltaTime();
+	moveVector = moveVector.Normalize() * (config_.Speed_.MOVE_ / moveData_.maxTime_) * lwp::GetDeltaTime();
 
 	demoModel_->transform.translation += moveVector;
 }
@@ -273,12 +277,15 @@ void Player::UpdateSlash()
 	// 無敵時間
 	// ジャスト成立中
 	//　無敵時間中
-	colliders_.player_->isActive = (!isJustSlashing_ && cTIMEJUSTSLASH_ + cTIMEADDINCVINCIBLE_ < t);
+	//colliders_.player_->isActive = (!isJustSlashing_ && cTIMEJUSTSLASH_ + cTIMEADDINCVINCIBLE_ < t);
+	colliders_.player_->isActive = (!isJustSlashing_ && config_.Time_.TAKEJUSTSLASH_ + config_.Time_.ADDINCVINCIBLE_ < t);
 	// 判定を取れるようにする
-	colliders_.justSlash_->isActive = t < cTIMEJUSTSLASH_;
+	//colliders_.justSlash_->isActive = t < cTIMEJUSTSLASH_;
+	colliders_.justSlash_->isActive = t < config_.Time_.TAKEJUSTSLASH_;
 
 	// 武器の判定を伸ばす
-	colliders_.weapon_->end = demoModel_->transform.translation + slashData_.vector_ * cPLUSWEAPONCORRECTION_;
+	//colliders_.weapon_->end = demoModel_->transform.translation + slashData_.vector_ * cPLUSWEAPONCORRECTION_;
+	colliders_.weapon_->end = demoModel_->transform.translation + slashData_.vector_ * config_.Length_.CORRECTIONPLUSWEAPON_;
 	if (slashData_.maxTime_ <= t)
 	{
 		reqBehavior_ = Behavior::Moment;
@@ -294,8 +301,8 @@ void Player::UpdateSlash()
 	// モデル回転
 	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
-	//moveVector = moveVector.Normalize() * cSPEEDSLASH_ * max(min(t / slashData_.maxTime_, 1.0f), 0.0f);
-	moveVector = moveVector * (cSPEEDSLASH_ / slashData_.maxTime_) * lwp::GetDeltaTime();
+	//moveVector = moveVector * (cSPEEDSLASH_ / slashData_.maxTime_) * lwp::GetDeltaTime();
+	moveVector = moveVector * (config_.Speed_.SLASH_ / slashData_.maxTime_) * lwp::GetDeltaTime();
 
 	demoModel_->transform.translation += moveVector;
 }
@@ -318,8 +325,8 @@ void Player::UpdateMoment()
 		// モデル回転
 		demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
-		//moveVector = moveVector.Normalize() * cSPEEDSLASH_ * 0.01f * max(min(t / momentData_.maxTime_, 1.0f), 0.0f);
-		moveVector = moveVector.Normalize() * (cSPEEDMOMENT_ / momentData_.maxTime_) * lwp::GetDeltaTime();
+		//moveVector = moveVector.Normalize() * (cSPEEDMOMENT_ / momentData_.maxTime_) * lwp::GetDeltaTime();
+		moveVector = moveVector.Normalize() * (config_.Speed_.MOMENT_ / momentData_.maxTime_) * lwp::GetDeltaTime();
 
 		demoModel_->transform.translation += moveVector;
 	}
@@ -451,7 +458,8 @@ void Player::CreateWeaponCollision()
 	colliders_.weapon_ = LWP::Common::CreateInstance<lwp::Collider::Capsule>();
 	// 武器との当たり判定を取る
 	colliders_.weapon_->Create({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f });
-	colliders_.weapon_->radius = cRADIUSWEAPONCOLLISION_;
+	//colliders_.weapon_->radius = cRADIUSWEAPONCOLLISION_;
+	colliders_.weapon_->radius = config_.Length_.RADIUSWEAPONCOLLISION_;
 	// マスク
 	colliders_.weapon_->mask.SetBelongFrag(MaskLayer::Layer3);
 	colliders_.weapon_->mask.SetHitFrag(MaskLayer::Enemy);
@@ -685,7 +693,8 @@ void Player::DebugWindow()
 
 	ImGui::Text("SlashRelation / MaxRelation");
 	ImGui::Text("%d / %d", slashData_.relationSlash_, slashData_.maxRelation_);
-	ImGui::Text("INCREMENTMOMENT : %.3f", cTIMEINCREMENTMOMENT_);
+	//ImGui::Text("INCREMENTMOMENT : %.3f", cTIMEINCREMENTMOMENT_);
+	ImGui::Text("INCREMENTMOMENT : %.3f", config_.Time_.INCREMENTMOMENT_);
 
 	ImGui::End();
 }

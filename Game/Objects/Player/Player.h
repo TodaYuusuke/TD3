@@ -114,9 +114,9 @@ private:
 
 	struct Configs
 	{
-		Speeds cSpeed_;
-		Times cTime_;
-		Lengths cLength_;
+		Speeds Speed_;
+		Times Time_;
+		Lengths Length_;
 	};
 
 
@@ -240,30 +240,30 @@ private: //*** プライベート変数 ***//
 	//*** 外部から設定する変数 ***//
 
 	// プレイヤーの通常移動
-	// 移動する距離
-	float cSPEEDMOVE_ = 1.0f;
-	// プレイヤーの居合
-	// 移動する距離
-	float cSPEEDSLASH_ = 20.0f;
-	// プレイヤーの後隙
-	// 移動する距離
-	float cSPEEDMOMENT_ = 2.0f;
+	//// 移動する距離
+	//float cSPEEDMOVE_ = 1.0f;
+	//// プレイヤーの居合
+	//// 移動する距離
+	//float cSPEEDSLASH_ = 20.0f;
+	//// プレイヤーの後隙
+	//// 移動する距離
+	//float cSPEEDMOMENT_ = 2.0f;
 
-	// 居合による後隙の加算分
-	float cTIMEINCREMENTMOMENT_ = 0.25f;
-	// ジャスト居合を取る時間
-	float cTIMEJUSTSLASH_ = 0.1f;
-	// ジャスト居合に加えて無敵時間
-	float cTIMEADDINCVINCIBLE_ = 0.1f;
+	//// 居合による後隙の加算分
+	//float cTIMEINCREMENTMOMENT_ = 0.25f;
+	//// ジャスト居合を取る時間
+	//float cTIMEJUSTSLASH_ = 0.1f;
+	//// ジャスト居合に加えて無敵時間
+	//float cTIMEADDINCVINCIBLE_ = 0.1f;
 
-	// 武器の半径
-	float cRADIUSWEAPONCOLLISION_ = 1.0f;
-	// 居合時の武器の前側への補正
-	float cPLUSWEAPONCORRECTION_ = 4.0f;
-	// ジャストの半径
-	float cRADIUSJUSTCOLLISION_ = 1.5f;
-	// 敵の攻撃からの有効範囲
-	float cRANGEJUSTENABLE_ = 2.0f;
+	//// 武器の半径
+	//float cRADIUSWEAPONCOLLISION_ = 1.0f;
+	//// 居合時の武器の前側への補正
+	//float cPLUSWEAPONCORRECTION_ = 4.0f;
+	//// ジャストの半径
+	//float cRADIUSJUSTCOLLISION_ = 1.5f;
+	//// 敵の攻撃からの有効範囲
+	//float cRANGEJUSTENABLE_ = 2.0f;
 
 	// 情報
 	Configs config_;
