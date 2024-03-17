@@ -30,27 +30,6 @@ private:
 		_COUNT,		// 状態最大数 : 使用禁止
 	};
 
-	/// <summary>
-	/// プレイヤー行動
-	/// 実際にコマンドとして入力したものが対象
-	/// 後隙への状態遷移は含まない
-	/// コマンドを溜める
-	/// 移動がどうするか迷う
-	/// 一応下にあるほど優先度が高いと思いたい
-	/// </summary>
-	//enum class Command : size_t
-	//{
-	//	toMoveF = 0u,	// 前移動
-	//	toMoveB,		// 後ろ移動
-	//	toMoveL,		// 左移動
-	//	toMoveR,		// 右移動
-	//	toSlash,		// 居合攻撃
-
-	//	_COUNT,		// 状態最大数 : 使用禁止
-	//};
-
-
-
 	//*** 各 Behavior で使う情報 ***//
 
 	// 共通データ
@@ -91,6 +70,76 @@ private:
 	struct DamageData : public BaseData
 	{
 
+	};
+
+	//*** 外部設定の変数管理 ***//
+
+	// 移動距離 : (1 秒間に進む距離)
+	struct Speeds
+	{
+		// プレイヤーの通常移動
+		// 移動する距離
+		float MOVE_ = 1.0f;
+		// プレイヤーの居合
+		// 移動する距離
+		float SLASH_ = 20.0f;
+		// プレイヤーの後隙
+		// 移動する距離
+		float MOMENT_ = 2.0f;
+	};
+
+	// 秒時間
+	struct Times
+	{
+		// 居合による後隙の加算分
+		float INCREMENTMOMENT_ = 0.25f;
+		// ジャスト居合を取る時間
+		float TAKEJUSTSLASH_ = 0.1f;
+		// ジャスト居合に加えて無敵時間
+		float ADDINCVINCIBLE_ = 0.1f;
+	};
+
+	// 半径
+	struct Lengths
+	{
+		// 武器の半径
+		float RADIUSWEAPONCOLLISION_ = 1.0f;
+		// 居合時の武器の前側への補正
+		float CORRECTIONPLUSWEAPON_ = 4.0f;
+		// ジャストの半径
+		float RADIUSJUSTCOLLISION_ = 1.5f;
+		// 敵の攻撃からの有効範囲
+		float RANGEJUSTENABLE_ = 2.0f;
+	};
+
+	struct Configs
+	{
+		Speeds cSpeed_;
+		Times cTime_;
+		Lengths cLength_;
+	};
+
+
+	//*** フラグ管理 ***//
+
+	// フラグをまとめた構造体
+	struct Flags
+	{
+		bool isInputMove_ = false;		// 移動入力がされているか
+		bool isJustSlashing_ = false;	// 今ジャスト抜刀中か
+	};
+
+	//*** 当たり判定 ***//
+
+	// 当たり判定をオンオフするための変数
+	struct Colliders
+	{
+		// プレイヤー自身の当たり判定
+		lwp::Collider::AABB* player_ = nullptr;
+		// 武器の当たり判定
+		lwp::Collider::Capsule* weapon_ = nullptr;
+		// ジャスト抜刀したいときの大きめの判定
+		lwp::Collider::Capsule* justSlash_ = nullptr;
 	};
 
 public: //*** パブリック関数 ***//
@@ -139,25 +188,50 @@ private: //*** Behavior 管理に使う関数 ***//
 
 private: //*** プライベート関数 ***//
 
+	//*** 初期化系 ***//
+
 	// データの情報を取得する
 	void InitDatas();
+	
+	// 設定を初期化
+	void InitConfigs();
+	// 移動距離
+	void InitSpeeds();
+	// 時間
+	void InitTimes();
+	// 長さ
+	void InitLengths();
+
 	// 状態の値を取得
-	RootData* InitRootData();
-	MoveData* InitMoveData();
-	SlashData* InitSlashData();
-	MomentData* InitMomentData();
-	DamageData* InitDamageData();
+	void InitRootData();
+	void InitMoveData();
+	void InitSlashData();
+	void InitMomentData();
+	void InitDamageData();
 
 	// 当たり判定の作成
-	void CreateCollision();
+	void CreateCollisions();
+	void CreatePlayerCollision();
+	void CreateWeaponCollision();
 	// ジャスト居合の生成
 	void CreateJustCollision();
+
+
+	//*** 更新系 ***//
+
+	// プレイヤーの OnCollision
+	void OnCollisionPlayer(lwp::Collider::HitData& data);
+	// 武器の OnCollision
+	void OnCollisionWeapon(lwp::Collider::HitData& data);
+	// ジャスト抜刀の OnCollision
+	void OnCollisionJust(lwp::Collider::HitData& data);
 
 	// プレイヤーの操作を受け付ける
 	void UpdateInput();
 	// 受け付けた入力を判別して実際の行動に反映する
 	void CheckBehavior();
 
+	// デバッグ表示
 	void DebugWindow();
 
 private: //*** プライベート変数 ***//
@@ -191,21 +265,25 @@ private: //*** プライベート変数 ***//
 	// 敵の攻撃からの有効範囲
 	float cRANGEJUSTENABLE_ = 2.0f;
 
+	Configs config_;
 
-	// 各状態毎のデータ
+	//*** 各状態毎のデータ ***//
+
 	// 固定されているデータを外部から取得
-	std::unique_ptr<RootData> rootData_;
-	std::unique_ptr<MoveData> moveData_;
-	std::unique_ptr<SlashData> slashData_;
-	std::unique_ptr<MomentData> momentData_;
-	std::unique_ptr<DamageData> damageData_;
+	RootData rootData_;
+	MoveData moveData_;
+	SlashData slashData_;
+	MomentData momentData_;
+	DamageData damageData_;
 
-	// プログラム内だけど外部のやつ
+
+	//*** プログラム内だけど外部のやつ ***//
 	// カメラ
 	FollowCamera* pCamera_ = nullptr;
 
 	// 今のシーン
 	IScene* pScene_ = nullptr;
+
 
 	//*** 計算に使う ***//
 
@@ -215,32 +293,26 @@ private: //*** プライベート変数 ***//
 	// 複数入力に対応させたい
 	// コマンドを積み重ねる
 	std::list<IPlayerCommand*>* pCommands_;
+	// 入力したコマンドを一括で管理する
+	std::list<Behavior> commands_;
+	// 最終的に行動するコマンド
+	Behavior* command_ = nullptr;
 
 	// プレイヤーのモデル
 	LWP::Primitive::Mesh* demoModel_ = nullptr;
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
 
-
 	// 現在の状態
 	Behavior behavior_ = Behavior::Root;
 	// 状態の予約
 	std::optional<Behavior> reqBehavior_ = std::nullopt;
-	// 現在の状態のデータ
-	//BaseData* currentData_ = nullptr;
-
 
 	// 次に移動する方向
 	// これは通常移動くらいでしか使わない
 	LWP::Math::Vector3 destinate_ = { 0.0f,0.0f,1.0f };
 	// キーまたはスティックでの移動が入力されたか
 	bool isInputMove_ = false;
-
-
-	// 入力したコマンドを一括で管理する
-	std::list<Behavior> commands_;
-	// 最終的に行動するコマンド
-	Behavior* command_ = nullptr;
 
 	// 秒数
 	float t = 0.0f;
@@ -255,7 +327,7 @@ private: //*** プライベート変数 ***//
 	lwp::Collider::AABB* playerCollision_ = nullptr;
 	// 武器の当たり判定
 	lwp::Collider::Capsule* weaponCollision_ = nullptr;
-	// ジャスト居合したいときの大きめの判定
+	// ジャスト抜刀したいときの大きめの判定
 	lwp::Collider::Capsule* justCollision_ = nullptr;
 
 	// ジャスト中か
