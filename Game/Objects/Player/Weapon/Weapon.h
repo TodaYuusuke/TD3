@@ -74,6 +74,10 @@ public:	//*** セッター,ゲッター ***//
 
 private: //*** プライベート関数 ***//
 
+	void InitRoot();
+	void InitSlash();
+	void InitMoment();
+
 	void UpdateRoot();
 	void UpdateSlash();
 	void UpdateMoment();

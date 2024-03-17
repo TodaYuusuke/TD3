@@ -23,15 +23,13 @@ void Weapon::Update()
 		switch (behavior_)
 		{
 		case Weapon::Behavior::Root:
-			rootData_->translate_.start_ = demoModel_->transform.translation;
-			rootData_->rotate_.start_ = demoModel_->transform.rotation;
+			InitRoot();
 			break;
 		case Weapon::Behavior::Slash:
+			InitSlash();
 			break;
 		case Weapon::Behavior::Moment:
-			momentData_->scale_.start_ = demoModel_->transform.scale;
-			momentData_->rotate_.start_ = demoModel_->transform.rotation;
-			momentData_->translate_.start_ = demoModel_->transform.translation;
+			InitMoment();
 			break;
 		default:
 			break;
@@ -53,6 +51,23 @@ void Weapon::Update()
 	default:
 		break;
 	}
+}
+
+void Weapon::InitRoot()
+{
+	rootData_->translate_.start_ = demoModel_->transform.translation;
+	rootData_->rotate_.start_ = demoModel_->transform.rotation;
+}
+
+void Weapon::InitSlash()
+{
+}
+
+void Weapon::InitMoment()
+{
+	momentData_->scale_.start_ = demoModel_->transform.scale;
+	momentData_->rotate_.start_ = demoModel_->transform.rotation;
+	momentData_->translate_.start_ = demoModel_->transform.translation;
 }
 
 void Weapon::UpdateRoot()
