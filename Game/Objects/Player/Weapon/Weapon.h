@@ -83,18 +83,18 @@ private: //*** プライベート関数 ***//
 	void UpdateMoment();
 
 	void InitDatas();
-	RootData* InitRootData();
-	SlashData* InitSlashData();
-	MomentData* InitMomentData();
+	void InitRootData();
+	void InitSlashData();
+	void InitMomentData();
 
 private: //*** プライベート変数 ***//
 
 	//*** 外部からのデータ ***//
 
 	// 状態のデータ
-	std::unique_ptr<RootData> rootData_;
-	std::unique_ptr<SlashData> slashData_;
-	std::unique_ptr<MomentData> momentData_;
+	RootData rootData_;
+	SlashData slashData_;
+	MomentData momentData_;
 
 
 	//*** 計算用 ***//
