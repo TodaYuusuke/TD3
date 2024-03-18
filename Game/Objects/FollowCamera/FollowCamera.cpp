@@ -5,6 +5,14 @@ using namespace LWP::Math;
 using namespace LWP::Input;
 using namespace LWP::Input::Pad;
 
+FollowCamera::FollowCamera() {
+	currentFrame_ = 0;
+	isStartEase_ = false;
+	isEndEase_ = false;
+	fovState_ = FovState::NORMAL;
+	preFovState_ = fovState_;
+}
+
 void FollowCamera::Update() {
 	// 入力処理
 	InputAngle();
@@ -21,20 +29,20 @@ void FollowCamera::Update() {
 		// 座標をコピーしてオフセット分ずらす。ただしx座標はずらさない
 		pCamera_->transform.translation = target_->translation + offset;
 	}
+
+	// ジャスト抜刀時のfovの更新処理
+	JustSlashUpdate();
 }
-
-
-static int hhhh = 90;
 
 void FollowCamera::InputAngle() {
 	// rotationが2πより大きかったら(もしくは-2πより小さ勝ったら)0にリセット
 	// Y軸
 	if (pCamera_->transform.rotation.y >= 6.28f || pCamera_->transform.rotation.y <= -6.28f) {
-		pCamera_->transform.rotation.y = 0.0f;	   
+		pCamera_->transform.rotation.y = 0.0f;
 	}
 	// X軸
 	if (pCamera_->transform.rotation.x >= 6.28f || pCamera_->transform.rotation.x <= -6.28f) {
-		pCamera_->transform.rotation.x = 0.0f;	   
+		pCamera_->transform.rotation.x = 0.0f;
 	}
 
 	// 入力感度
@@ -63,27 +71,62 @@ void FollowCamera::InputAngle() {
 	// X軸
 	pCamera_->transform.rotation.x -= Controller::GetRStick().y * sensitivity.y;
 #pragma endregion
-
-#ifdef DEMO
-
-	ImGui::Begin("TTT");
-	ImGui::DragInt("value", &hhhh);
-	ImGui::End();
-		
-	if (LWP::Input::Keyboard::GetPress(DIK_1)) {
-		ReduceFov();
-	}
-	if (LWP::Input::Keyboard::GetPress(DIK_2)) {
-		ResetFov();
-	}
-
-#endif
 }
 
 void FollowCamera::ReduceFov() {
-	pCamera_->fov = hhhh;
+	const float kFinishFrame = 90;
+	float t = Utility::Easing::OutExpo(currentFrame_ / kFinishFrame);
+
+	if (t < 1.0f) {
+		pCamera_->fov = Lerp(tempFov_, kMinFov, t);
+		currentFrame_++;
+	}
+	if (t >= 1.0f) {
+		fovState_ = FovState::NORMAL;
+	}
 }
 
 void FollowCamera::ResetFov() {
-	pCamera_->fov = 90;
+	const float kFinishFrame = 10;
+	float t = Utility::Easing::OutExpo(currentFrame_ / kFinishFrame);
+	if (t <= 1.0f) {
+		pCamera_->fov = Lerp(tempFov_, kMaxFov, t);
+		currentFrame_++;
+	}
+	if (t >= 1.0f) {
+		fovState_ = FovState::NORMAL;
+	}
+}
+
+float FollowCamera::Lerp(const float& v1, const float& v2, float t) {
+	return v1 + ((v2 - v1) * t);
+}
+
+void FollowCamera::StartJustSlash() {
+	fovState_ = FovState::REDUCE;
+}
+
+void FollowCamera::EndJustSlash() {
+	fovState_ = FovState::RESET;
+}
+
+void FollowCamera::JustSlashUpdate() {
+	// イージング開始前と開始後にfovの値を1フレームだけ保存
+	if (fovState_ != preFovState_) {
+		currentFrame_ = 0;
+		tempFov_ = pCamera_->fov;
+	}
+	// 前のフレームのfov状態を代入
+	preFovState_ = fovState_;
+
+	switch (fovState_) {
+	case FollowCamera::NORMAL:		
+		break;
+	case FollowCamera::REDUCE:
+		ReduceFov();
+		break;
+	case FollowCamera::RESET:
+		ResetFov();
+		break;
+	}
 }
