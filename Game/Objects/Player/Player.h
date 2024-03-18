@@ -12,9 +12,13 @@
 
 class Player final
 {
-private:
+private: //*** サブクラス ***//
+
+#pragma region SubClass
 
 	//*** Behaivior で管理する ***//
+
+#pragma region Behavior
 
 	/// <summary>
 	/// プレイヤー行動
@@ -71,7 +75,11 @@ private:
 
 	};
 
+#pragma endregion
+
 	//*** 外部設定の変数管理 ***//
+
+#pragma region Config
 
 	// 移動距離 : (1 秒間に進む距離)
 	struct Speeds
@@ -101,17 +109,19 @@ private:
 		float MOMENTINCREMENT_ = 0.25f;
 		// ジャスト居合を取る時間
 		float JUSTTAKETIME_ = 0.1f;
-		// ジャスト居合に加えて無敵時間
-		float JUSTINVINCIBLE_ = 0.1f;
+		// ジャスト抜刀判定時間に加える無敵時間
+		float JUSTINVINCIBLECORRECTION_ = 0.05f;
+		// ジャスト抜刀成功時に加える無敵時間
+		float JUSTINVINCIBLEADD_ = 0.1f;
 		// 被ダメージ時の無敵時間
-		float DAMAGEINVINCIBLE_ = 0.3f;
+		float DAMAGEINVINCIBLE_ = 2.0f;
 	};
 
 	// 半径
 	struct Lengths
 	{
 		// 武器の半径
-		float WEAPONCOLLISIONRADIUS_ = 1.0f;
+		float WEAPONCOLLISIONRADIUS_ = 1.5f;
 		// 居合時の武器の前側への補正
 		float WEAPONPLUSCORRECTION_ = 4.0f;
 		// ジャストの半径
@@ -129,6 +139,7 @@ private:
 	// 割合系
 	struct Parcentages
 	{
+		// 居合攻撃からジャスト判定が取れる距離の割合
 		float JUSTENABLE_ = 0.2f;
 	};
 
@@ -141,6 +152,7 @@ private:
 		Parcentages Par_;
 	};
 
+#pragma endregion
 
 	//*** フラグ管理 ***//
 
@@ -166,6 +178,8 @@ private:
 		lwp::Collider::Capsule* justSlash_ = nullptr;
 	};
 
+#pragma endregion
+
 public: //*** パブリック関数 ***//
 
 	// コンストラクタ
@@ -189,6 +203,8 @@ public:	//*** セッター,ゲッター ***//
 
 public: //*** コマンド操作で呼び出される関数 ***//
 
+#pragma region CommandFunc
+
 	// ここではまだ実際に行動に移さない
 	void MoveFront();
 	void MoveBack();
@@ -196,8 +212,16 @@ public: //*** コマンド操作で呼び出される関数 ***//
 	void MoveRight();
 	void Slash();
 
+#pragma endregion
+
+private: //*** プライベート関数 ***//
+
+#pragma region PrivateFunc
+
 private: //*** Behavior 管理に使う関数 ***//
 
+#pragma region BehaviorFunc
+		
 	void InitRoot();
 	void InitMove();
 	void InitSlash();
@@ -210,9 +234,11 @@ private: //*** Behavior 管理に使う関数 ***//
 	void UpdateMoment();
 	void UpdateDamage();
 
-private: //*** プライベート関数 ***//
+#pragma endregion
 
 	//*** 初期化系 ***//
+
+#pragma region DataFunc
 
 	// データの情報を取得する
 	void InitDatas();
@@ -233,15 +259,25 @@ private: //*** プライベート関数 ***//
 	void InitMomentData();
 	void InitDamageData();
 
+#pragma endregion
+
+#pragma region CreateCollision
+
 	// 当たり判定の作成
 	void CreateCollisions();
+	// プレイヤー
 	void CreatePlayerCollision();
+	// 武器
 	void CreateWeaponCollision();
 	// ジャスト居合の生成
 	void CreateJustCollision();
 
+#pragma endregion
+
 
 	//*** 更新系 ***//
+
+#pragma region OnCollision
 
 	// プレイヤーの OnCollision
 	void OnCollisionPlayer(lwp::Collider::HitData& data);
@@ -250,10 +286,14 @@ private: //*** プライベート関数 ***//
 	// ジャスト抜刀の OnCollision
 	void OnCollisionJust(lwp::Collider::HitData& data);
 
+#pragma endregion
+
 	// プレイヤーの操作を受け付ける
 	void UpdateInput();
 	// 受け付けた入力を判別して実際の行動に反映する
 	void CheckBehavior();
+
+#pragma region DebugFunc
 
 	// デバッグ表示
 	void DebugWindow();
@@ -264,8 +304,13 @@ private: //*** プライベート関数 ***//
 	void DebugCounts();
 	void DebugParcentages();
 
+#pragma endregion
+
+#pragma endregion
+
 private: //*** プライベート変数 ***//
 
+#pragma region PrivateVar
 
 	//*** 外部から設定する変数 ***//
 
@@ -320,6 +365,11 @@ private: //*** プライベート変数 ***//
 	float t = 0.0f;
 	// イージング
 	float easeT_ = 0.0f;
+	// 無敵時間まで加算
+	float invincibleTime_ = 0.0f;
+	// 全体の無敵時間
+	float maxInvincibleTime_ = 0.0f;
+
 
 	// 居合攻撃を描画
 	std::unique_ptr<SlashPanel> slashPanel_;
@@ -329,6 +379,8 @@ private: //*** プライベート変数 ***//
 
 	// フラグ
 	Flags flag_;
+
+#pragma endregion
 
 };
 

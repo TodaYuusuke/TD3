@@ -35,6 +35,9 @@ void Player::Initialize()
 	slashPanel_.reset(new SlashPanel);
 	slashPanel_->Initialize();
 
+	invincibleTime_ = 0.0f;
+	maxInvincibleTime_ = 0.0f;
+
 	// コライダー生成
 	CreateCollisions();
 }
@@ -102,6 +105,21 @@ void Player::Update()
 	t += (float)lwp::GetDeltaTime();
 	weapon_->Update();
 	slashPanel_->Update();
+
+	colliders_.player_->Create(demoModel_->transform.translation + lwp::Vector3(0.0f, 0.5f, 0.0f));
+
+	// 無敵時間確認
+	if (flag_.isInvincible_)
+	{
+		invincibleTime_ += (float)lwp::GetDeltaTime();
+		if (maxInvincibleTime_ <= invincibleTime_)
+		{
+			// 無敵を切る
+			flag_.isInvincible_ = false;
+		}
+	}
+	// 無敵なのかどうか判断
+	colliders_.player_->isActive = !flag_.isInvincible_;
 }
 
 void Player::EndJust()
@@ -158,6 +176,8 @@ void Player::Slash()
 
 #pragma region BehaviorFunc
 
+#pragma region InitFunc
+
 void Player::InitRoot()
 {
 	//rootData_.maxTime_ = rootData_.cBASETIME;
@@ -195,6 +215,9 @@ void Player::InitSlash()
 	// 当たり判定を消去
 	//colliders_.player_->isActive = false;
 	flag_.isInvincible_ = true;
+	// ジャスト判定中は無敵
+	invincibleTime_ = 0.0f;
+	maxInvincibleTime_ = config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLECORRECTION_;
 	// 武器の当たり判定を出す
 	// カプセルの設定
 	lwp::Vector3 start = demoModel_->transform.translation;
@@ -227,10 +250,18 @@ void Player::InitDamage()
 {
 	// デルタタイム変更
 	EndJust();
-	colliders_.player_->isActive = false;
+	colliders_.weapon_->isActive = false;
+	colliders_.justSlash_->isActive = false;
+	flag_.isInvincible_ = true;
+	invincibleTime_ = 0.0f;
+	maxInvincibleTime_ = config_.Time_.DAMAGEINVINCIBLE_;
 	//damageData_.maxTime_ = damageData_.cBASETIME;
 	damageData_.maxTime_ = config_.Time_.DAMAGEBASE_;
 }
+
+#pragma endregion
+
+#pragma region UpdateFunc
 
 void Player::UpdateRoot()
 {
@@ -265,7 +296,8 @@ void Player::UpdateSlash()
 	// 無敵時間
 	// ジャスト成立中
 	//　無敵時間中
-	colliders_.player_->isActive = (!flag_.isJustSlashing_ && config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLE_ < t);
+	//colliders_.player_->isActive = (!flag_.isJustSlashing_ && config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLE_ < t);
+	//flag_.isInvincible_ = (!flag_.isJustSlashing_ && config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLE_ < t);
 	// 判定を取れるようにする
 	colliders_.justSlash_->isActive = t < config_.Time_.JUSTTAKETIME_;
 
@@ -320,6 +352,9 @@ void Player::UpdateDamage()
 	}
 	easeT_ = t / damageData_.maxTime_;
 }
+
+#pragma endregion
+
 
 #pragma region BehaviorData
 
@@ -398,6 +433,8 @@ void Player::InitDamageData()
 // BehaviorFunc
 #pragma endregion
 
+#pragma region CollisionFunc
+
 void Player::CreateCollisions()
 {
 	CreatePlayerCollision();
@@ -410,7 +447,7 @@ void Player::CreatePlayerCollision()
 	// 当たり判定を設定
 	colliders_.player_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
 	// 武器との当たり判定を取る
-	colliders_.player_->CreateFromPrimitive(demoModel_);
+	colliders_.player_->Create(demoModel_->transform.translation);
 	// マスク
 	colliders_.player_->mask.SetBelongFrag(MaskLayer::Player);
 	// 敵または敵の攻撃
@@ -420,6 +457,7 @@ void Player::CreatePlayerCollision()
 	colliders_.player_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionPlayer(data); });
 
 	colliders_.player_->isActive = true;
+	flag_.isInvincible_ = false;
 #ifdef DEMO
 	colliders_.player_->name = "Player";
 #endif
@@ -462,6 +500,8 @@ void Player::CreateJustCollision()
 #endif
 }
 
+#pragma region OnCollisionFunc
+
 void Player::OnCollisionPlayer(lwp::Collider::HitData& data)
 {
 	if (data.state == OnCollisionState::Trigger)
@@ -483,6 +523,8 @@ void Player::OnCollisionJust(lwp::Collider::HitData& data)
 	{
 		// ジャスト判定の一瞬のみを取得している
 		flag_.isJustSlashing_ = true;
+		// 無敵時間を加算
+		maxInvincibleTime_ += config_.Time_.JUSTINVINCIBLEADD_;
 		// ここをゲームシーンに変える
 		TItleScene* const scene = dynamic_cast<TItleScene*>(pScene_);
 		assert(scene);
@@ -497,6 +539,12 @@ void Player::OnCollisionJust(lwp::Collider::HitData& data)
 		}
 	}
 }
+
+#pragma endregion
+
+
+#pragma endregion
+
 
 void Player::UpdateInput()
 {
@@ -604,8 +652,9 @@ void Player::CheckBehavior()
 			break;
 		}
 	}
-
 }
+
+#pragma region DebugFunc
 
 void Player::DebugWindow()
 {
@@ -659,6 +708,8 @@ void Player::DebugWindow()
 	ImGui::Text("SlashRelation / MaxRelation");
 	ImGui::Text("%d / %d", slashData_.relationSlash_, slashData_.maxRelation_);
 	ImGui::Text("INCREMENTMOMENT : %.3f", config_.Time_.MOMENTINCREMENT_);
+	ImGui::Text("Invincible : "); ImGui::SameLine();
+	ImGui::Text(flag_.isInvincible_ ? "TRUE" : "FALSE");
 
 	ImGui::Separator();
 
@@ -667,6 +718,20 @@ void Player::DebugWindow()
 	DebugLengths();
 	//DebugCounts();
 	DebugParcentages();
+
+	ImGui::Separator();
+
+	static float multi = 1.0f;
+	if (ImGui::DragFloat("DeltaMulti", &multi, 0.001f))
+	{
+		lwp::SetDeltaTimeMultiply(multi);
+	}
+	static bool exec = false;
+	ImGui::Checkbox("AppleyDelta", &exec);
+	if (exec)
+	{
+		lwp::SetDeltaTimeMultiply(multi);
+	}
 
 	ImGui::End();
 }
@@ -713,7 +778,8 @@ void Player::DebugTimes()
 		if (ImGui::TreeNode("SLASH"))
 		{
 			ImGui::DragFloat("JUSTTAKE", &config_.Time_.JUSTTAKETIME_, 0.001f,0.0f,config_.Time_.SLASHBASE_);
-			ImGui::DragFloat("JUSTINVINCIGLE", &config_.Time_.JUSTINVINCIBLE_, 0.001f,0.0f,config_.Time_.JUSTTAKETIME_);
+			ImGui::DragFloat("JUSTINVINCIGLECORRECTION", &config_.Time_.JUSTINVINCIBLECORRECTION_, 0.001f, 0.0f, config_.Time_.SLASHBASE_ - config_.Time_.JUSTTAKETIME_);
+			ImGui::DragFloat("JUSTINVINCIGLEADD", &config_.Time_.JUSTINVINCIBLEADD_, 0.001f,0.0f);
 
 			ImGui::TreePop();
 			ImGui::Separator();
@@ -777,3 +843,5 @@ void Player::DebugParcentages()
 		ImGui::Separator();
 	}
 }
+
+#pragma endregion
