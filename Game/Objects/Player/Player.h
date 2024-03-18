@@ -37,8 +37,7 @@ private:
 	// 絶対に継承した先のインスタンスを使う
 	struct BaseData
 	{
-		//float time_ = 0.0f;		// 状態に入ってから経過した時間(second)
-		float cBASETIME = 0.0f;	// 状態の基本時間 : 基本となる秒数
+		//float cBASETIME = 0.0f;	// 状態の基本時間 : 基本となる秒数
 		float maxTime_ = 0.0f;	// 状態の最大時間 : 条件で抜けるときもあるかもしれない
 	};
 
@@ -56,7 +55,7 @@ private:
 		lwp::Vector3 vector_;		// 向かう方向
 		uint32_t relationSlash_;	// 連続居合回数 : 二回以降+1
 		uint32_t maxRelation_;		// 最大居合回数 : Max
-		uint32_t cMAXRELATION_;
+		//uint32_t cMAXRELATION_;
 	};
 
 
@@ -91,25 +90,46 @@ private:
 	// 秒時間
 	struct Times
 	{
+		// 各状態にかかる時間
+		float ROOTBASE_ = 0.5f;
+		float MOVEBASE_ = 0.1f;
+		float SLASHBASE_ = 0.1f;
+		float MOMENTBASE_ = 0.5f;
+		float DAMAGEBASE_ = 0.5f;
+
 		// 居合による後隙の加算分
-		float INCREMENTMOMENT_ = 0.25f;
+		float MOMENTINCREMENT_ = 0.25f;
 		// ジャスト居合を取る時間
-		float TAKEJUSTSLASH_ = 0.1f;
+		float JUSTTAKETIME_ = 0.1f;
 		// ジャスト居合に加えて無敵時間
-		float ADDINCVINCIBLE_ = 0.1f;
+		float JUSTINVINCIBLE_ = 0.1f;
+		// 被ダメージ時の無敵時間
+		float DAMAGEINVINCIBLE_ = 0.3f;
 	};
 
 	// 半径
 	struct Lengths
 	{
 		// 武器の半径
-		float RADIUSWEAPONCOLLISION_ = 1.0f;
+		float WEAPONCOLLISIONRADIUS_ = 1.0f;
 		// 居合時の武器の前側への補正
-		float CORRECTIONPLUSWEAPON_ = 4.0f;
+		float WEAPONPLUSCORRECTION_ = 4.0f;
 		// ジャストの半径
-		float RADIUSJUSTCOLLISION_ = 1.5f;
+		float JUSTCOLLISIONRADIUS_ = 1.5f;
 		// 敵の攻撃からの有効範囲
-		float RANGEJUSTENABLE_ = 2.0f;
+		//float JUSTENABLERANGE_ = 2.0f;
+	};
+
+	// カウント系
+	struct Counts
+	{
+		uint32_t SLASHRELATIONMAX_ = 3u;
+	};
+
+	// 割合系
+	struct Parcentages
+	{
+		float JUSTENABLE_ = 0.2f;
 	};
 
 	struct Configs
@@ -117,6 +137,8 @@ private:
 		Speeds Speed_;
 		Times Time_;
 		Lengths Length_;
+		Counts Count_;
+		Parcentages Par_;
 	};
 
 
@@ -127,6 +149,8 @@ private:
 	{
 		bool isInputMove_ = false;		// 移動入力がされているか
 		bool isJustSlashing_ = false;	// 今ジャスト抜刀中か
+		bool isInvincible_ = false;		// 無敵時間中か
+		bool isDamage_ = false;			// ダメージを受けたか
 	};
 
 	//*** 当たり判定 ***//
@@ -233,6 +257,12 @@ private: //*** プライベート関数 ***//
 
 	// デバッグ表示
 	void DebugWindow();
+	// 各コンフィグをいじる
+	void DebugSpeeds();
+	void DebugTimes();
+	void DebugLengths();
+	void DebugCounts();
+	void DebugParcentages();
 
 private: //*** プライベート変数 ***//
 
