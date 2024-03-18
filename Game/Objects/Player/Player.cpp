@@ -143,7 +143,7 @@ void Player::EndJust()
 	isJustSlashing_ = false;
 	// 無敵切れは次の居合時にもなる
 	playerCollision_->isActive = true;
-	pCamera_->ResetFov();
+	pCamera_->EndJustSlash();
 }
 
 void Player::MoveFront()
@@ -393,7 +393,7 @@ void Player::CreateJustCollision()
 			assert(scene);
 			scene->StartJustSlash();
 			isJustSlashing_ = true;
-			pCamera_->ReduceFov();
+			pCamera_->StartJustSlash();
 			if (slashData_->maxRelation_ <= slashData_->cMAXRELATION_)
 			{
 				slashData_->maxRelation_++;
