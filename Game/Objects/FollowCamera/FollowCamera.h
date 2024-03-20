@@ -25,42 +25,86 @@ public:
 
 	/// Setter
 	// 追従する対象を設定
-	void SetTarget(const LWP::Object::WorldTransform* target) { target_ = target; }
+	void SetTarget(const LWP::Object::WorldTransform* target) {
+		target_ = target;
+		ResetAngle();
+	}
 
 	// メインカメラのアドレスを設定
 	void SetCameraAddress(lwp::Camera* pCamera) { pCamera_ = pCamera; }
+
+	// 向きをリセットする
+	void ResetAngle();
 
 	// ジャスト抜刀時のイージングをスタートする
 	void StartJustSlash();
 	// ジャスト抜刀時のイージングを終了する
 	void EndJustSlash();
 
-private:// プライベートな関数
+private:/// プライベートな関数
+	// キーボード,ゲームパッドの入力処理
+	void InputAngle();
+
+	///
+	/// ジャスト抜刀時に呼ばれる処理
+	/// 
+
 	// ジャスト抜刀の瞬間カメラを縮小
 	void ReduceFov();
-
 	// ジャスト抜刀終了時のイージング
 	void ResetFov();
-
 	// ジャスト抜刀の更新処理
 	void JustSlashUpdate();
 
-	// カメラの角度を入力
-	void InputAngle();
+	///
+	/// 数学関数
+	///
 
 	// 返り値がfloatの線形補間
 	float Lerp(const float& v1, const float& v2, float t);
+	// 最短角度補間
+	float LerpShortAngle(float a, float b, float t);
 
-private:// 定数
+	// オフセットの計算
+	LWP::Math::Vector3 CalcOffset();
+
+private:/// 定数
+	///
+	/// 視点操作の設定
+	/// 
+
+	// 入力感度
+	const LWP::Math::Vector2 kSensitivity = { 0.05f, 0.02f };
+	// 視点移動の滑らかさ(0~1の間で設定)
+	const float kRotationSmoothness = 0.1f;
+	// カメラの後追い速度(0~1の間で設定)
+	const float kFollowRate = 0.1f;
+
+	// 追従対象との距離
+	const LWP::Math::Vector3 kTargetDist = { 0.0f,0.0f,-30.0f };
+	
+	// 初期角度 
+	LWP::Math::Vector3 kStartAngle = { 0.2f, 0.0f, 0.0f };
+
+	///
+	/// ジャスト抜刀時のFov設定
+	/// 
+
 	// Fovの最小値
 	const float kMinFov = 65;
 	// Fovの最大値
 	const float kMaxFov = 90;
 
-public:// パブリックな変数
+public:/// パブリックな変数
 	LWP::Object::Camera* pCamera_;
 
-private:// メンバ変数
+private:/// プライベートな変数
+	// 追従対象
+	const LWP::Object::WorldTransform* target_ = nullptr;
+	// 追従対象の残像座標
+	LWP::Math::Vector3 interTarget_;
+	// 目標角度
+	LWP::Math::Vector2 destinationAngle_;
 
 	// Fovの状態
 	enum FovState {
@@ -71,19 +115,13 @@ private:// メンバ変数
 	// Fovの状態
 	FovState fovState_;
 	FovState preFovState_;
+	// 前のFovの値を保存
+	float tempFov_;
 
-	// 追従対象
-	const LWP::Object::WorldTransform* target_ = nullptr;
-
+	// 現在の時間(frame単位)
+	float currentFrame_;
 	// イージングスタート
 	bool isStartEase_;
 	// イージング終了
 	bool isEndEase_;
-	// Fovの値を一瞬だけ保存する
-	bool isTempFovTrigger_;
-
-	// 現在の時間(frame単位)
-	float currentFrame_;
-	// 現在のFovを保存
-	float tempFov_;
 };
