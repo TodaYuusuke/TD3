@@ -19,60 +19,65 @@ void FollowCamera::Update() {
 
 	// 追従の計算
 	if (target_) {
-		Vector3 offset = { 0.0f, 0.0f, -30.0f };;
-		// カメラの角度から回転行列を計算
-		Matrix4x4 rotateMatrix = LWP::Math::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
-
-		// オフセットをカメラの回転に合わせて回転
-		offset = offset * rotateMatrix;
-
+		// 追従座標の補間
+		interTarget_ = LWP::Math::Vector3::Lerp(interTarget_, target_->translation, kFollowRate);
+		
+		// オフセットの計算
+		Vector3 offset = CalcOffset();
 		// 座標をコピーしてオフセット分ずらす。ただしx座標はずらさない
-		pCamera_->transform.translation = target_->translation + offset;
+		pCamera_->transform.translation = interTarget_ + offset;
 	}
 
-	// ジャスト抜刀時のfovの更新処理
+	// ジャスト抜刀時のFovの更新処理
 	JustSlashUpdate();
 }
 
+void FollowCamera::ResetAngle() {
+	destinationAngle_ = { kStartAngle.x, target_->rotation.y };
+	// オフセットの計算
+	Vector3 offset = CalcOffset();
+	// 座標をコピーしてオフセット分ずらす。ただしx座標はずらさない
+	pCamera_->transform.translation = interTarget_ + offset;
+}
+
 void FollowCamera::InputAngle() {
-	// rotationが2πより大きかったら(もしくは-2πより小さ勝ったら)0にリセット
-	// Y軸
-	if (pCamera_->transform.rotation.y >= 6.28f || pCamera_->transform.rotation.y <= -6.28f) {
-		pCamera_->transform.rotation.y = 0.0f;
-	}
-	// X軸
-	if (pCamera_->transform.rotation.x >= 6.28f || pCamera_->transform.rotation.x <= -6.28f) {
-		pCamera_->transform.rotation.x = 0.0f;
-	}
-
 	// 入力感度
-	const Math::Vector2 sensitivity = { 0.05f, 0.02f };
-
+	const LWP::Math::Vector2 sensitivity = kSensitivity;
 #pragma  region キーボード入力
 	// Y軸
 	if (LWP::Input::Keyboard::GetPress(DIK_RIGHT)) {
-		pCamera_->transform.rotation.y -= sensitivity.x;
+		destinationAngle_.y += sensitivity.x;
 	}
 	if (LWP::Input::Keyboard::GetPress(DIK_LEFT)) {
-		pCamera_->transform.rotation.y += sensitivity.x;
+		destinationAngle_.y -= sensitivity.x;
 	}
 	// X軸
 	if (LWP::Input::Keyboard::GetPress(DIK_UP)) {
-		pCamera_->transform.rotation.x += sensitivity.y;
+		destinationAngle_.x -= sensitivity.y;
 	}
 	if (LWP::Input::Keyboard::GetPress(DIK_DOWN)) {
-		pCamera_->transform.rotation.x -= sensitivity.y;
+		destinationAngle_.x += sensitivity.y;
 	}
 #pragma endregion
 
 #pragma  region ゲームパッド入力
-	// Y軸
-	pCamera_->transform.rotation.y += Controller::GetRStick().x * sensitivity.x;
-	// X軸
-	pCamera_->transform.rotation.x -= Controller::GetRStick().y * sensitivity.y;
+	// Rスティック
+	destinationAngle_.x -= Controller::GetRStick().y * sensitivity.y;
+	destinationAngle_.y += Controller::GetRStick().x * sensitivity.x;
+
+	// Rスティック押し込み
+	// 角度リセット
+	if (Controller::GetTrigger(XINPUT_GAMEPAD_RIGHT_THUMB)) {
+		ResetAngle();
+	}
 #pragma endregion
+
+	// 最短角度補間
+	pCamera_->transform.rotation.y = LerpShortAngle(pCamera_->transform.rotation.y, destinationAngle_.y, kRotationSmoothness);
+	pCamera_->transform.rotation.x = LerpShortAngle(pCamera_->transform.rotation.x, destinationAngle_.x, kRotationSmoothness);
 }
 
+#pragma region ジャスト抜刀
 void FollowCamera::ReduceFov() {
 	const float kFinishFrame = 90;
 	float t = Utility::Easing::OutExpo(currentFrame_ / kFinishFrame);
@@ -96,10 +101,6 @@ void FollowCamera::ResetFov() {
 	if (t >= 1.0f) {
 		fovState_ = FovState::NORMAL;
 	}
-}
-
-float FollowCamera::Lerp(const float& v1, const float& v2, float t) {
-	return v1 + ((v2 - v1) * t);
 }
 
 void FollowCamera::StartJustSlash() {
@@ -130,3 +131,46 @@ void FollowCamera::JustSlashUpdate() {
 		break;
 	}
 }
+#pragma endregion
+
+#pragma region 数学関数
+float FollowCamera::Lerp(const float& v1, const float& v2, float t) {
+	float result = v1 + (v2 - v1) * t;
+	return result;
+}
+
+float FollowCamera::LerpShortAngle(float a, float b, float t) {
+	// 角度差分を求める
+	float diff = b - a;
+
+	float pi = 3.14f;
+
+	diff = std::fmod(diff, 2 * pi);
+	if (diff < 2 * -pi) {
+		diff += 2 * pi;
+	}
+	else if (diff >= 2 * pi) {
+		diff -= 2 * pi;
+	}
+
+	diff = std::fmod(diff, 2 * pi);
+	if (diff < -pi) {
+		diff += 2 * pi;
+	}
+	else if (diff >= pi) {
+		diff -= 2 * pi;
+	}
+
+	return a + diff * t;
+}
+
+LWP::Math::Vector3 FollowCamera::CalcOffset() {
+	Vector3 offset = kTargetDist;
+	// カメラの角度から回転行列を計算
+	Matrix4x4 rotateMatrix = LWP::Math::Matrix4x4::CreateRotateXYZMatrix(pCamera_->transform.rotation);
+	// オフセットをカメラの回転に合わせて回転
+	offset = offset * rotateMatrix;
+
+	return offset;
+}
+#pragma endregion
