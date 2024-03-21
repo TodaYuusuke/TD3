@@ -16,12 +16,13 @@ void Arrow::Init(lwp::WorldTransform transform)
 	aabb_ = LWP::Common::CreateInstance<AABB>();
 	aabb_->CreateFromPrimitive(model_);
 	aabb_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	aabb_->mask.SetHitFrag(MaskLayer::Player);
+	aabb_->mask.SetHitFrag(MaskLayer::Player | MaskLayer::Layer3);
 	aabb_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		data;
 		if (!(data.state == OnCollisionState::None) &&
 			data.hit &&
-			(data.hit->mask.GetBelongFrag() & MaskLayer::Player))
+			((data.hit->mask.GetBelongFrag() & MaskLayer::Player) ||
+			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3)))
 		{
 			Death();
 		}

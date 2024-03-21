@@ -293,21 +293,11 @@ void Player::UpdateMove()
 
 void Player::UpdateSlash()
 {
-	// 無敵時間
-	// ジャスト成立中
-	//　無敵時間中
-	//colliders_.player_->isActive = (!flag_.isJustSlashing_ && config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLE_ < t);
-	//flag_.isInvincible_ = (!flag_.isJustSlashing_ && config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLE_ < t);
-	// 判定を取れるようにする
-	colliders_.justSlash_->isActive = t < config_.Time_.JUSTTAKETIME_;
-
-	// 武器の判定を伸ばす
-	colliders_.weapon_->end = demoModel_->transform.translation + slashData_.vector_ * config_.Length_.WEAPONPLUSCORRECTION_;
 	if (slashData_.maxTime_ <= t)
 	{
 		reqBehavior_ = Behavior::Moment;
 	}
-	easeT_ = t / slashData_.maxTime_;
+	easeT_ = LWP::Utility::Easing::OutExpo(t / slashData_.maxTime_);
 
 	// 一定方向を向く
 	lwp::Vector3 moveVector = slashData_.vector_;
@@ -317,7 +307,17 @@ void Player::UpdateSlash()
 
 	moveVector = moveVector * (config_.Speed_.SLASH_ / slashData_.maxTime_) * (float)lwp::GetDeltaTime();
 
-	demoModel_->transform.translation += moveVector;
+	demoModel_->transform.translation += moveVector;	// 無敵時間
+	// ジャスト成立中
+	//　無敵時間中
+	//colliders_.player_->isActive = (!flag_.isJustSlashing_ && config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLE_ < t);
+	//flag_.isInvincible_ = (!flag_.isJustSlashing_ && config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLE_ < t);
+	// 判定を取れるようにする
+	colliders_.justSlash_->isActive = t < config_.Time_.JUSTTAKETIME_;
+
+	// 武器の判定を伸ばす
+	colliders_.weapon_->end = demoModel_->transform.translation + slashData_.vector_ * config_.Length_.WEAPONPLUSCORRECTION_;
+
 }
 
 void Player::UpdateMoment()
@@ -326,7 +326,7 @@ void Player::UpdateMoment()
 	{
 		reqBehavior_ = Behavior::Root;
 	}
-	easeT_ = t / momentData_.maxTime_;
+	easeT_ = LWP::Utility::Easing::InExpo(t / momentData_.maxTime_);
 
 	// 移動入力がされている時
 	if (flag_.isInputMove_)
@@ -777,9 +777,9 @@ void Player::DebugTimes()
 		}
 		if (ImGui::TreeNode("SLASH"))
 		{
-			ImGui::DragFloat("JUSTTAKE", &config_.Time_.JUSTTAKETIME_, 0.001f,0.0f,config_.Time_.SLASHBASE_);
+			ImGui::DragFloat("JUSTTAKE", &config_.Time_.JUSTTAKETIME_, 0.001f, 0.0f, config_.Time_.SLASHBASE_);
 			ImGui::DragFloat("JUSTINVINCIGLECORRECTION", &config_.Time_.JUSTINVINCIBLECORRECTION_, 0.001f, 0.0f, config_.Time_.SLASHBASE_ - config_.Time_.JUSTTAKETIME_);
-			ImGui::DragFloat("JUSTINVINCIGLEADD", &config_.Time_.JUSTINVINCIBLEADD_, 0.001f,0.0f);
+			ImGui::DragFloat("JUSTINVINCIGLEADD", &config_.Time_.JUSTINVINCIBLEADD_, 0.001f, 0.0f);
 
 			ImGui::TreePop();
 			ImGui::Separator();

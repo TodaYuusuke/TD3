@@ -114,8 +114,8 @@ void Weapon::InitSlashData()
 	slashData_.scale_.end_ = { 0.5f,0.5f,1.0f };
 	slashData_.rotate_.start_ = { 0.0f,0.0f,0.0f };
 	slashData_.rotate_.end_ = { 0.0f,0.0f,0.0f };
-	slashData_.translate_.start_ = { -0.5f,0.5f,3.0f };
-	slashData_.translate_.end_ = { 0.5f,0.0f,1.0f };
+	slashData_.translate_.start_ = { -1.0f,0.5f,3.0f };
+	slashData_.translate_.end_ = { 1.0f,0.5f,1.0f };
 }
 
 void Weapon::InitMomentData()
