@@ -14,8 +14,6 @@ private:
 	void AttackAnimation();
 	// 攻撃条件
 	bool CheckAttackRange();
-	// 自機との方向ベクトルを算出(返り値は正規化している)
-	LWP::Math::Vector3 GetDirectVel();
 	// 対象を狙う
 	void Aim();
 
