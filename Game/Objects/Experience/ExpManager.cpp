@@ -61,7 +61,7 @@ void ExpManager::DebugWindow()
 
 	ImGui::Begin("ExpManager");
 
-	ImGui::DragFloat3("pso", &pos.x, 0.01f);
+	ImGui::DragFloat3("pso", &pos.x, 0.1f);
 
 	ImGui::Separator();
 
@@ -78,20 +78,20 @@ void ExpManager::DebugWindow()
 
 	ImGui::Separator();
 
-	//ImGui::BeginChild(ImGui::GetID((void*)0));
+	ImGui::BeginChild(ImGui::GetID((void*)0));
 
-	//std::list<Experience*>::iterator itr = exps_.begin();
-	//for (size_t i = 0; i < exps_.size(); i++)
-	//{
-	//	if (ImGui::Button(("Exp" + std::to_string(i)).c_str()))
-	//	{
-	//		temp = (*itr);
-	//	}
-	//	//ImGui::Separator();
-	//	++itr;
-	//}
+	std::list<Experience*>::iterator itr = exps_.begin();
+	for (size_t i = 0; i < exps_.size(); i++)
+	{
+		if (ImGui::Button(("Exp" + std::to_string(i)).c_str()))
+		{
+			temp = (*itr);
+		}
+		//ImGui::Separator();
+		++itr;
+	}
 
-	//ImGui::EndChild();
+	ImGui::EndChild();
 
 	ImGui::End();
 }

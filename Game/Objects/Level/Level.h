@@ -16,16 +16,27 @@ public: //*** パブリック関数 ***//
 	void Initialize();
 
 	// 更新
-	void Update();
+	void Update(const lwp::Vector3& position);
 
 private: //*** プライベート関数 ***//
+
+	// 当たり判定生成
+	void CreateCollision();
+
+	// ヒット
+	void OnCollision(const lwp::Collider::HitData& data);
+
+	// 経験値取得
+	void GainEXP();
+
+	// レベルアップ
+	void LevelUp();
 
 #ifdef DEMO
 
 	void DebugWindow();
 
 #endif // DEMO
-
 
 private: //*** プライベート変数 ***//
 
@@ -35,6 +46,8 @@ private: //*** プライベート変数 ***//
 	// 今蓄えている経験値
 	float exp_ = 0.0f;
 
+	// プレイヤーの経験値取得範囲
+	lwp::Collider::Capsule* collider_ = nullptr;
 
 };
 
