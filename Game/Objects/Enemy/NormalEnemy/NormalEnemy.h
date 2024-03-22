@@ -14,8 +14,6 @@ private:
 	void AttackAnimation();
 	// 攻撃条件
 	bool CheckAttackRange();
-	// 自機との方向ベクトルを算出(返り値は正規化している)
-	LWP::Math::Vector3 GetDirectVel();
 	// 対象を狙う
 	void Aim();
 
@@ -26,9 +24,12 @@ private:// 定数
 	// 攻撃のクールタイム
 	const int kAttackWaitTime = 120;
 
+	// 移動の定数
+	const float kMove = 2.0f;
+
 private:
-	lwp::Vector3 PlayerRot;
-	lwp::Vector3 PlayerEndRot;
+	lwp::Vector3 Rot;
+	lwp::Vector3 EndRot;
 	MotionWork attackWork = {
 	.targetpoint = 1.0f,
 	.speed = 0.05f,

@@ -44,7 +44,7 @@ void NormalEnemy::Move()
 	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0]->transform.translation;
 	MoveVec = MoveVec.Normalize();
 	MoveVec.y = 0.0f;
-	models_[0]->transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
+	models_[0]->transform.translation += MoveVec * kMove * LWP::Info::GetDeltaTime();
 }
 
 void NormalEnemy::Attack()
@@ -52,10 +52,11 @@ void NormalEnemy::Attack()
 	if (attackWaitTime_ <= 0) {
 		attackWork.flag = true;
 
-		PlayerRot = models_[0]->transform.rotation;
-		attackWork.targetpoint = PlayerRot;
+		Rot = models_[0]->transform.rotation;
+		attackWork.targetpoint = Rot;
+		// 回転を足す
 		attackWork.targetpoint.x += -0.5f;
-		PlayerEndRot = attackWork.targetpoint;
+		EndRot = attackWork.targetpoint;
 		attackWaitTime_ = kAttackWaitTime;
 		Aim();
 	}
@@ -67,7 +68,7 @@ void NormalEnemy::AttackAnimation()
 	if (attackWork.flag) {
 		if (attackWork.t < 1.0f) {
 			attackWork.t += attackWork.speed;
-			point = lwp::Vector3::Lerp(PlayerRot, attackWork.targetpoint, attackWork.t);
+			point = lwp::Vector3::Lerp(Rot, attackWork.targetpoint, attackWork.t);
 			models_[0]->transform.rotation = point;
 		}
 		else if (attackWork.t >= 1.0f) {
@@ -90,7 +91,7 @@ void NormalEnemy::AttackAnimation()
 	if (attackEndWork.flag) {
 		if (attackEndWork.t < 1.0f) {
 			attackEndWork.t += attackEndWork.speed;
-			point = lwp::Vector3::Lerp(PlayerEndRot, PlayerRot, attackEndWork.t);
+			point = lwp::Vector3::Lerp(EndRot, Rot, attackEndWork.t);
 			models_[0]->transform.rotation = point;
 		}
 		else if (attackEndWork.t >= 1.0f) {
@@ -111,10 +112,6 @@ bool NormalEnemy::CheckAttackRange() {
 		return true;
 	}
 	return false;
-}
-
-LWP::Math::Vector3 NormalEnemy::GetDirectVel() {
-	return (models_[0]->transform.translation - player_->GetWorldTransform()->translation).Normalize();
 }
 
 void NormalEnemy::Aim()
