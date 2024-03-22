@@ -104,6 +104,8 @@ public: //*** パブリック関数 ***//
 public:	//*** セッター,ゲッター ***//
 
 	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
+	bool GetIsJustSlashing() { return isJustSlashing_; }
+	bool GetIsSlash() { return isSlash_; }
 	void SetCameraPointer(FollowCamera* p) { pCamera_ = p; }
 	void SetScene(IScene* p) { pScene_ = p; }
 
@@ -243,6 +245,7 @@ private: //*** プライベート変数 ***//
 
 	// ジャスト中か
 	bool isJustSlashing_ = false;
-
+	// 抜刀の瞬間
+	bool isSlash_ = false;
 };
 

@@ -100,8 +100,11 @@ void Player::Update()
 			// サイズ
 			justCollision_->max = playerCollision_->max + lwp::Vector3(1.0f, 1.0f, 1.0f);
 			justCollision_->min = playerCollision_->min - lwp::Vector3(1.0f, 1.0f, 1.0f);
+			// 抜刀した
+			isSlash_ = true;
+			pCamera_->StartSlash();
 			break;
-		case Player::Behavior::Moment:
+		case Player::Behavior::Moment:		
 			//momentData_->time_ = 0.0f;
 			momentData_->relationSlash_ = slashData_->relationSlash_;
 			// 回数分フレームを加算
@@ -109,6 +112,11 @@ void Player::Update()
 			weapon_->SetBehavior(Weapon::Behavior::Moment);
 			// 武器の判定を消す
 			weaponCollision_->isActive = false;
+			// 抜刀してない
+			isSlash_ = false;
+			if (!isJustSlashing_) {
+				pCamera_->EndSlash();
+			}
 			break;
 		default:
 			break;
@@ -143,7 +151,7 @@ void Player::EndJust()
 	isJustSlashing_ = false;
 	// 無敵切れは次の居合時にもなる
 	playerCollision_->isActive = true;
-	pCamera_->EndJustSlash();
+	pCamera_->EndSlash();
 }
 
 void Player::MoveFront()
@@ -393,7 +401,7 @@ void Player::CreateJustCollision()
 			assert(scene);
 			scene->StartJustSlash();
 			isJustSlashing_ = true;
-			pCamera_->StartJustSlash();
+			//pCamera_->StartJustSlash();
 			if (slashData_->maxRelation_ <= slashData_->cMAXRELATION_)
 			{
 				slashData_->maxRelation_++;
