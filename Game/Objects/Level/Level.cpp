@@ -7,7 +7,7 @@ Level::~Level()
 {
 }
 
-void Level::Initialize()
+void Level::Initialize(const lwp::Vector3& position)
 {
 	// 経験値初期化
 	exp_ = 0.0f;
@@ -16,6 +16,8 @@ void Level::Initialize()
 
 	// 当たり判定生成
 	CreateCollision();
+	// 場所を設定
+	collider_->Create(position, position);
 }
 
 void Level::Update(const lwp::Vector3& position)
@@ -28,7 +30,7 @@ void Level::Update(const lwp::Vector3& position)
 
 #ifdef DEMO
 
-	//DebugWindow();
+	DebugWindow();
 
 #endif // DEMO
 }
@@ -51,15 +53,10 @@ void Level::CreateCollision()
 void Level::OnCollision(const lwp::Collider::HitData& data)
 {
 	if (data.state == OnCollisionState::Trigger &&
-		data.hit->mask.GetBelongFrag() & MaskLayer::Layer5)
+		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 	{
 		// 経験値取得
 		GainEXP();
-		// レベルアップ
-		if (reqEXP_ <= exp_)
-		{
-			LevelUp();
-		}
 	}
 }
 
@@ -67,21 +64,56 @@ void Level::GainEXP()
 {
 	// 経験値補正入れるならここ
 	exp_ += 1.0f;
+	// レベルアップ
+	if (reqEXP_ <= exp_)
+	{
+		LevelUp();
+	}
 }
 
 void Level::LevelUp()
 {
 	exp_ = 0.0f;
 	reqEXP_ += 1.0f;
+	lv_++;
 	// ここでアップデートする関数を呼び出す
 
 }
 
 void Level::DebugWindow()
 {
-	ImGui::Begin("Level");
+	ImGui::Begin("Levels");
 
+	if (ImGui::BeginTabBar("exp"))
+	{
 
+		if (ImGui::BeginTabItem("Level"))
+		{
+
+			ImGui::Text("Gain    : Button or Press 9");
+			ImGui::Text("LevelUp : Button or Press 0");
+
+			if (ImGui::Button("Gain") || lwp::Keyboard::GetTrigger(DIK_9))
+			{
+				GainEXP();
+			}
+
+			if (ImGui::Button("LevelUp") || lwp::Keyboard::GetTrigger(DIK_0))
+			{
+				LevelUp();
+			}
+
+			ImGui::Separator();
+
+			ImGui::Text("LEVEL:%d", lv_);
+			ImGui::DragFloat("REQEXP", &reqEXP_, 1.0f);
+			ImGui::DragFloat("EXP", &exp_, 1.0f);
+
+			ImGui::EndTabItem();
+		}
+
+		ImGui::EndTabBar();
+	}
 
 	ImGui::End();
 }

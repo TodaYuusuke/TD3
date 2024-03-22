@@ -29,7 +29,7 @@ void ExpManager::Update()
 		// 消えているなら
 		if ((*itr)->isDead_)
 		{
-			delete *itr;
+			delete* itr;
 			itr = exps_.erase(itr);
 			continue;
 		}
@@ -59,39 +59,50 @@ void ExpManager::DebugWindow()
 	static Experience* temp = nullptr;
 	static Vector3 pos = { 0.0f,0.0f,0.0f };
 
-	ImGui::Begin("ExpManager");
+	ImGui::Begin("Levels");
 
-	ImGui::DragFloat3("pso", &pos.x, 0.1f);
-
-	ImGui::Separator();
-
-	if (ImGui::Button("Create"))
+	if (ImGui::BeginTabBar("exp"))
 	{
-		Create(pos);
-	}
 
-	if (ImGui::Button("Delete") && temp)
-	{
-		temp->isDead_ = true;
-		temp = nullptr;
-	}
-
-	ImGui::Separator();
-
-	ImGui::BeginChild(ImGui::GetID((void*)0));
-
-	std::list<Experience*>::iterator itr = exps_.begin();
-	for (size_t i = 0; i < exps_.size(); i++)
-	{
-		if (ImGui::Button(("Exp" + std::to_string(i)).c_str()))
+		if (ImGui::BeginTabItem("ExpManager"))
 		{
-			temp = (*itr);
+
+			ImGui::DragFloat3("pso", &pos.x, 0.1f);
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Create"))
+			{
+				Create(pos);
+			}
+
+			if (ImGui::Button("Delete") && temp)
+			{
+				temp->isDead_ = true;
+				temp = nullptr;
+			}
+
+			ImGui::Separator();
+
+			ImGui::BeginChild(ImGui::GetID((void*)0));
+
+			std::list<Experience*>::iterator itr = exps_.begin();
+			for (size_t i = 0; i < exps_.size(); i++)
+			{
+				if (ImGui::Button(("Exp" + std::to_string(i)).c_str()))
+				{
+					temp = (*itr);
+				}
+				//ImGui::Separator();
+				++itr;
+			}
+
+			ImGui::EndChild();
+
+			ImGui::EndTabItem();
 		}
-		//ImGui::Separator();
-		++itr;
+
+		ImGui::EndTabBar();
 	}
-
-	ImGui::EndChild();
-
 	ImGui::End();
 }

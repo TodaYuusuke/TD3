@@ -13,7 +13,7 @@ public: //*** パブリック関数 ***//
 	~Level();
 
 	// 初期化
-	void Initialize();
+	void Initialize(const lwp::Vector3& position);
 
 	// 更新
 	void Update(const lwp::Vector3& position);
@@ -39,6 +39,9 @@ private: //*** プライベート関数 ***//
 #endif // DEMO
 
 private: //*** プライベート変数 ***//
+
+	// 今のレベル
+	uint32_t lv_ = 1u;
 
 	// 次のレベルアップに必要な経験値量
 	float reqEXP_ = 10.0f;

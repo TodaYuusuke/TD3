@@ -37,6 +37,10 @@ void TItleScene::Initialize()
 	expManager_ = std::make_unique<ExpManager>();
 	expManager_->Initialize();
 
+	// レベル
+	level_ = std::make_unique<Level>();
+	level_->Initialize(player_->GetWorldTransform()->translation);
+
 }
 
 // 更新
@@ -66,6 +70,10 @@ void TItleScene::Update()
 	// 敵が死んだときに出てくるので敵の更新の後
 	// 経験値を更新
 	expManager_->Update();
+
+	// 経験値が更新された後かと思ったけど別にプレイヤーの更新が終わった後ならどこでもいい
+	level_->Update(player_->GetWorldTransform()->translation);
+
 }
 
 void TItleScene::StartJustSlash()

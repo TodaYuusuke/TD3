@@ -62,7 +62,7 @@ void Experience::CreateCollision()
 	collider_->mask.SetBelongFrag(MaskLayer::Layer5);
 	// プレイヤーと経験値取得範囲
 	// プレイヤーとの当たり判定は消してもいい
-	collider_->mask.SetHitFrag(MaskLayer::Player | MaskLayer::Layer4);
+	collider_->mask.SetHitFrag(MaskLayer::Layer4);
 	// 別個で用意した当たった時の関数
 	// 状態を切り替えたい
 	collider_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollision(data); });
@@ -73,7 +73,7 @@ void Experience::CreateCollision()
 void Experience::OnCollision(const lwp::Collider::HitData& data)
 {
 	if (data.state == OnCollisionState::Trigger &&
-		(data.hit->mask.GetBelongFrag() & (MaskLayer::Player | MaskLayer::Layer4)))
+		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 	{
 		// 本来はアニメーションをさせた後に消す
 		isDead_ = true;

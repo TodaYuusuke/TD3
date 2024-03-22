@@ -4,6 +4,7 @@
 #pragma region GameInclude
 #include "Game/Objects/FollowCamera/FollowCamera.h"
 #include "Game/Objects/Player/Player.h"
+#include "Game/Objects/Level/Level.h"
 #include "Game/Objects/Enemy/EnemyManager.h"
 #include "Game/Objects/Experience/ExpManager.h"
 #pragma endregion
@@ -42,6 +43,9 @@ private: //*** 変数群 ***//
 
 	// プレイヤー
 	std::unique_ptr<Player> player_;
+
+	// レベルアップ機能
+	std::unique_ptr<Level> level_;
 
 	// ジャスト抜刀
 	bool isJustSlash_ = false;
