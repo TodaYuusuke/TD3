@@ -109,10 +109,6 @@ bool ShieldEnemy::CheckAttackRange() {
 	return false;
 }
 
-LWP::Math::Vector3 ShieldEnemy::GetDirectVel() {
-	return (models_[0]->transform.translation - player_->GetWorldTransform()->translation).Normalize();
-}
-
 void ShieldEnemy::Aim()
 {
 	// 狙う対象に身体を向ける
