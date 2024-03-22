@@ -151,6 +151,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Class\Scene\Sample.cpp" />
+    <ClCompile Include="Game\Objects\Experience\ExpManager.cpp" />
+    <ClCompile Include="Game\Objects\Experience\Experience.cpp" />
     <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.cpp" />
     <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\Arrow\Arrow.cpp" />
     <ClCompile Include="Game\Objects\Enemy\IEnemy\IEnemy.cpp" />
@@ -160,6 +162,7 @@
     <ClCompile Include="Game\Objects\FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="Game\Scenes\TitleScene.cpp" />
     <ClCompile Include="Game\Objects\Player\Commands\PlayerCommand.cpp" />
+    <ClCompile Include="Game\Objects\Level\Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Game\Objects\Player\Player.cpp" />
     <ClCompile Include="Game\Objects\Player\Commands\PlayerInput.cpp" />
@@ -169,6 +172,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Scene\Sample.h" />
+    <ClInclude Include="Game\Objects\Experience\ExpManager.h" />
+    <ClInclude Include="Game\Objects\Experience\Experience.h" />
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.h" />
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\Arrow\Arrow.h" />
     <ClInclude Include="Game\Objects\Enemy\NormalEnemy\NormalEnemy.h" />
@@ -183,6 +188,7 @@
     <ClInclude Include="Game\Objects\Player\Weapon\Weapon.h" />
     <ClInclude Include="Game\Objects\UIPanel\UIPanel.h" />
     <ClInclude Include="Game\Objects\Player\SlashPanel.h" />
+    <ClInclude Include="Game\Objects\Level\Level.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

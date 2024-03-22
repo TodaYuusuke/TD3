@@ -32,6 +32,11 @@ void TItleScene::Initialize()
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->SetPlayer(player_.get());
 	enemyManager_->Init();
+
+	// 経験値タンク
+	expManager_ = std::make_unique<ExpManager>();
+	expManager_->Initialize();
+
 }
 
 // 更新
@@ -57,6 +62,10 @@ void TItleScene::Update()
 	//mainCamera->transform = followCamera_->camera_.transform;
 
 	enemyManager_->Update();
+
+	// 敵が死んだときに出てくるので敵の更新の後
+	// 経験値を更新
+	expManager_->Update();
 }
 
 void TItleScene::StartJustSlash()

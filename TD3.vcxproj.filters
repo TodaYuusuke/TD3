@@ -30,6 +30,9 @@
     <ClCompile Include="Game\Objects\UIPanel\UIPanel.cpp" />
     <ClCompile Include="Game\Objects\Player\SlashPanel.cpp" />
     <ClCompile Include="Game\Objects\Enemy\IEnemy\IEnemy.cpp" />
+    <ClCompile Include="Game\Objects\Experience\Experience.cpp" />
+    <ClCompile Include="Game\Objects\Experience\ExpManager.cpp" />
+    <ClCompile Include="Game\Objects\Level\Level.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Scene\Sample.h" />
@@ -60,5 +63,8 @@
     <ClInclude Include="Game\Objects\Player\Weapon\Weapon.h" />
     <ClInclude Include="Game\Objects\UIPanel\UIPanel.h" />
     <ClInclude Include="Game\Objects\Player\SlashPanel.h" />
+    <ClInclude Include="Game\Objects\Experience\Experience.h" />
+    <ClInclude Include="Game\Objects\Experience\ExpManager.h" />
+    <ClInclude Include="Game\Objects\Level\Level.h" />
   </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@
 #include "Game/Objects/FollowCamera/FollowCamera.h"
 #include "Game/Objects/Player/Player.h"
 #include "Game/Objects/Enemy/EnemyManager.h"
+#include "Game/Objects/Experience/ExpManager.h"
 #pragma endregion
 
 class TItleScene final
@@ -35,6 +36,9 @@ private: //*** 変数群 ***//
 	// 追従カメラ
 	std::unique_ptr<FollowCamera> followCamera_;
 	std::unique_ptr<EnemyManager> enemyManager_;
+
+	// 経験値マネージャー
+	std::unique_ptr<ExpManager> expManager_;
 
 	// プレイヤー
 	std::unique_ptr<Player> player_;
