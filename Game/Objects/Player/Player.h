@@ -219,6 +219,8 @@ public: //*** パブリック関数 ***//
 public:	//*** セッター,ゲッター ***//
 
 	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
+	bool GetIsJustSlashing() { return isJustSlashing_; }
+	bool GetIsSlash() { return isSlash_; }
 	void SetCameraPointer(FollowCamera* p) { pCamera_ = p; }
 	void SetScene(TItleScene* p) { pScene_ = p; }
 	// 状態を外部から設定する

@@ -7,7 +7,7 @@ void EnemyManager::Init()
 
 void EnemyManager::Update()
 {
-	Flame++;
+	//Flame++;
 	if (Flame >= 120) {
 		//ランダム生成用
 		std::random_device seedGenerator;

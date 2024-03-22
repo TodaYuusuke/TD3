@@ -24,9 +24,8 @@ void TItleScene::Initialize()
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->SetCameraAddress(mainCamera);
 	followCamera_->SetTarget(player_->GetWorldTransform());
-	// カメラを少し上に上げる
-	followCamera_->pCamera_->transform.rotation.x = 0.3f;
-	//followCamera_->camera_.transform.Parent(&mainCamera->transform);
+	followCamera_->SetPlayer(player_.get());
+
 	player_->SetCameraPointer(followCamera_.get());
 
 	enemyManager_ = std::make_unique<EnemyManager>();
@@ -103,4 +102,5 @@ void TItleScene::StartJustSlash()
 	isJustSlash_ = true;
 	time_ = 0.0f;
 	LWP::Info::SetDeltaTimeMultiply(0.1f);
+	followCamera_->StartSlash();
 }
