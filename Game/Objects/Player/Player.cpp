@@ -504,7 +504,8 @@ void Player::CreateJustCollision()
 
 void Player::OnCollisionPlayer(lwp::Collider::HitData& data)
 {
-	if (data.state == OnCollisionState::Trigger)
+	if (data.state == OnCollisionState::Trigger &&
+		(data.hit->mask.GetBelongFrag() & (MaskLayer::Enemy | MaskLayer::Layer2)))
 	{
 		reqBehavior_ = Behavior::Damage;
 	}
