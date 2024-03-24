@@ -33,13 +33,24 @@ void TItleScene::Initialize()
 	enemyManager_->SetPlayer(player_.get());
 	enemyManager_->Init();
 
-	upgrade_ = std::make_unique<UpgradeManager>();
+	upgrade_ = std::make_unique<Upgrade>();
 	upgrade_->Init();
 }
 
 // 更新
 void TItleScene::Update()
 {
+	if (Ison) {
+		if (LWP::Input::Keyboard::GetTrigger(DIKEYBOARD_1) || LWP::Input::Keyboard::GetTrigger(DIKEYBOARD_2) || LWP::Input::Keyboard::GetTrigger(DIKEYBOARD_3)) {
+			pFunc.push_back(upgrade_->SelectUpgrade());
+			Ison = false;
+		}
+		else {
+			return;
+		}
+
+	}
+
 	// スローを確認
 	if (isJustSlash_)
 	{
@@ -61,15 +72,11 @@ void TItleScene::Update()
 
 	enemyManager_->Update();
 
-	if (LWP::Input::Keyboard::GetTrigger(DIKEYBOARD_1)) {
-		pFunc.push_back(upgrade_->pFunc[0]);
+	if (LWP::Input::Keyboard::GetTrigger(DIKEYBOARD_4)) {
+		Ison = true;
 	}
-	if (LWP::Input::Keyboard::GetTrigger(DIKEYBOARD_2)) {
-		pFunc.push_back(upgrade_->pFunc[1]);
-	}
-	if (LWP::Input::Keyboard::GetTrigger(DIKEYBOARD_3)) {
-		pFunc.push_back(upgrade_->pFunc[2]);
-	}
+
+	
 	for (auto func : pFunc) {
 		func();
 	}

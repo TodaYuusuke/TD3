@@ -2,21 +2,35 @@
 #include "Adapter.h"
 
 typedef void (*pfunc)();
-class UpgradeManager
+class Player;
+class Upgrade
 {
 public:
-	UpgradeManager() = default;
-	~UpgradeManager() = default;
+	Upgrade() = default;
+	~Upgrade() = default;
 
 	void Init();
-	void Update();
+	//void Update();
+
+	pfunc SelectUpgrade();
+	void RollUpgrade();
+
+	void SetPlayer(Player* player) { player_ = player; };
 
 	std::vector<pfunc> pFunc;
+	std::map<int, bool> selectedNum;
+	std::map<int, bool> checkUseNum;
+	int select1;
+	int select2;
+	int select3;
 
 private:
-
+	Player* player_;
 };
 
 	void DrawOne();
 	void DrawTwo();
 	void DrawThree();
+	void DrawFour();
+	void DrawFive();
+	void DrawSix();

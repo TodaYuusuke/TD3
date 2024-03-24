@@ -43,8 +43,9 @@ private: //*** 変数群 ***//
 	std::unique_ptr<Player> player_;
 
 	// Upgrade
-	std::unique_ptr<UpgradeManager> upgrade_;
+	std::unique_ptr<Upgrade> upgrade_;
 	std::vector<pfunc> pFunc;
+	bool Ison = false;
 
 	// ジャスト抜刀
 	bool isJustSlash_ = false;
