@@ -17,15 +17,16 @@ void Level::Initialize(const lwp::Vector3& position)
 	// 当たり判定生成
 	CreateCollision();
 	// 場所を設定
-	collider_->Create(position, position);
+	//collider_->Create(position, position);
+	collider_->Create(position);
 }
 
 void Level::Update(const lwp::Vector3& position)
 {
 	// 当たり判定を 1 フレーム毎に更新
-	collider_->start = collider_->end;
-	collider_->end = position;
-
+	//collider_->start = collider_->end;
+	//collider_->end = position;
+	collider_->Create(position);
 
 
 #ifdef DEMO
@@ -38,7 +39,7 @@ void Level::Update(const lwp::Vector3& position)
 void Level::CreateCollision()
 {
 	// 当たり判定を作成
-	collider_ = CreateInstance<Capsule>();
+	collider_ = CreateInstance<Sphere>();
 	// マスク
 	collider_->mask.SetBelongFrag(MaskLayer::Layer4);
 	// 経験値
@@ -87,36 +88,41 @@ void Level::DebugWindow()
 {
 	ImGui::Begin("Levels");
 
-	if (ImGui::BeginTabBar("exp"))
+	//if (ImGui::BeginTabBar("exp"))
+	//{
+
+	//	if (ImGui::BeginTabItem("Level"))
+	//	{
+
+	if (ImGui::TreeNode("Level"))
 	{
+		ImGui::Text("Gain    : Button or Press 9");
+		ImGui::Text("LevelUp : Button or Press 0");
 
-		if (ImGui::BeginTabItem("Level"))
+		if (ImGui::Button("Gain") || lwp::Keyboard::GetTrigger(DIK_9))
 		{
-
-			ImGui::Text("Gain    : Button or Press 9");
-			ImGui::Text("LevelUp : Button or Press 0");
-
-			if (ImGui::Button("Gain") || lwp::Keyboard::GetTrigger(DIK_9))
-			{
-				GainEXP();
-			}
-
-			if (ImGui::Button("LevelUp") || lwp::Keyboard::GetTrigger(DIK_0))
-			{
-				LevelUp();
-			}
-
-			ImGui::Separator();
-
-			ImGui::Text("LEVEL:%d", lv_);
-			ImGui::DragFloat("REQEXP", &reqEXP_, 1.0f);
-			ImGui::DragFloat("EXP", &exp_, 1.0f);
-
-			ImGui::EndTabItem();
+			GainEXP();
 		}
 
-		ImGui::EndTabBar();
+		if (ImGui::Button("LevelUp") || lwp::Keyboard::GetTrigger(DIK_0))
+		{
+			LevelUp();
+		}
+
+		ImGui::Separator();
+
+		ImGui::Text("LEVEL:%d", lv_);
+		ImGui::DragFloat("REQEXP", &reqEXP_, 1.0f);
+		ImGui::DragFloat("EXP", &exp_, 1.0f);
+		ImGui::Separator();
+
+		ImGui::TreePop();
 	}
+	//		ImGui::EndTabItem();
+	//	}
+
+	//	ImGui::EndTabBar();
+	//}
 
 	ImGui::End();
 }

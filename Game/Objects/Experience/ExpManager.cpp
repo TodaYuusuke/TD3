@@ -61,48 +61,53 @@ void ExpManager::DebugWindow()
 
 	ImGui::Begin("Levels");
 
-	if (ImGui::BeginTabBar("exp"))
+	//if (ImGui::BeginTabBar("exp"))
+	//{
+
+	//	if (ImGui::BeginTabItem("ExpManager"))
+	//	{
+	if (ImGui::TreeNode("EXP"))
 	{
+		ImGui::DragFloat3("pso", &pos.x, 0.1f);
 
-		if (ImGui::BeginTabItem("ExpManager"))
+		ImGui::Separator();
+
+		if (ImGui::Button("Create"))
 		{
-
-			ImGui::DragFloat3("pso", &pos.x, 0.1f);
-
-			ImGui::Separator();
-
-			if (ImGui::Button("Create"))
-			{
-				Create(pos);
-			}
-
-			if (ImGui::Button("Delete") && temp)
-			{
-				temp->isDead_ = true;
-				temp = nullptr;
-			}
-
-			ImGui::Separator();
-
-			ImGui::BeginChild(ImGui::GetID((void*)0));
-
-			std::list<Experience*>::iterator itr = exps_.begin();
-			for (size_t i = 0; i < exps_.size(); i++)
-			{
-				if (ImGui::Button(("Exp" + std::to_string(i)).c_str()))
-				{
-					temp = (*itr);
-				}
-				//ImGui::Separator();
-				++itr;
-			}
-
-			ImGui::EndChild();
-
-			ImGui::EndTabItem();
+			Create(pos);
 		}
 
-		ImGui::EndTabBar();
+		if (ImGui::Button("Delete") && temp)
+		{
+			temp->isDead_ = true;
+			temp = nullptr;
+		}
+
+		ImGui::Separator();
+
+		ImGui::BeginChild(ImGui::GetID((void*)0),ImVec2(0,100));
+
+		std::list<Experience*>::iterator itr = exps_.begin();
+		for (size_t i = 0; i < exps_.size(); i++)
+		{
+			if (ImGui::Button(("Exp" + std::to_string(i)).c_str()))
+			{
+				temp = (*itr);
+			}
+			//ImGui::Separator();
+			++itr;
+		}
+
+		ImGui::EndChild();
+		ImGui::Separator();
+
+		ImGui::TreePop();
 	}
+	//		ImGui::EndTabItem();
+	//	}
+
+	//	ImGui::EndTabBar();
+	//}
+
 	ImGui::End();
 }
