@@ -16,7 +16,7 @@ public:
 	void RollUpgrade();
 
 	void SetPlayer(Player* player) { player_ = player; };
-
+	
 	std::vector<pfunc> pFunc;
 	std::map<int, bool> selectedNum;
 	std::map<int, bool> checkUseNum;
