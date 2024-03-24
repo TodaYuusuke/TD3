@@ -48,6 +48,9 @@ void Level::CreateCollision()
 	collider_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollision(data); });
 	// 当たる
 	collider_->isActive = true;
+#ifdef DEMO
+	collider_->name = "Level";
+#endif // DEMO
 }
 
 void Level::OnCollision(const lwp::Collider::HitData& data)

@@ -62,12 +62,15 @@ void Experience::CreateCollision()
 	collider_->mask.SetBelongFrag(MaskLayer::Layer5);
 	// プレイヤーと経験値取得範囲
 	// プレイヤーとの当たり判定は消してもいい
-	collider_->mask.SetHitFrag(MaskLayer::Layer4);
+	collider_->mask.SetHitFrag(MaskLayer::Layer4 | MaskLayer::Player);
 	// 別個で用意した当たった時の関数
 	// 状態を切り替えたい
 	collider_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollision(data); });
 	// 当たる
 	collider_->isActive = true;
+#ifdef DEMO
+	collider_->name = "EXP";
+#endif // DEMO
 }
 
 void Experience::OnCollision(const lwp::Collider::HitData& data)
