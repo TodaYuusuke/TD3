@@ -32,6 +32,9 @@ void TItleScene::Initialize()
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->SetPlayer(player_.get());
 	enemyManager_->Init();
+
+	upgrade_ = std::make_unique<UpgradeManager>();
+	upgrade_->Init();
 }
 
 // 更新
@@ -57,6 +60,20 @@ void TItleScene::Update()
 	//mainCamera->transform = followCamera_->camera_.transform;
 
 	enemyManager_->Update();
+
+	if (LWP::Input::Keyboard::GetTrigger(DIKEYBOARD_1)) {
+		pFunc.push_back(upgrade_->pFunc[0]);
+	}
+	if (LWP::Input::Keyboard::GetTrigger(DIKEYBOARD_2)) {
+		pFunc.push_back(upgrade_->pFunc[1]);
+	}
+	if (LWP::Input::Keyboard::GetTrigger(DIKEYBOARD_3)) {
+		pFunc.push_back(upgrade_->pFunc[2]);
+	}
+	for (auto func : pFunc) {
+		func();
+	}
+
 }
 
 void TItleScene::StartJustSlash()
