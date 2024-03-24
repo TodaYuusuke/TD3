@@ -41,6 +41,11 @@ void TItleScene::Initialize()
 	level_ = std::make_unique<Level>();
 	level_->Initialize(player_->GetWorldTransform()->translation);
 
+	// アップグレード
+	scUpgrade_ = std::make_unique<UpgradeScreen>();
+	scUpgrade_->Initialize();
+
+	level_->SetUpgradeScreen(scUpgrade_.get());
 }
 
 // 更新
@@ -57,22 +62,31 @@ void TItleScene::Update()
 		}
 	}
 
-	// プレイヤー
-	player_->Update();
+	if (!scUpgrade_->GetIsUpgrade())
+	{
 
-	// 追従カメラ
-	followCamera_->Update();
+		// プレイヤー
+		player_->Update();
 
-	//mainCamera->transform = followCamera_->camera_.transform;
+		// 追従カメラ
+		followCamera_->Update();
 
-	enemyManager_->Update();
+		//mainCamera->transform = followCamera_->camera_.transform;
 
-	// 敵が死んだときに出てくるので敵の更新の後
-	// 経験値を更新
-	expManager_->Update();
+		enemyManager_->Update();
 
-	// 経験値が更新された後かと思ったけど別にプレイヤーの更新が終わった後ならどこでもいい
-	level_->Update(player_->GetWorldTransform()->translation);
+		// 敵が死んだときに出てくるので敵の更新の後
+		// 経験値を更新
+		expManager_->Update();
+
+		// 経験値が更新された後かと思ったけど別にプレイヤーの更新が終わった後ならどこでもいい
+		level_->Update(player_->GetWorldTransform()->translation);
+
+	}
+	else
+	{
+		scUpgrade_->Update();
+	}
 
 }
 
