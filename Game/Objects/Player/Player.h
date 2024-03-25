@@ -10,6 +10,8 @@
 #include "Game/Objects/Player/SlashPanel.h"
 #include "../FollowCamera/FollowCamera.h"
 
+#include "Upgrade/UpgradeManager.h"
+
 class Player final
 {
 private: //*** サブクラス ***//
@@ -194,6 +196,14 @@ public: //*** パブリック関数 ***//
 
 	// ジャスト終了
 	void EndJust();
+
+
+	/// <summary>
+	/// アップグレードを適応するための関数
+	/// <para>UpgradeManagerがアップグレードの選択確定時に呼び出します</para>
+	/// </summary>
+	/// <param name="para">レベルアップによって変わったパラメーター</param>
+	void ApplyUpgrade(const UpgradeParameter& para);
 
 public:	//*** セッター,ゲッター ***//
 
