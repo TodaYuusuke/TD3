@@ -1,6 +1,6 @@
 #include "Level.h"
 
-#include "Game/Scenes/UpgradeScreen/UpgradeScreen.h"
+#include "Game/Objects/Player/Upgrade/UpgradeManager.h"
 
 using namespace LWP;
 using namespace LWP::Object::Collider;
@@ -83,7 +83,7 @@ void Level::LevelUp()
 	reqEXP_ += 1.0f;
 	lv_++;
 	// ここでアップデートする関数を呼び出す
-	scUpgrade_->Upgrade();
+	L::UpgradeManager::LevelUp();
 }
 
 void Level::DebugWindow()

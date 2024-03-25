@@ -42,10 +42,12 @@ void TItleScene::Initialize()
 	level_->Initialize(player_->GetWorldTransform()->translation);
 
 	// アップグレード
-	scUpgrade_ = std::make_unique<UpgradeScreen>();
-	scUpgrade_->Initialize();
+	//scUpgrade_ = std::make_unique<UpgradeScreen>();
+	//scUpgrade_->Initialize();
 
-	level_->SetUpgradeScreen(scUpgrade_.get());
+	//level_->SetUpgradeScreen(scUpgrade_.get());
+	upgradeManager_ = std::make_unique<L::UpgradeManager>();
+	upgradeManager_->Init();
 }
 
 // 更新
@@ -62,7 +64,13 @@ void TItleScene::Update()
 		}
 	}
 
-	if (!scUpgrade_->GetIsUpgrade())
+	// デバッグ
+#ifdef DEMO
+	upgradeManager_->DebugWindow();
+#endif // DEMO
+
+
+	if (!upgradeManager_->GetLevelUpFlag())
 	{
 
 		// プレイヤー
@@ -85,7 +93,7 @@ void TItleScene::Update()
 	}
 	else
 	{
-		scUpgrade_->Update();
+		upgradeManager_->Update(player_.get());
 	}
 
 }

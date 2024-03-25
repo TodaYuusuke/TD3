@@ -3,9 +3,9 @@
 
 struct UpgradeParameter {
 	// 攻撃力(定数)
-	float power;
+	float power = 1.0f;
 	// 攻撃力(％)
-	float powerPer;
+	float powerPer = 100.0f;
 };
 
 namespace L {

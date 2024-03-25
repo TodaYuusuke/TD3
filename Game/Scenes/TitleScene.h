@@ -7,7 +7,8 @@
 #include "Game/Objects/Level/Level.h"
 #include "Game/Objects/Enemy/EnemyManager.h"
 #include "Game/Objects/Experience/ExpManager.h"
-#include "Game/Scenes/UpgradeScreen/UpgradeScreen.h"
+//#include "Game/Scenes/UpgradeScreen/UpgradeScreen.h"
+#include "Game/Objects/Player/Upgrade/UpgradeManager.h"
 #pragma endregion
 
 class TItleScene final
@@ -58,6 +59,7 @@ private: //*** 変数群 ***//
 	float cTIMESLOW_ = 0.5f;
 
 	// アップグレードの表示
-	std::unique_ptr<UpgradeScreen> scUpgrade_;
+	//std::unique_ptr<UpgradeScreen> scUpgrade_;
+	std::unique_ptr<L::UpgradeManager> upgradeManager_;
 
 };

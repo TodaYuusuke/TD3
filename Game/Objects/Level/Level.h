@@ -2,8 +2,6 @@
 
 #include <Adapter.h>
 
-class UpgradeScreen;
-
 class Level
 {
 public: //*** パブリック関数 ***//
@@ -22,7 +20,6 @@ public: //*** パブリック関数 ***//
 
 public: //*** ゲッターセッター ***//
 
-	void SetUpgradeScreen(UpgradeScreen* screen) { scUpgrade_ = screen; }
 
 private: //*** プライベート関数 ***//
 
@@ -58,9 +55,6 @@ private: //*** プライベート変数 ***//
 	// プレイヤーの経験値取得範囲
 	//lwp::Collider::Capsule* collider_ = nullptr;
 	lwp::Collider::Sphere* collider_ = nullptr;
-
-	// アップグレード画面を呼び出すためにポインタ
-	UpgradeScreen* scUpgrade_ = nullptr;
 
 };
 

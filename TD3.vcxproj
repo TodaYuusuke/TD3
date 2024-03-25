@@ -190,6 +190,8 @@
     <ClInclude Include="Game\Objects\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.h" />
     <ClInclude Include="Game\Objects\FollowCamera\FollowCamera.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp10.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp30.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerUp.h" />
     <ClInclude Include="Game\Scenes\TitleScene.h" />
     <ClInclude Include="Game\Objects\Player\Player.h" />

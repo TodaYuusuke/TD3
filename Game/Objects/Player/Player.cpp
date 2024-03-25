@@ -132,6 +132,11 @@ void Player::EndJust()
 	pCamera_->ResetFov();
 }
 
+void Player::ApplyUpgrade(const UpgradeParameter& para)
+{
+	para;
+}
+
 #pragma region CommandFunction
 
 void Player::MoveFront()
