@@ -76,7 +76,7 @@ void L::UpgradeManager::DebugWindow()
 	ImGui::Text("Nums : %d", upgrades_.size());
 	if (ImGui::TreeNode("All"))
 	{
-		
+
 		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
 
 		for (size_t i = 0; i < upgrades_.size(); i++)
@@ -121,10 +121,26 @@ void L::UpgradeManager::RandomUpgrade()
 		}
 		// 取得する範囲の添え字を受け取る
 		int rand = Utility::GenerateRandamNum(0, (int)upgrades_.size() - 1);
-		if (upgrades_[rand]->isApplied)
+		// 判断
+		bool isFind = false;
+		// 既に選択しているものは出ない
+		isFind = upgrades_[rand]->isApplied;
+
+		// 被りが発生しても無理
+		for (size_t i = 0; i < candidata_.size(); i++)
+		{
+			if (candidata_[i] == rand)
+			{
+				isFind = true;
+				break;
+			}
+		}
+		// 重なっていたらもう一度抽選
+		if (isFind)
 		{
 			continue;
 		}
+
 		candidata_.push_back(rand);
 	}
 }

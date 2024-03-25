@@ -163,7 +163,6 @@
     <ClCompile Include="Game\Scenes\TitleScene.cpp" />
     <ClCompile Include="Game\Objects\Player\Commands\PlayerCommand.cpp" />
     <ClCompile Include="Game\Objects\Level\Level.cpp" />
-    <ClCompile Include="Game\Scenes\UpgradeScreen\UpgradeScreen.cpp" />
     <ClCompile Include="Game\Objects\Player\Upgrade\IUpgrade.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Game\Objects\Player\Player.cpp" />
@@ -171,12 +170,6 @@
     <ClCompile Include="Game\Objects\Player\Weapon\Weapon.cpp" />
     <ClCompile Include="Game\Objects\UIPanel\UIPanel.cpp" />
     <ClCompile Include="Game\Objects\Player\SlashPanel.cpp" />
-    <ClCompile Include="Game\Scenes\UpgradeScreen\Commands\UpgradeInput.cpp" />
-    <ClCompile Include="Game\Scenes\UpgradeScreen\Commands\UpgradeCommand.cpp" />
-    <ClCompile Include="Game\Objects\UpgradePanel\BaseUpgradePanel.cpp" />
-    <ClCompile Include="Game\Objects\UpgradePanel\UpGradeItem\UpgradeItemPanel.cpp" />
-    <ClCompile Include="Game\Objects\UpgradePanel\UpGradeBack\UpgradeBackPanel.cpp" />
-    <ClCompile Include="Game\Objects\UpgradePanel\UpgradePanels.cpp" />
     <ClCompile Include="Game\Objects\Player\Upgrade\UpgradeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -201,13 +194,6 @@
     <ClInclude Include="Game\Objects\UIPanel\UIPanel.h" />
     <ClInclude Include="Game\Objects\Player\SlashPanel.h" />
     <ClInclude Include="Game\Objects\Level\Level.h" />
-    <ClInclude Include="Game\Scenes\UpgradeScreen\UpgradeScreen.h" />
-    <ClInclude Include="Game\Scenes\UpgradeScreen\Commands\UpgradeInput.h" />
-    <ClInclude Include="Game\Scenes\UpgradeScreen\Commands\UpgradeCommand.h" />
-    <ClInclude Include="Game\Objects\UpgradePanel\BaseUpgradePanel.h" />
-    <ClInclude Include="Game\Objects\UpgradePanel\UpGradeItem\UpgradeItemPanel.h" />
-    <ClInclude Include="Game\Objects\UpgradePanel\UpGradeBack\UpgradeBackPanel.h" />
-    <ClInclude Include="Game\Objects\UpgradePanel\UpgradePanels.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\IUpgrade.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\UpgradeManager.h" />
   </ItemGroup>
