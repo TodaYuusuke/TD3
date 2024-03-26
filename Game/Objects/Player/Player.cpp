@@ -67,9 +67,17 @@ void Player::Update()
 			break;
 		case Player::Behavior::Slash:
 			InitSlash();
+			// 抜刀した
+			isSlash_ = true;
+			pCamera_->StartSlash();
 			break;
 		case Player::Behavior::Moment:
 			InitMoment();
+			// 抜刀してない
+			isSlash_ = false;
+			if (!isJustSlashing_) {
+				pCamera_->EndSlash();
+			}
 			break;
 		case Player::Behavior::Damage:
 			InitDamage();
@@ -110,7 +118,7 @@ void Player::EndJust()
 	isJustSlashing_ = false;
 	// 無敵切れは次の居合時にもなる
 	playerCollision_->isActive = true;
-	pCamera_->ResetFov();
+	pCamera_->EndSlash();
 }
 
 #pragma region CommandFunction
@@ -464,8 +472,6 @@ void Player::CreateJustCollision()
 			TItleScene* const scene = dynamic_cast<TItleScene*>(pScene_);
 			assert(scene);
 			scene->StartJustSlash();
-			pCamera_->ReduceFov();
-			// 居合回数獲得(一回のみ)
 			if (slashData_->maxRelation_ <= slashData_->cMAXRELATION_)
 			{
 				slashData_->maxRelation_++;
