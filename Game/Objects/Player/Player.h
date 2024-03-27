@@ -77,13 +77,13 @@ private: //*** サブクラス ***//
 	{
 		// プレイヤーの通常移動
 		// 移動する距離
-		float MOVE_ = 1.0f;
+		float MOVE_ = 15.0f;
 		// プレイヤーの居合
 		// 移動する距離
-		float SLASH_ = 20.0f;
+		float SLASH_ = 100.0f;
 		// プレイヤーの後隙
 		// 移動する距離
-		float MOMENT_ = 2.0f;
+		float MOMENT_ = 10.0f;
 	};
 
 	// 秒時間
@@ -92,7 +92,7 @@ private: //*** サブクラス ***//
 		// 各状態にかかる時間
 		float ROOTBASE_ = 0.5f;
 		float MOVEBASE_ = 0.1f;
-		float SLASHBASE_ = 0.1f;
+		float SLASHBASE_ = 0.3f;
 		float MOMENTBASE_ = 0.5f;
 		float DAMAGEBASE_ = 0.5f;
 
@@ -144,12 +144,23 @@ private: //*** サブクラス ***//
 	};
 
 	//*** プレイヤーが持つアップグレードのパラメータ ***//
+
+	/// <summary>
+	/// 最終的なパラメータをまとめている
+	/// <para>適用する関数内でプラスもマイナスもするデータ</para>
+	/// </summary>
 	struct PlayerParameter
 	{
-		// 攻撃力
-		float power_ = 1.0f;
-		// 移動速度
-		float speed_ = 5.0f;
+		// 攻撃力差分
+		float power_ = 0.0f;
+		// 移動速度差分
+		float moveSpeed = 0.0f;
+		// 移動速度差分
+		float slashSpeed = 0.0f;
+		// 移動速度差分
+		float momentSpeed = 0.0f;
+		// 居合回数差分
+		int slashNum = 0;
 	};
 
 #pragma endregion
@@ -212,6 +223,8 @@ public:	//*** セッター,ゲッター ***//
 	void SetScene(TItleScene* p) { pScene_ = p; }
 	// 状態を外部から設定する
 	void RegistStatus(IStatus::Behavior request);
+	// Vector3 をカメラ方向に変える
+	lwp::Vector3 GetVectorTranspose(const lwp::Vector3& vec);
 
 private: //*** プライベート関数 ***//
 
@@ -376,7 +389,17 @@ public: //*** プライベート変数 ***//
 	// 状態毎に使うクラスをまとめている
 	std::vector<IStatus*> statuses_;
 
+	// 移動入力があったか
+	bool isInputMove_ = false;
+
+	// 攻撃入力があったか
+	bool isInputSlash_ = false;
+
 #pragma endregion
+
+private: //*** プライベート関数 ***//
+
+	void ResetParameter();
 
 };
 

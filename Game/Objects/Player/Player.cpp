@@ -57,6 +57,9 @@ void Player::Initialize()
 	{
 		statuses_[i]->Init(this);
 	}
+
+	// パラメータを反映させる
+	ResetParameter();
 }
 
 void Player::Update()
@@ -133,14 +136,24 @@ void Player::EndJust()
 
 void Player::ApplyUpgrade(const UpgradeParameter& para)
 {
-	parameter_.power_ = para.power.base * (0.01f * para.power.percent);
-	parameter_.speed_ = para.speed.base * (0.01f * para.speed.percent);
+	parameter_.power_ = (para.power.base) * (0.01f * para.power.percent);
+	parameter_.moveSpeed = (config_.Speed_.MOVE_ + para.speed.base) * (0.01f * para.speed.percent);
+	parameter_.slashSpeed = (config_.Speed_.SLASH_ + para.speed.base) * (0.01f * para.speed.percent);
+	parameter_.momentSpeed = (config_.Speed_.MOMENT_ + para.speed.base) * (0.01f * para.speed.percent);
 }
 
 
 void Player::RegistStatus(IStatus::Behavior request)
 {
 	commands_.push_back(request);
+}
+
+lwp::Vector3 Player::GetVectorTranspose(const lwp::Vector3& vec)
+{
+	lwp::Vector3 vector = vec * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->pCamera_->transform.rotation);
+	vector.y = 0.0f;
+	vector = vector.Normalize();
+	return vector;
 }
 
 #pragma region BehaviorFunc
@@ -548,8 +561,8 @@ void Player::CheckBehavior()
 			break;
 		case Behavior::Slash:
 			// 居合に入る条件を記述
-			if ((behavior_ != Behavior::Slash || flag_.isJustSlashing_) &&
-				slashData_.relationSlash_ < slashData_.maxRelation_)
+			//if ((behavior_ != Behavior::Slash || flag_.isJustSlashing_) &&
+			//	slashData_.relationSlash_ < slashData_.maxRelation_)
 			{
 				reqBehavior_ = Behavior::Slash;
 			}
@@ -627,6 +640,10 @@ void Player::DebugWindow()
 
 	ImGui::Separator();
 
+	if (ImGui::Button("Reset"))
+	{
+		ResetParameter();
+	}
 	DebugSpeeds();
 	DebugTimes();
 	DebugLengths();
@@ -759,3 +776,11 @@ void Player::DebugParcentages()
 }
 
 #pragma endregion
+
+void Player::ResetParameter()
+{
+	parameter_.power_ = 1.0f;
+	parameter_.moveSpeed = (config_.Speed_.MOVE_);
+	parameter_.slashSpeed = (config_.Speed_.SLASH_);
+	parameter_.momentSpeed = (config_.Speed_.MOMENT_);
+}

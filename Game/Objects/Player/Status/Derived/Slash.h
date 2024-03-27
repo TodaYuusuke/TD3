@@ -37,4 +37,9 @@ private: //*** プライベート関数 ***//
 	/// </summary>
 	void CreateMotions() override;
 
+	/// <summary>
+	/// 当たり判定を設定しなおす
+	/// </summary>
+	void ResetCollider();
+
 };

@@ -50,29 +50,40 @@ void IStatus::CheckInputMove()
 	}
 
 	// キーボード入力として区別させる
-	destinate_ = direct.Normalize() * 0.75f;
+	player_->destinate_ = direct.Normalize() * 0.75f;
 
 	// コントローラーの入力を合わせる
 	float x = LWP::Input::Controller::GetLStick().x;
 	float y = LWP::Input::Controller::GetLStick().y;
-	if ((destinate_.x < 0 ? -destinate_.x : destinate_.x)
+	if ((player_->destinate_.x < 0 ? -player_->destinate_.x : player_->destinate_.x)
 		< (x < 0 ? -x : x))
 	{
-		destinate_.x = x;
+		player_->destinate_.x = x;
 	}
-	if ((destinate_.z < 0 ? -destinate_.z : destinate_.z)
+	if ((player_->destinate_.z < 0 ? -player_->destinate_.z : player_->destinate_.z)
 		< (y < 0 ? -y : y))
 	{
-		destinate_.z = y;
+		player_->destinate_.z = y;
 	}
-	destinate_ = destinate_.Normalize();
+	player_->destinate_ = player_->destinate_.Normalize();
 
 	// 方向がゼロだった場合は元に戻す
-	if (destinate_.x == 0 && destinate_.z == 0)
+	if (player_->destinate_.x == 0 && player_->destinate_.z == 0)
 	{
-		destinate_ = direct.Normalize();
+		player_->destinate_ = direct.Normalize();
 	}
 
 	// そもそも移動入力が無かったらフラグを立てない
-	isInputMove_ = !(destinate_.x == 0 && destinate_.z == 0);
+	player_->isInputMove_ = !(player_->destinate_.x == 0 && player_->destinate_.z == 0);
+}
+
+void IStatus::CheckInputSlash()
+{
+	if (Keyboard::GetTrigger(DIK_SPACE) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_A))
+	{
+		player_->isInputSlash_ = true;
+	}
+	else
+		player_->isInputSlash_ = false;
 }

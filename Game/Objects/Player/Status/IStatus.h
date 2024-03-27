@@ -52,9 +52,14 @@ protected: //*** プロテクト関数 ***//
 	virtual void CreateMotions() = 0;
 
 	/// <summary>
-	/// 操作入力を受け取る
+	/// 移動操作入力を受け取る
 	/// </summary>
 	void CheckInputMove();
+
+	/// <summary>
+	/// 攻撃操作入力を受け取る
+	/// </summary>
+	void CheckInputSlash();
 
 protected: // ** 派生先用のメンバ変数 ** //
 
@@ -65,11 +70,6 @@ protected: // ** 派生先用のメンバ変数 ** //
 	// 状態内で動くアニメーション
 	std::vector<LWP::Resource::Motion> motions_;
 
-	// 向いている方向
-	LWP::Math::Vector3 destinate_ = { 0.0f,0.0f,1.0f };
-
-	// 移動入力があったか
-	bool isInputMove_ = false;
 
 	// この行動に入ってからの時間
 	float elapsedTime_ = 0.0f;
