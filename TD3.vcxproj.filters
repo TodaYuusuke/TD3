@@ -75,5 +75,6 @@
     <ClInclude Include="Game\Objects\Player\Upgrade\IUpgrade.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\UpgradeManager.h" />
     <ClInclude Include="Game\Objects\Player\Motion\IStatus.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\AttackRangeUp.h" />
   </ItemGroup>
 </Project>

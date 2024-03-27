@@ -14,6 +14,12 @@ struct UpgradeParameter {
 	Paramete power;
 	// 移動速度
 	Paramete speed;
+	// 攻撃範囲
+	Paramete attackRange;
+	// 攻撃回数
+	int attackTotal = 3;
+	// 体力
+	Paramete lifeMax;
 };
 
 namespace L {
