@@ -13,7 +13,7 @@ public: //*** パブリック関数 ***//
 	~Level();
 
 	// 初期化
-	void Initialize(const lwp::Vector3& position);
+	void Initialize(const lwp::Vector3& position = { 0.0f,0.0f,0.0f });
 
 	// 更新
 	void Update(const lwp::Vector3& position);

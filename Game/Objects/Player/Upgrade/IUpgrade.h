@@ -1,11 +1,19 @@
 #pragma once
 #include <Adapter.h>
 
+struct Paramete
+{
+	// 基準(定数)
+	float base = 1.0f;
+	// 補正(％)
+	float percent = 100.0f;
+};
+
 struct UpgradeParameter {
-	// 攻撃力(定数)
-	float power = 1.0f;
-	// 攻撃力(％)
-	float powerPer = 100.0f;
+	// 攻撃力
+	Paramete power;
+	// 移動速度
+	Paramete speed;
 };
 
 namespace L {

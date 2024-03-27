@@ -14,7 +14,7 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->powerPer += 30.0f;
+			para->power.percent += 30.0f;
 		}
 
 		std::string GetTexturePass() override

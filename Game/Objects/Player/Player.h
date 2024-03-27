@@ -154,6 +154,15 @@ private: //*** サブクラス ***//
 		Parcentages Par_;
 	};
 
+	//*** プレイヤーが持つアップグレードのパラメータ ***//
+	struct PlayerParameter
+	{
+		// 攻撃力
+		float power_ = 1.0f;
+		// 移動速度
+		float speed_ = 1.0f;
+	};
+
 #pragma endregion
 
 	//*** フラグ管理 ***//
@@ -343,6 +352,9 @@ private: //*** プライベート変数 ***//
 
 	// 今のシーン
 	IScene* pScene_ = nullptr;
+
+	// アップグレードで作成されたパラメータを反映
+	PlayerParameter parameter_;
 
 
 	//*** 計算に使う ***//

@@ -134,7 +134,8 @@ void Player::EndJust()
 
 void Player::ApplyUpgrade(const UpgradeParameter& para)
 {
-	para;
+	parameter_.power_ = para.power.base * para.power.percent;
+	parameter_.speed_ = para.speed.base * para.speed.percent;
 }
 
 #pragma region CommandFunction
@@ -291,7 +292,10 @@ void Player::UpdateMove()
 	// モデル回転
 	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
-	moveVector = moveVector.Normalize() * (config_.Speed_.MOVE_ / moveData_.maxTime_) * (float)lwp::GetDeltaTime();
+	// 正規化
+	moveVector = moveVector.Normalize();
+	// パラメータも使う
+	moveVector = moveVector * (config_.Speed_.MOVE_ / moveData_.maxTime_) * (float)lwp::GetDeltaTime();
 
 	demoModel_->transform.translation += moveVector;
 }
