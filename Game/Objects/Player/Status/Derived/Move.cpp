@@ -41,7 +41,7 @@ void Move::Update()
 	// 正規化
 	moveVector = moveVector.Normalize();
 	// パラメータも使う
-	moveVector = moveVector * player_->parameter_.speed_ *(float)lwp::GetDeltaTime();
+	moveVector *= player_->parameter_.speed_ * (float)lwp::GetDeltaTime();
 
 	player_->demoModel_->transform.translation += moveVector;
 

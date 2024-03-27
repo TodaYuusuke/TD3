@@ -149,7 +149,7 @@ private: //*** サブクラス ***//
 		// 攻撃力
 		float power_ = 1.0f;
 		// 移動速度
-		float speed_ = 1.0f;
+		float speed_ = 5.0f;
 	};
 
 #pragma endregion
