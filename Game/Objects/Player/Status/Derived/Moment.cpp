@@ -42,14 +42,11 @@ void Moment::Update()
 		player_->RegistStatus(Behavior::Slash);
 	}
 	// 移動方向をカメラに合わせる
-	lwp::Vector3 moveVector = player_->destinate_ * lwp::Matrix4x4::CreateRotateXYZMatrix(player_->pCamera_->pCamera_->transform.rotation);
-	moveVector.y = 0.0f;
+	lwp::Vector3 moveVector = player_->GetVectorTranspose(player_->destinate_);
 
 	// モデル回転
 	player_->demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
-	// 正規化
-	moveVector = moveVector.Normalize();
 	// パラメータも使う
 	moveVector *= player_->parameter_.momentSpeed * (float)lwp::GetDeltaTime();
 

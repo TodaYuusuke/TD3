@@ -150,8 +150,7 @@ lwp::Vector3 Player::GetVectorTranspose(const lwp::Vector3& vec)
 {
 	lwp::Vector3 vector = vec * lwp::Matrix4x4::CreateRotateXYZMatrix(pCamera_->pCamera_->transform.rotation);
 	vector.y = 0.0f;
-	vector = vector.Normalize();
-	return vector;
+	return vector.Normalize();
 }
 
 #pragma region BehaviorFunc

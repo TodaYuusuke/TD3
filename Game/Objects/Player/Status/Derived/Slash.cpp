@@ -25,12 +25,7 @@ void Slash::Reset()
 	player_->isSlash_ = true;
 	player_->pCamera_->StartSlash();
 
-	// 方向がゼロにならない保護
-	if (player_->destinate_.x != 0.0f &&
-		player_->destinate_.z != 0.0f)
-	{
-		player_->slashData_.vector_ = player_->destinate_;
-	}
+
 	ResetCollider();
 
 	// アニメーション作成
@@ -39,11 +34,10 @@ void Slash::Reset()
 
 void Slash::Update()
 {
-	CheckInputMove();
 	// 一定方向を向く
 	lwp::Vector3 moveVector = player_->GetVectorTranspose(player_->slashData_.vector_);
 
-	moveVector *= player_->parameter_.slashSpeed * lwp::GetDeltaTimeF();
+	moveVector *= player_->parameter_.slashSpeed * lwp::GetDefaultDeltaTimeF();
 
 	player_->demoModel_->transform.translation += moveVector;
 
@@ -57,7 +51,7 @@ void Slash::Update()
 		player_->config_.Length_.WEAPONPLUSCORRECTION_;
 
 
-	elapsedTime_ += lwp::GetDeltaTimeF();
+	elapsedTime_ += lwp::GetDefaultDeltaTimeF();
 	if (EndTime_ <= elapsedTime_)
 	{
 		player_->RegistStatus(Behavior::Moment);
@@ -72,7 +66,6 @@ void Slash::ResetCollider()
 {
 	// デルタタイム変更
 	player_->EndJust();
-	player_->slashData_.vector_ = player_->GetVectorTranspose(player_->destinate_);;
 	//slashData_.maxTime_ = slashData_.cBASETIME;
 	player_->slashData_.maxTime_ = player_->config_.Time_.SLASHBASE_;
 	player_->weapon_->SetBehavior(Weapon::Behavior::Slash);
