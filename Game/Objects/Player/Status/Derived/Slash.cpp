@@ -26,7 +26,8 @@ void Slash::Reset()
 	player_->pCamera_->StartSlash();
 
 	// 方向がゼロにならない保護
-	if (player_->destinate_.Length() != 0.0f)
+	if (player_->destinate_.x != 0.0f &&
+		player_->destinate_.z != 0.0f)
 	{
 		player_->slashData_.vector_ = player_->destinate_;
 	}
@@ -40,12 +41,9 @@ void Slash::Update()
 {
 	CheckInputMove();
 	// 一定方向を向く
-	lwp::Vector3 moveVector = player_->slashData_.vector_;
+	lwp::Vector3 moveVector = player_->GetVectorTranspose(player_->slashData_.vector_);
 
-	// モデル回転
-	player_->demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
-
-	moveVector = moveVector * player_->parameter_.slashSpeed * lwp::GetDeltaTimeF();
+	moveVector *= player_->parameter_.slashSpeed * lwp::GetDeltaTimeF();
 
 	player_->demoModel_->transform.translation += moveVector;
 
