@@ -7,8 +7,8 @@ void EnemyManager::Init()
 
 void EnemyManager::Update()
 {
-	//Flame++;
-	if (Flame >= 120) {
+	currentFrame_++;
+	if (currentFrame_ >= kSpownFrequency) {
 		//ランダム生成用
 		std::random_device seedGenerator;
 		std::mt19937 randomEngine(seedGenerator());
@@ -17,7 +17,7 @@ void EnemyManager::Update()
 		for (int It = 0; It < Spown; It++) {
 			EnemySpown();
 		}
-		Flame = 0;
+		currentFrame_ = 0;
 	}
 
 	// 消しながら更新
@@ -44,38 +44,41 @@ void EnemyManager::EnemySpown()
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 	std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
-	float number = 	distribution(randomEngine);
+	float number = distribution(randomEngine);
 	//方向を決める
 	float divideX = distribution(randomEngine);
 	float divideZ = 1.0f - divideX;
 	float signX = distribution(randomEngine);
 	float signY = distribution(randomEngine);
-		if (signX <= 0.5f) {
-			signX = 1;
-		}
-		else {
-			signX = -1;
-		}
-		if (signY <= 0.5f) {
-			signY = 1;
-		}
-		else {
-			signY = -1;
-		}
+	if (signX <= 0.5f) {
+		signX = 1;
+	}
+	else {
+		signX = -1;
+	}
+	if (signY <= 0.5f) {
+		signY = 1;
+	}
+	else {
+		signY = -1;
+	}
 
 	std::uniform_real_distribution<float> distribution2(8.0f, 10.0f);
 	float PtoE = distribution2(randomEngine);
 
 	lwp::Vector3 pos = { PtoE * divideX * signX , 0.5f , PtoE * divideZ * signY };
 	if (number <= 0.5f) {
-		NormalEnemySpown(pos);
+		//NormalEnemySpown(pos);
+		// ボスの発生
+		DashBossSpown(pos);
 	}
 	else if (number <= 0.8f) {
-		ShieldEnemySpown(pos);
+		//ShieldEnemySpown(pos);
 	}
 	else {
-		ArrowEnemySpown(pos);
+		//ArrowEnemySpown(pos);
 	}
+
 }
 void EnemyManager::NormalEnemySpown(lwp::Vector3 pos)
 {
@@ -95,10 +98,18 @@ void EnemyManager::ShieldEnemySpown(lwp::Vector3 pos)
 }
 void EnemyManager::ArrowEnemySpown(lwp::Vector3 pos)
 {
-	
+
 	ArrowEnemy* NEnemy = new ArrowEnemy();
 	NEnemy->Initialize();
 	NEnemy->SetTarget(player_);
 	NEnemy->SetPosition(pos);
 	enemys_.push_back(NEnemy);
+}
+
+void EnemyManager::DashBossSpown(lwp::Vector3 pos) {
+	DashBoss* dashBoss = new DashBoss();
+	dashBoss->Initialize();
+	dashBoss->SetTarget(player_);
+	dashBoss->SetPosition(pos);
+	enemys_.push_back(dashBoss);
 }
