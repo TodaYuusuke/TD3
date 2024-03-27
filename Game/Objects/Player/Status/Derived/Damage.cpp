@@ -23,6 +23,10 @@ void Damage::Reset()
 	// 時間を初期化
 	elapsedTime_ = 0.0f;
 	EndTime_ = player_->config_.Time_.DAMAGEBASE_;
+	// 無敵判定を出す
+	player_->flag_.isInvincible_ = true;
+	player_->invincibleTime_ = 0.0f;
+	player_->maxInvincibleTime_ = player_->config_.Time_.DAMAGEINVINCIBLE_;
 
 	// アニメーション作成
 	//CreateMotions();
