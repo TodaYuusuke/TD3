@@ -4,7 +4,11 @@
 #pragma region GameInclude
 #include "Game/Objects/FollowCamera/FollowCamera.h"
 #include "Game/Objects/Player/Player.h"
+#include "Game/Objects/Level/Level.h"
 #include "Game/Objects/Enemy/EnemyManager.h"
+#include "Game/Objects/Experience/ExpManager.h"
+//#include "Game/Scenes/UpgradeScreen/UpgradeScreen.h"
+#include "Game/Objects/Upgrade/UpgradeManager.h"
 #pragma endregion
 
 class TItleScene final
@@ -36,8 +40,14 @@ private: //*** 変数群 ***//
 	std::unique_ptr<FollowCamera> followCamera_;
 	std::unique_ptr<EnemyManager> enemyManager_;
 
+	// 経験値マネージャー
+	std::unique_ptr<ExpManager> expManager_;
+
 	// プレイヤー
 	std::unique_ptr<Player> player_;
+
+	// レベルアップ機能
+	std::unique_ptr<Level> level_;
 
 	// ジャスト抜刀
 	bool isJustSlash_ = false;
@@ -47,4 +57,9 @@ private: //*** 変数群 ***//
 
 	// スローモーションになる時間
 	float cTIMESLOW_ = 0.5f;
+
+	// アップグレードの表示
+	//std::unique_ptr<UpgradeScreen> scUpgrade_;
+	std::unique_ptr<L::UpgradeManager> upgradeManager_;
+
 };

@@ -23,15 +23,13 @@ void Weapon::Update()
 		switch (behavior_)
 		{
 		case Weapon::Behavior::Root:
-			rootData_->translate_.start_ = demoModel_->transform.translation;
-			rootData_->rotate_.start_ = demoModel_->transform.rotation;
+			InitRoot();
 			break;
 		case Weapon::Behavior::Slash:
+			InitSlash();
 			break;
 		case Weapon::Behavior::Moment:
-			momentData_->scale_.start_ = demoModel_->transform.scale;
-			momentData_->rotate_.start_ = demoModel_->transform.rotation;
-			momentData_->translate_.start_ = demoModel_->transform.translation;
+			InitMoment();
 			break;
 		default:
 			break;
@@ -55,66 +53,77 @@ void Weapon::Update()
 	}
 }
 
+void Weapon::InitRoot()
+{
+	rootData_.translate_.start_ = demoModel_->transform.translation;
+	rootData_.rotate_.start_ = demoModel_->transform.rotation;
+}
+
+void Weapon::InitSlash()
+{
+}
+
+void Weapon::InitMoment()
+{
+	momentData_.scale_.start_ = demoModel_->transform.scale;
+	momentData_.rotate_.start_ = demoModel_->transform.rotation;
+	momentData_.translate_.start_ = demoModel_->transform.translation;
+}
+
 void Weapon::UpdateRoot()
 {
-	demoModel_->transform.scale = lwp::Vector3::Slerp(rootData_->scale_.start_, rootData_->scale_.end_, *pT_);
-	demoModel_->transform.rotation = lwp::Vector3::Slerp(rootData_->rotate_.start_, rootData_->rotate_.end_, *pT_);
-	demoModel_->transform.translation = lwp::Vector3::Slerp(rootData_->translate_.start_, rootData_->translate_.end_, *pT_);
+	demoModel_->transform.scale = lwp::Vector3::Slerp(rootData_.scale_.start_, rootData_.scale_.end_, *pT_);
+	demoModel_->transform.rotation = lwp::Vector3::Slerp(rootData_.rotate_.start_, rootData_.rotate_.end_, *pT_);
+	demoModel_->transform.translation = lwp::Vector3::Slerp(rootData_.translate_.start_, rootData_.translate_.end_, *pT_);
 }
 
 void Weapon::UpdateSlash()
 {
-	demoModel_->transform.scale = lwp::Vector3::Slerp(slashData_->scale_.start_, slashData_->scale_.end_, *pT_);
-	demoModel_->transform.rotation = lwp::Vector3::Slerp(slashData_->rotate_.start_, slashData_->rotate_.end_, *pT_);
-	demoModel_->transform.translation = lwp::Vector3::Slerp(slashData_->translate_.start_, slashData_->translate_.end_, *pT_);
+	demoModel_->transform.scale = lwp::Vector3::Slerp(slashData_.scale_.start_, slashData_.scale_.end_, *pT_);
+	demoModel_->transform.rotation = lwp::Vector3::Slerp(slashData_.rotate_.start_, slashData_.rotate_.end_, *pT_);
+	demoModel_->transform.translation = lwp::Vector3::Slerp(slashData_.translate_.start_, slashData_.translate_.end_, *pT_);
 }
 
 void Weapon::UpdateMoment()
 {
-	demoModel_->transform.scale = lwp::Vector3::Slerp(momentData_->scale_.start_, momentData_->scale_.end_, *pT_);
-	demoModel_->transform.rotation = lwp::Vector3::Slerp(momentData_->rotate_.start_, momentData_->rotate_.end_, *pT_);
-	demoModel_->transform.translation = lwp::Vector3::Slerp(momentData_->translate_.start_, momentData_->translate_.end_, *pT_);
+	demoModel_->transform.scale = lwp::Vector3::Slerp(momentData_.scale_.start_, momentData_.scale_.end_, *pT_);
+	demoModel_->transform.rotation = lwp::Vector3::Slerp(momentData_.rotate_.start_, momentData_.rotate_.end_, *pT_);
+	demoModel_->transform.translation = lwp::Vector3::Slerp(momentData_.translate_.start_, momentData_.translate_.end_, *pT_);
 }
 
 void Weapon::InitDatas()
 {
-	rootData_.reset(InitRootData());
-	slashData_.reset(InitSlashData());
-	momentData_.reset(InitMomentData());
+	InitRootData();
+	InitSlashData();
+	InitMomentData();
 }
 
-Weapon::RootData* Weapon::InitRootData()
+void Weapon::InitRootData()
 {
-	RootData* data = new RootData;
-	data->scale_.start_ = { 0.5f,0.5f,0.8f };
-	data->scale_.end_ = { 0.5f,0.5f,0.8f };
-	data->rotate_.start_ = { 0.0f,0.0f,0.0f };
-	data->rotate_.end_ = { 0.0f,0.0f,0.0f };
-	data->translate_.start_ = { 0.5f,0.0f,0.0f };
-	data->translate_.end_ = { -0.5f,0.0f,0.0f };
-	return data;
+	rootData_.scale_.start_ = { 0.5f,0.5f,0.8f };
+	rootData_.scale_.end_ = { 0.5f,0.5f,0.8f };
+	rootData_.rotate_.start_ = { 0.0f,0.0f,0.0f };
+	rootData_.rotate_.end_ = { 0.0f,0.0f,0.0f };
+	rootData_.translate_.start_ = { 0.5f,0.0f,0.0f };
+	rootData_.translate_.end_ = { -0.5f,0.0f,0.0f };
 }
 
-Weapon::SlashData* Weapon::InitSlashData()
+void Weapon::InitSlashData()
 {
-	SlashData* data = new SlashData;
-	data->scale_.start_ = { 0.5f,0.5f,0.8f };
-	data->scale_.end_ = { 0.5f,0.5f,1.0f };
-	data->rotate_.start_ = { 0.0f,0.0f,0.0f };
-	data->rotate_.end_ = { 0.0f,0.0f,0.0f };
-	data->translate_.start_ = { -0.5f,0.5f,3.0f };
-	data->translate_.end_ = { 0.5f,0.0f,1.0f };
-	return data;
+	slashData_.scale_.start_ = { 0.5f,0.5f,0.8f };
+	slashData_.scale_.end_ = { 0.5f,0.5f,1.0f };
+	slashData_.rotate_.start_ = { 0.0f,0.0f,0.0f };
+	slashData_.rotate_.end_ = { 0.0f,0.0f,0.0f };
+	slashData_.translate_.start_ = { -1.0f,0.5f,3.0f };
+	slashData_.translate_.end_ = { 1.0f,0.5f,1.0f };
 }
 
-Weapon::MomentData* Weapon::InitMomentData()
+void Weapon::InitMomentData()
 {
-	MomentData* data = new MomentData;
-	data->scale_.start_ = { 0.5f,0.5f,1.0f };
-	data->scale_.end_ = { 0.5f,0.5f,0.8f };
-	data->rotate_.start_ = { 0.0f,0.0f,0.0f };
-	data->rotate_.end_ = { 0.0f,0.0f,0.0f };
-	data->translate_.start_ = { 0.0f,0.0f,0.0f };
-	data->translate_.end_ = { -0.5f,0.0f,0.0f };
-	return data;
+	momentData_.scale_.start_ = { 0.5f,0.5f,1.0f };
+	momentData_.scale_.end_ = { 0.5f,0.5f,0.8f };
+	momentData_.rotate_.start_ = { 0.0f,0.0f,0.0f };
+	momentData_.rotate_.end_ = { 0.0f,0.0f,0.0f };
+	momentData_.translate_.start_ = { 0.0f,0.0f,0.0f };
+	momentData_.translate_.end_ = { -0.5f,0.0f,0.0f };
 }

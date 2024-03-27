@@ -11,13 +11,6 @@ class SlashPanel
 {
 private:
 
-	struct UIData
-	{
-		lwp::Vector2 anchor_ = { 0.0f,0.0f };
-		lwp::Vector2 transform_ = { 0.0f,0.0f };
-		std::string fileName_ = "";
-	};
-
 	const static int32_t kWINDOW_WIDTH_HALF_ = 1980 / 2;
 
 public:
@@ -39,11 +32,6 @@ public: //*** 外部からセット ***//
 	void Reset();
 	// ジャストを検知
 	void Just();
-
-private: //*** プライベート関数 ***//
-
-	// いろいろ情報を渡したりもしたい
-	UIPanel* CreateUIPanel(const UIData& data);
 
 private: //*** プライベート変数 ***//
 

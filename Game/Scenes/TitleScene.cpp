@@ -32,6 +32,22 @@ void TItleScene::Initialize()
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->SetPlayer(player_.get());
 	enemyManager_->Init();
+
+	// 経験値タンク
+	expManager_ = std::make_unique<ExpManager>();
+	expManager_->Initialize();
+
+	// レベル
+	level_ = std::make_unique<Level>();
+	level_->Initialize(player_->GetWorldTransform()->translation);
+
+	// アップグレード
+	//scUpgrade_ = std::make_unique<UpgradeScreen>();
+	//scUpgrade_->Initialize();
+
+	//level_->SetUpgradeScreen(scUpgrade_.get());
+	upgradeManager_ = std::make_unique<L::UpgradeManager>();
+	upgradeManager_->Init();
 }
 
 // 更新
@@ -48,13 +64,38 @@ void TItleScene::Update()
 		}
 	}
 
-	// プレイヤー
-	player_->Update();
+	// デバッグ
+#ifdef DEMO
+	upgradeManager_->DebugWindow();
+#endif // DEMO
 
-	// 追従カメラ
-	followCamera_->Update();
 
-	enemyManager_->Update();
+	if (!upgradeManager_->GetLevelUpFlag())
+	{
+
+		// プレイヤー
+		player_->Update();
+
+		// 追従カメラ
+		followCamera_->Update();
+
+		//mainCamera->transform = followCamera_->camera_.transform;
+
+		enemyManager_->Update();
+
+		// 敵が死んだときに出てくるので敵の更新の後
+		// 経験値を更新
+		expManager_->Update();
+
+		// 経験値が更新された後かと思ったけど別にプレイヤーの更新が終わった後ならどこでもいい
+		level_->Update(player_->GetWorldTransform()->translation);
+
+	}
+	else
+	{
+		upgradeManager_->Update(player_.get());
+	}
+
 }
 
 void TItleScene::StartJustSlash()
