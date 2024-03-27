@@ -19,9 +19,9 @@ void ArrowEnemy::Init()
 void ArrowEnemy::Update()
 {
 	if (CheckAttackRange()) {
-		IsAttackFkag = true;
+		isAttack = true;
 	}
-	if (IsAttackFkag) {
+	if (isAttack) {
 		// 攻撃処理
 		Attack();
 	}
@@ -103,7 +103,7 @@ void ArrowEnemy::Attack()
 		arrow->Init(models_[0]->transform);
 		arrows_.push_back(arrow);
 		attackWaitTime_ = kAttackWaitTime;
-		IsAttackFkag = false;
+		isAttack = false;
 
 	}
 }

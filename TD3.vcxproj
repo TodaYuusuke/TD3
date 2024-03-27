@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Class\Scene\Sample.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\Boss\DashBoss.cpp" />
     <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.cpp" />
     <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\Arrow\Arrow.cpp" />
     <ClCompile Include="Game\Objects\Enemy\IEnemy\IEnemy.cpp" />
@@ -169,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Scene\Sample.h" />
+    <ClInclude Include="Game\Objects\Enemy\Boss\DashBoss.h" />
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.h" />
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\Arrow\Arrow.h" />
     <ClInclude Include="Game\Objects\Enemy\NormalEnemy\NormalEnemy.h" />
