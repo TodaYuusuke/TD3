@@ -1,10 +1,20 @@
 #pragma once
 #include "Game/Objects/Enemy/IEnemy/IEnemy.h"
 
+/// <summary>
+/// çªé€²ã‚¿ã‚¤ãƒ—ã®ãƒœã‚¹ã‚­ãƒ£ãƒ©
+/// </summary>
 class DashBoss : public IEnemy
 {
-public:// ƒpƒuƒŠƒbƒN‚Èƒƒ“ƒoŠÖ”
-	//*** ƒˆ‰¼‘zŠÖ” ***//
+private:// æ§‹é€ ä½“
+	// æŒ¯ã‚‹ã¾ã„
+	enum class Behavior {
+		kRoot,	 // é€šå¸¸çŠ¶æ…‹
+		kDash	 // ãƒ€ãƒƒã‚·ãƒ¥ä¸­
+	};
+
+public:// ãƒ‘ãƒ–ãƒªãƒƒã‚¯ãªãƒ¡ãƒ³ãƒé–¢æ•°
+	//*** ç´”ç²‹ä»®æƒ³é–¢æ•° ***//
 	void Init()override;
 	void Update()override;
 	void SetPosition(lwp::Vector3 pos)override;
@@ -13,33 +23,63 @@ public:// ƒpƒuƒŠƒbƒN‚Èƒƒ“ƒoŠÖ”
 	/// User Method
 	/// 
 
-	// UŒ‚ğŒ
+	// æ”»æ’ƒæ¡ä»¶
 	bool CheckAttackRange();
 
-	// ‘ÎÛ‚ğ‘_‚¤
+	// å¯¾è±¡ã‚’ç‹™ã†
 	void Aim();
 
+#pragma region æŒ¯ã‚‹ã¾ã„
+
+	// é€šå¸¸çŠ¶æ…‹ã®åˆæœŸåŒ–
+	void B_RootInit();
+	// é€šå¸¸çŠ¶æ…‹ã®æ›´æ–°å‡¦ç†
+	void B_RootUpdate();
+
+	// ãƒ€ãƒƒã‚·ãƒ¥çŠ¶æ…‹ã®åˆæœŸåŒ–
+	void B_DashInit();
+	// ãƒ€ãƒƒã‚·ãƒ¥çŠ¶æ…‹ã®æ›´æ–°å‡¦ç†
+	void B_DashUpdate();
+
+#pragma endregion
+
 	/// Getter
-	// ©‹@‚Æ‚Ì•ûŒüƒxƒNƒgƒ‹‚ğZo(•Ô‚è’l‚Í³‹K‰»‚µ‚Ä‚¢‚é)
+	// è‡ªæ©Ÿã¨ã®æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç®—å‡º(è¿”ã‚Šå€¤ã¯æ­£è¦åŒ–ã—ã¦ã„ã‚‹)
 	LWP::Math::Vector3 GetDirectVel();
 
 	/// Setter
 
-private:// ƒvƒ‰ƒCƒx[ƒg‚Èƒƒ“ƒoŠÖ”
-	//*** ƒˆ‰¼‘zŠÖ” ***//
-	// ˆÚ“®
+private:// ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆãªãƒ¡ãƒ³ãƒé–¢æ•°
+	//*** ç´”ç²‹ä»®æƒ³é–¢æ•° ***//
+	// ç§»å‹•
 	void Move()override;
-	// UŒ‚
+	// æ”»æ’ƒ
 	void Attack()override;
 
-private:// ’è”
-	// UŒ‚‚·‚é”ÍˆÍ
+private:// å®šæ•°
+	// æ”»æ’ƒã™ã‚‹ç¯„å›²
 	const float kAttackRange = 10.0f;
 
-	// UŒ‚‚ÌƒN[ƒ‹ƒ^ƒCƒ€
-	const int kAttackWaitTime = 120;
+	// çªé€²é€Ÿåº¦ã®ä¿‚æ•°
+	const float kDashSpeedCoefficient = 1.0f;
 
-private:// ƒvƒ‰ƒCƒx[ƒg‚È•Ï”
-	// ƒ_ƒbƒVƒ…‚Ì•ûŒüƒxƒNƒgƒ‹
+	// æ”»æ’ƒã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ 
+	const int kAttackWaitTime = 120;
+	// çªé€²æ”»æ’ƒã®å…¨ä½“ãƒ•ãƒ¬ãƒ¼ãƒ 
+	const int kDashAttackAllFrame = 15;
+
+private:// ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆãªå¤‰æ•°
+	// ãƒ€ãƒƒã‚·ãƒ¥ã®æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
 	LWP::Math::Vector3 dashVel_;
+
+	// å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã§ã¯æ”»æ’ƒå¯èƒ½ã‹
+	bool isPreAttack_;
+
+	// ç¾åœ¨ã®ãƒ•ãƒ¬ãƒ¼ãƒ 
+	int currentFrame_;
+
+	// ç¾åœ¨ã®æŒ¯ã‚‹ã¾ã„
+	Behavior behavior_ = Behavior::kRoot;
+	// æ¬¡ã®æŒ¯ã‚‹ã¾ã„ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
+	std::optional<Behavior> behaviorRequest_ = std::nullopt;
 };
