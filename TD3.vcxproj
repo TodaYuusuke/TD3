@@ -196,6 +196,13 @@
     <ClInclude Include="Game\Objects\Upgrade\Derved\PowerPerUp10.h" />
     <ClInclude Include="Game\Objects\Upgrade\Derved\PowerPerUp30.h" />
     <ClInclude Include="Game\Objects\Upgrade\Derved\PowerUp.h" />
+    <ClInclude Include="Game\Objects\Player\Motion\IStatus.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\AttackRangeUp2.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\AttackTotalUp1.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\LifeMaxUp10.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp10.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp30.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerUp.h" />
     <ClInclude Include="Game\Scenes\TitleScene.h" />
     <ClInclude Include="Game\Objects\Player\Player.h" />
     <ClInclude Include="Game\Objects\Player\Weapon\Weapon.h" />

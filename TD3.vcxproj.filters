@@ -68,6 +68,13 @@
     <ClInclude Include="Game\Objects\Experience\Experience.h" />
     <ClInclude Include="Game\Objects\Experience\ExpManager.h" />
     <ClInclude Include="Game\Objects\Level\Level.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp10.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp30.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerUp.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\IUpgrade.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\UpgradeManager.h" />
+    <ClInclude Include="Game\Objects\Player\Motion\IStatus.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\AttackRangeUp.h" />
     <ClInclude Include="Game\Objects\Upgrade\Derved\PowerPerUp10.h" />
     <ClInclude Include="Game\Objects\Upgrade\Derved\PowerPerUp30.h" />
     <ClInclude Include="Game\Objects\Upgrade\Derved\PowerUp.h" />
