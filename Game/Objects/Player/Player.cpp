@@ -3,9 +3,16 @@
 // ゲームシーン
 #include "Game/Scenes/TitleScene.h"
 
+#include "Status/Derived/Idol.h"
+#include "Status/Derived/Move.h"
+#include "Status/Derived/Slash.h"
+#include "Status/Derived/Moment.h"
+#include "Status/Derived/Damage.h"
+
+using Behavior = IStatus::Behavior;
+
 Player::~Player()
 {
-	delete pInput_;
 }
 
 void Player::Initialize()
@@ -24,10 +31,6 @@ void Player::Initialize()
 	weapon_->SetParent(&demoModel_->transform);
 	weapon_->SetTPointer(&easeT_);
 
-	// 入力ハンドルを初期化
-	pInput_ = new PlayerInput();
-	pInput_->AssignCommands();
-
 	// 状態の情報を設定
 	InitDatas();
 
@@ -40,6 +43,20 @@ void Player::Initialize()
 
 	// コライダー生成
 	CreateCollisions();
+
+	// 状態作成
+	statuses_.clear();
+
+	statuses_.push_back(new Idol);
+	statuses_.push_back(new Move);
+	statuses_.push_back(new Slash);
+	statuses_.push_back(new Moment);
+	statuses_.push_back(new Damage);
+
+	for (size_t i = 0; i < statuses_.size(); i++)
+	{
+		statuses_[i]->Init(this);
+	}
 }
 
 void Player::Update()
@@ -49,9 +66,6 @@ void Player::Update()
 	DebugWindow();
 #endif
 
-	// コマンド動作を確認
-	UpdateInput();
-
 	// 状態を変えるか判別
 	CheckBehavior();
 
@@ -60,57 +74,24 @@ void Player::Update()
 		behavior_ = reqBehavior_.value();
 		t = 0.0f;
 		easeT_ = 0.0f;
-		switch (behavior_)
-		{
-		case Player::Behavior::Root:
-			InitRoot();
-			break;
-		case Player::Behavior::Move:
-			InitMove();
-			break;
-		case Player::Behavior::Slash:
-			InitSlash();
-			break;
-		case Player::Behavior::Moment:
-			InitMoment();
-			break;
-		case Player::Behavior::Damage:
-			InitDamage();
-			break;
-		default:
-			break;
-		}
+		statuses_[static_cast<size_t>(behavior_)]->Reset();
 		reqBehavior_ = std::nullopt;
 	}
-	switch (behavior_)
-	{
-	case Player::Behavior::Root:
-		UpdateRoot();
-		break;
-	case Player::Behavior::Move:
-		UpdateMove();
-		break;
-	case Player::Behavior::Slash:
-		UpdateSlash();
-		break;
-	case Player::Behavior::Moment:
-		UpdateMoment();
-		break;
-	case Player::Behavior::Damage:
-		UpdateDamage();
-		break;
-	default:
-		break;
-	}
+	// 状態の更新
+	statuses_[static_cast<size_t>(behavior_)]->Update();
 	t += (float)lwp::GetDeltaTime();
 	weapon_->Update();
 	slashPanel_->Update();
+
+
+	//*** ここから下はフラグによって管理されている ***//
 
 	colliders_.player_->Create(demoModel_->transform.translation + lwp::Vector3(0.0f, 0.5f, 0.0f));
 
 	// 無敵時間確認
 	if (flag_.isInvincible_)
 	{
+		// 無敵フレームを満たすか判断
 		invincibleTime_ += (float)lwp::GetDeltaTime();
 		if (maxInvincibleTime_ <= invincibleTime_)
 		{
@@ -120,6 +101,24 @@ void Player::Update()
 	}
 	// 無敵なのかどうか判断
 	colliders_.player_->isActive = !flag_.isInvincible_;
+}
+
+void Player::StartJust()
+{
+	// ジャスト判定の一瞬のみを取得している
+	flag_.isJustSlashing_ = true;
+	// 無敵時間を加算
+	maxInvincibleTime_ += config_.Time_.JUSTINVINCIBLEADD_;
+	// ここをゲームシーンに変える
+	pScene_->StartJustSlash();
+	pCamera_->ReduceFov();
+	// 居合回数獲得(一回のみ)
+	//if (slashData_.maxRelation_ <= slashData_.cMAXRELATION_)
+	if (slashData_.maxRelation_ <= config_.Count_.SLASHRELATIONMAX_)
+	{
+		slashData_.maxRelation_++;
+		slashPanel_->Just();
+	}
 }
 
 void Player::EndJust()
@@ -134,51 +133,15 @@ void Player::EndJust()
 
 void Player::ApplyUpgrade(const UpgradeParameter& para)
 {
-	parameter_.power_ = para.power.base * para.power.percent;
-	parameter_.speed_ = para.speed.base * para.speed.percent;
+	parameter_.power_ = para.power.base * (0.01f * para.power.percent);
+	parameter_.speed_ = para.speed.base * (0.01f * para.speed.percent);
 }
 
-#pragma region CommandFunction
 
-void Player::MoveFront()
+void Player::RegistStatus(IStatus::Behavior request)
 {
-	// 向いている方向へ変換するので単純にしている
-	destinate_.z = 1.0f;
-	commands_.push_back(Behavior::Move);
-	// 移動キーが入力されている時通る
-	flag_.isInputMove_ = true;
+	commands_.push_back(request);
 }
-
-void Player::MoveBack()
-{
-	destinate_.z = -1.0f;
-	commands_.push_back(Behavior::Move);
-	// 移動キーが入力されている時通る
-	flag_.isInputMove_ = true;
-}
-
-void Player::MoveLeft()
-{
-	destinate_.x = -1.0f;
-	commands_.push_back(Behavior::Move);
-	// 移動キーが入力されている時通る
-	flag_.isInputMove_ = true;
-}
-
-void Player::MoveRight()
-{
-	destinate_.x = 1.0f;
-	commands_.push_back(Behavior::Move);
-	// 移動キーが入力されている時通る
-	flag_.isInputMove_ = true;
-}
-
-void Player::Slash()
-{
-	commands_.push_back(Behavior::Slash);
-}
-// CommandFunc
-#pragma endregion
 
 #pragma region BehaviorFunc
 
@@ -513,7 +476,8 @@ void Player::CreateJustCollision()
 
 void Player::OnCollisionPlayer(lwp::Collider::HitData& data)
 {
-	if (data.state == OnCollisionState::Trigger &&
+	if (data.state == OnCollisionState::Press &&
+		!flag_.isInvincible_ &&
 		(data.hit->mask.GetBelongFrag() & (MaskLayer::Enemy | MaskLayer::Layer2)))
 	{
 		reqBehavior_ = Behavior::Damage;
@@ -531,22 +495,7 @@ void Player::OnCollisionJust(lwp::Collider::HitData& data)
 		!flag_.isJustSlashing_ && data.hit &&
 		(data.hit->mask.GetBelongFrag() & MaskLayer::Layer2))
 	{
-		// ジャスト判定の一瞬のみを取得している
-		flag_.isJustSlashing_ = true;
-		// 無敵時間を加算
-		maxInvincibleTime_ += config_.Time_.JUSTINVINCIBLEADD_;
-		// ここをゲームシーンに変える
-		TItleScene* const scene = dynamic_cast<TItleScene*>(pScene_);
-		assert(scene);
-		scene->StartJustSlash();
-		pCamera_->ReduceFov();
-		// 居合回数獲得(一回のみ)
-		//if (slashData_.maxRelation_ <= slashData_.cMAXRELATION_)
-		if (slashData_.maxRelation_ <= config_.Count_.SLASHRELATIONMAX_)
-		{
-			slashData_.maxRelation_++;
-			slashPanel_->Just();
-		}
+		StartJust();
 	}
 }
 
@@ -555,95 +504,40 @@ void Player::OnCollisionJust(lwp::Collider::HitData& data)
 
 #pragma endregion
 
-
-void Player::UpdateInput()
-{
-	// コマンドを積み重ねたものを取得
-	pCommands_ = pInput_->HandleInput();
-
-	// クリア
-	commands_.clear();
-	flag_.isInputMove_ = false;
-
-	// 方向を作成
-	lwp::Vector3 direct = destinate_;
-	destinate_ = { 0.0f,0.0f,0.0f };
-
-	// コマンドを実行
-	// 実際には情報を一度すべて受け取る
-	for (std::list<IPlayerCommand*>::iterator itr = pCommands_->begin();
-		itr != pCommands_->end(); ++itr)
-	{
-		(*itr)->Exec(*this);
-
-	}
-
-	// キーボード入力として区別させる
-	destinate_ = destinate_.Normalize() * 0.75f;
-
-	// コントローラーの入力を合わせる
-	float x = LWP::Input::Controller::GetLStick().x;
-	float y = LWP::Input::Controller::GetLStick().y;
-	if ((destinate_.x < 0 ? -destinate_.x : destinate_.x)
-		< (x < 0 ? -x : x))
-	{
-		destinate_.x = x;
-		commands_.push_back(Behavior::Move);
-		// 移動キーが入力されている時通る
-		flag_.isInputMove_ = true;
-	}
-	if ((destinate_.z < 0 ? -destinate_.z : destinate_.z)
-		< (y < 0 ? -y : y))
-	{
-		destinate_.z = y;
-		commands_.push_back(Behavior::Move);
-		// 移動キーが入力されている時通る
-		flag_.isInputMove_ = true;
-	}
-	destinate_ = destinate_.Normalize();
-
-	// 方向がゼロだった場合は元に戻す
-	if (destinate_.x == 0 && destinate_.z == 0)
-	{
-		destinate_ = direct.Normalize();
-	}
-}
 
 void Player::CheckBehavior()
 {
+	std::optional<Behavior> command = std::nullopt;
+
 	// コマンドを設定
-	if (reqBehavior_)
-	{
-		command_ = &reqBehavior_.value();
-	}
-	else
-	{
-		command_ = nullptr;
-	}
+	command = reqBehavior_;
 
 	// 積み重ねたコマンドから実際の行動を決定する
 	for (std::list<Behavior>::iterator itr = commands_.begin();
 		itr != commands_.end(); ++itr)
 	{
-		if (command_)
+		if (command)
 		{
 			// 優先度が高い方にする
-			if (static_cast<uint32_t>(*command_) <= static_cast<uint32_t>(*itr))
+			if (static_cast<uint32_t>(command.value()) <= static_cast<uint32_t>(*itr))
 			{
-				command_ = &*itr;
+				command = *itr;
 			}
 		}
 		else
 		{
-			command_ = &*itr;
+			command = *itr;
 		}
 	}
 
 	// コマンドによって行動変化
-	if (command_)
+	if (command)
 	{
-		switch (*command_)
+		switch (command.value())
 		{
+		case Behavior::Root:
+			reqBehavior_ = Behavior::Root;
+			break;
 		case Behavior::Move:
 			// 移動は待機状態からの派生とか
 			if (behavior_ == Behavior::Root ||
@@ -660,8 +554,18 @@ void Player::CheckBehavior()
 				reqBehavior_ = Behavior::Slash;
 			}
 			break;
+		case Behavior::Moment:
+			reqBehavior_ = Behavior::Moment;
+			break;
+		case Behavior::Damage:
+			reqBehavior_ = Behavior::Damage;
+			break;
 		}
 	}
+
+	// 確認したので中身を消す
+	commands_.clear();
+
 }
 
 #pragma region DebugFunc
@@ -682,27 +586,27 @@ void Player::DebugWindow()
 	ImGui::SameLine();
 	switch (behavior_)
 	{
-	case Player::Behavior::Root:
+	case Behavior::Root:
 		ImGui::Text("ROOT");
 		ImGui::Text("BaseFrame : %.3f", config_.Time_.ROOTBASE_);
 		ImGui::Text("MaxFrame  : %.3f", rootData_.maxTime_);
 		break;
-	case Player::Behavior::Move:
+	case Behavior::Move:
 		ImGui::Text("MOVE");
 		ImGui::Text("BaseFrame : %.3f", config_.Time_.MOVEBASE_);
 		ImGui::Text("MaxFrame  : %.3f", moveData_.maxTime_);
 		break;
-	case Player::Behavior::Slash:
+	case Behavior::Slash:
 		ImGui::Text("SLASH");
 		ImGui::Text("BaseFrame : %.3f", config_.Time_.SLASHBASE_);
 		ImGui::Text("MaxFrame  : %.3f", slashData_.maxTime_);
 		break;
-	case Player::Behavior::Moment:
+	case Behavior::Moment:
 		ImGui::Text("MOMENT");
 		ImGui::Text("BaseFrame : %.3f", config_.Time_.MOMENTBASE_);
 		ImGui::Text("MaxFrame  : %.3f", momentData_.maxTime_);
 		break;
-	case Player::Behavior::Damage:
+	case Behavior::Damage:
 		ImGui::Text("DAMAGE");
 		ImGui::Text("BaseFrame : %.3f", config_.Time_.DAMAGEBASE_);
 		ImGui::Text("MaxFrame  : %.3f", damageData_.maxTime_);

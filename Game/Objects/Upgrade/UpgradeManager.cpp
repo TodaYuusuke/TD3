@@ -2,9 +2,9 @@
 
 #include "Game/Objects/Player/Player.h"
 #pragma region Upgrades
-#include "Game/Objects/Player/Upgrade/Derved/PowerUp.h"
-#include "Game/Objects/Player/Upgrade/Derved/PowerPerUp10.h"
-#include "Game/Objects/Player/Upgrade/Derved/PowerPerUp30.h"
+#include "Game/Objects/Upgrade/Derved/PowerUp.h"
+#include "Game/Objects/Upgrade/Derved/PowerPerUp10.h"
+#include "Game/Objects/Upgrade/Derved/PowerPerUp30.h"
 #pragma endregion
 
 using namespace LWP;
@@ -117,7 +117,7 @@ void L::UpgradeManager::RandomUpgrade()
 		// アップグレードの数が足りなくなったら
 		if (upgrades_.size() - upgradedConut_ <= kUpgradNum_)
 		{
-			kUpgradNum_ = upgrades_.size() - upgradedConut_ - 1;
+			kUpgradNum_ = int(upgrades_.size()) - upgradedConut_ - 1;
 		}
 		// 取得する範囲の添え字を受け取る
 		int rand = Utility::GenerateRandamNum(0, (int)upgrades_.size() - 1);

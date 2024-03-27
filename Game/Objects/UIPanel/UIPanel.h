@@ -39,7 +39,7 @@ public:	//*** ゲッターセッター ***//
 	void SetPositionX(float x) { world_.translation.x = x; }
 	void SetPositionY(float y) { world_.translation.y = y; }
 	// サイズ設定
-	void SetSize(int x, int y) { uiSprite_->size = lwp::Vector2(x, y); }
+	void SetSize(int x, int y) { uiSprite_->size = lwp::Vector2(float(x), float(y)); }
 	void SetSize(const lwp::Vector2& size) { uiSprite_->size = size; }
 	// 描画するかどうかの設定
 	void SetIsActive(bool flag) { uiSprite_->isActive = flag; }

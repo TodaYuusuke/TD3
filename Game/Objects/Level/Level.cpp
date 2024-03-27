@@ -1,6 +1,6 @@
 #include "Level.h"
 
-#include "Game/Objects/Player/Upgrade/UpgradeManager.h"
+#include "Game/Objects/Upgrade/UpgradeManager.h"
 
 using namespace LWP;
 using namespace LWP::Object::Collider;

@@ -5,12 +5,15 @@
 #include <array>
 #include <optional>
 
-#include "Commands/PlayerInput.h"
 #include "Game/Objects/Player/Weapon/Weapon.h"
 #include "Game/Objects/Player/SlashPanel.h"
 #include "../FollowCamera/FollowCamera.h"
+#include "Status/IStatus.h"
 
-#include "Upgrade/UpgradeManager.h"
+#include "Game/Objects/Upgrade/IUpgrade.h"
+
+// 前方宣言
+class TItleScene;
 
 class Player final
 {
@@ -21,20 +24,6 @@ private: //*** サブクラス ***//
 	//*** Behaivior で管理する ***//
 
 #pragma region Behavior
-
-	/// <summary>
-	/// プレイヤー行動
-	/// </summary>
-	enum class Behavior : size_t
-	{
-		Root = 0u,	// 待機状態
-		Move,		// 移動
-		Slash,		// 居合攻撃
-		Moment,		// とりあえず居合の後隙
-		Damage,		// 攻撃を受けた時
-
-		_COUNT,		// 状態最大数 : 使用禁止
-	};
 
 	//*** 各 Behavior で使う情報 ***//
 
@@ -204,6 +193,8 @@ public: //*** パブリック関数 ***//
 	void Update();
 
 	// ジャスト終了
+	void StartJust();
+	// ジャスト終了
 	void EndJust();
 
 
@@ -218,20 +209,9 @@ public:	//*** セッター,ゲッター ***//
 
 	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
 	void SetCameraPointer(FollowCamera* p) { pCamera_ = p; }
-	void SetScene(IScene* p) { pScene_ = p; }
-
-public: //*** コマンド操作で呼び出される関数 ***//
-
-#pragma region CommandFunc
-
-	// ここではまだ実際に行動に移さない
-	void MoveFront();
-	void MoveBack();
-	void MoveLeft();
-	void MoveRight();
-	void Slash();
-
-#pragma endregion
+	void SetScene(TItleScene* p) { pScene_ = p; }
+	// 状態を外部から設定する
+	void RegistStatus(IStatus::Behavior request);
 
 private: //*** プライベート関数 ***//
 
@@ -240,7 +220,7 @@ private: //*** プライベート関数 ***//
 private: //*** Behavior 管理に使う関数 ***//
 
 #pragma region BehaviorFunc
-		
+
 	void InitRoot();
 	void InitMove();
 	void InitSlash();
@@ -261,7 +241,7 @@ private: //*** Behavior 管理に使う関数 ***//
 
 	// データの情報を取得する
 	void InitDatas();
-	
+
 	// 設定を初期化
 	void InitConfigs();
 	// 移動距離
@@ -307,8 +287,6 @@ private: //*** Behavior 管理に使う関数 ***//
 
 #pragma endregion
 
-	// プレイヤーの操作を受け付ける
-	void UpdateInput();
 	// 受け付けた入力を判別して実際の行動に反映する
 	void CheckBehavior();
 
@@ -327,7 +305,7 @@ private: //*** Behavior 管理に使う関数 ***//
 
 #pragma endregion
 
-private: //*** プライベート変数 ***//
+public: //*** プライベート変数 ***//
 
 #pragma region PrivateVar
 
@@ -351,7 +329,7 @@ private: //*** プライベート変数 ***//
 	FollowCamera* pCamera_ = nullptr;
 
 	// 今のシーン
-	IScene* pScene_ = nullptr;
+	TItleScene* pScene_ = nullptr;
 
 	// アップグレードで作成されたパラメータを反映
 	PlayerParameter parameter_;
@@ -359,15 +337,8 @@ private: //*** プライベート変数 ***//
 
 	//*** 計算に使う ***//
 
-	// プレイヤーのインプットを処理する
-	PlayerInput* pInput_ = nullptr;
-	// 受け取るコマンド
-	// コマンドを積み重ねる
-	std::list<IPlayerCommand*>* pCommands_;
 	// 入力したコマンドを一括で管理する
-	std::list<Behavior> commands_;
-	// 最終的に行動するコマンド
-	Behavior* command_ = nullptr;
+	std::list<IStatus::Behavior> commands_;
 
 	// プレイヤーのモデル
 	LWP::Primitive::Mesh* demoModel_ = nullptr;
@@ -375,9 +346,9 @@ private: //*** プライベート変数 ***//
 	std::unique_ptr<Weapon> weapon_;
 
 	// 現在の状態
-	Behavior behavior_ = Behavior::Root;
+	IStatus::Behavior behavior_ = IStatus::Behavior::Root;
 	// 状態の予約
-	std::optional<Behavior> reqBehavior_ = std::nullopt;
+	std::optional<IStatus::Behavior> reqBehavior_ = std::nullopt;
 
 	// 次に移動する方向
 	// これは通常移動くらいでしか使わない
@@ -401,6 +372,9 @@ private: //*** プライベート変数 ***//
 
 	// フラグ
 	Flags flag_;
+
+	// 状態毎に使うクラスをまとめている
+	std::vector<IStatus*> statuses_;
 
 #pragma endregion
 

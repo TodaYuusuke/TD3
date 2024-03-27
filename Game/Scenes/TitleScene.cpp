@@ -81,7 +81,7 @@ void TItleScene::Update()
 
 		//mainCamera->transform = followCamera_->camera_.transform;
 
-		enemyManager_->Update();
+		//6enemyManager_->Update();
 
 		// 敵が死んだときに出てくるので敵の更新の後
 		// 経験値を更新

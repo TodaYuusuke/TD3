@@ -8,7 +8,7 @@
 #include "Game/Objects/Enemy/EnemyManager.h"
 #include "Game/Objects/Experience/ExpManager.h"
 //#include "Game/Scenes/UpgradeScreen/UpgradeScreen.h"
-#include "Game/Objects/Player/Upgrade/UpgradeManager.h"
+#include "Game/Objects/Upgrade/UpgradeManager.h"
 #pragma endregion
 
 class TItleScene final
