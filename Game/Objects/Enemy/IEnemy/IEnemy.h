@@ -46,5 +46,6 @@ protected:
 	Player* player_;
 	// 攻撃のクールタイム
 	int attackWaitTime_;
-	bool IsAttackFkag = false;
+	// 攻撃開始フラグ
+	bool isAttack = false;
 };

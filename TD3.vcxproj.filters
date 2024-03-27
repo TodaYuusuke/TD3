@@ -37,6 +37,7 @@
     <ClCompile Include="Game\Objects\Player\Status\Derived\Slash.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Damage.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Moment.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\Boss\DashBoss.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Scene\Sample.h" />
@@ -77,5 +78,6 @@
     <ClInclude Include="Game\Objects\Player\Status\Derived\Slash.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Damage.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Moment.h" />
+    <ClInclude Include="Game\Objects\Enemy\Boss\DashBoss.h" />
   </ItemGroup>
 </Project>

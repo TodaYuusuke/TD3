@@ -15,13 +15,13 @@ void ShieldEnemy::Init()
 void ShieldEnemy::Update()
 {
 	if (CheckAttackRange()) {
-		IsAttackFkag = true;
+		isAttack = true;
 	}
-	if (IsAttackFkag) {
+	if (isAttack) {
 		// 攻撃処理
 		Attack();
 		// 攻撃アニメーション
-		AttackAnimetion();
+		AttackAnimation();
 	}
 	else {
 		Aim();
@@ -59,7 +59,7 @@ void ShieldEnemy::Attack()
 	}
 }
 
-void ShieldEnemy::AttackAnimetion()
+void ShieldEnemy::AttackAnimation()
 {
 	// 攻撃アニメーション
 	if (attackWork.flag) {
@@ -93,7 +93,7 @@ void ShieldEnemy::AttackAnimetion()
 		else if (attackEndWork.t >= 1.0f) {
 			attackEndWork.flag = false;
 			attackEndWork.t = 0.0f;
-			IsAttackFkag = false;
+			isAttack = false;
 			collider_->mask.SetBelongFrag(MaskLayer::Enemy);
 		}
 	}

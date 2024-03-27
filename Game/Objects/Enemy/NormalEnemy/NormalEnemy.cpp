@@ -16,13 +16,13 @@ void NormalEnemy::Init()
 void NormalEnemy::Update()
 {
 	if (CheckAttackRange()) {
-		IsAttackFkag = true;
+		isAttack = true;
 	}
-	if (IsAttackFkag) {
+	if (isAttack) {
 		// 攻撃処理
 		Attack();
 		// 攻撃アニメーション
-		AttackAnimetion();
+		AttackAnimation();
 	}
 	else {
 		Aim();
@@ -61,7 +61,7 @@ void NormalEnemy::Attack()
 	}
 }
 
-void NormalEnemy::AttackAnimetion()
+void NormalEnemy::AttackAnimation()
 {
 	lwp::Vector3 point = { 0.0f,0.0f,0.0f };
 	if (attackWork.flag) {
@@ -96,7 +96,7 @@ void NormalEnemy::AttackAnimetion()
 		else if (attackEndWork.t >= 1.0f) {
 			attackEndWork.flag = false;
 			attackEndWork.t = 0.0f;
-			IsAttackFkag = false;
+			isAttack = false;
 			collider_->mask.SetBelongFrag(MaskLayer::Enemy);
 		}
 	}
