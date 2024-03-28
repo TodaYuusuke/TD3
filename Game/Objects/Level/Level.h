@@ -10,7 +10,9 @@ public: //*** パブリック関数 ***//
 	/// コンストラクタ・デストラクタ
 	/// </summary>
 	Level() = default;
-	~Level();
+	~Level() {
+		delete collider_;
+	};
 
 	// 初期化
 	void Initialize(const lwp::Vector3& position = { 0.0f,0.0f,0.0f });
@@ -54,7 +56,7 @@ private: //*** プライベート変数 ***//
 
 	// プレイヤーの経験値取得範囲
 	//lwp::Collider::Capsule* collider_ = nullptr;
-	lwp::Collider::Sphere collider_;
+	lwp::Collider::Sphere* collider_;
 
 };
 
