@@ -11,9 +11,6 @@
 
 using Behavior = IStatus::Behavior;
 
-Player::~Player()
-{
-}
 
 void Player::Initialize()
 {

@@ -10,7 +10,10 @@ public: //*** パブリック関数 ***//
 	Experience();
 	Experience(const lwp::Vector3& pos);
 	// デストラクタ
-	~Experience();
+	~Experience() {
+		delete model_;
+		delete collider_;
+	};
 
 	// 更新
 	void Update();
