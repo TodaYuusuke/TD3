@@ -15,11 +15,11 @@ void UIPanel::Initialize(const std::string& fileName)
 	world_.Initialize();
 	// UI
 	uiSprite_ = LWP::Primitive::Sprite();
-	uiSprite_->texture = lwp::LoadTexture(fileName);
-	uiSprite_->transform.Parent(&world_);
-	uiSprite_->isActive = true;
-	uiSprite_->name = "UISprite";
-	uiSprite_->isUI = true;
+	uiSprite_.texture = lwp::LoadTexture(fileName);
+	uiSprite_.transform.Parent(&world_);
+	uiSprite_.isActive = true;
+	uiSprite_.name = "UISprite";
+	uiSprite_.isUI = true;
 }
 
 void UIPanel::Initialize(const UIData& data)

@@ -10,10 +10,7 @@ public: //*** パブリック関数 ***//
 	Experience();
 	Experience(const lwp::Vector3& pos);
 	// デストラクタ
-	~Experience() {
-		delete model_;
-		delete collider_;
-	};
+	~Experience();
 
 	// 更新
 	void Update();
@@ -42,7 +39,7 @@ public: //*** パブリック変数 ***//
 private: //*** プライベート変数 ***//
 
 	// モデル
-	lwp::Mesh* model_ = nullptr;
+	lwp::Mesh model_;
 
 	// 生成されてから動かないコライダー
 	lwp::Collider::Sphere* collider_ = nullptr;

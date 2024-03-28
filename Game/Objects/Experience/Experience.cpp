@@ -26,8 +26,10 @@ Experience::Experience(const lwp::Vector3& pos)
 Experience::~Experience()
 {
 	// 表示も当たり判定も切る
-	model_->isActive = false;
+	model_.isActive = false;
 	collider_->isActive = false;
+
+	delete collider_;
 }
 
 void Experience::Update()
@@ -37,12 +39,12 @@ void Experience::Update()
 void Experience::Initialize(const lwp::Vector3& pos)
 {
 	// モデル読み込み
-	model_->LoadFile("cube/cube.obj");
+	model_.LoadFile("cube/cube.obj");
 	// 設定
-	model_->isActive = true;
-	model_->name = "EXP";
+	model_.isActive = true;
+	model_.name = "EXP";
 	// 場所を設定
-	model_->transform.translation = pos;
+	model_.transform.translation = pos;
 
 	// 当たり判定を作成
 	CreateCollision();
