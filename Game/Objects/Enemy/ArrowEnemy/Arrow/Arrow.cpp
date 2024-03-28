@@ -3,7 +3,7 @@
 void Arrow::Init(lwp::WorldTransform transform)
 {
 	// モデルの作成
-	model_ = LWP::Common::CreateInstance<LWP::Primitive::Cube>();
+	model_ = new LWP::Primitive::Cube();
 	model_->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::WHITE);
 	model_->transform.translation = transform.translation;
 	model_->transform.rotation = transform.rotation;
@@ -13,7 +13,7 @@ void Arrow::Init(lwp::WorldTransform transform)
 	attackWork.targetpoint = attackWork.targetpoint.Normalize();
 
 	// 当たり判定を設定
-	aabb_ = LWP::Common::CreateInstance<AABB>();
+	aabb_ = new LWP::Object::Collider::AABB();
 	aabb_->CreateFromPrimitive(model_);
 	aabb_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 	aabb_->mask.SetHitFrag(MaskLayer::Player | MaskLayer::Layer3);

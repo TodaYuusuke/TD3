@@ -18,17 +18,17 @@ Player::~Player()
 void Player::Initialize()
 {
 	// モデル読み込み
-	demoModel_ = LWP::Resource::LoadModel("cube/cube.obj");
+	demoModel_.LoadFile("cube/cube.obj");
 	//demoModel_->transform.Parent(&world_);
-	demoModel_->isActive = true;
-	demoModel_->name = "Player";
+	demoModel_.isActive = true;
+	demoModel_.name = "Player";
 
-	demoModel_->transform.translation.z = -4.0f;
+	demoModel_.transform.translation.z = -4.0f;
 
 	// 武器を作成
 	weapon_.reset(new Weapon);
 	weapon_->Initialize();
-	weapon_->SetParent(&demoModel_->transform);
+	weapon_->SetParent(&demoModel_.transform);
 	weapon_->SetTPointer(&easeT_);
 
 	// 状態の情報を設定
@@ -89,7 +89,7 @@ void Player::Update()
 
 	//*** ここから下はフラグによって管理されている ***//
 
-	colliders_.player_->Create(demoModel_->transform.translation + lwp::Vector3(0.0f, 0.5f, 0.0f));
+	colliders_.player_.Create(demoModel_.transform.translation + lwp::Vector3(0.0f, 0.5f, 0.0f));
 
 	// 無敵時間確認
 	if (flag_.isInvincible_)
@@ -103,7 +103,7 @@ void Player::Update()
 		}
 	}
 	// 無敵なのかどうか判断
-	colliders_.player_->isActive = !flag_.isInvincible_;
+	colliders_.player_.isActive = !flag_.isInvincible_;
 }
 
 void Player::StartJust()
@@ -129,7 +129,7 @@ void Player::EndJust()
 	//isJustSlashing_ = false;
 	flag_.isJustSlashing_ = false;
 	// 無敵切れは次の居合時にもなる
-	colliders_.player_->isActive = true;
+	colliders_.player_.isActive = true;
 }
 
 void Player::ApplyUpgrade(const UpgradeParameter& para)
@@ -200,17 +200,17 @@ void Player::InitSlash()
 	maxInvincibleTime_ = config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLECORRECTION_;
 	// 武器の当たり判定を出す
 	// カプセルの設定
-	lwp::Vector3 start = demoModel_->transform.translation;
-	lwp::Vector3 end = demoModel_->transform.translation;
-	colliders_.weapon_->Create(start, end);
-	colliders_.weapon_->radius = config_.Length_.WEAPONCOLLISIONRADIUS_;
-	colliders_.weapon_->isActive = true;
+	lwp::Vector3 start = demoModel_.transform.translation;
+	lwp::Vector3 end = demoModel_.transform.translation;
+	colliders_.weapon_.Create(start, end);
+	colliders_.weapon_.radius = config_.Length_.WEAPONCOLLISIONRADIUS_;
+	colliders_.weapon_.isActive = true;
 	// ジャスト判定を作る
-	colliders_.justSlash_->Create(start, end);
+	colliders_.justSlash_.Create(start, end);
 	// サイズ
-	colliders_.justSlash_->radius = config_.Length_.JUSTCOLLISIONRADIUS_;
-	colliders_.justSlash_->end = demoModel_->transform.translation + slashData_.vector_ * (config_.Speed_.SLASH_ * config_.Par_.JUSTENABLE_);
-	colliders_.justSlash_->isActive = true;
+	colliders_.justSlash_.radius = config_.Length_.JUSTCOLLISIONRADIUS_;
+	colliders_.justSlash_.end = demoModel_.transform.translation + slashData_.vector_ * (config_.Speed_.SLASH_ * config_.Par_.JUSTENABLE_);
+	colliders_.justSlash_.isActive = true;
 }
 
 void Player::InitMoment()
@@ -223,15 +223,15 @@ void Player::InitMoment()
 	momentData_.maxTime_ = config_.Time_.MOMENTBASE_ + (momentData_.relationSlash_ * config_.Time_.MOMENTINCREMENT_);
 	weapon_->SetBehavior(Weapon::Behavior::Moment);
 	// 武器の判定を消す
-	colliders_.weapon_->isActive = false;
+	colliders_.weapon_.isActive = false;
 }
 
 void Player::InitDamage()
 {
 	// デルタタイム変更
 	EndJust();
-	colliders_.weapon_->isActive = false;
-	colliders_.justSlash_->isActive = false;
+	colliders_.weapon_.isActive = false;
+	colliders_.justSlash_.isActive = false;
 	flag_.isInvincible_ = true;
 	invincibleTime_ = 0.0f;
 	maxInvincibleTime_ = config_.Time_.DAMAGEINVINCIBLE_;
@@ -264,14 +264,14 @@ void Player::UpdateMove()
 	moveVector.y = 0.0f;
 
 	// モデル回転
-	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+	demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 	// 正規化
 	moveVector = moveVector.Normalize();
 	// パラメータも使う
 	moveVector = moveVector * (config_.Speed_.MOVE_ / moveData_.maxTime_) * (float)lwp::GetDeltaTime();
 
-	demoModel_->transform.translation += moveVector;
+	demoModel_.transform.translation += moveVector;
 }
 
 void Player::UpdateSlash()
@@ -286,20 +286,20 @@ void Player::UpdateSlash()
 	lwp::Vector3 moveVector = slashData_.vector_;
 
 	// モデル回転
-	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+	demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 	moveVector = moveVector * (config_.Speed_.SLASH_ / slashData_.maxTime_) * (float)lwp::GetDeltaTime();
 
-	demoModel_->transform.translation += moveVector;	// 無敵時間
+	demoModel_.transform.translation += moveVector;	// 無敵時間
 	// ジャスト成立中
 	//　無敵時間中
 	//colliders_.player_->isActive = (!flag_.isJustSlashing_ && config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLE_ < t);
 	//flag_.isInvincible_ = (!flag_.isJustSlashing_ && config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLE_ < t);
 	// 判定を取れるようにする
-	colliders_.justSlash_->isActive = t < config_.Time_.JUSTTAKETIME_;
+	colliders_.justSlash_.isActive = t < config_.Time_.JUSTTAKETIME_;
 
 	// 武器の判定を伸ばす
-	colliders_.weapon_->end = demoModel_->transform.translation + slashData_.vector_ * config_.Length_.WEAPONPLUSCORRECTION_;
+	colliders_.weapon_.end = demoModel_.transform.translation + slashData_.vector_ * config_.Length_.WEAPONPLUSCORRECTION_;
 
 }
 
@@ -318,12 +318,12 @@ void Player::UpdateMoment()
 		moveVector.y = 0.0f;
 
 		// モデル回転
-		demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+		demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 		//moveVector = moveVector.Normalize() * (cSPEEDMOMENT_ / momentData_.maxTime_) * lwp::GetDeltaTime();
 		moveVector = moveVector.Normalize() * (config_.Speed_.MOMENT_ / momentData_.maxTime_) * (float)lwp::GetDeltaTime();
 
-		demoModel_->transform.translation += moveVector;
+		demoModel_.transform.translation += moveVector;
 	}
 }
 
@@ -428,58 +428,58 @@ void Player::CreateCollisions()
 void Player::CreatePlayerCollision()
 {
 	// 当たり判定を設定
-	colliders_.player_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
+	colliders_.player_ = LWP::Object::Collider::AABB();
 	// 武器との当たり判定を取る
-	colliders_.player_->Create(demoModel_->transform.translation);
+	colliders_.player_.Create(demoModel_.transform.translation);
 	// マスク
-	colliders_.player_->mask.SetBelongFrag(MaskLayer::Player);
+	colliders_.player_.mask.SetBelongFrag(MaskLayer::Player);
 	// 敵または敵の攻撃
-	colliders_.player_->mask.SetHitFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+	colliders_.player_.mask.SetHitFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 	// チョットした後隙
 	// 別個で用意した当たった時の関数
-	colliders_.player_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionPlayer(data); });
+	colliders_.player_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionPlayer(data); });
 
-	colliders_.player_->isActive = true;
+	colliders_.player_.isActive = true;
 	flag_.isInvincible_ = false;
 #ifdef DEMO
-	colliders_.player_->name = "Player";
+	colliders_.player_.name = "Player";
 #endif
 }
 
 void Player::CreateWeaponCollision()
 {
 	// 当たり判定を設定
-	colliders_.weapon_ = LWP::Common::CreateInstance<lwp::Collider::Capsule>();
+	colliders_.weapon_ = LWP::Object::Collider::Capsule();
 	// 武器との当たり判定を取る
-	colliders_.weapon_->Create({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f });
-	colliders_.weapon_->radius = config_.Length_.WEAPONCOLLISIONRADIUS_;
+	colliders_.weapon_.Create({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f });
+	colliders_.weapon_.radius = config_.Length_.WEAPONCOLLISIONRADIUS_;
 	// マスク
-	colliders_.weapon_->mask.SetBelongFrag(MaskLayer::Layer3);
-	colliders_.weapon_->mask.SetHitFrag(MaskLayer::Enemy);
+	colliders_.weapon_.mask.SetBelongFrag(MaskLayer::Layer3);
+	colliders_.weapon_.mask.SetHitFrag(MaskLayer::Enemy);
 	// 別個で用意した当たった時の関数
-	colliders_.weapon_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionWeapon(data); });
-	colliders_.weapon_->isActive = false;
+	colliders_.weapon_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionWeapon(data); });
+	colliders_.weapon_.isActive = false;
 #ifdef DEMO
-	colliders_.weapon_->name = "Weapon";
+	colliders_.weapon_.name = "Weapon";
 #endif
 }
 
 void Player::CreateJustCollision()
 {
 	// ジャスト居合
-	colliders_.justSlash_ = LWP::Common::CreateInstance<lwp::Collider::Capsule>();
-	colliders_.justSlash_->Create(demoModel_->transform.translation, demoModel_->transform.translation);
+	colliders_.justSlash_ = LWP::Object::Collider::Capsule();
+	colliders_.justSlash_.Create(demoModel_.transform.translation, demoModel_.transform.translation);
 	// マスク
-	colliders_.justSlash_->mask.SetBelongFrag(MaskLayer::Player);
-	colliders_.justSlash_->mask.SetHitFrag(MaskLayer::Layer2);
+	colliders_.justSlash_.mask.SetBelongFrag(MaskLayer::Player);
+	colliders_.justSlash_.mask.SetHitFrag(MaskLayer::Layer2);
 	// ジャスト居合したことを通知
 	// 別個で用意した当たった時の関数
-	colliders_.justSlash_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionJust(data); });
+	colliders_.justSlash_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionJust(data); });
 	// フラグオフ
-	colliders_.justSlash_->isActive = false;
+	colliders_.justSlash_.isActive = false;
 
 #ifdef DEMO
-	colliders_.justSlash_->name = "Just";
+	colliders_.justSlash_.name = "Just";
 #endif
 }
 

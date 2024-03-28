@@ -2,13 +2,13 @@
 void Weapon::Initialize()
 {
 	// モデル読み込み
-	demoModel_ = LWP::Resource::LoadModel("cube/cube.obj");
+	demoModel_.LoadFile("cube/cube.obj");
 	//demoModel_->transform.Parent(&world_);
-	demoModel_->isActive = true;
-	demoModel_->name = "PlayerWeapon";
+	demoModel_.isActive = true;
+	demoModel_.name = "PlayerWeapon";
 
-	demoModel_->transform.translation.z = 1.0f;
-	demoModel_->transform.scale = { 0.5f,0.5f,0.8f };
+	demoModel_.transform.translation.z = 1.0f;
+	demoModel_.transform.scale = { 0.5f,0.5f,0.8f };
 
 	InitDatas();
 
@@ -55,8 +55,8 @@ void Weapon::Update()
 
 void Weapon::InitRoot()
 {
-	rootData_.translate_.start_ = demoModel_->transform.translation;
-	rootData_.rotate_.start_ = demoModel_->transform.rotation;
+	rootData_.translate_.start_ = demoModel_.transform.translation;
+	rootData_.rotate_.start_ = demoModel_.transform.rotation;
 }
 
 void Weapon::InitSlash()
@@ -65,30 +65,30 @@ void Weapon::InitSlash()
 
 void Weapon::InitMoment()
 {
-	momentData_.scale_.start_ = demoModel_->transform.scale;
-	momentData_.rotate_.start_ = demoModel_->transform.rotation;
-	momentData_.translate_.start_ = demoModel_->transform.translation;
+	momentData_.scale_.start_ = demoModel_.transform.scale;
+	momentData_.rotate_.start_ = demoModel_.transform.rotation;
+	momentData_.translate_.start_ = demoModel_.transform.translation;
 }
 
 void Weapon::UpdateRoot()
 {
-	demoModel_->transform.scale = lwp::Vector3::Slerp(rootData_.scale_.start_, rootData_.scale_.end_, *pT_);
-	demoModel_->transform.rotation = lwp::Vector3::Slerp(rootData_.rotate_.start_, rootData_.rotate_.end_, *pT_);
-	demoModel_->transform.translation = lwp::Vector3::Slerp(rootData_.translate_.start_, rootData_.translate_.end_, *pT_);
+	demoModel_.transform.scale = lwp::Vector3::Slerp(rootData_.scale_.start_, rootData_.scale_.end_, *pT_);
+	demoModel_.transform.rotation = lwp::Vector3::Slerp(rootData_.rotate_.start_, rootData_.rotate_.end_, *pT_);
+	demoModel_.transform.translation = lwp::Vector3::Slerp(rootData_.translate_.start_, rootData_.translate_.end_, *pT_);
 }
 
 void Weapon::UpdateSlash()
 {
-	demoModel_->transform.scale = lwp::Vector3::Slerp(slashData_.scale_.start_, slashData_.scale_.end_, *pT_);
-	demoModel_->transform.rotation = lwp::Vector3::Slerp(slashData_.rotate_.start_, slashData_.rotate_.end_, *pT_);
-	demoModel_->transform.translation = lwp::Vector3::Slerp(slashData_.translate_.start_, slashData_.translate_.end_, *pT_);
+	demoModel_.transform.scale = lwp::Vector3::Slerp(slashData_.scale_.start_, slashData_.scale_.end_, *pT_);
+	demoModel_.transform.rotation = lwp::Vector3::Slerp(slashData_.rotate_.start_, slashData_.rotate_.end_, *pT_);
+	demoModel_.transform.translation = lwp::Vector3::Slerp(slashData_.translate_.start_, slashData_.translate_.end_, *pT_);
 }
 
 void Weapon::UpdateMoment()
 {
-	demoModel_->transform.scale = lwp::Vector3::Slerp(momentData_.scale_.start_, momentData_.scale_.end_, *pT_);
-	demoModel_->transform.rotation = lwp::Vector3::Slerp(momentData_.rotate_.start_, momentData_.rotate_.end_, *pT_);
-	demoModel_->transform.translation = lwp::Vector3::Slerp(momentData_.translate_.start_, momentData_.translate_.end_, *pT_);
+	demoModel_.transform.scale = lwp::Vector3::Slerp(momentData_.scale_.start_, momentData_.scale_.end_, *pT_);
+	demoModel_.transform.rotation = lwp::Vector3::Slerp(momentData_.rotate_.start_, momentData_.rotate_.end_, *pT_);
+	demoModel_.transform.translation = lwp::Vector3::Slerp(momentData_.translate_.start_, momentData_.translate_.end_, *pT_);
 }
 
 void Weapon::InitDatas()

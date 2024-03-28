@@ -49,7 +49,7 @@ void Sample::Initialize() {
 
 	// 三角形
 	for (int i = 0; i < 2; i++) {
-		tri[i] = LWP::Primitive::CreateInstance<Triangle>();
+		tri[i] = LWP::Primitive::Triangle();
 	}
 	tri[0]->vertices[0].color = Color(RED);
 	tri[0]->vertices[1].color = Color(BLUE);
@@ -188,7 +188,7 @@ void Sample::Update() {
 
 	// シェーダー作り直し
 	if (Keyboard::GetTrigger(DIK_R)) {
-		mainCamera->ReCreateShader();
+		mainCamera.ReCreateShader();
 	}
 	// パーティクル呼び出し
 	if (Keyboard::GetTrigger(DIK_P)) {

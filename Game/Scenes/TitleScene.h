@@ -61,5 +61,7 @@ private: //*** 変数群 ***//
 	// アップグレードの表示
 	//std::unique_ptr<UpgradeScreen> scUpgrade_;
 	std::unique_ptr<L::UpgradeManager> upgradeManager_;
+	// 地面
+	lwp::Mesh ground;
 
 };

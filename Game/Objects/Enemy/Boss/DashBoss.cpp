@@ -4,7 +4,7 @@
 void DashBoss::Init()
 {
 	// 当たり判定のインスタンス生成
-	models_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
+	models_.push_back(new LWP::Primitive::Cube());
 	// 色
 	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::RED);
 	// 大きさ

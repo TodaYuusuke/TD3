@@ -69,6 +69,6 @@ namespace L {
 	protected: // ** 派生先用のメンバ変数 ** //
 
 		// スプライト
-		LWP::Primitive::Sprite* sprite_;
+		LWP::Primitive::Sprite sprite_;
 	};
 }

@@ -20,7 +20,7 @@ void Moment::Reset()
 	elapsedTime_ = 0.0f;
 	EndTime_ = player_->config_.Time_.MOMENTBASE_;
 	player_->isSlash_ = false;
-	player_->colliders_.weapon_->isActive = false;
+	player_->colliders_.weapon_.isActive = false;
 	if (!player_->isJustSlashing_)
 	{
 		player_->pCamera_->EndSlash();
@@ -46,14 +46,14 @@ void Moment::Update()
 	moveVector.y = 0.0f;
 
 	// モデル回転
-	player_->demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+	player_->demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 	// 正規化
 	moveVector = moveVector.Normalize();
 	// パラメータも使う
 	moveVector *= player_->parameter_.momentSpeed * (float)lwp::GetDeltaTime();
 
-	player_->demoModel_->transform.translation += moveVector;
+	player_->demoModel_.transform.translation += moveVector;
 
 	// 経過時間を加算
 	elapsedTime_ += lwp::GetDeltaTimeF();

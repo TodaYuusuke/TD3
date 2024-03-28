@@ -7,7 +7,10 @@ using namespace LWP::Object::Collider;
 class Arrow
 {
 public:
-	~Arrow() = default;
+	~Arrow(){
+		delete model_;
+		delete aabb_;
+	};
 	void Init(lwp::WorldTransform transform);
 	void Update();
 	void Attack();

@@ -6,7 +6,7 @@ using namespace LWP::Object::Collider;
 
 void ArrowEnemy::Init()
 {
-	models_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
+	models_.push_back(new LWP::Primitive::Cube());
 	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::GREEN);
 
 	// 最初から描画
@@ -60,14 +60,14 @@ void ArrowEnemy::SetPosition(lwp::Vector3 pos)
 void ArrowEnemy::CreateCollider()
 {
 	// 当たり判定を設定
-	collider_ = LWP::Common::CreateInstance<AABB>();
+	collider_ = LWP::Object::Collider::AABB();
 	// 当たり判定を取る
-	collider_->CreateFromPrimitive(models_[0]);
+	collider_.CreateFromPrimitive(models_[0]);
 	// マスク処理
-	collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	collider_->mask.SetHitFrag(MaskLayer::Layer3);
+	collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+	collider_.mask.SetHitFrag(MaskLayer::Layer3);
 	// 今のところは何もしていない
-	collider_->SetOnCollisionLambda([this](HitData data) {
+	collider_.SetOnCollisionLambda([this](HitData data) {
 		data;
 		if (data.state == OnCollisionState::Press && isActive_ &&
 			data.hit &&
@@ -75,7 +75,7 @@ void ArrowEnemy::CreateCollider()
 		{
 			isActive_ = false;
 			models_[0]->isActive = false;
-			collider_->isActive = false;
+			collider_.isActive = false;
 			arrows_.remove_if([](Arrow* arrow) {
 				arrow->Death();
 				delete arrow;

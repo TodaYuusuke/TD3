@@ -20,7 +20,7 @@ void Level::Initialize(const lwp::Vector3& position)
 	CreateCollision();
 	// 場所を設定
 	//collider_->Create(position, position);
-	collider_->Create(position);
+	collider_.Create(position);
 }
 
 void Level::Update(const lwp::Vector3& position)
@@ -28,7 +28,7 @@ void Level::Update(const lwp::Vector3& position)
 	// 当たり判定を 1 フレーム毎に更新
 	//collider_->start = collider_->end;
 	//collider_->end = position;
-	collider_->Create(position);
+	collider_.Create(position);
 
 
 #ifdef DEMO
@@ -41,18 +41,18 @@ void Level::Update(const lwp::Vector3& position)
 void Level::CreateCollision()
 {
 	// 当たり判定を作成
-	collider_ = CreateInstance<Sphere>();
+	collider_ = LWP::Object::Collider::Sphere();
 	// マスク
-	collider_->mask.SetBelongFrag(MaskLayer::Layer4);
+	collider_.mask.SetBelongFrag(MaskLayer::Layer4);
 	// 経験値
-	collider_->mask.SetHitFrag(MaskLayer::Layer5);
+	collider_.mask.SetHitFrag(MaskLayer::Layer5);
 	// 別個で用意した当たった時の関数
 	// 状態を切り替えたい
-	collider_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollision(data); });
+	collider_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollision(data); });
 	// 当たる
-	collider_->isActive = true;
+	collider_.isActive = true;
 #ifdef DEMO
-	collider_->name = "Level";
+	collider_.name = "Level";
 #endif // DEMO
 }
 

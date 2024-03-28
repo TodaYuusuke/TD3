@@ -182,11 +182,11 @@ private: //*** サブクラス ***//
 	struct Colliders
 	{
 		// プレイヤー自身の当たり判定
-		lwp::Collider::AABB* player_ = nullptr;
+		lwp::Collider::AABB player_;
 		// 武器の当たり判定
-		lwp::Collider::Capsule* weapon_ = nullptr;
+		lwp::Collider::Capsule weapon_;
 		// ジャスト抜刀したいときの大きめの判定
-		lwp::Collider::Capsule* justSlash_ = nullptr;
+		lwp::Collider::Capsule justSlash_;
 	};
 
 #pragma endregion
@@ -218,7 +218,7 @@ public: //*** パブリック関数 ***//
 
 public:	//*** セッター,ゲッター ***//
 
-	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
+	lwp::WorldTransform* GetWorldTransform() { return &demoModel_.transform; }
 	bool GetIsJustSlashing() { return isJustSlashing_; }
 	bool GetIsSlash() { return isSlash_; }
 	void SetCameraPointer(FollowCamera* p) { pCamera_ = p; }
@@ -356,7 +356,7 @@ public: //*** プライベート変数 ***//
 	std::list<IStatus::Behavior> commands_;
 
 	// プレイヤーのモデル
-	LWP::Primitive::Mesh* demoModel_ = nullptr;
+	LWP::Primitive::Mesh demoModel_;
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
 
