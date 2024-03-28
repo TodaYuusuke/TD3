@@ -13,7 +13,9 @@ class IEnemy
 {
 public:
 	// デストラクタ
-	virtual ~IEnemy() = default;
+	virtual ~IEnemy() {
+		
+	};
 
 	void Initialize();
 

@@ -62,4 +62,5 @@ private: //*** 変数群 ***//
 	//std::unique_ptr<UpgradeScreen> scUpgrade_;
 	std::unique_ptr<L::UpgradeManager> upgradeManager_;
 
+	lwp::Mesh ground;
 };

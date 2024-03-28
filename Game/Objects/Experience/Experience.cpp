@@ -37,7 +37,7 @@ void Experience::Update()
 void Experience::Initialize(const lwp::Vector3& pos)
 {
 	// モデル読み込み
-	model_ = LoadModel("cube/cube.obj");
+	model_->LoadFile("cube/cube.obj");
 	// 設定
 	model_->isActive = true;
 	model_->name = "EXP";
@@ -57,7 +57,7 @@ void Experience::Initialize(const lwp::Vector3& pos)
 void Experience::CreateCollision()
 {
 	// 当たり判定を作成
-	collider_ = CreateInstance<Sphere>();
+	collider_ = new LWP::Object::Collider::Sphere();
 	// マスク
 	collider_->mask.SetBelongFrag(MaskLayer::Layer5);
 	// プレイヤーと経験値取得範囲

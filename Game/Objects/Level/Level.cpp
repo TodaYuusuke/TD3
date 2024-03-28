@@ -41,7 +41,7 @@ void Level::Update(const lwp::Vector3& position)
 void Level::CreateCollision()
 {
 	// 当たり判定を作成
-	collider_ = CreateInstance<Sphere>();
+	collider_ = new Sphere();
 	// マスク
 	collider_->mask.SetBelongFrag(MaskLayer::Layer4);
 	// 経験値

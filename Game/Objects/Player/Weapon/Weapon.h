@@ -61,16 +61,16 @@ public: //*** パブリック関数 ***//
 
 public:	//*** セッター,ゲッター ***//
 
-	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
-	void SetParent(lwp::WorldTransform* p) { demoModel_->transform.Parent(p); }
+	lwp::WorldTransform* GetWorldTransform() { return &demoModel_.transform; }
+	void SetParent(lwp::WorldTransform* p) { demoModel_.transform.Parent(p); }
 
-	void SetIsActive(bool flag) { demoModel_->isActive = flag; }
+	void SetIsActive(bool flag) { demoModel_.isActive = flag; }
 	void SetTPointer(float* p) { pT_ = p; }
 
 	void SetBehavior(Behavior b) { reqBehavior_ = b; }
 
 	// 武器のモデル取得
-	lwp::Mesh* GetMesh() { return demoModel_; }
+	lwp::Mesh* GetMesh() { return &demoModel_; }
 
 private: //*** プライベート関数 ***//
 
@@ -100,7 +100,7 @@ private: //*** プライベート変数 ***//
 	//*** 計算用 ***//
 
 	// モデル
-	lwp::Mesh* demoModel_ = nullptr;
+	lwp::Mesh demoModel_;
 
 	// イージング用
 	// 外部からの T を参照

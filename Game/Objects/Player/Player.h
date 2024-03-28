@@ -196,7 +196,11 @@ public: //*** パブリック関数 ***//
 	// コンストラクタ
 	Player() = default;
 	// デストラクタ
-	~Player();
+	~Player() {
+		delete colliders_.justSlash_;
+		delete colliders_.player_;
+		delete colliders_.weapon_;
+	};
 
 	// 初期化
 	void Initialize();
@@ -218,7 +222,7 @@ public: //*** パブリック関数 ***//
 
 public:	//*** セッター,ゲッター ***//
 
-	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
+	lwp::WorldTransform* GetWorldTransform() { return &demoModel_.transform; }
 	bool GetIsJustSlashing() { return isJustSlashing_; }
 	bool GetIsSlash() { return isSlash_; }
 	void SetCameraPointer(FollowCamera* p) { pCamera_ = p; }
@@ -356,7 +360,7 @@ public: //*** プライベート変数 ***//
 	std::list<IStatus::Behavior> commands_;
 
 	// プレイヤーのモデル
-	LWP::Primitive::Mesh* demoModel_ = nullptr;
+	LWP::Primitive::Mesh demoModel_;
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
 
