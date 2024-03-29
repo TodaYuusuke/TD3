@@ -28,14 +28,8 @@ void Move::Reset()
 
 void Move::Update()
 {
-	// 移動入力を受け付ける
-	CheckInputMove();
-
-	// 攻撃入力を受け付ける
-	CheckInputSlash();
-
 	// 居合するか
-	if (player_->isInputSlash_)
+	if (player_->flag_.isInputSlash_)
 	{
 		player_->RegistStatus(Behavior::Slash);
 	}
@@ -43,12 +37,12 @@ void Move::Update()
 	lwp::Vector3 moveVector = player_->GetVectorTranspose(player_->destinate_);
 
 	// モデル回転
-	player_->demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+	player_->demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 	// パラメータも使う
 	moveVector *= player_->parameter_.moveSpeed * (float)lwp::GetDeltaTime();
 
-	player_->demoModel_->transform.translation += moveVector;
+	player_->demoModel_.transform.translation += moveVector;
 
 	// 経過時間を加算
 	elapsedTime_ += lwp::GetDeltaTimeF();

@@ -51,15 +51,6 @@ protected: //*** プロテクト関数 ***//
 	/// </summary>
 	virtual void CreateMotions() = 0;
 
-	/// <summary>
-	/// 移動操作入力を受け取る
-	/// </summary>
-	void CheckInputMove();
-
-	/// <summary>
-	/// 攻撃操作入力を受け取る
-	/// </summary>
-	void CheckInputSlash();
 
 protected: // ** 派生先用のメンバ変数 ** //
 

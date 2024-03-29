@@ -22,9 +22,11 @@ void Slash::Reset()
 	// 時間を初期化
 	elapsedTime_ = 0.0f;
 	EndTime_ = player_->config_.Time_.SLASHBASE_;
-	player_->isSlash_ = true;
 	player_->pCamera_->StartSlash();
 
+	// 居合の方向を更新
+	// 居合中には変更しない
+	player_->slashData_.vector_ = player_->destinate_;
 
 	ResetCollider();
 
@@ -34,19 +36,24 @@ void Slash::Reset()
 
 void Slash::Update()
 {
+	// 居合するか
+	if (player_->flag_.isInputSlash_ && player_->flag_.isJustSlashing_)
+	{
+		player_->RegistStatus(Behavior::Slash);
+	}
 	// 一定方向を向く
 	lwp::Vector3 moveVector = player_->GetVectorTranspose(player_->slashData_.vector_);
 
 	moveVector *= player_->parameter_.slashSpeed * lwp::GetDefaultDeltaTimeF();
 
-	player_->demoModel_->transform.translation += moveVector;
+	player_->demoModel_.transform.translation += moveVector;
 
 	// 判定を取れるようにする
 	player_->colliders_.justSlash_->isActive = elapsedTime_ < player_->config_.Time_.JUSTTAKETIME_;
 
 	// 武器の判定を伸ばす
 	player_->colliders_.weapon_->end =
-		player_->demoModel_->transform.translation +
+		player_->demoModel_.transform.translation +
 		player_->slashData_.vector_ *
 		player_->config_.Length_.WEAPONPLUSCORRECTION_;
 
@@ -81,8 +88,8 @@ void Slash::ResetCollider()
 	player_->maxInvincibleTime_ = player_->config_.Time_.JUSTTAKETIME_ + player_->config_.Time_.JUSTINVINCIBLECORRECTION_;
 	// 武器の当たり判定を出す
 	// カプセルの設定
-	lwp::Vector3 start = player_->demoModel_->transform.translation;
-	lwp::Vector3 end = player_->demoModel_->transform.translation;
+	lwp::Vector3 start = player_->demoModel_.transform.translation;
+	lwp::Vector3 end = player_->demoModel_.transform.translation;
 	player_->colliders_.weapon_->Create(start, end);
 	player_->colliders_.weapon_->radius = player_->config_.Length_.WEAPONCOLLISIONRADIUS_;
 	player_->colliders_.weapon_->isActive = true;
@@ -90,6 +97,6 @@ void Slash::ResetCollider()
 	player_->colliders_.justSlash_->Create(start, end);
 	// サイズ
 	player_->colliders_.justSlash_->radius = player_->config_.Length_.JUSTCOLLISIONRADIUS_;
-	player_->colliders_.justSlash_->end = player_->demoModel_->transform.translation + player_->slashData_.vector_ * (player_->config_.Speed_.SLASH_ * player_->config_.Par_.JUSTENABLE_);
+	player_->colliders_.justSlash_->end = player_->demoModel_.transform.translation + player_->slashData_.vector_ * (player_->config_.Speed_.SLASH_ * player_->config_.Par_.JUSTENABLE_);
 	player_->colliders_.justSlash_->isActive = true;
 }

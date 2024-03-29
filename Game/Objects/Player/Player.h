@@ -170,10 +170,12 @@ private: //*** サブクラス ***//
 	// フラグをまとめた構造体
 	struct Flags
 	{
-		bool isInputMove_ = false;		// 移動入力がされているか
 		bool isJustSlashing_ = false;	// 今ジャスト抜刀中か
 		bool isInvincible_ = false;		// 無敵時間中か
 		bool isDamage_ = false;			// ダメージを受けたか
+		bool isInputMove_ = false;		// 移動入力があったか
+		bool isInputSlash_ = false;		// 攻撃入力があったか
+
 	};
 
 	//*** 当たり判定 ***//
@@ -196,7 +198,11 @@ public: //*** パブリック関数 ***//
 	// コンストラクタ
 	Player() = default;
 	// デストラクタ
-	~Player();
+	~Player() {
+		delete colliders_.justSlash_;
+		delete colliders_.player_;
+		delete colliders_.weapon_;
+	};
 
 	// 初期化
 	void Initialize();
@@ -218,9 +224,9 @@ public: //*** パブリック関数 ***//
 
 public:	//*** セッター,ゲッター ***//
 
-	lwp::WorldTransform* GetWorldTransform() { return &demoModel_->transform; }
-	bool GetIsJustSlashing() { return isJustSlashing_; }
-	bool GetIsSlash() { return isSlash_; }
+	lwp::WorldTransform* GetWorldTransform() { return &demoModel_.transform;}
+	bool GetIsJustSlashing() { return flag_.isJustSlashing_; }
+	bool GetIsSlash() { return behavior_ == IStatus::Behavior::Slash; }
 	void SetCameraPointer(FollowCamera* p) { pCamera_ = p; }
 	void SetScene(TItleScene* p) { pScene_ = p; }
 	// 状態を外部から設定する
@@ -302,6 +308,16 @@ private: //*** Behavior 管理に使う関数 ***//
 
 #pragma endregion
 
+	/// <summary>
+	/// 移動操作入力を受け取る
+	/// </summary>
+	void CheckInputMove();
+
+	/// <summary>
+	/// 攻撃操作入力を受け取る
+	/// </summary>
+	void CheckInputSlash();
+
 	// 受け付けた入力を判別して実際の行動に反映する
 	void CheckBehavior();
 
@@ -356,7 +372,7 @@ public: //*** プライベート変数 ***//
 	std::list<IStatus::Behavior> commands_;
 
 	// プレイヤーのモデル
-	LWP::Primitive::Mesh* demoModel_ = nullptr;
+	LWP::Primitive::Mesh demoModel_;
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
 
@@ -391,16 +407,6 @@ public: //*** プライベート変数 ***//
 	// 状態毎に使うクラスをまとめている
 	std::vector<IStatus*> statuses_;
 
-	// 移動入力があったか
-	bool isInputMove_ = false;
-
-	// 攻撃入力があったか
-	bool isInputSlash_ = false;
-
-	// ジャスト中か
-	bool isJustSlashing_ = false;
-	// 抜刀の瞬間
-	bool isSlash_ = false;
 #pragma endregion
 
 private: //*** プライベート関数 ***//

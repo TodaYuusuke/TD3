@@ -11,24 +11,21 @@
 
 using Behavior = IStatus::Behavior;
 
-Player::~Player()
-{
-}
 
 void Player::Initialize()
 {
 	// モデル読み込み
-	demoModel_ = LWP::Resource::LoadModel("cube/cube.obj");
+	demoModel_.LoadFile("cube/cube.obj");
 	//demoModel_->transform.Parent(&world_);
-	demoModel_->isActive = true;
-	demoModel_->name = "Player";
+	demoModel_.isActive = true;
+	demoModel_.name = "Player";
 
-	demoModel_->transform.translation.z = -4.0f;
+	demoModel_.transform.translation.z = -4.0f;
 
 	// 武器を作成
 	weapon_.reset(new Weapon);
 	weapon_->Initialize();
-	weapon_->SetParent(&demoModel_->transform);
+	weapon_->SetParent(&demoModel_.transform);
 	weapon_->SetTPointer(&easeT_);
 
 	// 状態の情報を設定
@@ -69,6 +66,12 @@ void Player::Update()
 	DebugWindow();
 #endif
 
+	// 移動入力を受け付ける
+	CheckInputMove();
+
+	// 攻撃入力を受け付ける
+	CheckInputSlash();
+
 	// 状態を変えるか判別
 	CheckBehavior();
 
@@ -89,7 +92,7 @@ void Player::Update()
 
 	//*** ここから下はフラグによって管理されている ***//
 
-	colliders_.player_->Create(demoModel_->transform.translation + lwp::Vector3(0.0f, 0.5f, 0.0f));
+	colliders_.player_->Create(demoModel_.transform.translation + lwp::Vector3(0.0f, 0.5f, 0.0f));
 
 	// 無敵時間確認
 	if (flag_.isInvincible_)
@@ -125,11 +128,12 @@ void Player::StartJust()
 
 void Player::EndJust()
 {
-	LWP::Info::SetDeltaTimeMultiply(1.0f);
 	//isJustSlashing_ = false;
 	flag_.isJustSlashing_ = false;
 	// 無敵切れは次の居合時にもなる
 	colliders_.player_->isActive = true;
+	// 終了したことを通知
+	pScene_->EndJustSlash();
 }
 
 void Player::ApplyUpgrade(const UpgradeParameter& para)
@@ -199,8 +203,8 @@ void Player::InitSlash()
 	maxInvincibleTime_ = config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLECORRECTION_;
 	// 武器の当たり判定を出す
 	// カプセルの設定
-	lwp::Vector3 start = demoModel_->transform.translation;
-	lwp::Vector3 end = demoModel_->transform.translation;
+	lwp::Vector3 start = demoModel_.transform.translation;
+	lwp::Vector3 end = demoModel_.transform.translation;
 	colliders_.weapon_->Create(start, end);
 	colliders_.weapon_->radius = config_.Length_.WEAPONCOLLISIONRADIUS_;
 	colliders_.weapon_->isActive = true;
@@ -208,7 +212,7 @@ void Player::InitSlash()
 	colliders_.justSlash_->Create(start, end);
 	// サイズ
 	colliders_.justSlash_->radius = config_.Length_.JUSTCOLLISIONRADIUS_;
-	colliders_.justSlash_->end = demoModel_->transform.translation + slashData_.vector_ * (config_.Speed_.SLASH_ * config_.Par_.JUSTENABLE_);
+	colliders_.justSlash_->end = demoModel_.transform.translation + slashData_.vector_ * (config_.Speed_.SLASH_ * config_.Par_.JUSTENABLE_);
 	colliders_.justSlash_->isActive = true;
 }
 
@@ -263,14 +267,14 @@ void Player::UpdateMove()
 	moveVector.y = 0.0f;
 
 	// モデル回転
-	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+	demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 	// 正規化
 	moveVector = moveVector.Normalize();
 	// パラメータも使う
 	moveVector = moveVector * (config_.Speed_.MOVE_ / moveData_.maxTime_) * (float)lwp::GetDeltaTime();
 
-	demoModel_->transform.translation += moveVector;
+	demoModel_.transform.translation += moveVector;
 }
 
 void Player::UpdateSlash()
@@ -285,11 +289,11 @@ void Player::UpdateSlash()
 	lwp::Vector3 moveVector = slashData_.vector_;
 
 	// モデル回転
-	demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+	demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 	moveVector = moveVector * (config_.Speed_.SLASH_ / slashData_.maxTime_) * (float)lwp::GetDeltaTime();
 
-	demoModel_->transform.translation += moveVector;	// 無敵時間
+	demoModel_.transform.translation += moveVector;	// 無敵時間
 	// ジャスト成立中
 	//　無敵時間中
 	//colliders_.player_->isActive = (!flag_.isJustSlashing_ && config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLE_ < t);
@@ -298,7 +302,7 @@ void Player::UpdateSlash()
 	colliders_.justSlash_->isActive = t < config_.Time_.JUSTTAKETIME_;
 
 	// 武器の判定を伸ばす
-	colliders_.weapon_->end = demoModel_->transform.translation + slashData_.vector_ * config_.Length_.WEAPONPLUSCORRECTION_;
+	colliders_.weapon_->end = demoModel_.transform.translation + slashData_.vector_ * config_.Length_.WEAPONPLUSCORRECTION_;
 
 }
 
@@ -317,12 +321,12 @@ void Player::UpdateMoment()
 		moveVector.y = 0.0f;
 
 		// モデル回転
-		demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+		demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 		//moveVector = moveVector.Normalize() * (cSPEEDMOMENT_ / momentData_.maxTime_) * lwp::GetDeltaTime();
 		moveVector = moveVector.Normalize() * (config_.Speed_.MOMENT_ / momentData_.maxTime_) * (float)lwp::GetDeltaTime();
 
-		demoModel_->transform.translation += moveVector;
+		demoModel_.transform.translation += moveVector;
 	}
 }
 
@@ -419,17 +423,17 @@ void Player::InitDamageData()
 
 void Player::CreateCollisions()
 {
+	CreateJustCollision();
 	CreatePlayerCollision();
 	CreateWeaponCollision();
-	CreateJustCollision();
 }
 
 void Player::CreatePlayerCollision()
 {
 	// 当たり判定を設定
-	colliders_.player_ = LWP::Common::CreateInstance<lwp::Collider::AABB>();
+	colliders_.player_ = new LWP::Object::Collider::AABB();
 	// 武器との当たり判定を取る
-	colliders_.player_->Create(demoModel_->transform.translation);
+	colliders_.player_->Create(demoModel_.transform.translation);
 	// マスク
 	colliders_.player_->mask.SetBelongFrag(MaskLayer::Player);
 	// 敵または敵の攻撃
@@ -448,7 +452,7 @@ void Player::CreatePlayerCollision()
 void Player::CreateWeaponCollision()
 {
 	// 当たり判定を設定
-	colliders_.weapon_ = LWP::Common::CreateInstance<lwp::Collider::Capsule>();
+	colliders_.weapon_ = new LWP::Object::Collider::Capsule();
 	// 武器との当たり判定を取る
 	colliders_.weapon_->Create({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f });
 	colliders_.weapon_->radius = config_.Length_.WEAPONCOLLISIONRADIUS_;
@@ -466,8 +470,8 @@ void Player::CreateWeaponCollision()
 void Player::CreateJustCollision()
 {
 	// ジャスト居合
-	colliders_.justSlash_ = LWP::Common::CreateInstance<lwp::Collider::Capsule>();
-	colliders_.justSlash_->Create(demoModel_->transform.translation, demoModel_->transform.translation);
+	colliders_.justSlash_ = new LWP::Object::Collider::Capsule();
+	colliders_.justSlash_->Create(demoModel_.transform.translation, demoModel_.transform.translation);
 	// マスク
 	colliders_.justSlash_->mask.SetBelongFrag(MaskLayer::Player);
 	colliders_.justSlash_->mask.SetHitFrag(MaskLayer::Layer2);
@@ -513,6 +517,75 @@ void Player::OnCollisionJust(lwp::Collider::HitData& data)
 
 
 #pragma endregion
+
+void Player::CheckInputMove()
+{
+	lwp::Vector2 direct{ 0.0f,0.0f };
+	if (lwp::Keyboard::GetPress(DIK_W))
+	{
+		direct.y += 1.0f;
+	}
+	else if (lwp::Keyboard::GetPress(DIK_S))
+	{
+		direct.y -= 1.0f;
+	}
+	if (lwp::Keyboard::GetPress(DIK_A))
+	{
+		direct.x -= 1.0f;
+	}
+	else if (lwp::Keyboard::GetPress(DIK_D))
+	{
+		direct.x += 1.0f;
+	}
+	direct += LWP::Input::Controller::GetLStick();
+	direct = direct.Normalize();
+
+	//// キーボード入力として区別させる
+	//player_->destinate_ = direct.Normalize() * 0.75f;
+
+	//// コントローラーの入力を合わせる
+	//float x = LWP::Input::Controller::GetLStick().x;
+	//float y = LWP::Input::Controller::GetLStick().y;
+	//if ((player_->destinate_.x < 0 ? -player_->destinate_.x : player_->destinate_.x)
+	//	< (x < 0 ? -x : x))
+	//{
+	//	player_->destinate_.x = x;
+	//}
+	//if ((player_->destinate_.z < 0 ? -player_->destinate_.z : player_->destinate_.z)
+	//	< (y < 0 ? -y : y))
+	//{
+	//	player_->destinate_.z = y;
+	//}
+	//player_->destinate_ = player_->destinate_.Normalize();
+
+	//// 方向がゼロだった場合は元に戻す
+	//if (player_->destinate_.x == 0 && player_->destinate_.z == 0)
+	//{
+	//	player_->destinate_ = direct.Normalize();
+	//}
+
+	// そもそも移動入力が無かったらフラグを立てない
+	flag_.isInputMove_ = !(direct.x == 0 && direct.y == 0);
+
+	// 移動入力があった時に方向を更新する
+		// 方向がゼロにならない保護
+	if (flag_.isInputMove_)
+	{
+		destinate_.x = direct.x;
+		destinate_.z = direct.y;
+	}
+}
+
+void Player::CheckInputSlash()
+{
+	if (lwp::Keyboard::GetTrigger(DIK_SPACE) ||
+		lwp::Pad::GetTrigger(XINPUT_GAMEPAD_A))
+	{
+		flag_.isInputSlash_ = true;
+	}
+	else
+		flag_.isInputSlash_ = false;
+}
 
 
 void Player::CheckBehavior()
@@ -560,10 +633,10 @@ void Player::CheckBehavior()
 			// 居合に入る条件を記述
 			//if ((behavior_ != Behavior::Slash || flag_.isJustSlashing_) &&
 			//	slashData_.relationSlash_ < slashData_.maxRelation_)
-			{
-				reqBehavior_ = Behavior::Slash;
-			}
-			break;
+		{
+			reqBehavior_ = Behavior::Slash;
+		}
+		break;
 		case Behavior::Moment:
 			reqBehavior_ = Behavior::Moment;
 			break;
@@ -588,7 +661,7 @@ void Player::DebugWindow()
 	ImGui::Bullet();
 	ImGui::Text("WASD or LStick : MOVE");
 	ImGui::Bullet();
-	ImGui::Text("SPACE or ABXY  : SLASH");
+	ImGui::Text("SPACE or A  : SLASH");
 
 	ImGui::Separator();
 

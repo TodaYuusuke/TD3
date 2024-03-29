@@ -33,16 +33,16 @@ public:
 public:	//*** ゲッターセッター ***//
 
 	// アンカーポイント
-	void SetAnchorPoint(const lwp::Vector2& a) { uiSprite_->anchorPoint = a; }
+	void SetAnchorPoint(const lwp::Vector2& a) { uiSprite_.anchorPoint = a; }
 	// スクリーン座標系でピクセル単位の設定
 	void SetPosition(const lwp::Vector2& pos) { world_.translation.x = pos.x; world_.translation.y = pos.y; }
 	void SetPositionX(float x) { world_.translation.x = x; }
 	void SetPositionY(float y) { world_.translation.y = y; }
 	// サイズ設定
-	void SetSize(int x, int y) { uiSprite_->size = lwp::Vector2(float(x), float(y)); }
-	void SetSize(const lwp::Vector2& size) { uiSprite_->size = size; }
+	void SetSize(int x, int y) { uiSprite_.size = lwp::Vector2(float(x), float(y)); }
+	void SetSize(const lwp::Vector2& size) { uiSprite_.size = size; }
 	// 描画するかどうかの設定
-	void SetIsActive(bool flag) { uiSprite_->isActive = flag; }
+	void SetIsActive(bool flag) { uiSprite_.isActive = flag; }
 
 protected:
 
@@ -51,5 +51,5 @@ protected:
 	lwp::WorldTransform world_;
 
 	// スプライト
-	lwp::Sprite* uiSprite_ = nullptr;
+	lwp::Sprite uiSprite_;
 };

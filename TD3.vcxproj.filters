@@ -38,6 +38,7 @@
     <ClCompile Include="Game\Objects\Player\Status\Derived\Slash.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Damage.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Moment.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\Boss\DashBoss.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Scene\Sample.h" />
@@ -86,5 +87,13 @@
     <ClInclude Include="Game\Objects\Player\Status\Derived\Slash.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Damage.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Moment.h" />
+    <ClInclude Include="Game\Objects\Enemy\Boss\DashBoss.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp10.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp30.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerUp.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\IUpgrade.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\UpgradeManager.h" />
+    <ClInclude Include="Game\Objects\Player\Motion\IStatus.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\AttackRangeUp.h" />
   </ItemGroup>
 </Project>

@@ -15,14 +15,14 @@ void TItleScene::Initialize()
 	player_->SetScene(this);
 
 	// 地面
-	Mesh* ground = LWP::Resource::LoadModel("ground/ground.obj");
-	ground->transform.translation.y = -0.5f;
-	ground->transform.scale = { 10.0f,0.1f, 10.0f };
-	ground->name = "Ground";
+	ground.LoadFile("ground/ground.obj");
+	ground.transform.translation.y = -0.5f;
+	ground.transform.scale = { 10.0f,0.1f, 10.0f };
+	ground.name = "Ground";
 
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
-	followCamera_->SetCameraAddress(mainCamera);
+	followCamera_->SetCameraAddress(&mainCamera);
 	followCamera_->SetTarget(player_->GetWorldTransform());
 	followCamera_->SetPlayer(player_.get());
 	// カメラを少し上に上げる
@@ -54,13 +54,13 @@ void TItleScene::Initialize()
 void TItleScene::Update()
 {
 	// スローを確認
-	if (isJustSlash_)
+	if (player_->GetIsJustSlashing())
 	{
 		time_ += lwp::GetDeltaTime();
 		if (cTIMESLOW_ <= time_)
 		{
-			isJustSlash_ = false;
 			player_->EndJust();
+			EndJustSlash();
 		}
 	}
 
@@ -100,8 +100,13 @@ void TItleScene::Update()
 
 void TItleScene::StartJustSlash()
 {
-	isJustSlash_ = true;
 	time_ = 0.0f;
 	LWP::Info::SetDeltaTimeMultiply(0.1f);
 	followCamera_->StartSlash();
+}
+
+void TItleScene::EndJustSlash()
+{
+	LWP::Info::SetDeltaTimeMultiply(1.0f);
+	followCamera_->EndSlash();
 }

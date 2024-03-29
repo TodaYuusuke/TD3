@@ -13,7 +13,12 @@ class IEnemy
 {
 public:
 	// デストラクタ
-	virtual ~IEnemy() = default;
+	virtual ~IEnemy() {
+		for (LWP::Primitive::IPrimitive* model : models_) {
+			delete model;
+		}
+		delete collider_;
+	};
 
 	void Initialize();
 
