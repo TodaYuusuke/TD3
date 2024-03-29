@@ -17,7 +17,6 @@ public:
 		for (LWP::Primitive::IPrimitive* model : models_) {
 			delete model;
 		}
-		delete collider_;
 	};
 
 	void Initialize();
@@ -38,14 +37,14 @@ public: //*** ゲッターセッター ***//
 
 protected: //*** 継承クラスで呼び出す共通処理 ***//
 
-	virtual void CreateCollider();
+	void CreateCollider();
 
 
 protected:
 	std::vector<LWP::Primitive::IPrimitive*> models_;
 
 	// 敵の当たり判定
-	lwp::Collider::AABB* collider_ = nullptr;
+	lwp::Collider::AABB collider_;
 	bool isActive_ = false;
 	// 
 	Player* player_;

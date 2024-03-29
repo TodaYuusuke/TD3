@@ -57,34 +57,6 @@ void ArrowEnemy::SetPosition(lwp::Vector3 pos)
 	models_[0]->transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 }
 
-void ArrowEnemy::CreateCollider()
-{
-	// 当たり判定を設定
-	collider_ = new LWP::Object::Collider::AABB;
-	// 当たり判定を取る
-	collider_->CreateFromPrimitive(models_[0]);
-	// マスク処理
-	collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	collider_->mask.SetHitFrag(MaskLayer::Layer3);
-	// 今のところは何もしていない
-	collider_->SetOnCollisionLambda([this](HitData data) {
-		data;
-		if (data.state == OnCollisionState::Press && isActive_ &&
-			data.hit &&
-			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3))
-		{
-			isActive_ = false;
-			models_[0]->isActive = false;
-			collider_->isActive = false;
-			arrows_.remove_if([](Arrow* arrow) {
-				arrow->Death();
-				delete arrow;
-				return true;
-				});
-		}
-		});
-}
-
 void ArrowEnemy::Move()
 {
 	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0]->transform.translation;

@@ -23,9 +23,6 @@ public:// パブリックなメンバ関数
 
 private:// プライベートなメンバ関数
 
-	// コライダーを生成
-	void CreateCollider() override;
-
 	// 移動
 	void Move()override;
 	// 攻撃
