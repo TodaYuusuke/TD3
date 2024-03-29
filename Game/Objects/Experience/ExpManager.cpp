@@ -10,7 +10,7 @@ ExpManager::~ExpManager()
 	for (std::list<Experience*>::iterator itr = exps_.begin(); itr != exps_.end();)
 	{
 		// 消す
-		delete (*itr);
+		delete* itr;
 		itr = exps_.erase(itr);
 	}
 }
@@ -77,6 +77,7 @@ void ExpManager::DebugWindow()
 			Create(pos);
 		}
 
+		ImGui::Text(temp ? "IN" : "NULL");
 		if (ImGui::Button("Delete") && temp)
 		{
 			temp->isDead_ = true;

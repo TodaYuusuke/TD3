@@ -42,6 +42,6 @@ private: //*** プライベート変数 ***//
 	lwp::Mesh model_;
 
 	// 生成されてから動かないコライダー
-	lwp::Collider::Sphere* collider_ = nullptr;
+	lwp::Collider::Sphere collider_;
 
 };

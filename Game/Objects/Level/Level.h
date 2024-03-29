@@ -54,7 +54,7 @@ private: //*** プライベート変数 ***//
 
 	// プレイヤーの経験値取得範囲
 	//lwp::Collider::Capsule* collider_ = nullptr;
-	lwp::Collider::Sphere* collider_ = nullptr;
+	lwp::Collider::Sphere collider_;
 
 };
 
