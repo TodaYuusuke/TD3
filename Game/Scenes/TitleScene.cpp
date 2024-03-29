@@ -15,17 +15,18 @@ void TItleScene::Initialize()
 	player_->SetScene(this);
 
 	// 地面
-	Mesh* ground = LWP::Resource::LoadModel("ground/ground.obj");
-	ground->transform.translation.y = -0.5f;
-	ground->transform.scale = { 10.0f,0.1f, 10.0f };
-	ground->name = "Ground";
+	ground.LoadFile("ground/ground.obj");
+	ground.transform.translation.y = -0.5f;
+	ground.transform.scale = { 10.0f,0.1f, 10.0f };
+	ground.name = "Ground";
 
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
-	followCamera_->SetCameraAddress(mainCamera);
+	followCamera_->SetCameraAddress(&mainCamera);
 	followCamera_->SetTarget(player_->GetWorldTransform());
 	followCamera_->SetPlayer(player_.get());
-
+	// カメラを少し上に上げる
+	followCamera_->pCamera_->transform.rotation.x = 0.3f;
 	player_->SetCameraPointer(followCamera_.get());
 
 	enemyManager_ = std::make_unique<EnemyManager>();

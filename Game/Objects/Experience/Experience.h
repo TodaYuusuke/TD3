@@ -39,7 +39,7 @@ public: //*** パブリック変数 ***//
 private: //*** プライベート変数 ***//
 
 	// モデル
-	lwp::Mesh* model_ = nullptr;
+	lwp::Mesh model_;
 
 	// 生成されてから動かないコライダー
 	lwp::Collider::Sphere* collider_ = nullptr;

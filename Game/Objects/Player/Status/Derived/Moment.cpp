@@ -43,12 +43,12 @@ void Moment::Update()
 		lwp::Vector3 moveVector = player_->GetVectorTranspose(player_->destinate_);
 
 		// モデル回転
-		player_->demoModel_->transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+		player_->demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 		// パラメータも使う
 		moveVector *= player_->parameter_.momentSpeed * (float)lwp::GetDeltaTime();
 
-		player_->demoModel_->transform.translation += moveVector;
+		player_->demoModel_.transform.translation += moveVector;
 	}
 
 	// 経過時間を加算

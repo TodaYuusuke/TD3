@@ -6,7 +6,7 @@ using namespace LWP::Object::Collider;
 
 void ArrowEnemy::Init()
 {
-	models_.push_back(LWP::Common::CreateInstance<LWP::Primitive::Cube>());
+	models_.push_back(new LWP::Primitive::Cube);
 	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::GREEN);
 
 	// 最初から描画
@@ -60,7 +60,7 @@ void ArrowEnemy::SetPosition(lwp::Vector3 pos)
 void ArrowEnemy::CreateCollider()
 {
 	// 当たり判定を設定
-	collider_ = LWP::Common::CreateInstance<AABB>();
+	collider_ = new LWP::Object::Collider::AABB;
 	// 当たり判定を取る
 	collider_->CreateFromPrimitive(models_[0]);
 	// マスク処理

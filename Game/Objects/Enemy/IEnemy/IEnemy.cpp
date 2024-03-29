@@ -13,7 +13,7 @@ void IEnemy::Initialize()
 void IEnemy::CreateCollider()
 {
 	// 当たり判定を設定
-	collider_ = LWP::Common::CreateInstance<AABB>();
+	collider_ = new LWP::Object::Collider::AABB();
 	// 当たり判定を取る
 	collider_->CreateFromPrimitive(models_[0]);
 	// マスク処理
