@@ -119,9 +119,9 @@ void Player::StartJust()
 	pScene_->StartJustSlash();
 	// 居合回数獲得(一回のみ)
 	//if (slashData_.maxRelation_ <= slashData_.cMAXRELATION_)
-	if (slashData_.maxRelation_ <= config_.Count_.SLASHRELATIONMAX_)
+	if (parameter_.slashNum <= config_.Count_.SLASHRELATIONMAX_)
 	{
-		slashData_.maxRelation_++;
+		parameter_.slashNum++;
 		slashPanel_->Just();
 	}
 }
@@ -139,7 +139,7 @@ void Player::EndJust()
 void Player::ApplyUpgrade(const UpgradeParameter& para)
 {
 	// 攻撃力
-	parameter_.power_ = (para.power.base) * (0.01f * para.power.percent);
+	parameter_.power_ = (config_.Power_.BASEPOWER_ + para.power.base) * (0.01f * para.power.percent);
 	// 攻撃範囲
 	parameter_.attackRange_ = (config_.Length_.WEAPONCOLLISIONRADIUS_ + para.attackRange.base) * (0.01f * para.attackRange.percent);
 	// 移動速度
@@ -174,7 +174,7 @@ void Player::InitRoot()
 	// 居合回数のリセット
 	slashData_.relationSlash_ = 0u;
 	//slashData_.maxRelation_ = slashData_.cMAXRELATION_;
-	slashData_.maxRelation_ = config_.Count_.SLASHRELATIONMAX_;
+	//slashData_.maxRelation_ = config_.Count_.SLASHRELATIONMAX_;
 	weapon_->SetBehavior(Weapon::Behavior::Root);
 	// UI に反映
 	slashPanel_->Reset();
@@ -404,7 +404,7 @@ void Player::InitSlashData()
 	slashData_.maxTime_ = 0.0f;
 	slashData_.relationSlash_ = 0u;
 	//slashData_.cMAXRELATION_ = 3u;
-	slashData_.maxRelation_ = 0u;
+	//slashData_.maxRelation_ = 0u;
 }
 
 void Player::InitMomentData()
@@ -711,7 +711,7 @@ void Player::DebugWindow()
 	ImGui::Separator();
 
 	ImGui::Text("SlashRelation / MaxRelation");
-	ImGui::Text("%d / %d", slashData_.relationSlash_, slashData_.maxRelation_);
+	ImGui::Text("%d / %d", slashData_.relationSlash_, parameter_.slashNum);
 	ImGui::Text("INCREMENTMOMENT : %.3f", config_.Time_.MOMENTINCREMENT_);
 	ImGui::Text("Invincible : "); ImGui::SameLine();
 	ImGui::Text(flag_.isInvincible_ ? "TRUE" : "FALSE");

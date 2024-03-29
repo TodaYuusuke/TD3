@@ -4,7 +4,7 @@
 struct Paramete
 {
 	// 基準(定数)
-	float base = 1.0f;
+	float base = 0.0f;
 	// 補正(％)
 	float percent = 100.0f;
 };
@@ -17,7 +17,7 @@ struct UpgradeParameter {
 	// 攻撃範囲
 	Paramete attackRange;
 	// 攻撃回数
-	int attackTotal = 3;
+	int attackTotal = 0;
 	// 体力
 	Paramete lifeMax;
 };

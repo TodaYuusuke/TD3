@@ -49,8 +49,6 @@ private: //*** サブクラス ***//
 	{
 		lwp::Vector3 vector_ = { 0.0f,0.0f,1.0f };		// 向かう方向
 		uint32_t relationSlash_;	// 連続居合回数 : 二回以降+1
-		uint32_t maxRelation_;		// 最大居合回数 : Max
-		//uint32_t cMAXRELATION_;
 	};
 
 
@@ -133,6 +131,13 @@ private: //*** サブクラス ***//
 		// 居合攻撃からジャスト判定が取れる距離の割合
 		float JUSTENABLE_ = 0.2f;
 	};
+	
+	// 強さ
+	struct Power
+	{
+		// 初期攻撃力
+		float BASEPOWER_ = 1.0f;
+	};
 
 	struct Configs
 	{
@@ -141,6 +146,7 @@ private: //*** サブクラス ***//
 		Lengths Length_;
 		Counts Count_;
 		Parcentages Par_;
+		Power Power_;
 	};
 
 	//*** プレイヤーが持つアップグレードのパラメータ ***//

@@ -23,7 +23,7 @@ void Idol::Reset()
 	// 居合回数のリセット
 	player_->slashData_.relationSlash_ = 0u;
 	//slashData_.maxRelation_ = slashData_.cMAXRELATION_;
-	player_->slashData_.maxRelation_ = player_->config_.Count_.SLASHRELATIONMAX_;
+	//player_->slashData_.maxRelation_ = player_->config_.Count_.SLASHRELATIONMAX_;
 	player_->weapon_->SetBehavior(Weapon::Behavior::Root);
 	// UI に反映
 	player_->slashPanel_->Reset();
