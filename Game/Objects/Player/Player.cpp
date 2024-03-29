@@ -119,6 +119,7 @@ void Player::StartJust()
 	pScene_->StartJustSlash();
 	// 居合回数獲得(一回のみ)
 	//if (slashData_.maxRelation_ <= slashData_.cMAXRELATION_)
+	// パラメータによって上限を増やしてもいい
 	if (parameter_.slashNum <= config_.Count_.SLASHRELATIONMAX_)
 	{
 		parameter_.slashNum++;
@@ -638,7 +639,7 @@ void Player::CheckBehavior()
 		case Behavior::Slash:
 			// 居合に入る条件を記述
 			// 最大回数に達していないか
-			if (slashData_.relationSlash_ < parameter_.slashNum)
+			if (slashData_.relationSlash_ < (uint32_t)parameter_.slashNum)
 				// if ((behavior_ != Behavior::Slash || flag_.isJustSlashing_) &&
 				//	slashData_.relationSlash_ < slashData_.maxRelation_)
 			{
