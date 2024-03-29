@@ -26,7 +26,7 @@ void Slash::Reset()
 
 	// 居合の方向を更新
 	// 居合中には変更しない
-	player_->slashData_.vector_ = player_->destinate_;
+	player_->slashData_.vector_ = player_->GetVectorTranspose(player_->destinate_);
 
 	// デルタタイム変更
 	player_->EndJust();
@@ -43,6 +43,7 @@ void Slash::Reset()
 	// ジャスト判定中は無敵
 	player_->invincibleTime_ = 0.0f;
 	player_->maxInvincibleTime_ = player_->config_.Time_.JUSTTAKETIME_ + player_->config_.Time_.JUSTINVINCIBLECORRECTION_;
+
 	// コライダーの設定
 	ResetCollider();
 
@@ -58,9 +59,8 @@ void Slash::Update()
 		player_->RegistStatus(Behavior::Slash);
 	}
 	// 一定方向を向く
-	lwp::Vector3 moveVector = player_->GetVectorTranspose(player_->slashData_.vector_);
-
-	moveVector *= player_->parameter_.slashSpeed * lwp::GetDefaultDeltaTimeF();
+	lwp::Vector3 moveVector = player_->slashData_.vector_ *
+		player_->parameter_.slashSpeed * lwp::GetDefaultDeltaTimeF();
 
 	player_->demoModel_.transform.translation += moveVector;
 
