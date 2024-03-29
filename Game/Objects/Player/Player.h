@@ -151,15 +151,17 @@ private: //*** サブクラス ***//
 	/// </summary>
 	struct PlayerParameter
 	{
-		// 攻撃力差分
+		// 攻撃力
 		float power_ = 0.0f;
-		// 移動速度差分
+		// 攻撃範囲
+		float attackRange_ = 0.0f;
+		// 通常移動速度
 		float moveSpeed = 0.0f;
-		// 移動速度差分
+		// 居合移動速度
 		float slashSpeed = 0.0f;
-		// 移動速度差分
+		// 後隙移動速度
 		float momentSpeed = 0.0f;
-		// 居合回数差分
+		// 居合回数
 		int slashNum = 0;
 	};
 

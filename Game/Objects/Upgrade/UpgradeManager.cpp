@@ -55,7 +55,7 @@ void L::UpgradeManager::LevelUp()
 	RandomUpgrade();
 }
 
-void L::UpgradeManager::DebugWindow()
+void L::UpgradeManager::DebugWindow(Player* player)
 {
 	ImGui::Begin("UpgradeManager");
 
@@ -64,6 +64,10 @@ void L::UpgradeManager::DebugWindow()
 	{
 		// 押された瞬間
 		LevelUp();
+	}
+	if (ImGui::Button("ReApply"))
+	{
+		Apply(player);
 	}
 	ImGui::Separator();
 

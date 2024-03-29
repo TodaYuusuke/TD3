@@ -33,7 +33,7 @@ namespace L {
 		static bool GetLevelUpFlag() { return isLevelUpping; }
 
 #ifdef DEMO
-		void DebugWindow();
+		void DebugWindow(Player* player);
 #endif // DEMO
 
 	private: // ** メンバ変数 ** //

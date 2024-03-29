@@ -138,10 +138,16 @@ void Player::EndJust()
 
 void Player::ApplyUpgrade(const UpgradeParameter& para)
 {
+	// 攻撃力
 	parameter_.power_ = (para.power.base) * (0.01f * para.power.percent);
+	// 攻撃範囲
+	parameter_.attackRange_ = (config_.Length_.WEAPONCOLLISIONRADIUS_ + para.attackRange.base) * (0.01f * para.attackRange.percent);
+	// 移動速度
 	parameter_.moveSpeed = (config_.Speed_.MOVE_ + para.speed.base) * (0.01f * para.speed.percent);
 	parameter_.slashSpeed = (config_.Speed_.SLASH_ + para.speed.base) * (0.01f * para.speed.percent);
 	parameter_.momentSpeed = (config_.Speed_.MOMENT_ + para.speed.base) * (0.01f * para.speed.percent);
+	// 攻撃回数
+	parameter_.slashNum = std::max<int>(config_.Count_.SLASHRELATIONMAX_ + para.attackTotal, 1);
 }
 
 
@@ -850,7 +856,11 @@ void Player::DebugParcentages()
 void Player::ResetParameter()
 {
 	parameter_.power_ = 1.0f;
+	parameter_.attackRange_ = config_.Length_.WEAPONCOLLISIONRADIUS_;
+
 	parameter_.moveSpeed = (config_.Speed_.MOVE_);
 	parameter_.slashSpeed = (config_.Speed_.SLASH_);
 	parameter_.momentSpeed = (config_.Speed_.MOMENT_);
+
+	parameter_.slashNum = config_.Count_.SLASHRELATIONMAX_;
 }

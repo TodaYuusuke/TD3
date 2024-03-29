@@ -66,7 +66,7 @@ void TItleScene::Update()
 
 	// デバッグ
 #ifdef DEMO
-	upgradeManager_->DebugWindow();
+	upgradeManager_->DebugWindow(player_.get());
 #endif // DEMO
 
 
