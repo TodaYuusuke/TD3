@@ -28,6 +28,22 @@ void Slash::Reset()
 	// 居合中には変更しない
 	player_->slashData_.vector_ = player_->destinate_;
 
+	// デルタタイム変更
+	player_->EndJust();
+	//slashData_.maxTime_ = slashData_.cBASETIME;
+	player_->slashData_.maxTime_ = player_->config_.Time_.SLASHBASE_;
+	player_->weapon_->SetBehavior(Weapon::Behavior::Slash);
+	// 居合回数加算
+	player_->slashData_.relationSlash_++;
+	// UI に反映
+	//player_->slashPanel_->Slash();
+	// 当たり判定を消去
+	//colliders_.player_->isActive = false;
+	player_->flag_.isInvincible_ = true;
+	// ジャスト判定中は無敵
+	player_->invincibleTime_ = 0.0f;
+	player_->maxInvincibleTime_ = player_->config_.Time_.JUSTTAKETIME_ + player_->config_.Time_.JUSTINVINCIBLECORRECTION_;
+	// コライダーの設定
 	ResetCollider();
 
 	// アニメーション作成
@@ -36,7 +52,7 @@ void Slash::Reset()
 
 void Slash::Update()
 {
-	// 居合するか
+	// ジャスト中に居合をするか
 	if (player_->flag_.isInputSlash_ && player_->flag_.isJustSlashing_)
 	{
 		player_->RegistStatus(Behavior::Slash);
@@ -71,21 +87,6 @@ void Slash::CreateMotions()
 
 void Slash::ResetCollider()
 {
-	// デルタタイム変更
-	player_->EndJust();
-	//slashData_.maxTime_ = slashData_.cBASETIME;
-	player_->slashData_.maxTime_ = player_->config_.Time_.SLASHBASE_;
-	player_->weapon_->SetBehavior(Weapon::Behavior::Slash);
-	// 居合回数加算
-	player_->slashData_.relationSlash_++;
-	// UI に反映
-	//player_->slashPanel_->Slash();
-	// 当たり判定を消去
-	//colliders_.player_->isActive = false;
-	player_->flag_.isInvincible_ = true;
-	// ジャスト判定中は無敵
-	player_->invincibleTime_ = 0.0f;
-	player_->maxInvincibleTime_ = player_->config_.Time_.JUSTTAKETIME_ + player_->config_.Time_.JUSTINVINCIBLECORRECTION_;
 	// 武器の当たり判定を出す
 	// カプセルの設定
 	lwp::Vector3 start = player_->demoModel_.transform.translation;

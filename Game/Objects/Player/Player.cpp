@@ -637,12 +637,14 @@ void Player::CheckBehavior()
 			break;
 		case Behavior::Slash:
 			// 居合に入る条件を記述
-			//if ((behavior_ != Behavior::Slash || flag_.isJustSlashing_) &&
-			//	slashData_.relationSlash_ < slashData_.maxRelation_)
-		{
-			reqBehavior_ = Behavior::Slash;
-		}
-		break;
+			// 最大回数に達していないか
+			if (slashData_.relationSlash_ < parameter_.slashNum)
+				// if ((behavior_ != Behavior::Slash || flag_.isJustSlashing_) &&
+				//	slashData_.relationSlash_ < slashData_.maxRelation_)
+			{
+				reqBehavior_ = Behavior::Slash;
+			}
+			break;
 		case Behavior::Moment:
 			reqBehavior_ = Behavior::Moment;
 			break;
