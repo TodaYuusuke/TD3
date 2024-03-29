@@ -69,6 +69,12 @@ void Player::Update()
 	DebugWindow();
 #endif
 
+	// 移動入力を受け付ける
+	CheckInputMove();
+
+	// 攻撃入力を受け付ける
+	CheckInputSlash();
+
 	// 状態を変えるか判別
 	CheckBehavior();
 
@@ -114,7 +120,6 @@ void Player::StartJust()
 	maxInvincibleTime_ += config_.Time_.JUSTINVINCIBLEADD_;
 	// ここをゲームシーンに変える
 	pScene_->StartJustSlash();
-	pCamera_->ReduceFov();
 	// 居合回数獲得(一回のみ)
 	//if (slashData_.maxRelation_ <= slashData_.cMAXRELATION_)
 	if (slashData_.maxRelation_ <= config_.Count_.SLASHRELATIONMAX_)
@@ -126,12 +131,12 @@ void Player::StartJust()
 
 void Player::EndJust()
 {
-	LWP::Info::SetDeltaTimeMultiply(1.0f);
 	//isJustSlashing_ = false;
 	flag_.isJustSlashing_ = false;
 	// 無敵切れは次の居合時にもなる
 	colliders_.player_->isActive = true;
-	pCamera_->ResetFov();
+	// 終了したことを通知
+	pScene_->EndJustSlash();
 }
 
 void Player::ApplyUpgrade(const UpgradeParameter& para)
@@ -421,9 +426,9 @@ void Player::InitDamageData()
 
 void Player::CreateCollisions()
 {
+	CreateJustCollision();
 	CreatePlayerCollision();
 	CreateWeaponCollision();
-	CreateJustCollision();
 }
 
 void Player::CreatePlayerCollision()
@@ -516,6 +521,75 @@ void Player::OnCollisionJust(lwp::Collider::HitData& data)
 
 #pragma endregion
 
+void Player::CheckInputMove()
+{
+	lwp::Vector2 direct{ 0.0f,0.0f };
+	if (lwp::Keyboard::GetPress(DIK_W))
+	{
+		direct.y += 1.0f;
+	}
+	else if (lwp::Keyboard::GetPress(DIK_S))
+	{
+		direct.y -= 1.0f;
+	}
+	if (lwp::Keyboard::GetPress(DIK_A))
+	{
+		direct.x -= 1.0f;
+	}
+	else if (lwp::Keyboard::GetPress(DIK_D))
+	{
+		direct.x += 1.0f;
+	}
+	direct += LWP::Input::Controller::GetLStick();
+	direct = direct.Normalize();
+
+	//// キーボード入力として区別させる
+	//player_->destinate_ = direct.Normalize() * 0.75f;
+
+	//// コントローラーの入力を合わせる
+	//float x = LWP::Input::Controller::GetLStick().x;
+	//float y = LWP::Input::Controller::GetLStick().y;
+	//if ((player_->destinate_.x < 0 ? -player_->destinate_.x : player_->destinate_.x)
+	//	< (x < 0 ? -x : x))
+	//{
+	//	player_->destinate_.x = x;
+	//}
+	//if ((player_->destinate_.z < 0 ? -player_->destinate_.z : player_->destinate_.z)
+	//	< (y < 0 ? -y : y))
+	//{
+	//	player_->destinate_.z = y;
+	//}
+	//player_->destinate_ = player_->destinate_.Normalize();
+
+	//// 方向がゼロだった場合は元に戻す
+	//if (player_->destinate_.x == 0 && player_->destinate_.z == 0)
+	//{
+	//	player_->destinate_ = direct.Normalize();
+	//}
+
+	// そもそも移動入力が無かったらフラグを立てない
+	flag_.isInputMove_ = !(direct.x == 0 && direct.y == 0);
+
+	// 移動入力があった時に方向を更新する
+		// 方向がゼロにならない保護
+	if (flag_.isInputMove_)
+	{
+		destinate_.x = direct.x;
+		destinate_.z = direct.y;
+	}
+}
+
+void Player::CheckInputSlash()
+{
+	if (lwp::Keyboard::GetTrigger(DIK_SPACE) ||
+		lwp::Pad::GetTrigger(XINPUT_GAMEPAD_A))
+	{
+		flag_.isInputSlash_ = true;
+	}
+	else
+		flag_.isInputSlash_ = false;
+}
+
 
 void Player::CheckBehavior()
 {
@@ -562,10 +636,10 @@ void Player::CheckBehavior()
 			// 居合に入る条件を記述
 			//if ((behavior_ != Behavior::Slash || flag_.isJustSlashing_) &&
 			//	slashData_.relationSlash_ < slashData_.maxRelation_)
-			{
-				reqBehavior_ = Behavior::Slash;
-			}
-			break;
+		{
+			reqBehavior_ = Behavior::Slash;
+		}
+		break;
 		case Behavior::Moment:
 			reqBehavior_ = Behavior::Moment;
 			break;
@@ -590,7 +664,7 @@ void Player::DebugWindow()
 	ImGui::Bullet();
 	ImGui::Text("WASD or LStick : MOVE");
 	ImGui::Bullet();
-	ImGui::Text("SPACE or ABXY  : SLASH");
+	ImGui::Text("SPACE or A  : SLASH");
 
 	ImGui::Separator();
 

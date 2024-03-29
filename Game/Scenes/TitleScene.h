@@ -31,8 +31,11 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 
 public: //*** 関数群 ***//
 
-	// ジャスト抜刀
+	// ジャスト抜刀開始
 	void StartJustSlash();
+	
+	// ジャスト抜刀終了
+	void EndJustSlash();
 
 private: //*** 変数群 ***//
 
@@ -48,9 +51,6 @@ private: //*** 変数群 ***//
 
 	// レベルアップ機能
 	std::unique_ptr<Level> level_;
-
-	// ジャスト抜刀
-	bool isJustSlash_ = false;
 
 	// ジャストからの時間
 	float time_ = 0.0f;

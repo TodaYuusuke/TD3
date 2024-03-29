@@ -34,19 +34,13 @@ void Idol::Reset()
 
 void Idol::Update()
 {
-	// 移動入力を受け付ける
-	CheckInputMove();
-
-	// 攻撃入力を受け付ける
-	CheckInputSlash();
-
 	// 移動に向かう
-	if (player_->isInputMove_)
+	if (player_->flag_.isInputMove_)
 	{
 		player_->RegistStatus(Behavior::Move);
 	}
 	// 居合するか
-	if (player_->isInputSlash_)
+	if (player_->flag_.isInputSlash_)
 	{
 		player_->RegistStatus(Behavior::Slash);
 	}

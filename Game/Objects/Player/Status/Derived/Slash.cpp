@@ -23,6 +23,9 @@ void Slash::Reset()
 	elapsedTime_ = 0.0f;
 	EndTime_ = player_->config_.Time_.SLASHBASE_;
 
+	// 居合の方向を更新
+	// 居合中には変更しない
+	player_->slashData_.vector_ = player_->destinate_;
 
 	ResetCollider();
 
@@ -32,6 +35,11 @@ void Slash::Reset()
 
 void Slash::Update()
 {
+	// 居合するか
+	if (player_->flag_.isInputSlash_ && player_->flag_.isJustSlashing_)
+	{
+		player_->RegistStatus(Behavior::Slash);
+	}
 	// 一定方向を向く
 	lwp::Vector3 moveVector = player_->GetVectorTranspose(player_->slashData_.vector_);
 

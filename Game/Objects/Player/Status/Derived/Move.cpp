@@ -28,14 +28,8 @@ void Move::Reset()
 
 void Move::Update()
 {
-	// 移動入力を受け付ける
-	CheckInputMove();
-
-	// 攻撃入力を受け付ける
-	CheckInputSlash();
-
 	// 居合するか
-	if (player_->isInputSlash_)
+	if (player_->flag_.isInputSlash_)
 	{
 		player_->RegistStatus(Behavior::Slash);
 	}

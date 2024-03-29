@@ -53,13 +53,13 @@ void TItleScene::Initialize()
 void TItleScene::Update()
 {
 	// スローを確認
-	if (isJustSlash_)
+	if (player_->GetIsJustSlashing())
 	{
 		time_ += lwp::GetDeltaTime();
 		if (cTIMESLOW_ <= time_)
 		{
-			isJustSlash_ = false;
 			player_->EndJust();
+			EndJustSlash();
 		}
 	}
 
@@ -80,7 +80,7 @@ void TItleScene::Update()
 
 		//mainCamera->transform = followCamera_->camera_.transform;
 
-		//6enemyManager_->Update();
+		enemyManager_->Update();
 
 		// 敵が死んだときに出てくるので敵の更新の後
 		// 経験値を更新
@@ -99,8 +99,13 @@ void TItleScene::Update()
 
 void TItleScene::StartJustSlash()
 {
-	isJustSlash_ = true;
 	time_ = 0.0f;
 	LWP::Info::SetDeltaTimeMultiply(0.1f);
 	followCamera_->StartSlash();
+}
+
+void TItleScene::EndJustSlash()
+{
+	LWP::Info::SetDeltaTimeMultiply(1.0f);
+	followCamera_->EndSlash();
 }
