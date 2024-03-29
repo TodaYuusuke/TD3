@@ -6,8 +6,15 @@ using namespace LWP::Object::Collider;
 
 void ArrowEnemy::Init()
 {
-	models_.push_back(new LWP::Primitive::Cube);
-	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::GREEN);
+	LWP::Primitive::Mesh Mash;
+	Mash.LoadFile("cube/cube.obj");
+	Mash.name = "ArrowEnemy!!";
+	Mash.isActive = true;
+	models_.push_back(Mash);
+	//models_[0].LoadFile("cube/cube.obj");
+	//models_[0].name = "ArrowEnemy!!";
+	//models_[0].isActive = true;
+	//models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::GREEN);
 
 	// 最初から描画
 	isActive_ = true;
@@ -54,7 +61,7 @@ void ArrowEnemy::Update()
 
 void ArrowEnemy::SetPosition(lwp::Vector3 pos)
 {
-	models_[0]->transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 }
 
 void ArrowEnemy::CreateCollider()
@@ -62,7 +69,7 @@ void ArrowEnemy::CreateCollider()
 	// 当たり判定を設定
 	collider_ = new LWP::Object::Collider::AABB;
 	// 当たり判定を取る
-	collider_->CreateFromPrimitive(models_[0]);
+	collider_->CreateFromPrimitive(&models_[0]);
 	// マスク処理
 	collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 	collider_->mask.SetHitFrag(MaskLayer::Layer3);
@@ -74,7 +81,7 @@ void ArrowEnemy::CreateCollider()
 			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3))
 		{
 			isActive_ = false;
-			models_[0]->isActive = false;
+			//models_[0].isActive = false;
 			collider_->isActive = false;
 			arrows_.remove_if([](Arrow* arrow) {
 				arrow->Death();
@@ -87,10 +94,10 @@ void ArrowEnemy::CreateCollider()
 
 void ArrowEnemy::Move()
 {
-	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0]->transform.translation;
+	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;
 	MoveVec = MoveVec.Normalize();
 	MoveVec.y = 0.0f;
-	models_[0]->transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
+	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
 }
 
 void ArrowEnemy::Attack()
@@ -100,7 +107,7 @@ void ArrowEnemy::Attack()
 	{
 		Aim();
 		Arrow* arrow = new Arrow();
-		arrow->Init(models_[0]->transform);
+		arrow->Init(models_[0].transform);
 		arrows_.push_back(arrow);
 		attackWaitTime_ = kAttackWaitTime;
 		isAttack = false;
@@ -111,13 +118,13 @@ void ArrowEnemy::Attack()
 void ArrowEnemy::Aim()
 {
 	// 狙う対象に身体を向ける
-	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0]->transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0]->transform.translation.z);
-	models_[0]->transform.rotation.y = radian;
+	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0].transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0].transform.translation.z);
+	models_[0].transform.rotation.y = radian;
 }
 
 bool ArrowEnemy::CheckAttackRange() {
 	// 自機との距離
-	float distance = (models_[0]->transform.translation - player_->GetWorldTransform()->translation).Length();
+	float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
 	if (distance <= kAttackRange) {
 		return true;
 	}

@@ -4,11 +4,12 @@
 void DashBoss::Init()
 {
 	// 当たり判定のインスタンス生成
-	models_.push_back(new LWP::Primitive::Cube());
+	models_.push_back(LWP::Primitive::Mesh());
+	models_[0].LoadFile("cube/cube.obj");
 	// 色
-	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::RED);
+	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::RED);
 	// 大きさ
-	models_[0]->transform.scale = { 1,2,1 };
+	models_[0].transform.scale = { 1,2,1 };
 	// 当たり判定を有効化
 	isActive_ = true;
 
@@ -64,14 +65,14 @@ void DashBoss::Update()
 
 void DashBoss::SetPosition(lwp::Vector3 pos)
 {
-	models_[0]->transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 }
 
 void DashBoss::Move()
 {
 	lwp::Vector3 MoveVec = GetDirectVel();
 	MoveVec.y = 0.0f;
-	models_[0]->transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
+	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
 }
 
 void DashBoss::Attack()
@@ -81,7 +82,7 @@ void DashBoss::Attack()
 
 bool DashBoss::CheckAttackRange() {
 	// 自機との距離
-	float distance = (models_[0]->transform.translation - player_->GetWorldTransform()->translation).Length();
+	float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
 	if (distance <= kAttackRange) {
 		return true;
 	}
@@ -94,7 +95,7 @@ void DashBoss::Aim()
 	LWP::Math::Vector3 targetVel = GetDirectVel();
 	// 狙う対象に身体を向ける
 	float radian = atan2(targetVel.x, targetVel.z);
-	models_[0]->transform.rotation.y = radian;
+	models_[0].transform.rotation.y = radian;
 }
 
 void DashBoss::B_RootInit() {
@@ -130,7 +131,7 @@ void DashBoss::B_DashInit() {
 
 void DashBoss::B_DashUpdate() {
 	// 突進攻撃
-	models_[0]->transform.translation += dashVel_ * kDashSpeedCoefficient;
+	models_[0].transform.translation += dashVel_ * kDashSpeedCoefficient;
 
 	// 既定の時間を過ぎたら攻撃終了
 	if (currentFrame_ >= kDashAttackAllFrame) {
@@ -141,5 +142,5 @@ void DashBoss::B_DashUpdate() {
 }
 
 LWP::Math::Vector3 DashBoss::GetDirectVel() {
-	return (player_->GetWorldTransform()->translation - models_[0]->transform.translation).Normalize();
+	return (player_->GetWorldTransform()->translation - models_[0].transform.translation).Normalize();
 }
