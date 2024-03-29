@@ -21,5 +21,10 @@ namespace L
 		{
 			return "powerUp/PowerUp.png";
 		}
+
+		std::string GetUpgradeName() override
+		{
+			return "LifeMaxUp";
+		}
 	};
 }

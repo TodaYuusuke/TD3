@@ -5,6 +5,7 @@
 #include "Game/Objects/Upgrade/Derved/PowerUp.h"
 #include "Game/Objects/Upgrade/Derved/PowerPerUp10.h"
 #include "Game/Objects/Upgrade/Derved/PowerPerUp30.h"
+#include "Game/Objects/Upgrade/Derved/AllSpeedDelta.h"
 #pragma endregion
 
 using namespace LWP;
@@ -25,13 +26,19 @@ void L::UpgradeManager::Init()
 
 	upgrades_.clear();
 	// アップグレードをすべて取得
-	upgrades_.push_back(new PowerUp);
-	upgrades_.push_back(new PowerUp);
-	upgrades_.push_back(new PowerUp);
-	upgrades_.push_back(new PowerUp);
-	upgrades_.push_back(new PowerUp);
-	upgrades_.push_back(new PowerPerUp10);
-	upgrades_.push_back(new PowerPerUp30);
+	//upgrades_.push_back(new AllSpeedDelta);
+	upgrades_.push_back(new AllSpeedDelta(10));
+	upgrades_.push_back(new AllSpeedDelta(20));
+	upgrades_.push_back(new AllSpeedDelta(30));
+	upgrades_.push_back(new AllSpeedDelta(40));
+	 
+	//upgrades_.push_back(new PowerUp);
+	//upgrades_.push_back(new PowerUp);
+	//upgrades_.push_back(new PowerUp);
+	//upgrades_.push_back(new PowerUp);
+	//upgrades_.push_back(new PowerUp);
+	//upgrades_.push_back(new PowerPerUp10);
+	//upgrades_.push_back(new PowerPerUp30);
 
 	// すべてを初期化する
 	for (size_t i = 0; i < upgrades_.size(); i++)
@@ -85,7 +92,7 @@ void L::UpgradeManager::DebugWindow(Player* player)
 
 		for (size_t i = 0; i < upgrades_.size(); i++)
 		{
-			ImGui::Text("upgrade : %d", i);
+			ImGui::Text(upgrades_[i]->GetUpgradeName().c_str());
 		}
 
 		ImGui::EndChild();
@@ -101,7 +108,7 @@ void L::UpgradeManager::DebugWindow(Player* player)
 		{
 			if (upgrades_[i]->isApplied)
 			{
-				ImGui::Text("upgrade : %d", i);
+				ImGui::Text(upgrades_[i]->GetUpgradeName().c_str());
 			}
 		}
 
@@ -116,12 +123,13 @@ void L::UpgradeManager::DebugWindow(Player* player)
 void L::UpgradeManager::RandomUpgrade()
 {
 	candidata_.clear();
+	// 抽選数分だけ抽選候補に入れる
 	while (candidata_.size() < kUpgradNum_)
 	{
 		// アップグレードの数が足りなくなったら
-		if (upgrades_.size() - upgradedConut_ <= kUpgradNum_)
+		if (upgrades_.size() - upgradedConut_ < kUpgradNum_)
 		{
-			kUpgradNum_ = int(upgrades_.size()) - upgradedConut_ - 1;
+			kUpgradNum_ = int(upgrades_.size()) - upgradedConut_;
 		}
 		// 取得する範囲の添え字を受け取る
 		int rand = Utility::GenerateRandamNum(0, (int)upgrades_.size() - 1);

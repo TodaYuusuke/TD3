@@ -45,6 +45,12 @@ namespace L {
 		/// </summary>
 		/// <returns>resources/texture/以降のパス</returns>
 		virtual std::string GetTexturePass() = 0;
+		
+		/// <summary>
+		/// UI用のテクスチャのパスを返す関数
+		/// </summary>
+		/// <returns>resources/texture/以降のパス</returns>
+		virtual std::string GetUpgradeName() = 0;
 
 		/// <summary>
 		/// 初期化（sprite用テクスチャ読み込み）
