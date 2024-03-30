@@ -207,9 +207,9 @@ public: //*** パブリック関数 ***//
 	Player() = default;
 	// デストラクタ
 	~Player() {
-		delete colliders_.justSlash_;
-		delete colliders_.player_;
-		delete colliders_.weapon_;
+		//delete colliders_.justSlash_;
+		//delete colliders_.player_;
+		//delete colliders_.weapon_;
 	};
 
 	// 初期化
