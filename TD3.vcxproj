@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\Objects\Enemy\Boss\ArrowBoss.cpp" />
     <ClCompile Include="Game\Objects\Enemy\Boss\DashBoss.cpp" />
     <ClCompile Include="Game\Objects\Experience\ExpManager.cpp" />
     <ClCompile Include="Game\Objects\Experience\Experience.cpp" />
@@ -177,6 +178,7 @@
     <ClCompile Include="Game\Objects\Player\Status\Derived\Move.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\Objects\Enemy\Boss\ArrowBoss.h" />
     <ClInclude Include="Game\Objects\Enemy\Boss\DashBoss.h" />
     <ClInclude Include="Game\Objects\Experience\ExpManager.h" />
     <ClInclude Include="Game\Objects\Experience\Experience.h" />

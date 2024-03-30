@@ -68,15 +68,16 @@ void EnemyManager::EnemySpown()
 
 	lwp::Vector3 pos = { PtoE * divideX * signX , 0.5f , PtoE * divideZ * signY };
 	if (number <= 0.5f) {
-		NormalEnemySpown(pos);
+		//NormalEnemySpown(pos);
 		// ボスの発生
 		//DashBossSpown(pos);
+		ArrowBossSpown(pos);
 	}
 	else if (number <= 0.8f) {
-		ShieldEnemySpown(pos);
+		//ShieldEnemySpown(pos);
 	}
 	else {
-		ArrowEnemySpown(pos);
+		//ArrowEnemySpown(pos);
 	}
 
 }
@@ -112,4 +113,12 @@ void EnemyManager::DashBossSpown(lwp::Vector3 pos) {
 	dashBoss->SetTarget(player_);
 	dashBoss->SetPosition(pos);
 	enemys_.push_back(dashBoss);
+}
+
+void EnemyManager::ArrowBossSpown(lwp::Vector3 pos) {
+	ArrowBoss* arrowBoss = new ArrowBoss();
+	arrowBoss->Initialize();
+	arrowBoss->SetTarget(player_);
+	arrowBoss->SetPosition(pos);
+	enemys_.push_back(arrowBoss);
 }
