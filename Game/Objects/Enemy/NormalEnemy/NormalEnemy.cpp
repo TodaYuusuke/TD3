@@ -4,11 +4,11 @@
 using namespace LWP::Object::Collider;
 void NormalEnemy::Init()
 {
-	models_.push_back(LWP::Primitive::Mesh());
+	models_.emplace_back();
 	models_[0].LoadFile("cube/cube.obj");
-	//models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
+	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
 	models_[0].name = "NormalEnemy!!";
-	models_[0].isActive = true;
+
 	isActive_ = true;
 
 	attackWaitTime_ = kAttackWaitTime;

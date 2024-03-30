@@ -5,11 +5,11 @@ using namespace LWP::Object::Collider;
 
 void ShieldEnemy::Init()
 {
-	models_.push_back(LWP::Primitive::Mesh());
+	models_.emplace_back();
 	models_[0].LoadFile("cube/cube.obj");
-	models_[0].name = "ShieldEnemy!!";
-	models_[0].isActive = true;
 	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::CYAN);
+	models_[0].name = "ShieldEnemy!!";
+
 	isActive_ = true;
 
 	attackWaitTime_ = kAttackWaitTime;

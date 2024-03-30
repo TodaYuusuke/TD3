@@ -9,9 +9,8 @@ void ArrowEnemy::Init()
 	// これでできる
 	models_.emplace_back(); 
 	models_[0].LoadFile("cube/cube.obj");
-	models_[0].name = "ArrowEnemy!!";
-	models_[0].isActive = true;
 	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::GREEN);
+	models_[0].name = "ArrowEnemy!!";
 
 	// 最初から描画
 	isActive_ = true;
