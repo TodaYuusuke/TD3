@@ -12,7 +12,7 @@ public:// パブリックなメンバ関数
 	void Init()override;
 	void Update()override;
 	void SetPosition(lwp::Vector3 pos)override;
-
+	void CreateCollider()override;
 	///
 	/// User Method
 	/// 

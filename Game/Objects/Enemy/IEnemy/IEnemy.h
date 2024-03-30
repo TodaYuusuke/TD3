@@ -33,7 +33,7 @@ public: //*** ゲッターセッター ***//
 
 protected: //*** 継承クラスで呼び出す共通処理 ***//
 
-	void CreateCollider();
+	virtual void CreateCollider();
 
 
 protected:
