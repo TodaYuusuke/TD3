@@ -13,11 +13,7 @@ class IEnemy
 {
 public:
 	// デストラクタ
-	virtual ~IEnemy() {
-		for (LWP::Primitive::IPrimitive* model : models_) {
-			delete model;
-		}
-	};
+	virtual ~IEnemy() = default;
 
 	void Initialize();
 
@@ -33,7 +29,7 @@ public: //*** ゲッターセッター ***//
 
 	// 狙う対象をセット(今回は自機をセットする)
 	virtual void SetTarget(Player* player) { player_ = player; }
-	virtual void SetPosition(lwp::Vector3 pos) { models_[0]->transform.translation = pos; }
+	virtual void SetPosition(lwp::Vector3 pos) { models_[0].transform.translation = pos; }
 
 protected: //*** 継承クラスで呼び出す共通処理 ***//
 
@@ -41,7 +37,7 @@ protected: //*** 継承クラスで呼び出す共通処理 ***//
 
 
 protected:
-	std::vector<LWP::Primitive::IPrimitive*> models_;
+	std::vector<LWP::Primitive::Mesh> models_;
 
 	// 敵の当たり判定
 	lwp::Collider::AABB collider_;

@@ -7,7 +7,7 @@ using namespace LWP::Object::Collider;
 class Arrow
 {
 public:
-	~Arrow() = default;
+	~Arrow();
 	void Init(lwp::WorldTransform transform);
 	void Update();
 	void Attack();
@@ -23,7 +23,7 @@ private:// 定数
 
 private:
 	// 矢のモデル
-	LWP::Primitive::IPrimitive* model_;
+	LWP::Primitive::Mesh model_;
 
 	// AABB判定
 	AABB* aabb_;

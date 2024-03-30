@@ -4,8 +4,10 @@
 using namespace LWP::Object::Collider;
 void NormalEnemy::Init()
 {
-	models_.push_back(new LWP::Primitive::Cube);
-	models_[0]->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
+	models_.emplace_back();
+	models_[0].LoadFile("cube/cube.obj");
+	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
+	models_[0].name = "NormalEnemy!!";
 
 	isActive_ = true;
 
@@ -36,15 +38,15 @@ void NormalEnemy::Update()
 
 void NormalEnemy::SetPosition(lwp::Vector3 pos)
 {
-	models_[0]->transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 }
 
 void NormalEnemy::Move()
 {
-	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0]->transform.translation;
+	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;
 	MoveVec = MoveVec.Normalize();
 	MoveVec.y = 0.0f;
-	models_[0]->transform.translation += MoveVec * kMove * LWP::Info::GetDeltaTime();
+	models_[0].transform.translation += MoveVec * kMove * LWP::Info::GetDeltaTime();
 }
 
 void NormalEnemy::Attack()
@@ -52,7 +54,7 @@ void NormalEnemy::Attack()
 	if (attackWaitTime_ <= 0) {
 		attackWork.flag = true;
 
-		Rot = models_[0]->transform.rotation;
+		Rot = models_[0].transform.rotation;
 		attackWork.targetpoint = Rot;
 		// 回転を足す
 		attackWork.targetpoint.x += -0.5f;
@@ -69,7 +71,7 @@ void NormalEnemy::AttackAnimation()
 		if (attackWork.t < 1.0f) {
 			attackWork.t += attackWork.speed;
 			point = lwp::Vector3::Lerp(Rot, attackWork.targetpoint, attackWork.t);
-			models_[0]->transform.rotation = point;
+			models_[0].transform.rotation = point;
 		}
 		else if (attackWork.t >= 1.0f) {
 			attackWork.flag = false;
@@ -92,7 +94,7 @@ void NormalEnemy::AttackAnimation()
 		if (attackEndWork.t < 1.0f) {
 			attackEndWork.t += attackEndWork.speed;
 			point = lwp::Vector3::Lerp(EndRot, Rot, attackEndWork.t);
-			models_[0]->transform.rotation = point;
+			models_[0].transform.rotation = point;
 		}
 		else if (attackEndWork.t >= 1.0f) {
 			attackEndWork.flag = false;
@@ -107,7 +109,7 @@ void NormalEnemy::AttackAnimation()
 
 bool NormalEnemy::CheckAttackRange() {
 	// 自機との距離
-	float distance = (models_[0]->transform.translation - player_->GetWorldTransform()->translation).Length();
+	float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
 	if (distance <= kAttackRange) {
 		return true;
 	}
@@ -117,6 +119,6 @@ bool NormalEnemy::CheckAttackRange() {
 void NormalEnemy::Aim()
 {
 	// 狙う対象に身体を向ける
-	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0]->transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0]->transform.translation.z);
-	models_[0]->transform.rotation.y = radian;
+	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0].transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0].transform.translation.z);
+	models_[0].transform.rotation.y = radian;
 }
