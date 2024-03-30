@@ -192,7 +192,7 @@ private: //*** サブクラス ***//
 	struct Colliders
 	{
 		// プレイヤー自身の当たり判定
-		lwp::Collider::AABB* player_ = nullptr;
+		lwp::Collider::AABB player_;
 		// 武器の当たり判定
 		lwp::Collider::Capsule* weapon_ = nullptr;
 		// ジャスト抜刀したいときの大きめの判定

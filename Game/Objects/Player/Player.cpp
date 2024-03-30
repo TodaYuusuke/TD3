@@ -92,7 +92,7 @@ void Player::Update()
 
 	//*** ここから下はフラグによって管理されている ***//
 
-	colliders_.player_->Create(demoModel_.transform.translation + lwp::Vector3(0.0f, 0.5f, 0.0f));
+	colliders_.player_.Create(demoModel_.transform.translation + lwp::Vector3(0.0f, 0.5f, 0.0f));
 
 	// 無敵時間確認
 	if (flag_.isInvincible_)
@@ -106,7 +106,7 @@ void Player::Update()
 		}
 	}
 	// 無敵なのかどうか判断
-	colliders_.player_->isActive = !flag_.isInvincible_;
+	colliders_.player_.isActive = !flag_.isInvincible_;
 }
 
 void Player::StartJust()
@@ -132,7 +132,7 @@ void Player::EndJust()
 	//isJustSlashing_ = false;
 	flag_.isJustSlashing_ = false;
 	// 無敵切れは次の居合時にもなる
-	colliders_.player_->isActive = true;
+	colliders_.player_.isActive = true;
 	// 終了したことを通知
 	pScene_->EndJustSlash();
 }
@@ -438,21 +438,21 @@ void Player::CreateCollisions()
 void Player::CreatePlayerCollision()
 {
 	// 当たり判定を設定
-	colliders_.player_ = new LWP::Object::Collider::AABB();
+	colliders_.player_ = LWP::Object::Collider::AABB();
 	// 武器との当たり判定を取る
-	colliders_.player_->Create(demoModel_.transform.translation);
+	colliders_.player_.Create(demoModel_.transform.translation);
 	// マスク
-	colliders_.player_->mask.SetBelongFrag(MaskLayer::Player);
+	colliders_.player_.mask.SetBelongFrag(MaskLayer::Player);
 	// 敵または敵の攻撃
-	colliders_.player_->mask.SetHitFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+	colliders_.player_.mask.SetHitFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 	// チョットした後隙
 	// 別個で用意した当たった時の関数
-	colliders_.player_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionPlayer(data); });
+	colliders_.player_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionPlayer(data); });
 
-	colliders_.player_->isActive = true;
+	colliders_.player_.isActive = true;
 	flag_.isInvincible_ = false;
 #ifdef DEMO
-	colliders_.player_->name = "Player";
+	colliders_.player_.name = "Player";
 #endif
 }
 
