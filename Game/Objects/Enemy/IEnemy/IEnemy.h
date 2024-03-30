@@ -17,7 +17,7 @@ public:
 		/*for (LWP::Primitive::IPrimitive* model : models_) {
 			delete model;
 		}*/
-		delete collider_;
+		//delete collider_;
 	};
 
 	void Initialize();
@@ -45,7 +45,7 @@ protected:
 	std::vector<LWP::Primitive::Mesh> models_;
 
 	// 敵の当たり判定
-	lwp::Collider::AABB* collider_ = nullptr;
+	lwp::Collider::AABB collider_;
 	bool isActive_ = false;
 	// 
 	Player* player_;

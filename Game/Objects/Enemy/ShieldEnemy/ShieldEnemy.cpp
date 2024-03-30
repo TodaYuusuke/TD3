@@ -75,7 +75,7 @@ void ShieldEnemy::AttackAnimation()
 			attackWork.t = 0.0f;
 
 			attackStanbyWork.flag = true;
-			collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+			collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 		}
 	}
 	if (attackStanbyWork.flag) {
@@ -97,7 +97,7 @@ void ShieldEnemy::AttackAnimation()
 			attackEndWork.flag = false;
 			attackEndWork.t = 0.0f;
 			isAttack = false;
-			collider_->mask.SetBelongFrag(MaskLayer::Enemy);
+			collider_.mask.SetBelongFrag(MaskLayer::Enemy);
 		}
 	}
 
