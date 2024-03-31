@@ -212,15 +212,15 @@ void Player::InitSlash()
 	// カプセルの設定
 	lwp::Vector3 start = demoModel_.transform.translation;
 	lwp::Vector3 end = demoModel_.transform.translation;
-	colliders_.weapon_->Create(start, end);
-	colliders_.weapon_->radius = config_.Length_.WEAPONCOLLISIONRADIUS_;
-	colliders_.weapon_->isActive = true;
+	colliders_.weapon_.Create(start, end);
+	colliders_.weapon_.radius = config_.Length_.WEAPONCOLLISIONRADIUS_;
+	colliders_.weapon_.isActive = true;
 	// ジャスト判定を作る
-	colliders_.justSlash_->Create(start, end);
+	colliders_.justSlash_.Create(start, end);
 	// サイズ
-	colliders_.justSlash_->radius = config_.Length_.JUSTCOLLISIONRADIUS_;
-	colliders_.justSlash_->end = demoModel_.transform.translation + slashData_.vector_ * (config_.Speed_.SLASH_ * config_.Par_.JUSTENABLE_);
-	colliders_.justSlash_->isActive = true;
+	colliders_.justSlash_.radius = config_.Length_.JUSTCOLLISIONRADIUS_;
+	colliders_.justSlash_.end = demoModel_.transform.translation + slashData_.vector_ * (config_.Speed_.SLASH_ * config_.Par_.JUSTENABLE_);
+	colliders_.justSlash_.isActive = true;
 }
 
 void Player::InitMoment()
@@ -233,15 +233,15 @@ void Player::InitMoment()
 	momentData_.maxTime_ = config_.Time_.MOMENTBASE_ + (momentData_.relationSlash_ * config_.Time_.MOMENTINCREMENT_);
 	weapon_->SetBehavior(Weapon::Behavior::Moment);
 	// 武器の判定を消す
-	colliders_.weapon_->isActive = false;
+	colliders_.weapon_.isActive = false;
 }
 
 void Player::InitDamage()
 {
 	// デルタタイム変更
 	EndJust();
-	colliders_.weapon_->isActive = false;
-	colliders_.justSlash_->isActive = false;
+	colliders_.weapon_.isActive = false;
+	colliders_.justSlash_.isActive = false;
 	flag_.isInvincible_ = true;
 	invincibleTime_ = 0.0f;
 	maxInvincibleTime_ = config_.Time_.DAMAGEINVINCIBLE_;
@@ -306,10 +306,10 @@ void Player::UpdateSlash()
 	//colliders_.player_->isActive = (!flag_.isJustSlashing_ && config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLE_ < t);
 	//flag_.isInvincible_ = (!flag_.isJustSlashing_ && config_.Time_.JUSTTAKETIME_ + config_.Time_.JUSTINVINCIBLE_ < t);
 	// 判定を取れるようにする
-	colliders_.justSlash_->isActive = t < config_.Time_.JUSTTAKETIME_;
+	colliders_.justSlash_.isActive = t < config_.Time_.JUSTTAKETIME_;
 
 	// 武器の判定を伸ばす
-	colliders_.weapon_->end = demoModel_.transform.translation + slashData_.vector_ * config_.Length_.WEAPONPLUSCORRECTION_;
+	colliders_.weapon_.end = demoModel_.transform.translation + slashData_.vector_ * config_.Length_.WEAPONPLUSCORRECTION_;
 
 }
 
@@ -459,37 +459,37 @@ void Player::CreatePlayerCollision()
 void Player::CreateWeaponCollision()
 {
 	// 当たり判定を設定
-	colliders_.weapon_ = new LWP::Object::Collider::Capsule();
+	//colliders_.weapon_ = LWP::Object::Collider::Capsule();
 	// 武器との当たり判定を取る
-	colliders_.weapon_->Create({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f });
-	colliders_.weapon_->radius = config_.Length_.WEAPONCOLLISIONRADIUS_;
+	colliders_.weapon_.Create({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f });
+	colliders_.weapon_.radius = config_.Length_.WEAPONCOLLISIONRADIUS_;
 	// マスク
-	colliders_.weapon_->mask.SetBelongFrag(MaskLayer::Layer3);
-	colliders_.weapon_->mask.SetHitFrag(MaskLayer::Enemy);
+	colliders_.weapon_.mask.SetBelongFrag(MaskLayer::Layer3);
+	colliders_.weapon_.mask.SetHitFrag(MaskLayer::Enemy);
 	// 別個で用意した当たった時の関数
-	colliders_.weapon_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionWeapon(data); });
-	colliders_.weapon_->isActive = false;
+	colliders_.weapon_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionWeapon(data); });
+	colliders_.weapon_.isActive = false;
 #ifdef DEMO
-	colliders_.weapon_->name = "Weapon";
+	colliders_.weapon_.name = "Weapon";
 #endif
 }
 
 void Player::CreateJustCollision()
 {
 	// ジャスト居合
-	colliders_.justSlash_ = new LWP::Object::Collider::Capsule();
-	colliders_.justSlash_->Create(demoModel_.transform.translation, demoModel_.transform.translation);
+	//colliders_.justSlash_ = new LWP::Object::Collider::Capsule();
+	colliders_.justSlash_.Create(demoModel_.transform.translation, demoModel_.transform.translation);
 	// マスク
-	colliders_.justSlash_->mask.SetBelongFrag(MaskLayer::Player);
-	colliders_.justSlash_->mask.SetHitFrag(MaskLayer::Layer2);
+	colliders_.justSlash_.mask.SetBelongFrag(MaskLayer::Player);
+	colliders_.justSlash_.mask.SetHitFrag(MaskLayer::Layer2);
 	// ジャスト居合したことを通知
 	// 別個で用意した当たった時の関数
-	colliders_.justSlash_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionJust(data); });
+	colliders_.justSlash_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionJust(data); });
 	// フラグオフ
-	colliders_.justSlash_->isActive = false;
+	colliders_.justSlash_.isActive = false;
 
 #ifdef DEMO
-	colliders_.justSlash_->name = "Just";
+	colliders_.justSlash_.name = "Just";
 #endif
 }
 
