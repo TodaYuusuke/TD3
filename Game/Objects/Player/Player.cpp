@@ -55,8 +55,10 @@ void Player::Initialize()
 		statuses_[i]->Init(this);
 	}
 
+	config_.Initialize();
+	parameter_.Initialize(&config_);
 	// パラメータを反映させる
-	ResetParameter();
+	parameter_.ResetParameter();
 	currStatus_ = statuses_[static_cast<size_t>(behavior_)];
 }
 
@@ -123,7 +125,7 @@ void Player::StartJust()
 	// 居合回数獲得(一回のみ)
 	//if (slashData_.maxRelation_ <= slashData_.cMAXRELATION_)
 	// パラメータによって上限を増やしてもいい
-	if (slashData_.maxRelation_ <= parameter_.slashNum)
+	if (slashData_.maxRelation_ <= (uint32_t)parameter_.slashNum)
 	{
 		slashData_.maxRelation_++;
 		slashPanel_->Just();
@@ -142,16 +144,7 @@ void Player::EndJust()
 
 void Player::ApplyUpgrade(const UpgradeParameter& para)
 {
-	// 攻撃力
-	parameter_.power_ = (config_.Power_.BASEPOWER_ + para.power.base) * (0.01f * para.power.percent);
-	// 攻撃範囲
-	parameter_.attackRange_ = (config_.Length_.WEAPONCOLLISIONRADIUS_ + para.attackRange.base) * (0.01f * para.attackRange.percent);
-	// 移動速度
-	parameter_.moveSpeed = (config_.Speed_.MOVE_ + para.speed.base) * (0.01f * para.speed.percent);
-	parameter_.slashSpeed = (config_.Speed_.SLASH_ + para.speed.base) * (0.01f * para.speed.percent);
-	parameter_.momentSpeed = (config_.Speed_.MOMENT_ + para.speed.base) * (0.01f * para.speed.percent);
-	// 攻撃回数
-	parameter_.slashNum = std::max<int>(config_.Count_.SLASHRELATIONMAX_ + para.attackTotal, 1);
+	parameter_.ApplyUpgrade(para);
 }
 
 
@@ -222,7 +215,7 @@ void Player::InitSlash()
 	colliders_.justSlash_.Create(start, end);
 	// サイズ
 	colliders_.justSlash_.radius = config_.Length_.JUSTCOLLISIONRADIUS_;
-	colliders_.justSlash_.end = demoModel_.transform.translation + slashData_.vector_ * (config_.Speed_.SLASH_ * config_.Par_.JUSTENABLE_);
+	colliders_.justSlash_.end = demoModel_.transform.translation + slashData_.vector_ * (config_.Speed_.SLASH_ * config_.Parcent_.JUSTENABLE_);
 	colliders_.justSlash_.isActive = true;
 }
 
@@ -393,6 +386,7 @@ void Player::InitRootData()
 {
 	//rootData_.cBASETIME = 0.5f;
 	rootData_.maxTime_ = 0.0f;
+	rootData_.velocity_ = { 0.0f,0.0f,0.0f };
 }
 
 void Player::InitMoveData()
@@ -665,6 +659,8 @@ void Player::CheckBehavior()
 
 #pragma region DebugFunc
 
+#if DEMO
+
 void Player::DebugWindow()
 {
 	ImGui::Begin("PlayerWindow");
@@ -676,6 +672,8 @@ void Player::DebugWindow()
 	ImGui::Text("SPACE or A  : SLASH");
 
 	ImGui::Separator();
+	ImGui::Text("%f", rootData_.velocity_.x);
+	ImGui::Text("%f", rootData_.velocity_.z);
 
 	ImGui::Text("Behavior : ");
 	ImGui::SameLine();
@@ -725,7 +723,7 @@ void Player::DebugWindow()
 
 	if (ImGui::Button("Reset"))
 	{
-		ResetParameter();
+		parameter_.ResetParameter();
 	}
 	DebugSpeeds();
 	DebugTimes();
@@ -851,23 +849,13 @@ void Player::DebugParcentages()
 {
 	if (ImGui::TreeNode("Parcentage"))
 	{
-		ImGui::SliderFloat("JUSTENABLE", &config_.Par_.JUSTENABLE_, 0.0f, 1.0f);
+		ImGui::SliderFloat("JUSTENABLE", &config_.Parcent_.JUSTENABLE_, 0.0f, 1.0f);
 
 		ImGui::TreePop();
 		ImGui::Separator();
 	}
 }
 
+#endif
+
 #pragma endregion
-
-void Player::ResetParameter()
-{
-	parameter_.power_ = 1.0f;
-	parameter_.attackRange_ = config_.Length_.WEAPONCOLLISIONRADIUS_;
-
-	parameter_.moveSpeed = (config_.Speed_.MOVE_);
-	parameter_.slashSpeed = (config_.Speed_.SLASH_);
-	parameter_.momentSpeed = (config_.Speed_.MOMENT_);
-
-	parameter_.slashNum = config_.Count_.SLASHRELATIONMAX_;
-}

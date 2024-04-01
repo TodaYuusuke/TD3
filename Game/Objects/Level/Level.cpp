@@ -82,6 +82,8 @@ void Level::LevelUp()
 	L::UpgradeManager::LevelUp();
 }
 
+#if DEMO
+
 void Level::DebugWindow()
 {
 	ImGui::Begin("Levels");
@@ -124,3 +126,5 @@ void Level::DebugWindow()
 
 	ImGui::End();
 }
+
+#endif
