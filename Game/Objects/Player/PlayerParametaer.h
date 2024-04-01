@@ -31,14 +31,49 @@ public:	//*** パブリック関数 ***//
 	/// </summary>
 	void ResetParameter();
 
+public: //*** オペレーターオーバーロード ***//
+
+	const PlayerParameter& operator*(const PlayerParameter& obj);
+
+public:	//*** サブクラス ***//
+
+	/// <summary>
+	/// HP に関するパラメータ
+	/// </summary>
+	struct HP
+	{
+		int hp_ = 0;	// 今のHP
+		int maxHP_ = 0;	// 最大HP
+	};
+
+	/// <summary>
+	/// 攻撃自体に対してのパラメータ
+	/// </summary>
+	struct Attack
+	{
+		// 抜刀そのもの
+		int slashNum_ = 0;			// 回数
+		float slashPower_ = 0.0f;	// 強さ
+		float slashRange_ = 0.0f;	// カプセル範囲
+	};
+
+	/// <summary>
+	/// 移動速度のみのパラメータ
+	/// </summary>
+	struct Speed
+	{
+		float move_ = 0.0f;
+		float slash_ = 0.0f;
+		float moment_ = 0.0f;
+	};
 
 public:	//*** パブリック変数 ***//
 	// 体力
 	int hp_ = 0;
 	// 攻撃力
-	float power_ = 0.0f;
+	float slashPower_ = 0.0f;
 	// 攻撃範囲
-	float attackRange_ = 0.0f;
+	float slashRange_ = 0.0f;
 	// 通常移動速度
 	float moveSpeed = 0.0f;
 	// 居合移動速度
