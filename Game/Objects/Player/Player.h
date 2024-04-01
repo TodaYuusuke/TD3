@@ -416,6 +416,9 @@ public: //*** プライベート変数 ***//
 	// 状態毎に使うクラスをまとめている
 	std::vector<IStatus*> statuses_;
 
+	// 今の状態クラス
+	IStatus* currStatus_ = nullptr;
+
 #pragma endregion
 
 private: //*** プライベート関数 ***//
