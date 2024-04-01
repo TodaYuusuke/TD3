@@ -18,6 +18,9 @@ private:
 	void Move()override;
 	void Attack()override;
 	void AttackAnimation();
+	void AnimeBody();
+	void AnimeL_Arm();
+	void AnimeR_Arm();
 	// 攻撃条件
 	bool CheckAttackRange();
 	// 対象を狙う

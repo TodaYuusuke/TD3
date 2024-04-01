@@ -59,19 +59,45 @@ void NormalEnemy::Move()
 void NormalEnemy::Attack()
 {
 	if (attackWaitTime_ <= 0) {
-		attackWork[Model::L_Arm].flag = true;
+		
+	#pragma region
 
+		attackWork[Model::L_Arm].flag = true;
 		Rot[Model::L_Arm] = models_[Model::L_Arm].transform.rotation;
 		attackWork[Model::L_Arm].targetpoint = Rot[Model::L_Arm];
 		// 回転を足す
 		attackWork[Model::L_Arm].targetpoint.x += -3.14f;
 		EndRot[Model::L_Arm] = attackWork[Model::L_Arm].targetpoint;
+
+	#pragma endregion L_Arm
+	#pragma region
+
+		attackWork[Model::R_Arm].flag = true;
+		Rot[Model::R_Arm] = models_[Model::R_Arm].transform.rotation;
+		attackWork[Model::R_Arm].targetpoint = Rot[Model::R_Arm];
+		// 回転を足す
+		attackWork[Model::R_Arm].targetpoint.x += -3.14f;
+		EndRot[Model::R_Arm] = attackWork[Model::R_Arm].targetpoint;
+
+	#pragma endregion R_Arm
+	#pragma region
+
+	#pragma endregion Body
+
 		attackWaitTime_ = kAttackWaitTime;
 		Aim();
 	}
 }
 
 void NormalEnemy::AttackAnimation()
+{
+	
+	AnimeL_Arm();
+	AnimeR_Arm();
+
+}
+
+void NormalEnemy::AnimeBody()
 {
 	lwp::Vector3 point = { 0.0f,0.0f,0.0f };
 	if (attackWork[Model::L_Arm].flag) {
@@ -110,8 +136,88 @@ void NormalEnemy::AttackAnimation()
 			collider_.mask.SetBelongFrag(MaskLayer::Enemy);
 		}
 	}
+}
 
+void NormalEnemy::AnimeL_Arm()
+{
+	lwp::Vector3 point = { 0.0f,0.0f,0.0f };
+	if (attackWork[Model::L_Arm].flag) {
+		if (attackWork[Model::L_Arm].t < 1.0f) {
+			attackWork[Model::L_Arm].t += attackWork[Model::L_Arm].speed;
+			point = lwp::Vector3::Lerp(Rot[Model::L_Arm], attackWork[Model::L_Arm].targetpoint, attackWork[Model::L_Arm].t);
+			models_[Model::L_Arm].transform.rotation = point;
+		}
+		else if (attackWork[Model::L_Arm].t >= 1.0f) {
+			attackWork[Model::L_Arm].flag = false;
+			attackWork[Model::L_Arm].t = 0.0f;
 
+			attackStanbyWork[Model::L_Arm].flag = true;
+			collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+		}
+	}
+	if (attackStanbyWork[Model::L_Arm].flag) {
+		attackStanbyWork[Model::L_Arm].t += attackStanbyWork[Model::L_Arm].speed;
+		if (attackStanbyWork[Model::L_Arm].t >= 1.0f) {
+			attackStanbyWork[Model::L_Arm].flag = false;
+			attackStanbyWork[Model::L_Arm].t = 0.0f;
+
+			attackEndWork[Model::L_Arm].flag = true;
+		}
+	}
+	if (attackEndWork[Model::L_Arm].flag) {
+		if (attackEndWork[Model::L_Arm].t < 1.0f) {
+			attackEndWork[Model::L_Arm].t += attackEndWork[Model::L_Arm].speed;
+			point = lwp::Vector3::Lerp(EndRot[Model::L_Arm], Rot[Model::L_Arm], attackEndWork[Model::L_Arm].t);
+			models_[Model::L_Arm].transform.rotation = point;
+		}
+		else if (attackEndWork[Model::L_Arm].t >= 1.0f) {
+			attackEndWork[Model::L_Arm].flag = false;
+			attackEndWork[Model::L_Arm].t = 0.0f;
+			isAttack = false;
+			collider_.mask.SetBelongFrag(MaskLayer::Enemy);
+		}
+	}
+}
+
+void NormalEnemy::AnimeR_Arm()
+{
+	lwp::Vector3 point = { 0.0f,0.0f,0.0f };
+	if (attackWork[Model::R_Arm].flag) {
+		if (attackWork[Model::R_Arm].t < 1.0f) {
+			attackWork[Model::R_Arm].t += attackWork[Model::R_Arm].speed;
+			point = lwp::Vector3::Lerp(Rot[Model::R_Arm], attackWork[Model::R_Arm].targetpoint, attackWork[Model::R_Arm].t);
+			models_[Model::R_Arm].transform.rotation = point;
+		}
+		else if (attackWork[Model::R_Arm].t >= 1.0f) {
+			attackWork[Model::R_Arm].flag = false;
+			attackWork[Model::R_Arm].t = 0.0f;
+
+			attackStanbyWork[Model::R_Arm].flag = true;
+			collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+		}
+	}
+	if (attackStanbyWork[Model::R_Arm].flag) {
+		attackStanbyWork[Model::R_Arm].t += attackStanbyWork[Model::R_Arm].speed;
+		if (attackStanbyWork[Model::R_Arm].t >= 1.0f) {
+			attackStanbyWork[Model::R_Arm].flag = false;
+			attackStanbyWork[Model::R_Arm].t = 0.0f;
+
+			attackEndWork[Model::R_Arm].flag = true;
+		}
+	}
+	if (attackEndWork[Model::R_Arm].flag) {
+		if (attackEndWork[Model::R_Arm].t < 1.0f) {
+			attackEndWork[Model::R_Arm].t += attackEndWork[Model::R_Arm].speed;
+			point = lwp::Vector3::Lerp(EndRot[Model::R_Arm], Rot[Model::R_Arm], attackEndWork[Model::R_Arm].t);
+			models_[Model::R_Arm].transform.rotation = point;
+		}
+		else if (attackEndWork[Model::R_Arm].t >= 1.0f) {
+			attackEndWork[Model::R_Arm].flag = false;
+			attackEndWork[Model::R_Arm].t = 0.0f;
+			isAttack = false;
+			collider_.mask.SetBelongFrag(MaskLayer::Enemy);
+		}
+	}
 }
 
 bool NormalEnemy::CheckAttackRange() {
