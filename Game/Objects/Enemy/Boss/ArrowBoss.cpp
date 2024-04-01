@@ -34,9 +34,12 @@ void ArrowBoss::Update()
 			B_AimingInit();
 			break;
 			// 撃つ
-		case Behavior::kShot:
-			B_ShotInit();
+		case Behavior::kNormalShot:
+			B_NormalShotInit();
 			break;
+			// ホーミング弾
+		case Behavior::kHomingShot:
+			B_HomingShotInit();
 		}
 		// 振るまいリクエストをリセット
 		behaviorRequest_ = std::nullopt;
@@ -51,18 +54,31 @@ void ArrowBoss::Update()
 	case Behavior::kAiming:
 		B_AimingUpdate();
 		break;
-		// 撃つ
-	case Behavior::kShot:
-		B_ShotUpdate();
+		// 通常射撃
+	case Behavior::kNormalShot:
+		B_NormalShotUpdate();
+		// ホーミング弾
+	case Behavior::kHomingShot:
+		B_HomingShotUpdate();
 		break;
 	}
 
-	// 矢の更新処理
-	for (Arrow* arrow : arrows_)
+	// 全ての弾の更新処理
+	ArrowsUpdate();
+}
+
+void ArrowBoss::SetPosition(lwp::Vector3 pos)
+{
+	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+}
+
+void ArrowBoss::ArrowsUpdate() {
+	// 通常弾の更新処理
+	for (Arrow* arrow : normalArrows_)
 	{
 		arrow->Update();
 	}
-	arrows_.remove_if([](Arrow* arrow) {
+	normalArrows_.remove_if([](Arrow* arrow) {
 		if (!arrow->GetIsAlive())
 		{
 			arrow->Death();
@@ -72,52 +88,20 @@ void ArrowBoss::Update()
 		return false;
 		});
 
-}
-
-void ArrowBoss::SetPosition(lwp::Vector3 pos)
-{
-	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
-}
-
-void ArrowBoss::CreateCollider()
-{
-	// 当たり判定を設定
-	collider_ = new LWP::Object::Collider::AABB;
-	// 当たり判定を取る
-	collider_->CreateFromPrimitive(&models_[0]);
-	// マスク処理
-	collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	collider_->mask.SetHitFrag(MaskLayer::Layer3);
-	// 今のところは何もしていない
-	collider_->SetOnCollisionLambda([this](HitData data) {
-		data;
-		if (data.state == OnCollisionState::Press && isActive_ &&
-			data.hit &&
-			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3))
-		{
-			isActive_ = false;
-		}
-		});
-}
-
-void ArrowBoss::Move()
-{
-	lwp::Vector3 MoveVec = GetDirectVel();
-	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
-}
-
-void ArrowBoss::Attack()
-{
-	// 矢の発射
-	if (attackWaitTime_ <= 0)
+	// ホーミング弾の更新処理
+	for (HomingArrow* arrow : homingArrows_)
 	{
-		Aim();
-		Arrow* arrow = new Arrow();
-		arrow->Init(models_[0].transform);
-		arrows_.push_back(arrow);
-		isAttack = false;
+		arrow->Update();
 	}
+	homingArrows_.remove_if([](HomingArrow* arrow) {
+		if (!arrow->GetIsAlive())
+		{
+			arrow->Death();
+			delete arrow;
+			return true;
+		}
+		return false;
+		});
 }
 
 bool ArrowBoss::CheckAttackRange() {
@@ -161,7 +145,7 @@ void ArrowBoss::B_RootUpdate() {
 		// 移動処理
 		Move();
 	}
-	
+
 	stunFrame_--;
 }
 
@@ -173,43 +157,131 @@ void ArrowBoss::B_AimingInit() {
 void ArrowBoss::B_AimingUpdate() {
 	// 体を自機に向ける
 	Aim();
-	
+
 	// 既定の時間を過ぎたら弾を撃つ
 	if (attackWaitTime_ <= 0) {
-		behaviorRequest_ = Behavior::kShot;
+		behaviorRequest_ = Behavior::kHomingShot;
 	}
 
 	attackWaitTime_--;
 }
 
-void ArrowBoss::B_ShotInit() {
+void ArrowBoss::B_NormalShotInit() {
 	// 自機狙い状態解除
 	isAiming_ = false;
 	// 攻撃開始
 	isAttack = true;
 	// 射撃の全体フレーム
-	shotFrame_ = kShotAllFrame;
+	shotFrame_ = kNormalShotAllFrame;
 	// 射撃のディレイ
-	shotDelay_ = kShotDelayFrame;
+	shotDelay_ = kNormalShotDelayFrame;
 	// 射撃回数
-	shotCount_ = kMaxShotCount;
+	shotCount_ = kMaxNormalShotCount;
 }
-void ArrowBoss::B_ShotUpdate() {
+void ArrowBoss::B_NormalShotUpdate() {
 	// 射撃間隔
 	if (shotDelay_ <= 0 && shotCount_ >= 1) {
 		Attack();
-		shotDelay_ = kShotDelayFrame;
+		shotDelay_ = kNormalShotDelayFrame;
 		shotCount_--;
 	}
 	// 既定の時間を過ぎたら攻撃終了
 	if (shotFrame_ <= 0) {
 		behaviorRequest_ = Behavior::kRoot;
 	}
-	
+
+	shotDelay_--;
+	shotFrame_--;
+}
+
+void ArrowBoss::B_HomingShotInit() {
+	// 自機狙い状態解除
+	isAiming_ = false;
+	// 攻撃開始
+	isAttack = true;
+	// 射撃の全体フレーム
+	shotFrame_ = kHomingShotAllFrame;
+	// 射撃のディレイ
+	shotDelay_ = kNormalShotDelayFrame;
+	// 射撃回数
+	shotCount_ = kMaxHomingShotCount;
+}
+void ArrowBoss::B_HomingShotUpdate() {
+	// 射撃間隔
+	if (shotDelay_ <= 0 && shotCount_ >= 1) {
+		Attack();
+		shotDelay_ = kHomingShotDelayFrame;
+		shotCount_--;
+	}
+	// 既定の時間を過ぎたら攻撃終了
+	if (shotFrame_ <= 0) {
+		behaviorRequest_ = Behavior::kRoot;
+	}
+
 	shotDelay_--;
 	shotFrame_--;
 }
 
 LWP::Math::Vector3 ArrowBoss::GetDirectVel() {
 	return (player_->GetWorldTransform()->translation - models_[0].transform.translation).Normalize();
+}
+
+void ArrowBoss::CreateCollider()
+{
+	// 当たり判定を設定
+	collider_ = new LWP::Object::Collider::AABB;
+	// 当たり判定を取る
+	collider_->CreateFromPrimitive(&models_[0]);
+	// マスク処理
+	collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+	collider_->mask.SetHitFrag(MaskLayer::Layer3);
+	// 今のところは何もしていない
+	collider_->SetOnCollisionLambda([this](HitData data) {
+		data;
+		if (data.state == OnCollisionState::Press && isActive_ &&
+			data.hit &&
+			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3))
+		{
+			isActive_ = false;
+		}
+		});
+}
+
+void ArrowBoss::Move()
+{
+	lwp::Vector3 MoveVec = GetDirectVel();
+	MoveVec.y = 0.0f;
+	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
+}
+
+void ArrowBoss::Attack()
+{
+	// 自機を狙う
+	Aim();
+#pragma region 通常弾
+	if (behavior_ == Behavior::kNormalShot) {
+		// 弾を生成
+		Arrow* arrow = new Arrow();
+		arrow->Init(models_[0].transform);
+		normalArrows_.push_back(arrow);
+	}
+#pragma endregion
+
+#pragma region ホーミング弾
+	else if (behavior_ == Behavior::kHomingShot) {
+		// 弾を生成
+		HomingArrow* homingArrow = new HomingArrow();
+		homingArrow->Init(models_[0].transform);
+
+		// 自機のアドレスを設定
+		homingArrow->SetPlayer(player_);
+
+		// 真上に弾を撃つ
+		LWP::Math::Vector3 rotate = { -M_PI / 2.5f, 0,0 };
+		homingArrow->SetShootingAngle(rotate);
+
+		homingArrows_.push_back(homingArrow);
+	}
+#pragma endregion 
+	isAttack = false;
 }

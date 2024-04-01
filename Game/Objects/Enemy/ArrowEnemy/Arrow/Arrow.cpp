@@ -1,8 +1,6 @@
 #include "Arrow.h"
 
-
 Arrow::~Arrow() {
-	//delete model_;
 	delete aabb_;
 }
 
@@ -30,11 +28,12 @@ void Arrow::Init(lwp::WorldTransform transform)
 		if (!(data.state == OnCollisionState::None) &&
 			data.hit &&
 			((data.hit->mask.GetBelongFrag() & MaskLayer::Player) ||
-			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3)))
+				(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3)))
 		{
 			Death();
 		}
 		});
+
 	aabb_->isActive = true;
 }
 
@@ -50,14 +49,20 @@ void Arrow::Update()
 	}
 	// 寿命を進める
 	deadTimer_++;
-#ifdef DEMO
-	ImGui::Text("isAlive : %d", attackWork.flag);
-#endif
 }
 
 void Arrow::Attack()
 {
-	model_.transform.translation += attackWork.targetpoint * attackWork.speed * LWP::Info::GetDeltaTime();
+	// 弾が向いている方向に動く処理
+	LWP::Math::Vector3 velocity = velocity_;
+	LWP::Math::Matrix4x4 rotateMatrix = LWP::Math::Matrix4x4::CreateRotateXYZMatrix(model_.transform.rotation);
+	velocity_ = velocity * rotateMatrix;
+	velocity_ = velocity.Normalize();
+	velocity_ *= kNormalSpeed;
+
+	// 加算
+	model_.transform.translation += velocity_ * LWP::Info::GetDeltaTime();
+
 	attackWork.flag = true;
 }
 
@@ -67,4 +72,3 @@ void Arrow::Death()
 	//model_->isActive = false;
 	//aabb_->isActive = false;
 }
-

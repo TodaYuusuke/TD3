@@ -3,6 +3,7 @@
 
 void EnemyManager::Init()
 {
+	ArrowBossSpown(LWP::Math::Vector3{ 0,0,10 });
 }
 
 void EnemyManager::Update()
@@ -71,7 +72,7 @@ void EnemyManager::EnemySpown()
 		//NormalEnemySpown(pos);
 		// ボスの発生
 		//DashBossSpown(pos);
-		ArrowBossSpown(pos);
+		//ArrowBossSpown(pos);
 	}
 	else if (number <= 0.8f) {
 		//ShieldEnemySpown(pos);
