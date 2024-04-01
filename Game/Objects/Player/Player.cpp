@@ -57,6 +57,7 @@ void Player::Initialize()
 
 	// パラメータを反映させる
 	ResetParameter();
+	currStatus_ = statuses_[static_cast<size_t>(behavior_)];
 }
 
 void Player::Update()
@@ -80,11 +81,13 @@ void Player::Update()
 		behavior_ = reqBehavior_.value();
 		t = 0.0f;
 		easeT_ = 0.0f;
-		statuses_[static_cast<size_t>(behavior_)]->Reset();
+		currStatus_ = statuses_[static_cast<size_t>(behavior_)];
+		currStatus_->Reset();
 		reqBehavior_ = std::nullopt;
 	}
 	// 状態の更新
-	statuses_[static_cast<size_t>(behavior_)]->Update();
+	//statuses_[static_cast<size_t>(behavior_)]->Update();
+	currStatus_->Update();
 	t += (float)lwp::GetDeltaTime();
 	weapon_->Update();
 	slashPanel_->Update();
@@ -711,8 +714,9 @@ void Player::DebugWindow()
 
 	ImGui::Separator();
 
-	ImGui::Text("SlashRelation / MaxRelation");
-	ImGui::Text("%d / %d(%d)", slashData_.relationSlash_, slashData_.maxRelation_, parameter_.slashNum);
+	ImGui::Text("SlashRelation");
+	ImGui::Bullet();	ImGui::Text("Num / Max(Base)");
+	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", slashData_.relationSlash_, slashData_.maxRelation_, parameter_.slashNum);
 	ImGui::Text("INCREMENTMOMENT : %.3f", config_.Time_.MOMENTINCREMENT_);
 	ImGui::Text("Invincible : "); ImGui::SameLine();
 	ImGui::Text(flag_.isInvincible_ ? "TRUE" : "FALSE");
