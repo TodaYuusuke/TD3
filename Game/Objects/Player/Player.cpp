@@ -438,7 +438,7 @@ void Player::CreateCollisions()
 void Player::CreatePlayerCollision()
 {
 	// 当たり判定を設定
-	colliders_.player_ = LWP::Object::Collider::AABB();
+	//colliders_.player_ = LWP::Object::Collider::AABB();
 	// 武器との当たり判定を取る
 	colliders_.player_.Create(demoModel_.transform.translation);
 	// マスク

@@ -73,10 +73,10 @@ void EnemyManager::EnemySpown()
 		//DashBossSpown(pos);
 	}
 	else if (number <= 0.8f) {
-		ShieldEnemySpown(pos);
+		//ShieldEnemySpown(pos);
 	}
 	else {
-		ArrowEnemySpown(pos);
+		//ArrowEnemySpown(pos);
 	}
 
 }

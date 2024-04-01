@@ -1,5 +1,11 @@
 #pragma once
 #include "Game/Objects/Enemy/IEnemy/IEnemy.h"
+enum Model{
+	Body = 0,
+	L_Arm = 1,
+	R_Arm = 2,
+	MaxValue = 3
+};
 
 class NormalEnemy: public IEnemy
 {
@@ -28,17 +34,27 @@ private:// 定数
 	const float kMove = 2.0f;
 
 private:
-	lwp::Vector3 Rot;
-	lwp::Vector3 EndRot;
-	MotionWork attackWork = {
-	.targetpoint = 1.0f,
-	.speed = 0.05f,
+	lwp::Vector3 Rot[Model::MaxValue];
+	lwp::Vector3 EndRot[Model::MaxValue];
+	MotionWork attackWork[Model::MaxValue] = {
+	{.targetpoint = 1.0f,
+	.speed = 0.05f,},
+	{.targetpoint = 1.0f,
+	.speed = 0.05f,},
+	{.targetpoint = 1.0f,
+	.speed = 0.05f,}
 	};
-	MotionWork attackStanbyWork = {
-	.speed = 0.02f,
+	MotionWork attackStanbyWork[Model::MaxValue] = {
+	{.speed = 0.02f,},
+	{.speed = 0.02f,},
+	{.speed = 0.02f,}
 	};
-	MotionWork attackEndWork = {
-	.targetpoint = 0.0f,
-	.speed = 0.1f,
+	MotionWork attackEndWork[Model::MaxValue] = {
+	{.targetpoint = 0.0f,
+	.speed = 0.1f,},
+	{.targetpoint = 0.0f,
+	.speed = 0.1f,},
+	{.targetpoint = 0.0f,
+	.speed = 0.1f,}
 	};
 };

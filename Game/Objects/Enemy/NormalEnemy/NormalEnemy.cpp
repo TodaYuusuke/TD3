@@ -4,10 +4,13 @@
 using namespace LWP::Object::Collider;
 void NormalEnemy::Init()
 {
+	models_.reserve(Model::MaxValue);
 	models_.emplace_back();
-	models_[0].LoadFile("cube/cube.obj");
-	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
-	models_[0].name = "NormalEnemy!!";
+	models_[Model::Body].LoadFile("NormalEnemy/Body/Body.obj");
+	models_.emplace_back();
+	models_[Model::L_Arm].LoadFile("NormalEnemy/L_Arm/L_Arm.obj");
+	models_.emplace_back();
+	models_[Model::R_Arm].LoadFile("NormalEnemy/R_Arm/R_Arm.obj");
 
 	isActive_ = true;
 
@@ -38,27 +41,31 @@ void NormalEnemy::Update()
 
 void NormalEnemy::SetPosition(lwp::Vector3 pos)
 {
-	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	models_[Model::Body].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	models_[Model::L_Arm].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	models_[Model::R_Arm].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 }
 
 void NormalEnemy::Move()
 {
-	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;
+	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[Model::Body].transform.translation;
 	MoveVec = MoveVec.Normalize();
 	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * kMove * LWP::Info::GetDeltaTime();
+	models_[Model::Body].transform.translation += MoveVec * kMove * LWP::Info::GetDeltaTime();
+	models_[Model::L_Arm].transform.translation += MoveVec * kMove * LWP::Info::GetDeltaTime();
+	models_[Model::R_Arm].transform.translation += MoveVec * kMove * LWP::Info::GetDeltaTime();
 }
 
 void NormalEnemy::Attack()
 {
 	if (attackWaitTime_ <= 0) {
-		attackWork.flag = true;
+		attackWork[Model::L_Arm].flag = true;
 
-		Rot = models_[0].transform.rotation;
-		attackWork.targetpoint = Rot;
+		Rot[Model::L_Arm] = models_[Model::L_Arm].transform.rotation;
+		attackWork[Model::L_Arm].targetpoint = Rot[Model::L_Arm];
 		// 回転を足す
-		attackWork.targetpoint.x += -0.5f;
-		EndRot = attackWork.targetpoint;
+		attackWork[Model::L_Arm].targetpoint.x += -3.14f;
+		EndRot[Model::L_Arm] = attackWork[Model::L_Arm].targetpoint;
 		attackWaitTime_ = kAttackWaitTime;
 		Aim();
 	}
@@ -67,38 +74,38 @@ void NormalEnemy::Attack()
 void NormalEnemy::AttackAnimation()
 {
 	lwp::Vector3 point = { 0.0f,0.0f,0.0f };
-	if (attackWork.flag) {
-		if (attackWork.t < 1.0f) {
-			attackWork.t += attackWork.speed;
-			point = lwp::Vector3::Lerp(Rot, attackWork.targetpoint, attackWork.t);
-			models_[0].transform.rotation = point;
+	if (attackWork[Model::L_Arm].flag) {
+		if (attackWork[Model::L_Arm].t < 1.0f) {
+			attackWork[Model::L_Arm].t += attackWork[Model::L_Arm].speed;
+			point = lwp::Vector3::Lerp(Rot[Model::L_Arm], attackWork[Model::L_Arm].targetpoint, attackWork[Model::L_Arm].t);
+			models_[Model::L_Arm].transform.rotation = point;
 		}
-		else if (attackWork.t >= 1.0f) {
-			attackWork.flag = false;
-			attackWork.t = 0.0f;
+		else if (attackWork[Model::L_Arm].t >= 1.0f) {
+			attackWork[Model::L_Arm].flag = false;
+			attackWork[Model::L_Arm].t = 0.0f;
 
-			attackStanbyWork.flag = true;
+			attackStanbyWork[Model::L_Arm].flag = true;
 			collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 		}
 	}
-	if (attackStanbyWork.flag) {
-		attackStanbyWork.t += attackStanbyWork.speed;
-		if (attackStanbyWork.t >= 1.0f) {
-			attackStanbyWork.flag = false;
-			attackStanbyWork.t = 0.0f;
+	if (attackStanbyWork[Model::L_Arm].flag) {
+		attackStanbyWork[Model::L_Arm].t += attackStanbyWork[Model::L_Arm].speed;
+		if (attackStanbyWork[Model::L_Arm].t >= 1.0f) {
+			attackStanbyWork[Model::L_Arm].flag = false;
+			attackStanbyWork[Model::L_Arm].t = 0.0f;
 
-			attackEndWork.flag = true;
+			attackEndWork[Model::L_Arm].flag = true;
 		}
 	}
-	if (attackEndWork.flag) {
-		if (attackEndWork.t < 1.0f) {
-			attackEndWork.t += attackEndWork.speed;
-			point = lwp::Vector3::Lerp(EndRot, Rot, attackEndWork.t);
-			models_[0].transform.rotation = point;
+	if (attackEndWork[Model::L_Arm].flag) {
+		if (attackEndWork[Model::L_Arm].t < 1.0f) {
+			attackEndWork[Model::L_Arm].t += attackEndWork[Model::L_Arm].speed;
+			point = lwp::Vector3::Lerp(EndRot[Model::L_Arm], Rot[Model::L_Arm], attackEndWork[Model::L_Arm].t);
+			models_[Model::L_Arm].transform.rotation = point;
 		}
-		else if (attackEndWork.t >= 1.0f) {
-			attackEndWork.flag = false;
-			attackEndWork.t = 0.0f;
+		else if (attackEndWork[Model::L_Arm].t >= 1.0f) {
+			attackEndWork[Model::L_Arm].flag = false;
+			attackEndWork[Model::L_Arm].t = 0.0f;
 			isAttack = false;
 			collider_.mask.SetBelongFrag(MaskLayer::Enemy);
 		}
@@ -109,7 +116,7 @@ void NormalEnemy::AttackAnimation()
 
 bool NormalEnemy::CheckAttackRange() {
 	// 自機との距離
-	float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
+	float distance = (models_[Model::Body].transform.translation - player_->GetWorldTransform()->translation).Length();
 	if (distance <= kAttackRange) {
 		return true;
 	}
@@ -119,6 +126,8 @@ bool NormalEnemy::CheckAttackRange() {
 void NormalEnemy::Aim()
 {
 	// 狙う対象に身体を向ける
-	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0].transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0].transform.translation.z);
-	models_[0].transform.rotation.y = radian;
+	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[Model::Body].transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[Model::Body].transform.translation.z);
+	models_[Model::Body].transform.rotation.y = radian;
+	models_[Model::L_Arm].transform.rotation.y = radian;
+	models_[Model::R_Arm].transform.rotation.y = radian;
 }
