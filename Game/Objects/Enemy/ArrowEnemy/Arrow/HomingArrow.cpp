@@ -5,8 +5,7 @@ HomingArrow::~HomingArrow() {
 	delete aabb_;
 }
 
-void HomingArrow::Init(lwp::WorldTransform transform)
-{
+void HomingArrow::Init(lwp::WorldTransform transform) {
 	// モデルの作成
 	model_ = LWP::Primitive::Mesh();
 	model_.LoadFile("cube/cube.obj");
@@ -14,7 +13,7 @@ void HomingArrow::Init(lwp::WorldTransform transform)
 	model_.transform.translation = transform.translation;
 	model_.transform.rotation = transform.rotation;
 	model_.transform.scale = { 0.5f,0.5f,1.0f };
-	model_.name = "Arrow!!";
+	model_.name = "HomingArrow!!";
 
 	// 当たり判定を設定
 	aabb_ = new LWP::Object::Collider::AABB();
@@ -31,23 +30,24 @@ void HomingArrow::Init(lwp::WorldTransform transform)
 			Death();
 		}
 		});
-
 	aabb_->isActive = true;
 
-	// ホーミングが開始する時間
-	homingStartFrame_ = kHomingStartFrame;
+	// ホーミングする時間
+	homingFrame_ = kHomingEndFrame;
 	// ホーミング機能をoff
 	isHoming_ = false;
+	// ホーミング精度
+	homingAccuracy_ = kLongDistHomingAccuracy;
 
-	velocity_ = { 0,0,10 };
+	// 撃ちだす方向にモデルを回転
+	model_.transform.rotation += shootingAngle_;
 }
 
-void HomingArrow::Update()
-{
+void HomingArrow::Update() {
 	// 移動処理
 	Attack();
 
-	// 弾が生存時間を越えていたら死ぬ
+	// 弾の消える条件
 	if (deadTimer_ >= kLifeTime || model_.transform.translation.y <= 0)
 	{
 		Death();
@@ -56,38 +56,45 @@ void HomingArrow::Update()
 	deadTimer_++;
 }
 
-void HomingArrow::Attack()
-{
+void HomingArrow::Attack() {
 	// ホーミング開始時間の確認
-	if (homingStartFrame_ <= 0) {
+	if (homingFrame_ <= kHomingEndFrame - kHomingStartFrame) {
 		isHoming_ = true;
 	}
+	// ホーミング終了時間の確認
+	if (homingFrame_ <= 0) {
+		isHoming_ = false;
+	}
 
+	// ホーミングの処理
 	if (isHoming_) {
-		// ホーミング機能がonになっているときに行う処理
+		// 距離によってホーミング精度を変える
+		ChangeHomingAccuracy();
+		// ホーミングの処理
 		HomingUpdate();
 	}
+	// ホーミングしないときの処理
 	else {
-		// 弾が向いている方向に動く処理
-		LWP::Math::Vector3 velocity = { 0,0,10 };
+		// 方向ベクトル(モデルから見て正面に向かって移動)
+		LWP::Math::Vector3 velocity = { 0,0,1 };
 		// 回転行列の生成(発射角を含み計算)
-		LWP::Math::Matrix4x4 rotateMatrix = LWP::Math::Matrix4x4::CreateRotateXYZMatrix(shootingAngle_ + model_.transform.rotation);
+		LWP::Math::Matrix4x4 rotateMatrix = LWP::Math::Matrix4x4::CreateRotateXYZMatrix(model_.transform.rotation);
 		velocity = velocity * rotateMatrix;
 		velocity_ = velocity.Normalize() * kSpeed;
 	}
+
 	// 加算
 	model_.transform.translation += velocity_ * LWP::Info::GetDeltaTime();
 
 	// ホーミング開始時間を進める
-	homingStartFrame_--;
+	homingFrame_--;
 	// 0よりも低くならないようにする
-	homingStartFrame_ = min(max(homingStartFrame_, 0), kHomingStartFrame);
+	homingFrame_ = min(max(homingFrame_, 0), kHomingEndFrame);
 
 	attackWork.flag = true;
 }
 
-void HomingArrow::Death()
-{
+void HomingArrow::Death() {
 	attackWork.flag = false;
 }
 
@@ -99,7 +106,7 @@ void HomingArrow::HomingUpdate() {
 	velocity_ = velocity_.Normalize();
 
 	// 球面線形保管により、今の速度と自キャラへのベクトルを内挿し、新たな速度とする
-	velocity_ = LWP::Math::Vector3::Lerp(velocity_, toPlayer, 0.05f);
+	velocity_ = LWP::Math::Vector3::Lerp(velocity_, toPlayer, homingAccuracy_);
 
 	velocity_ *= kSpeed;
 
@@ -112,4 +119,12 @@ void HomingArrow::HomingUpdate() {
 	// X軸周りの角度(θx)
 	model_.transform.rotation.x = std::atan2(-velocity_.y, velocityXZ);
 #pragma endregion
+}
+
+void HomingArrow::ChangeHomingAccuracy() {
+	// 自機との距離
+	float distance = (model_.transform.translation - player_->GetWorldTransform()->translation).Length();
+	if (distance <= kHomingStrengthRange) {
+		homingAccuracy_ = kShortDistHomingAccuracy;
+	}
 }

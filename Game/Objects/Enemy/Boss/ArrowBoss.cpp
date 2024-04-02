@@ -72,6 +72,73 @@ void ArrowBoss::SetPosition(lwp::Vector3 pos)
 	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 }
 
+LWP::Math::Vector3 ArrowBoss::GetDirectVel() {
+	return (player_->GetWorldTransform()->translation - models_[0].transform.translation).Normalize();
+}
+
+void ArrowBoss::CreateCollider()
+{
+	// 当たり判定を設定
+	collider_ = new LWP::Object::Collider::AABB;
+	// 当たり判定を取る
+	collider_->CreateFromPrimitive(&models_[0]);
+	// マスク処理
+	collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+	collider_->mask.SetHitFrag(MaskLayer::Layer3);
+	// 今のところは何もしていない
+	collider_->SetOnCollisionLambda([this](HitData data) {
+		data;
+		if (data.state == OnCollisionState::Press && isActive_ &&
+			data.hit &&
+			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3))
+		{
+			isActive_ = false;
+		}
+		});
+}
+
+void ArrowBoss::Move()
+{
+	lwp::Vector3 MoveVec = GetDirectVel();
+	MoveVec.y = 0.0f;
+	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
+}
+
+void ArrowBoss::Attack()
+{
+	// 自機を狙う
+	Aim();
+#pragma region 通常弾
+	if (behavior_ == Behavior::kNormalShot) {
+		// 弾を生成
+		Arrow* arrow = new Arrow();
+		// 初期化
+		arrow->Init(models_[0].transform);
+		
+		normalArrows_.push_back(arrow);
+	}
+#pragma endregion
+
+#pragma region ホーミング弾
+	else if (behavior_ == Behavior::kHomingShot) {
+		// 弾を生成
+		HomingArrow* homingArrow = new HomingArrow();
+		// 上に弾を撃つ(x,y軸をランダムで少し回転)
+		LWP::Math::Vector3 rotate = RandomShootingAngle();
+		homingArrow->SetShootingAngle(rotate);
+
+		// 初期化
+		homingArrow->Init(models_[0].transform);
+
+		// 自機のアドレスを設定
+		homingArrow->SetPlayer(player_);
+
+		homingArrows_.push_back(homingArrow);
+	}
+#pragma endregion 
+	isAttack = false;
+}
+
 void ArrowBoss::ArrowsUpdate() {
 	// 通常弾の更新処理
 	for (Arrow* arrow : normalArrows_)
@@ -122,6 +189,19 @@ void ArrowBoss::Aim()
 	models_[0].transform.rotation.y = radian;
 }
 
+LWP::Math::Vector3 ArrowBoss::RandomShootingAngle() {
+	//ランダム生成用
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
+	// x,y軸をランダムに回転
+	std::uniform_real_distribution<float> distributionX(M_PI / 2.5f, 1.5f * M_PI / 2.5f);// 45~135度
+	std::uniform_real_distribution<float> distributionY(0, 2 * M_PI);				   // 0~360度
+	LWP::Math::Vector3 rotate = { -distributionX(randomEngine), distributionY(randomEngine), 0 };
+
+	return rotate;
+}
+
+/// Behavior関数ここから↓
 void ArrowBoss::B_RootInit() {
 	// 攻撃状態解除
 	isAttack = false;
@@ -220,68 +300,4 @@ void ArrowBoss::B_HomingShotUpdate() {
 
 	shotDelay_--;
 	shotFrame_--;
-}
-
-LWP::Math::Vector3 ArrowBoss::GetDirectVel() {
-	return (player_->GetWorldTransform()->translation - models_[0].transform.translation).Normalize();
-}
-
-void ArrowBoss::CreateCollider()
-{
-	// 当たり判定を設定
-	collider_ = new LWP::Object::Collider::AABB;
-	// 当たり判定を取る
-	collider_->CreateFromPrimitive(&models_[0]);
-	// マスク処理
-	collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	collider_->mask.SetHitFrag(MaskLayer::Layer3);
-	// 今のところは何もしていない
-	collider_->SetOnCollisionLambda([this](HitData data) {
-		data;
-		if (data.state == OnCollisionState::Press && isActive_ &&
-			data.hit &&
-			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3))
-		{
-			isActive_ = false;
-		}
-		});
-}
-
-void ArrowBoss::Move()
-{
-	lwp::Vector3 MoveVec = GetDirectVel();
-	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
-}
-
-void ArrowBoss::Attack()
-{
-	// 自機を狙う
-	Aim();
-#pragma region 通常弾
-	if (behavior_ == Behavior::kNormalShot) {
-		// 弾を生成
-		Arrow* arrow = new Arrow();
-		arrow->Init(models_[0].transform);
-		normalArrows_.push_back(arrow);
-	}
-#pragma endregion
-
-#pragma region ホーミング弾
-	else if (behavior_ == Behavior::kHomingShot) {
-		// 弾を生成
-		HomingArrow* homingArrow = new HomingArrow();
-		homingArrow->Init(models_[0].transform);
-
-		// 自機のアドレスを設定
-		homingArrow->SetPlayer(player_);
-
-		// 真上に弾を撃つ
-		LWP::Math::Vector3 rotate = { -M_PI / 2.5f, 0,0 };
-		homingArrow->SetShootingAngle(rotate);
-
-		homingArrows_.push_back(homingArrow);
-	}
-#pragma endregion 
-	isAttack = false;
 }

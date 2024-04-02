@@ -35,9 +35,9 @@ void FollowCamera::Update() {
 	JustSlashUpdate();
 
 	ImGui::Begin("FollowCamera");
-	ImGui::DragFloat3("main:translation", &pCamera_->transform.translation.x, 0, -100, 100);
-	ImGui::DragFloat3("inter:translation", &interTarget_.x, 0, -100, 100);
+	ImGui::DragFloat3("main:rotate", &pCamera_->transform.rotation.x, 0, -6.28f, 6.28f);
 	ImGui::End();
+
 }
 
 void FollowCamera::ResetAngle() {
@@ -72,6 +72,9 @@ void FollowCamera::InputAngle() {
 	// Rスティック
 	destinationAngle_.x -= Controller::GetRStick().y * sensitivity.y;
 	destinationAngle_.y += Controller::GetRStick().x * sensitivity.x;
+
+	// 上下の回転に制限をかける
+	destinationAngle_.x = min(max(destinationAngle_.x, kMinAxisX), kMaxAxisX);
 
 	// Rスティック押し込み
 	// 角度リセット

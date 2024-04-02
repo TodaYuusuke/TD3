@@ -77,6 +77,10 @@ private:/// 定数
 	/// 視点操作の設定
 	/// 
 
+	// x軸の最低値
+	const float kMinAxisX = 0.06f;
+	// x軸の最大値
+	const float kMaxAxisX = 0.4f;
 	// 入力感度
 	const LWP::Math::Vector2 kSensitivity = { 0.05f, 0.02f };
 	// 視点移動の滑らかさ(0~1の間で設定)

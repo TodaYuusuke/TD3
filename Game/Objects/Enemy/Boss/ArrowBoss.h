@@ -20,9 +20,18 @@ public:// パブリックなメンバ関数
 	void Update()override;
 	void SetPosition(lwp::Vector3 pos)override;
 
-	///
-	/// User Method
-	/// 
+	/// Getter
+	// 自機との方向ベクトルを算出(返り値は正規化している)
+	LWP::Math::Vector3 GetDirectVel();
+
+private:// プライベートなメンバ関数
+	//*** 純粋仮想関数 ***//
+	// コライダーを生成
+	void CreateCollider() override;
+	// 移動
+	void Move()override;
+	// 攻撃
+	void Attack()override;
 
 	// 全ての弾の更新処理
 	void ArrowsUpdate();
@@ -32,6 +41,9 @@ public:// パブリックなメンバ関数
 
 	// 対象を狙う
 	void Aim();
+
+	// 弾の発射角をランダムにする
+	LWP::Math::Vector3 RandomShootingAngle();
 
 #pragma region 振るまい
 	// 通常状態の初期化
@@ -54,21 +66,6 @@ public:// パブリックなメンバ関数
 	// ホーミング射撃状態の更新処理
 	void B_HomingShotUpdate();
 #pragma endregion
-
-	/// Getter
-	// 自機との方向ベクトルを算出(返り値は正規化している)
-	LWP::Math::Vector3 GetDirectVel();
-
-	/// Setter
-
-private:// プライベートなメンバ関数
-	//*** 純粋仮想関数 ***//
-	// コライダーを生成
-	void CreateCollider() override;
-	// 移動
-	void Move()override;
-	// 攻撃
-	void Attack()override;
 
 private:// 定数
 #pragma region 行動のフレーム情報
