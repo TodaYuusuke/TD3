@@ -19,7 +19,9 @@ void EnemyManager::Update()
 		}
 		currentFrame_ = 0;
 	}
-
+	ImGui::Begin("EnemyMa");
+	ImGui::Text("%d", enemys_.size());
+	ImGui::End();
 	// 消しながら更新
 	for (std::list<IEnemy*>::iterator itr = enemys_.begin(); itr != enemys_.end();)
 	{
@@ -74,9 +76,11 @@ void EnemyManager::EnemySpown()
 	}
 	else if (number <= 0.8f) {
 		//ShieldEnemySpown(pos);
+		NormalEnemySpown(pos);
 	}
 	else {
 		//ArrowEnemySpown(pos);
+		NormalEnemySpown(pos);
 	}
 
 }

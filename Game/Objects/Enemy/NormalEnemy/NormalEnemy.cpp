@@ -61,27 +61,28 @@ void NormalEnemy::Attack()
 	if (attackWaitTime_ <= 0) {
 		
 	#pragma region
-
 		attackWork[Model::L_Arm].flag = true;
 		Rot[Model::L_Arm] = models_[Model::L_Arm].transform.rotation;
 		attackWork[Model::L_Arm].targetpoint = Rot[Model::L_Arm];
 		// 回転を足す
 		attackWork[Model::L_Arm].targetpoint.x += -3.14f;
 		EndRot[Model::L_Arm] = attackWork[Model::L_Arm].targetpoint;
-
 	#pragma endregion L_Arm
 	#pragma region
-
 		attackWork[Model::R_Arm].flag = true;
 		Rot[Model::R_Arm] = models_[Model::R_Arm].transform.rotation;
 		attackWork[Model::R_Arm].targetpoint = Rot[Model::R_Arm];
 		// 回転を足す
 		attackWork[Model::R_Arm].targetpoint.x += -3.14f;
 		EndRot[Model::R_Arm] = attackWork[Model::R_Arm].targetpoint;
-
 	#pragma endregion R_Arm
 	#pragma region
-
+		attackWork[Model::Body].flag = true;
+		Rot[Model::Body] = models_[Model::Body].transform.rotation;
+		attackWork[Model::Body].targetpoint = Rot[Model::Body];
+		// 回転を足す
+		attackWork[Model::Body].targetpoint.x += -3.14f;
+		EndRot[Model::Body] = attackWork[Model::Body].targetpoint;
 	#pragma endregion Body
 
 		attackWaitTime_ = kAttackWaitTime;
@@ -91,7 +92,7 @@ void NormalEnemy::Attack()
 
 void NormalEnemy::AttackAnimation()
 {
-	
+	AnimeBody();
 	AnimeL_Arm();
 	AnimeR_Arm();
 
