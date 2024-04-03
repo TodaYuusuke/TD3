@@ -4,16 +4,16 @@
 using namespace LWP::Object::Collider;
 void NormalEnemy::Init()
 {
-	models_.reserve(Model::MaxValue);
+	models_.reserve(1);
 	models_.emplace_back();
 	models_[Model::Body].LoadFile("NormalEnemy/Body/Body.obj");
 	models_[Model::Body].name = "Normal";
-	models_.emplace_back();
-	models_[Model::L_Arm].LoadFile("NormalEnemy/L_Arm/L_Arm.obj");
-	models_[Model::L_Arm].name = "LArm";
-	models_.emplace_back();
-	models_[Model::R_Arm].LoadFile("NormalEnemy/R_Arm/R_Arm.obj");
-	models_[Model::R_Arm].name = "RArm";
+	//models_.emplace_back();
+	//models_[Model::L_Arm].LoadFile("NormalEnemy/L_Arm/L_Arm.obj");
+	//models_[Model::L_Arm].name = "LArm";
+	//models_.emplace_back();
+	//models_[Model::R_Arm].LoadFile("NormalEnemy/R_Arm/R_Arm.obj");
+	//models_[Model::R_Arm].name = "RArm";
 
 	isActive_ = true;
 
