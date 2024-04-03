@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Class\Scene\Sample.cpp" />
     <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.cpp" />
     <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\Arrow\Arrow.cpp" />
     <ClCompile Include="Game\Objects\Enemy\NormalEnemy\NormalEnemy.cpp" />
@@ -41,7 +40,6 @@
     <ClCompile Include="Game\Objects\Enemy\Boss\DashBoss.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Class\Scene\Sample.h" />
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.h" />
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\Arrow\Arrow.h" />
     <ClInclude Include="Game\Objects\Enemy\NormalEnemy\NormalEnemy.h" />
@@ -72,10 +70,7 @@
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp10.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp30.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerUp.h" />
-    <ClInclude Include="Game\Objects\Player\Upgrade\IUpgrade.h" />
-    <ClInclude Include="Game\Objects\Player\Upgrade\UpgradeManager.h" />
     <ClInclude Include="Game\Objects\Player\Motion\IStatus.h" />
-    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\AttackRangeUp.h" />
     <ClInclude Include="Game\Objects\Upgrade\Derved\PowerPerUp10.h" />
     <ClInclude Include="Game\Objects\Upgrade\Derved\PowerPerUp30.h" />
     <ClInclude Include="Game\Objects\Upgrade\Derved\PowerUp.h" />
@@ -95,5 +90,9 @@
     <ClInclude Include="Game\Objects\Player\Upgrade\UpgradeManager.h" />
     <ClInclude Include="Game\Objects\Player\Motion\IStatus.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\AttackRangeUp.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Derved\AllSpeedDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Derved\AttackRangeUp2.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Derved\AttackTotalUp1.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Derved\LifeMaxUp10.h" />
   </ItemGroup>
 </Project>

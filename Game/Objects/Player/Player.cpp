@@ -451,9 +451,7 @@ void Player::CreatePlayerCollision()
 
 	colliders_.player_.isActive = true;
 	flag_.isInvincible_ = false;
-#ifdef DEMO
 	colliders_.player_.name = "Player";
-#endif
 }
 
 void Player::CreateWeaponCollision()
