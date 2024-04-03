@@ -56,7 +56,7 @@ void TItleScene::Update()
 	// スローを確認
 	if (player_->GetIsJustSlashing())
 	{
-		time_ += lwp::GetDeltaTime();
+		time_ += lwp::GetDeltaTimeF();
 		if (cTIMESLOW_ <= time_)
 		{
 			player_->EndJust();

@@ -72,7 +72,7 @@ void DashBoss::Move()
 {
 	lwp::Vector3 MoveVec = GetDirectVel();
 	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
+	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTimeF();
 }
 
 void DashBoss::Attack()

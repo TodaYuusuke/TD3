@@ -61,7 +61,9 @@ void L::UpgradeManager::LevelUp()
 	isLevelUpping = true;
 	RandomUpgrade();
 }
-#ifdef DEMO
+
+#if DEMO
+
 void L::UpgradeManager::DebugWindow(Player* player)
 {
 	ImGui::Begin("UpgradeManager");
@@ -119,7 +121,9 @@ void L::UpgradeManager::DebugWindow(Player* player)
 
 	ImGui::End();
 }
+
 #endif
+
 void L::UpgradeManager::RandomUpgrade()
 {
 	candidata_.clear();
