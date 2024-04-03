@@ -18,9 +18,6 @@ private:
 	void Move()override;
 	void Attack()override;
 	void AttackAnimation();
-	void AnimeBody();
-	void AnimeL_Arm();
-	void AnimeR_Arm();
 	// 攻撃条件
 	bool CheckAttackRange();
 	// 対象を狙う
@@ -37,27 +34,24 @@ private:// 定数
 	const float kMove = 2.0f;
 
 private:
-	lwp::Vector3 Rot[Model::MaxValue];
-	lwp::Vector3 EndRot[Model::MaxValue];
-	MotionWork attackWork[Model::MaxValue] = {
-	{.targetpoint = 1.0f,
-	.speed = 0.05f,},
-	{.targetpoint = 1.0f,
-	.speed = 0.05f,},
-	{.targetpoint = 1.0f,
-	.speed = 0.05f,}
+	lwp::Vector3 Rot;
+	lwp::Vector3 EndRot;
+	MotionWork attackRotWork = {
+	.targetpoint = 1.0f,
+	.speed = 0.05f,
 	};
-	MotionWork attackStanbyWork[Model::MaxValue] = {
-	{.speed = 0.02f,},
-	{.speed = 0.02f,},
-	{.speed = 0.02f,}
+	MotionWork attackMoveWork = {
+	.targetpoint = 1.0f,
+	.speed = 0.05f,
 	};
-	MotionWork attackEndWork[Model::MaxValue] = {
-	{.targetpoint = 0.0f,
-	.speed = 0.1f,},
-	{.targetpoint = 0.0f,
-	.speed = 0.1f,},
-	{.targetpoint = 0.0f,
-	.speed = 0.1f,}
+	MotionWork attackMoveEndWork = {
+		.speed = 0.1f,
+	};
+	MotionWork attackStanbyWork = {
+	.speed = 0.02f,
+	};
+	MotionWork attackEndWork = {
+	.targetpoint = 0.0f,
+	.speed = 0.1f,
 	};
 };

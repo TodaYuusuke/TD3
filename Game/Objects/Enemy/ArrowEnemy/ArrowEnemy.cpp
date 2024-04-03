@@ -8,8 +8,7 @@ void ArrowEnemy::Init()
 {
 	// これでできる
 	models_.emplace_back(); 
-	models_[0].LoadFile("cube/cube.obj");
-	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::GREEN);
+	models_[0].LoadFile("ArrowEnemy/ArrowEnemy.obj");
 	models_[0].name = "ArrowEnemy!!";
 
 	// 最初から描画
@@ -26,7 +25,13 @@ void ArrowEnemy::Update()
 	}
 	if (isAttack) {
 		// 攻撃処理
-		Attack();
+		// 矢の発射
+		if(attackWaitTime_ > 60){
+			Aim();
+		}
+		else if (attackWaitTime_ <= 0){
+			Attack();
+		}
 	}
 	else {
 		Aim();
@@ -98,24 +103,19 @@ void ArrowEnemy::Move()
 
 void ArrowEnemy::Attack()
 {
-	// 矢の発射
-	if (attackWaitTime_ <= 0)
-	{
-		Aim();
 		Arrow* arrow = new Arrow();
 		arrow->Init(models_[0].transform);
 		arrows_.push_back(arrow);
 		attackWaitTime_ = kAttackWaitTime;
 		isAttack = false;
-
-	}
 }
 
 void ArrowEnemy::Aim()
 {
 	// 狙う対象に身体を向ける
 	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0].transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0].transform.translation.z);
-	models_[0].transform.rotation.y = radian;
+
+	models_[0].transform.rotation.y = LerpShortAngle(models_[0].transform.rotation.y,radian,0.5f);
 }
 
 bool ArrowEnemy::CheckAttackRange() {
@@ -125,4 +125,29 @@ bool ArrowEnemy::CheckAttackRange() {
 		return true;
 	}
 	return false;
+}
+
+float ArrowEnemy::LerpShortAngle(float a, float b, float t) {
+	// 角度差分を求める
+	float diff = b - a;
+
+	float pi = 3.14f;
+
+	diff = std::fmod(diff, 2 * pi);
+	if (diff < 2 * -pi) {
+		diff += 2 * pi;
+	}
+	else if (diff >= 2 * pi) {
+		diff -= 2 * pi;
+	}
+
+	diff = std::fmod(diff, 2 * pi);
+	if (diff < -pi) {
+		diff += 2 * pi;
+	}
+	else if (diff >= pi) {
+		diff -= 2 * pi;
+	}
+
+	return a + diff * t;
 }
