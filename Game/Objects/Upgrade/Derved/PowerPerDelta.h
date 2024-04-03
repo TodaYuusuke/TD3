@@ -27,7 +27,7 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->slashPowerDelta.percent += var;
+			para->Attack.slashPowerDelta.percent += var;
 		}
 
 		std::string GetTexturePass() override

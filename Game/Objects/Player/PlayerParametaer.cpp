@@ -14,27 +14,27 @@ void PlayerParameter::ApplyUpgrade()
 	PlayerParameter base = *this;
 
 	// 攻撃力
-	base.Attack.slashPower_ = (config_->Power_.BASEPOWER_ + param.slashPowerDelta.base);
+	base.Attack.slashPower_ = (config_->Power_.BASEPOWER_ + param.Attack.slashPowerDelta.base);
 	// 攻撃範囲
-	base.Attack.slashRange_ = (config_->Length_.WEAPONCOLLISIONRADIUS_ + param.slashRangeDelta.base);
+	base.Attack.slashRange_ = (config_->Length_.WEAPONCOLLISIONRADIUS_ + param.Attack.slashRangeDelta.base);
 	// 移動速度
-	base.Speed.move_ = (config_->Speed_.MOVE_ + param.allSpeedDelta.base);
-	base.Speed.slash_ = (config_->Speed_.SLASH_ + param.allSpeedDelta.base);
-	base.Speed.moment_ = (config_->Speed_.MOMENT_ + param.allSpeedDelta.base);
+	base.Speed.move_ = (config_->Speed_.MOVE_ + param.Speed.allSpeedDelta.base);
+	base.Speed.slash_ = (config_->Speed_.SLASH_ + param.Speed.allSpeedDelta.base);
+	base.Speed.moment_ = (config_->Speed_.MOMENT_ + param.Speed.allSpeedDelta.base);
 	// 攻撃回数
-	base.Attack.slashNum_ = std::max<int>(config_->Count_.SLASHRELATIONMAX_ + (int)param.slashDelta.base, 1);
+	base.Attack.slashNum_ = std::max<int>(config_->Count_.SLASHRELATIONMAX_ + (int)param.Attack.slashNumDelta.base, 1);
 
 	// 掛け算部分の計算
 	PlayerParameter multi;
 
 	// 攻撃力
-	multi.Attack.slashPower_ = (0.01f * param.slashPowerDelta.percent);
+	multi.Attack.slashPower_ = (0.01f * param.Attack.slashPowerDelta.percent);
 	// 攻撃範囲
-	multi.Attack.slashRange_ = (0.01f * param.slashRangeDelta.percent);
+	multi.Attack.slashRange_ = (0.01f * param.Attack.slashRangeDelta.percent);
 	// 移動速度
-	multi.Speed.move_ = (0.01f * param.allSpeedDelta.percent);
-	multi.Speed.slash_ = (0.01f * param.allSpeedDelta.percent);
-	multi.Speed.moment_ = (0.01f * param.allSpeedDelta.percent);
+	multi.Speed.move_ = (0.01f * param.Speed.allSpeedDelta.percent);
+	multi.Speed.slash_ = (0.01f * param.Speed.allSpeedDelta.percent);
+	multi.Speed.moment_ = (0.01f * param.Speed.allSpeedDelta.percent);
 
 	*this = base * multi;
 }

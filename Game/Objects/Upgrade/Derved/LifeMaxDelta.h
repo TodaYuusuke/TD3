@@ -27,7 +27,7 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->hpDelta.base += var;
+			para->HP.hpDelta.base += var;
 		}
 
 		std::string GetTexturePass() override

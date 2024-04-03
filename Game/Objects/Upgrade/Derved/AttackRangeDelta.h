@@ -27,7 +27,7 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->slashRangeDelta.base += var;
+			para->Attack.slashRangeDelta.base += var;
 		}
 
 		std::string GetTexturePass() override

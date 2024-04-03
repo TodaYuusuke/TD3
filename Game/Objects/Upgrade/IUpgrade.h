@@ -12,31 +12,71 @@ struct Paramete
 	float percent = 100.0f;
 };
 
-/// <summary>
-/// アップグレードによって変化する値と倍率を司る
-/// </summary>
-struct UpgradeParameter {
+struct UpgradeHP
+{
+	// 体力 : 倍率は使わない
+	Paramete hpDelta;
+
+
+};
+
+struct UpgradeAttack
+{
 	// 攻撃力
 	Paramete slashPowerDelta;
 	// 攻撃範囲
 	Paramete slashRangeDelta;
-	// 移動速度
-	Paramete allSpeedDelta;
+	// 攻撃距離
+	Paramete slashLengthDelta;
 	// 攻撃回数 : 倍率は使わない
-	Paramete slashDelta;
-	// 体力 : 倍率は使わない
-	Paramete hpDelta;
-	// 後隙の時間
+	Paramete slashNumDelta;
 
 };
 
-namespace L {
+struct UpgradeSpeed
+{
+	// 移動速度
+	Paramete allSpeedDelta;
+
+};
+
+struct UpgradeTime
+{
+	// ジャスト判定の時間
+	Paramete justTimeDelta;
+	// 後隙の時間
+	Paramete momentTimeDelta;
+	// 被弾時の無敵時間
+	Paramete damageInvincibleTimeDelta;
+
+};
+
+
+
+/// <summary>
+/// アップグレードによって変化する値と倍率を司る
+/// </summary>
+struct UpgradeParameter
+{
+	// HP のみ
+	UpgradeHP HP;
+	// 攻撃関係
+	UpgradeAttack Attack;
+	// 移動速度のみ
+	UpgradeSpeed Speed;
+	// 時間のみ
+	UpgradeTime Time;
+};
+
+namespace L
+{
 	/// <summary>
 	/// アップグレード基底クラス（新しいアップグレードはこれを継承してつくること）
 	/// </summary>
-	class IUpgrade {
+	class IUpgrade
+	{
 	public:	// ** パブリックなメンバ変数 ** //
-		
+
 		// 適応ずみかフラグ
 		bool isApplied = false;
 
@@ -53,7 +93,7 @@ namespace L {
 		/// </summary>
 		/// <returns>resources/texture/以降のパス</returns>
 		virtual std::string GetTexturePass() = 0;
-		
+
 		/// <summary>
 		/// UI用のテクスチャのパスを返す関数
 		/// </summary>
