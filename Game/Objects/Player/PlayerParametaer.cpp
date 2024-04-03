@@ -22,7 +22,7 @@ void PlayerParameter::ApplyUpgrade()
 	base.slashSpeed = (config_->Speed_.SLASH_ + param.allSpeedDelta.base);
 	base.momentSpeed = (config_->Speed_.MOMENT_ + param.allSpeedDelta.base);
 	// 攻撃回数
-	base.slashNum = std::max<int>(config_->Count_.SLASHRELATIONMAX_ + param.slashDelta, 1);
+	base.slashNum = std::max<int>(config_->Count_.SLASHRELATIONMAX_ + param.slashDelta.base, 1);
 
 	// 掛け算部分の計算
 	PlayerParameter multi;

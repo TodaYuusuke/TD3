@@ -2,10 +2,12 @@
 
 #include "Game/Objects/Player/Player.h"
 #pragma region Upgrades
-#include "Game/Objects/Upgrade/Derved/PowerUp.h"
-#include "Game/Objects/Upgrade/Derved/PowerPerUp10.h"
-#include "Game/Objects/Upgrade/Derved/PowerPerUp30.h"
+#include "Game/Objects/Upgrade/Derved/PowerDelta.h"
+#include "Game/Objects/Upgrade/Derved/PowerPerDelta.h"
 #include "Game/Objects/Upgrade/Derved/AllSpeedDelta.h"
+#include "Game/Objects/Upgrade/Derved/AttackRangeDelta.h"
+#include "Game/Objects/Upgrade/Derved/AttackTotalDelta.h"
+#include "Game/Objects/Upgrade/Derved/LifeMaxDelta.h"
 #pragma endregion
 
 using namespace LWP;

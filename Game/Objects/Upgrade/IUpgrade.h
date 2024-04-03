@@ -1,6 +1,9 @@
 #pragma once
 #include <Adapter.h>
 
+/// <summary>
+/// ほぼすべてのアップグレードをこの型にしてもいいと思う
+/// </summary>
 struct Paramete
 {
 	// 基準(定数)
@@ -9,6 +12,9 @@ struct Paramete
 	float percent = 100.0f;
 };
 
+/// <summary>
+/// アップグレードによって変化する値と倍率を司る
+/// </summary>
 struct UpgradeParameter {
 	// 攻撃力
 	Paramete slashPowerDelta;
@@ -16,10 +22,10 @@ struct UpgradeParameter {
 	Paramete slashRangeDelta;
 	// 移動速度
 	Paramete allSpeedDelta;
-	// 攻撃回数
-	int slashDelta = 0;
-	// 体力
-	int hpDelta = 0;
+	// 攻撃回数 : 倍率は使わない
+	Paramete slashDelta;
+	// 体力 : 倍率は使わない
+	Paramete hpDelta;
 };
 
 namespace L {
