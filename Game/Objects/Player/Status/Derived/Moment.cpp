@@ -46,7 +46,7 @@ void Moment::Update()
 		player_->demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 		// パラメータも使う
-		moveVector *= player_->parameter_.momentSpeed * (float)lwp::GetDeltaTime();
+		moveVector *= player_->parameter_.Speed.move_ * (float)lwp::GetDeltaTime();
 
 		player_->demoModel_.transform.translation += moveVector;
 	}

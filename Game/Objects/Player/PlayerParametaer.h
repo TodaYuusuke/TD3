@@ -40,7 +40,7 @@ public:	//*** サブクラス ***//
 	/// <summary>
 	/// HP に関するパラメータ
 	/// </summary>
-	struct HP
+	struct HPParam
 	{
 		int hp_ = 0;	// 今のHP
 		int maxHP_ = 0;	// 最大HP
@@ -49,7 +49,7 @@ public:	//*** サブクラス ***//
 	/// <summary>
 	/// 攻撃自体に対してのパラメータ
 	/// </summary>
-	struct Attack
+	struct AttackParam
 	{
 		// 抜刀そのもの
 		int slashNum_ = 0;			// 回数
@@ -60,7 +60,7 @@ public:	//*** サブクラス ***//
 	/// <summary>
 	/// 移動速度のみのパラメータ
 	/// </summary>
-	struct Speed
+	struct SpeedParam
 	{
 		float move_ = 0.0f;
 		float slash_ = 0.0f;
@@ -68,20 +68,15 @@ public:	//*** サブクラス ***//
 	};
 
 public:	//*** パブリック変数 ***//
-	// 体力
-	int hp_ = 0;
-	// 攻撃力
-	float slashPower_ = 0.0f;
-	// 攻撃範囲
-	float slashRange_ = 0.0f;
-	// 通常移動速度
-	float moveSpeed = 0.0f;
-	// 居合移動速度
-	float slashSpeed = 0.0f;
-	// 後隙移動速度
-	float momentSpeed = 0.0f;
-	// 居合回数
-	int slashNum = 0;
+
+	// HP
+	HPParam Hp;
+
+	// 攻撃の処理に関する
+	AttackParam Attack;
+
+	// 移動速度のみ
+	SpeedParam Speed;
 
 private: //*** プライベート変数 ***//
 

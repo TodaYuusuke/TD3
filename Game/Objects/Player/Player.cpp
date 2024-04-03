@@ -128,7 +128,7 @@ void Player::StartJust()
 	// 居合回数獲得(一回のみ)
 	//if (slashData_.maxRelation_ <= slashData_.cMAXRELATION_)
 	// パラメータによって上限を増やしてもいい
-	if (slashData_.maxRelation_ <= (uint32_t)parameter_.slashNum)
+	if (slashData_.maxRelation_ <= (uint32_t)parameter_.Attack.slashNum_)
 	{
 		slashData_.maxRelation_++;
 		slashPanel_->Just();
@@ -511,7 +511,7 @@ void Player::DebugWindow()
 
 	ImGui::Text("SlashRelation");
 	ImGui::Bullet();	ImGui::Text("Num / Max(Base)");
-	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", slashData_.relationSlash_, slashData_.maxRelation_, parameter_.slashNum);
+	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", slashData_.relationSlash_, slashData_.maxRelation_, parameter_.Attack.slashNum_);
 	ImGui::Text("INCREMENTMOMENT : %.3f", config_.Time_.MOMENTINCREMENT_);
 	ImGui::Text("Invincible : "); ImGui::SameLine();
 	ImGui::Text(flag_.isInvincible_ ? "TRUE" : "FALSE");

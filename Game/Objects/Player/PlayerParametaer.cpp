@@ -14,27 +14,27 @@ void PlayerParameter::ApplyUpgrade()
 	PlayerParameter base = *this;
 
 	// 攻撃力
-	base.slashPower_ = (config_->Power_.BASEPOWER_ + param.slashPowerDelta.base);
+	base.Attack.slashPower_ = (config_->Power_.BASEPOWER_ + param.slashPowerDelta.base);
 	// 攻撃範囲
-	base.slashRange_ = (config_->Length_.WEAPONCOLLISIONRADIUS_ + param.slashRangeDelta.base);
+	base.Attack.slashRange_ = (config_->Length_.WEAPONCOLLISIONRADIUS_ + param.slashRangeDelta.base);
 	// 移動速度
-	base.moveSpeed = (config_->Speed_.MOVE_ + param.allSpeedDelta.base);
-	base.slashSpeed = (config_->Speed_.SLASH_ + param.allSpeedDelta.base);
-	base.momentSpeed = (config_->Speed_.MOMENT_ + param.allSpeedDelta.base);
+	base.Speed.move_ = (config_->Speed_.MOVE_ + param.allSpeedDelta.base);
+	base.Speed.slash_ = (config_->Speed_.SLASH_ + param.allSpeedDelta.base);
+	base.Speed.moment_ = (config_->Speed_.MOMENT_ + param.allSpeedDelta.base);
 	// 攻撃回数
-	base.slashNum = std::max<int>(config_->Count_.SLASHRELATIONMAX_ + param.slashDelta.base, 1);
+	base.Attack.slashNum_ = std::max<int>(config_->Count_.SLASHRELATIONMAX_ + (int)param.slashDelta.base, 1);
 
 	// 掛け算部分の計算
 	PlayerParameter multi;
 
 	// 攻撃力
-	multi.slashPower_ = (0.01f * param.slashPowerDelta.percent);
+	multi.Attack.slashPower_ = (0.01f * param.slashPowerDelta.percent);
 	// 攻撃範囲
-	multi.slashRange_ = (0.01f * param.slashRangeDelta.percent);
+	multi.Attack.slashRange_ = (0.01f * param.slashRangeDelta.percent);
 	// 移動速度
-	multi.moveSpeed = (0.01f * param.allSpeedDelta.percent);
-	multi.slashSpeed = (0.01f * param.allSpeedDelta.percent);
-	multi.momentSpeed = (0.01f * param.allSpeedDelta.percent);
+	multi.Speed.move_ = (0.01f * param.allSpeedDelta.percent);
+	multi.Speed.slash_ = (0.01f * param.allSpeedDelta.percent);
+	multi.Speed.moment_ = (0.01f * param.allSpeedDelta.percent);
 
 	*this = base * multi;
 }
@@ -47,26 +47,27 @@ void PlayerParameter::ApplyUpgrade(const UpgradeParameter& para)
 
 void PlayerParameter::ResetParameter()
 {
-	hp_ = config_->Count_.BASEHP_;
-	slashPower_ = config_->Power_.BASEPOWER_;
-	slashRange_ = config_->Length_.WEAPONCOLLISIONRADIUS_;
+	Hp.hp_ = config_->Count_.BASEHP_;
+	
+	Attack.slashPower_ = config_->Power_.BASEPOWER_;
+	Attack.slashRange_ = config_->Length_.WEAPONCOLLISIONRADIUS_;
+	Attack.slashNum_ = config_->Count_.SLASHRELATIONMAX_;
 
-	moveSpeed = (config_->Speed_.MOVE_);
-	slashSpeed = (config_->Speed_.SLASH_);
-	momentSpeed = (config_->Speed_.MOMENT_);
+	Speed.move_ = (config_->Speed_.MOVE_);
+	Speed.slash_ = (config_->Speed_.SLASH_);
+	Speed.moment_ = (config_->Speed_.MOMENT_);
 
-	slashNum = config_->Count_.SLASHRELATIONMAX_;
 }
 
 PlayerParameter PlayerParameter::operator*(const PlayerParameter& obj)
 {
 	PlayerParameter temp = *this;
-	temp.slashPower_ = this->slashPower_ * obj.slashPower_;
-	temp.slashRange_ = this->slashRange_ * obj.slashRange_;
-	temp.moveSpeed = this->moveSpeed * obj.moveSpeed;
-	temp.slashSpeed = this->slashSpeed * obj.slashSpeed;
-	temp.momentSpeed = this->momentSpeed * obj.momentSpeed;
-	temp.slashNum = this->slashNum;
+	temp.Attack.slashPower_ = this->Attack.slashPower_ * obj.Attack.slashPower_;
+	temp.Attack.slashRange_ = this->Attack.slashRange_ * obj.Attack.slashRange_;
+	temp.Speed.move_ = this->Speed.move_ * obj.Speed.move_;
+	temp.Speed.slash_ = this->Speed.slash_ * obj.Speed.slash_;
+	temp.Speed.moment_ = this->Speed.moment_ * obj.Speed.moment_;
+	temp.Attack.slashNum_ = this->Attack.slashNum_;
 
 	temp.config_ = this->config_;
 	return temp;

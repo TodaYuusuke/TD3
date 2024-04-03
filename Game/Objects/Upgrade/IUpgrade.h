@@ -26,6 +26,8 @@ struct UpgradeParameter {
 	Paramete slashDelta;
 	// 体力 : 倍率は使わない
 	Paramete hpDelta;
+	// 後隙の時間
+
 };
 
 namespace L {

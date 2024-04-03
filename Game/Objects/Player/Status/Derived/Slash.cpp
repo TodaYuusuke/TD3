@@ -65,7 +65,7 @@ void Slash::Update()
 	}
 	// 一定方向を向く
 	lwp::Vector3 moveVector = player_->slashData_.vector_ *
-		player_->parameter_.slashSpeed * lwp::GetDefaultDeltaTimeF();
+		player_->parameter_.Speed.slash_ * lwp::GetDefaultDeltaTimeF();
 
 	player_->demoModel_.transform.translation += moveVector;
 
