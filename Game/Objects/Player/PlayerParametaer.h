@@ -55,6 +55,15 @@ public:	//*** サブクラス ***//
 		int slashNum_ = 0;			// 回数
 		float slashPower_ = 0.0f;	// 強さ
 		float slashRange_ = 0.0f;	// カプセル範囲
+
+		AttackParam operator*(const AttackParam& obj)
+		{
+			AttackParam temp;
+			temp.slashNum_ = std::max<int>(this->slashNum_, obj.slashNum_);
+			temp.slashPower_ = this->slashPower_ * obj.slashPower_;
+			temp.slashRange_ = this->slashRange_ * obj.slashRange_;
+			return temp;
+		}
 	};
 
 	/// <summary>
@@ -65,11 +74,42 @@ public:	//*** サブクラス ***//
 		float move_ = 0.0f;
 		float slash_ = 0.0f;
 		float moment_ = 0.0f;
+
+		// 実際には代入されない
+		float all_ = 0.0f;
+
+		SpeedParam operator*(const SpeedParam& obj)
+		{
+			SpeedParam temp;
+			temp.move_ = (this->move_ + this->all_) * (obj.move_ * obj.all_);
+			temp.slash_ = (this->slash_ + this->all_) * (obj.slash_ * obj.all_);
+			temp.moment_ = (this->moment_ + this->all_) * (obj.moment_ * obj.all_);
+			return temp;
+		}
+	};
+
+	/// <summary>
+	/// 時間のみのパラメータ
+	/// </summary>
+	struct TimeParam
+	{
+		float justTake_;			// ジャスト判定の時間
+		float momentTime_;			// 後隙自体の時間
+		float invincibleDamage_;	// ダメージを受けた時の無敵
+
+		TimeParam operator*(const TimeParam& obj)
+		{
+			TimeParam temp;
+			temp.justTake_ = this->justTake_ * obj.justTake_;
+			temp.momentTime_ = this->momentTime_ * obj.momentTime_;
+			temp.invincibleDamage_ = this->invincibleDamage_ * obj.invincibleDamage_;
+			return temp;
+		}
 	};
 
 public:	//*** パブリック変数 ***//
 
-	// HP
+	// HP のみ
 	HPParam Hp;
 
 	// 攻撃の処理に関する
@@ -78,9 +118,19 @@ public:	//*** パブリック変数 ***//
 	// 移動速度のみ
 	SpeedParam Speed;
 
+	// 時間のみ
+	TimeParam Time;
+
 private: //*** プライベート変数 ***//
 
 	PlayerConfig* config_ = nullptr;
 
 	UpgradeParameter param;
+
+private: //*** プライベート関数 ***//
+
+	void ApplyHP();
+	void ApplyAttack();
+	void ApplySpeed();
+	void ApplyTime();
 };

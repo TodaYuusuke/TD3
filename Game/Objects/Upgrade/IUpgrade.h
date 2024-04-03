@@ -35,8 +35,14 @@ struct UpgradeAttack
 
 struct UpgradeSpeed
 {
-	// 移動速度
+	// すべての移動速度
 	Paramete allSpeedDelta;
+	// 歩きの移動速度
+	Paramete moveSpeedDelta;
+	// 抜刀の移動速度
+	Paramete slashSpeedDelta;
+	// 後隙の移動速度
+	Paramete momentSpeedDelta;
 
 };
 

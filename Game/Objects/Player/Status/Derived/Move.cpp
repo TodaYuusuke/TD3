@@ -44,7 +44,7 @@ void Move::Update()
 
 	player_->demoModel_.transform.translation += moveVector;
 	// 滑らか用
-	player_->rootData_.velocity_ = moveVector;
+	player_->rootData_.velocity_ = moveVector.Length() != 0.0f ? moveVector : player_->rootData_.velocity_;
 
 	// 経過時間を加算
 	elapsedTime_ += lwp::GetDeltaTimeF();

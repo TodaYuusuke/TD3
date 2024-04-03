@@ -57,7 +57,10 @@ void Idol::Update()
 	// 移動を続ける
 	player_->demoModel_.transform.translation += player_->rootData_.velocity_;
 	// 移動量を少なくする
-	player_->rootData_.velocity_ = 0.2f <= player_->rootData_.velocity_.Length() ? player_->rootData_.velocity_ *= 0.75f : lwp::Vector3(0.0f, 0.0f, 0.0f);
+	player_->rootData_.velocity_ =
+		0.2f <= player_->rootData_.velocity_.Length() ?
+		player_->rootData_.velocity_ *= 0.85f :
+		lwp::Vector3(0.0f, 0.0f, 0.0f);
 }
 
 void Idol::CreateMotions()

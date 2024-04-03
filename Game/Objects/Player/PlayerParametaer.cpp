@@ -10,33 +10,10 @@ void PlayerParameter::Initialize(PlayerConfig* p)
 
 void PlayerParameter::ApplyUpgrade()
 {
-	// 足し算の計算
-	PlayerParameter base = *this;
-
-	// 攻撃力
-	base.Attack.slashPower_ = (config_->Power_.BASEPOWER_ + param.Attack.slashPowerDelta.base);
-	// 攻撃範囲
-	base.Attack.slashRange_ = (config_->Length_.WEAPONCOLLISIONRADIUS_ + param.Attack.slashRangeDelta.base);
-	// 移動速度
-	base.Speed.move_ = (config_->Speed_.MOVE_ + param.Speed.allSpeedDelta.base);
-	base.Speed.slash_ = (config_->Speed_.SLASH_ + param.Speed.allSpeedDelta.base);
-	base.Speed.moment_ = (config_->Speed_.MOMENT_ + param.Speed.allSpeedDelta.base);
-	// 攻撃回数
-	base.Attack.slashNum_ = std::max<int>(config_->Count_.SLASHRELATIONMAX_ + (int)param.Attack.slashNumDelta.base, 1);
-
-	// 掛け算部分の計算
-	PlayerParameter multi;
-
-	// 攻撃力
-	multi.Attack.slashPower_ = (0.01f * param.Attack.slashPowerDelta.percent);
-	// 攻撃範囲
-	multi.Attack.slashRange_ = (0.01f * param.Attack.slashRangeDelta.percent);
-	// 移動速度
-	multi.Speed.move_ = (0.01f * param.Speed.allSpeedDelta.percent);
-	multi.Speed.slash_ = (0.01f * param.Speed.allSpeedDelta.percent);
-	multi.Speed.moment_ = (0.01f * param.Speed.allSpeedDelta.percent);
-
-	*this = base * multi;
+	ApplyHP();
+	ApplyAttack();
+	ApplySpeed();
+	ApplyTime();
 }
 
 void PlayerParameter::ApplyUpgrade(const UpgradeParameter& para)
@@ -48,7 +25,7 @@ void PlayerParameter::ApplyUpgrade(const UpgradeParameter& para)
 void PlayerParameter::ResetParameter()
 {
 	Hp.hp_ = config_->Count_.BASEHP_;
-	
+
 	Attack.slashPower_ = config_->Power_.BASEPOWER_;
 	Attack.slashRange_ = config_->Length_.WEAPONCOLLISIONRADIUS_;
 	Attack.slashNum_ = config_->Count_.SLASHRELATIONMAX_;
@@ -71,4 +48,81 @@ PlayerParameter PlayerParameter::operator*(const PlayerParameter& obj)
 
 	temp.config_ = this->config_;
 	return temp;
+}
+
+void PlayerParameter::ApplyHP()
+{
+	// 倍率を掛けない計算
+	HPParam base;
+
+	// 最大 HP のアップグレード
+	base.maxHP_ = param.HP.hpDelta.base;
+
+
+	this->Hp = base;
+}
+
+void PlayerParameter::ApplyAttack()
+{
+	// 足し算の計算
+	AttackParam base;
+
+	// 攻撃力
+	base.slashPower_ = (config_->Power_.BASEPOWER_ + param.Attack.slashPowerDelta.base);
+	// 攻撃範囲
+	base.slashRange_ = (config_->Length_.WEAPONCOLLISIONRADIUS_ + param.Attack.slashRangeDelta.base);
+	// 攻撃回数
+	base.slashNum_ = config_->Count_.SLASHRELATIONMAX_ + (int)param.Attack.slashNumDelta.base;
+
+	// 掛け算部分の計算
+	AttackParam multi;
+
+	// 攻撃力
+	multi.slashPower_ = (0.01f * param.Attack.slashPowerDelta.percent);
+	// 攻撃範囲
+	multi.slashRange_ = (0.01f * param.Attack.slashRangeDelta.percent);
+	// 攻撃回数(最低値)
+	multi.slashNum_ = 1;
+
+	this->Attack = base * multi;
+}
+
+void PlayerParameter::ApplySpeed()
+{
+	// 足し算の計算
+	SpeedParam base;
+	// 移動速度
+	base.all_ = (param.Speed.allSpeedDelta.base);
+	base.move_ = (config_->Speed_.MOVE_ + param.Speed.moveSpeedDelta.base);
+	base.slash_ = (config_->Speed_.SLASH_ + param.Speed.slashSpeedDelta.base);
+	base.moment_ = (config_->Speed_.MOMENT_ + param.Speed.momentSpeedDelta.base);
+
+	// 掛け算部分の計算
+	SpeedParam multi;
+	// 移動速度
+	multi.all_ = (0.01f * param.Speed.allSpeedDelta.percent);
+	multi.move_ = (0.01f * param.Speed.moveSpeedDelta.percent);
+	multi.slash_ = (0.01f * param.Speed.slashSpeedDelta.percent);
+	multi.moment_ = (0.01f * param.Speed.momentSpeedDelta.percent);
+
+	this->Speed = base * multi;
+}
+
+void PlayerParameter::ApplyTime()
+{
+	// 足し算の計算
+	TimeParam base;
+
+	base.justTake_ = (config_->Time_.JUSTTAKETIME_ + param.Time.justTimeDelta.base);
+	base.momentTime_ = (config_->Time_.MOMENTBASE_ + param.Time.momentTimeDelta.base);
+	base.invincibleDamage_ = (config_->Time_.DAMAGEINVINCIBLE_ + param.Time.damageInvincibleTimeDelta.base);
+
+	// 掛け算部分の計算
+	TimeParam multi;
+
+	base.justTake_ = (0.01f * param.Time.justTimeDelta.percent);
+	base.momentTime_ = (0.01f * param.Time.momentTimeDelta.percent);
+	base.invincibleDamage_ = (0.01f * param.Time.damageInvincibleTimeDelta.percent);
+
+	this->Time = base * multi;
 }
