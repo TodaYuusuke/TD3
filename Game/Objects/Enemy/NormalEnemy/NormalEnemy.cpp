@@ -46,7 +46,7 @@ void NormalEnemy::Move()
 	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;
 	MoveVec = MoveVec.Normalize();
 	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * kMove * LWP::Info::GetDeltaTime();
+	models_[0].transform.translation += MoveVec * kMove * LWP::Info::GetDeltaTimeF();
 }
 
 void NormalEnemy::Attack()

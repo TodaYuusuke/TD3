@@ -10,8 +10,8 @@ void PlayerParameter::Initialize(PlayerConfig* p)
 
 void PlayerParameter::ApplyUpgrade()
 {
-	PlayerParameter base = *this;
 	// 足し算の計算
+	PlayerParameter base = *this;
 
 	// 攻撃力
 	base.slashPower_ = (config_->Power_.BASEPOWER_ + param.slashPowerDelta.base);
@@ -24,8 +24,8 @@ void PlayerParameter::ApplyUpgrade()
 	// 攻撃回数
 	base.slashNum = std::max<int>(config_->Count_.SLASHRELATIONMAX_ + param.slashDelta, 1);
 
-	PlayerParameter multi;
 	// 掛け算部分の計算
+	PlayerParameter multi;
 
 	// 攻撃力
 	multi.slashPower_ = (0.01f * param.slashPowerDelta.percent);
@@ -58,7 +58,7 @@ void PlayerParameter::ResetParameter()
 	slashNum = config_->Count_.SLASHRELATIONMAX_;
 }
 
-const PlayerParameter& PlayerParameter::operator*(const PlayerParameter& obj)
+PlayerParameter PlayerParameter::operator*(const PlayerParameter& obj)
 {
 	PlayerParameter temp = *this;
 	temp.slashPower_ = this->slashPower_ * obj.slashPower_;

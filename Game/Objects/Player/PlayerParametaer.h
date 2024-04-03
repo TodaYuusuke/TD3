@@ -33,7 +33,7 @@ public:	//*** パブリック関数 ***//
 
 public: //*** オペレーターオーバーロード ***//
 
-	const PlayerParameter& operator*(const PlayerParameter& obj);
+	PlayerParameter operator*(const PlayerParameter& obj);
 
 public:	//*** サブクラス ***//
 

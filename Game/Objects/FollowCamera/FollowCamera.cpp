@@ -23,7 +23,7 @@ void FollowCamera::Update() {
 	// 追従の計算
 	if (target_) {
 		// 追従座標の補間
-		interTarget_ = LWP::Math::Vector3::Slerp(interTarget_, target_->translation, 0.1);
+		interTarget_ = LWP::Math::Vector3::Slerp(interTarget_, target_->translation, 0.1f);
 
 		// オフセットの計算
 		LWP::Math::Vector3 offset = CalcOffset();

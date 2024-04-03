@@ -114,6 +114,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)DirectXGame\Adapter;$(SolutionDir)DirectXGame\Engine</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
