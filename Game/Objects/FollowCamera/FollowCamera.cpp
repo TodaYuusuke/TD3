@@ -74,7 +74,7 @@ void FollowCamera::InputAngle() {
 	destinationAngle_.y += Controller::GetRStick().x * sensitivity.x;
 
 	// 上下の回転に制限をかける
-	destinationAngle_.x = min(max(destinationAngle_.x, kMinAxisX), kMaxAxisX);
+	destinationAngle_.x = std::clamp<float>(destinationAngle_.x, kMinAxisX, kMaxAxisX);
 
 	// Rスティック押し込み
 	// 角度リセット

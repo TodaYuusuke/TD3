@@ -16,6 +16,7 @@ private:// 構造体
 
 public:// パブリックなメンバ関数
 	//*** 純粋仮想関数 ***//
+	~ArrowBoss() override;
 	void Init()override;
 	void Update()override;
 	void SetPosition(lwp::Vector3 pos)override;

@@ -54,9 +54,9 @@ void Arrow::Update()
 void Arrow::Attack()
 {
 	// 弾が向いている方向に動く処理
-	LWP::Math::Vector3 velocity = velocity_;
+	LWP::Math::Vector3 velocity = { 0,0,1 };
 	LWP::Math::Matrix4x4 rotateMatrix = LWP::Math::Matrix4x4::CreateRotateXYZMatrix(model_.transform.rotation);
-	velocity_ = velocity * rotateMatrix;
+	velocity = velocity * rotateMatrix;
 	velocity_ = velocity.Normalize();
 	velocity_ *= kNormalSpeed;
 

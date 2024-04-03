@@ -1,7 +1,21 @@
 #include "ArrowBoss.h"
 #include "Game/Objects/Player/Player.h"
 
+using namespace LWP::Utility;
 using namespace LWP::Object::Collider;
+
+ArrowBoss::~ArrowBoss() {
+	for (Arrow* arrow : normalArrows_) {
+		delete arrow;
+	}
+
+	for (HomingArrow* arrow : homingArrows_) {
+		delete arrow;
+	}
+
+	normalArrows_.clear();
+	homingArrows_.clear();
+}
 
 void ArrowBoss::Init()
 {
@@ -114,7 +128,7 @@ void ArrowBoss::Attack()
 		Arrow* arrow = new Arrow();
 		// 初期化
 		arrow->Init(models_[0].transform);
-		
+
 		normalArrows_.push_back(arrow);
 	}
 #pragma endregion
@@ -238,9 +252,10 @@ void ArrowBoss::B_AimingUpdate() {
 	// 体を自機に向ける
 	Aim();
 
-	// 既定の時間を過ぎたら弾を撃つ
+	// 既定の時間を過ぎたら行動開始
 	if (attackWaitTime_ <= 0) {
-		behaviorRequest_ = Behavior::kHomingShot;
+		int randomBehavior = GenerateRandamNum(2, 3);
+		behaviorRequest_ = static_cast<Behavior>(randomBehavior);
 	}
 
 	attackWaitTime_--;
