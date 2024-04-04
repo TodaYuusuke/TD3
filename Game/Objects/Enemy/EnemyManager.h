@@ -53,4 +53,6 @@ private:
 
 	// 現在のフレーム
 	int currentFrame_ = 0;
+
+	int SpawnNum = 0;
 };

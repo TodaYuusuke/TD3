@@ -6,7 +6,7 @@ void NormalEnemy::Init()
 {
 	models_.reserve(1);
 	models_.emplace_back();
-	models_[Model::Body].LoadFile("NormalEnemy/Body/Body.obj");
+	models_[Model::Body].LoadFile("NormalEnemy/NormalEnemy.obj");
 	models_[Model::Body].name = "Normal";
 	//models_.emplace_back();
 	//models_[Model::L_Arm].LoadFile("NormalEnemy/L_Arm/L_Arm.obj");
@@ -135,7 +135,7 @@ void NormalEnemy::AttackAnimation()
 
 void NormalEnemy::DyingAnimation()
 {
-	float add = LWP::Utility::GenerateRandamNum(0.1f,1.0f);
+	float add = LWP::Utility::GenerateRandamNum<float>(0.1f,0.5f);
 	if (deadFlame == 0) {
 		deadAnime.targetpoint = models_[0].transform.translation;
 	}

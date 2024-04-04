@@ -57,5 +57,5 @@ protected:
 	};
 	int deadFlame = 0;
 	// 生きているかどうか
-	bool isActive_ = false;
+	bool isActive_ = true;
 };

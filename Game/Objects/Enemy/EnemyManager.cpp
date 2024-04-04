@@ -8,18 +8,24 @@ void EnemyManager::Init()
 void EnemyManager::Update()
 {
 	currentFrame_++;
-	if (currentFrame_ >= kSpownFrequency) {
-		//ランダム生成用
-		std::random_device seedGenerator;
-		std::mt19937 randomEngine(seedGenerator());
-		std::uniform_int_distribution<int> distribution(1, 3);
-		int Spown = distribution(randomEngine);
-		for (int It = 0; It < Spown; It++) {
+	//if (currentFrame_ >= kSpownFrequency) {
+	//	//ランダム生成用
+	//	std::random_device seedGenerator;
+	//	std::mt19937 randomEngine(seedGenerator());
+	//	std::uniform_int_distribution<int> distribution(1, 3);
+	//	int Spown = distribution(randomEngine);
+	//	for (int It = 0; It < Spown; It++) {
+	//		EnemySpown();
+	//	}
+	//	currentFrame_ = 0;
+	//}
+	ImGui::Begin("EnemyMa");
+	ImGui::InputInt("Spawn", &SpawnNum);
+	if (ImGui::Button("Create")) {
+		for (int it = 0; it < SpawnNum; it++) {
 			EnemySpown();
 		}
-		currentFrame_ = 0;
 	}
-	ImGui::Begin("EnemyMa");
 	ImGui::Text("%d", enemys_.size());
 	ImGui::End();
 	// 消しながら更新
@@ -70,18 +76,17 @@ void EnemyManager::EnemySpown()
 
 	lwp::Vector3 pos = { PtoE * divideX * signX , 0.5f , PtoE * divideZ * signY };
 	if (number <= 0.5f) {
-		//NormalEnemySpown(pos);
-		//NormalEnemySpown(pos);
+		NormalEnemySpown(pos);
 		// ボスの発生
 		//DashBossSpown(pos);
-		ArrowEnemySpown(pos);
+		//ArrowEnemySpown(pos);
 	}
 	else if (number <= 0.8f) {
 		//ShieldEnemySpown(pos);
-		ArrowEnemySpown(pos);
+		NormalEnemySpown(pos);
 	}
 	else {
-		ArrowEnemySpown(pos);
+		NormalEnemySpown(pos);
 	}
 
 }
