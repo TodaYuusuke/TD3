@@ -4,17 +4,21 @@
 
 using namespace LWP::Object::Collider;
 
+ArrowEnemy::~ArrowEnemy() {
+	for (Arrow* arrow : arrows_) {
+		delete arrow;
+	}
+
+	arrows_.clear();
+}
+
 void ArrowEnemy::Init()
 {
-	LWP::Primitive::Mesh Mash;
-	Mash.LoadFile("cube/cube.obj");
-	Mash.name = "ArrowEnemy!!";
-	Mash.isActive = true;
-	models_.push_back(Mash);
-	//models_[0].LoadFile("cube/cube.obj");
-	//models_[0].name = "ArrowEnemy!!";
-	//models_[0].isActive = true;
-	//models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::GREEN);
+	// これでできる
+	models_.emplace_back(); 
+	models_[0].LoadFile("cube/cube.obj");
+	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::GREEN);
+	models_[0].name = "ArrowEnemy!!";
 
 	// 最初から描画
 	isActive_ = true;
@@ -67,14 +71,14 @@ void ArrowEnemy::SetPosition(lwp::Vector3 pos)
 void ArrowEnemy::CreateCollider()
 {
 	// 当たり判定を設定
-	collider_ = new LWP::Object::Collider::AABB;
+	collider_ = LWP::Object::Collider::AABB();
 	// 当たり判定を取る
-	collider_->CreateFromPrimitive(&models_[0]);
+	collider_.CreateFromPrimitive(&models_[0]);
 	// マスク処理
-	collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	collider_->mask.SetHitFrag(MaskLayer::Layer3);
+	collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+	collider_.mask.SetHitFrag(MaskLayer::Layer3);
 	// 今のところは何もしていない
-	collider_->SetOnCollisionLambda([this](HitData data) {
+	collider_.SetOnCollisionLambda([this](HitData data) {
 		data;
 		if (data.state == OnCollisionState::Press && isActive_ &&
 			data.hit &&
@@ -82,7 +86,7 @@ void ArrowEnemy::CreateCollider()
 		{
 			isActive_ = false;
 			//models_[0].isActive = false;
-			collider_->isActive = false;
+			//collider_.isActive = false;
 			arrows_.remove_if([](Arrow* arrow) {
 				arrow->Death();
 				delete arrow;
@@ -97,7 +101,7 @@ void ArrowEnemy::Move()
 	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;
 	MoveVec = MoveVec.Normalize();
 	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
+	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTimeF();
 }
 
 void ArrowEnemy::Attack()

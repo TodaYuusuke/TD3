@@ -2,7 +2,7 @@
 #include "../../../Player/Player.h"
 
 HomingArrow::~HomingArrow() {
-	delete aabb_;
+	
 }
 
 void HomingArrow::Init(lwp::WorldTransform transform) {
@@ -16,11 +16,11 @@ void HomingArrow::Init(lwp::WorldTransform transform) {
 	model_.name = "HomingArrow!!";
 
 	// 当たり判定を設定
-	aabb_ = new LWP::Object::Collider::AABB();
-	aabb_->CreateFromPrimitive(&model_);
-	aabb_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	aabb_->mask.SetHitFrag(MaskLayer::Player | MaskLayer::Layer3);
-	aabb_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
+	//aabb_ = new LWP::Object::Collider::AABB();
+	aabb_.CreateFromPrimitive(&model_);
+	aabb_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+	aabb_.mask.SetHitFrag(MaskLayer::Player | MaskLayer::Layer3);
+	aabb_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		data;
 		if (!(data.state == OnCollisionState::None) &&
 			data.hit &&
@@ -30,8 +30,12 @@ void HomingArrow::Init(lwp::WorldTransform transform) {
 			Death();
 		}
 		});
-	aabb_->isActive = true;
+	aabb_.isActive = true;
 
+	// ホーミング開始時間(何も設定されていない場合はデフォルトの値を入れる)
+	if (homingStartFrame_ == 0) {
+		homingStartFrame_ = kHomingStartFrame;
+	}
 	// ホーミングする時間
 	homingFrame_ = kHomingEndFrame;
 	// ホーミング機能をoff
@@ -58,7 +62,7 @@ void HomingArrow::Update() {
 
 void HomingArrow::Attack() {
 	// ホーミング開始時間の確認
-	if (homingFrame_ <= kHomingEndFrame - kHomingStartFrame) {
+	if (homingFrame_ <= kHomingEndFrame - homingStartFrame_) {
 		isHoming_ = true;
 	}
 	// ホーミング終了時間の確認
@@ -84,7 +88,7 @@ void HomingArrow::Attack() {
 	}
 
 	// 加算
-	model_.transform.translation += velocity_ * LWP::Info::GetDeltaTime();
+	model_.transform.translation += velocity_ * LWP::Info::GetDeltaTimeF();
 
 	// ホーミング開始時間を進める
 	homingFrame_--;

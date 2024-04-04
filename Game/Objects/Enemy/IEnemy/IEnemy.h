@@ -1,5 +1,6 @@
 #pragma once
 #include <Adapter.h>
+#include "../../FollowCamera/FollowCamera.h"
 
 struct MotionWork {
 	lwp::Vector3 targetpoint;//目標地点
@@ -13,12 +14,7 @@ class IEnemy
 {
 public:
 	// デストラクタ
-	virtual ~IEnemy() {
-		/*for (LWP::Primitive::IPrimitive* model : models_) {
-			delete model;
-		}*/
-		delete collider_;
-	};
+	virtual ~IEnemy() = default;
 
 	void Initialize();
 
@@ -35,6 +31,8 @@ public: //*** ゲッターセッター ***//
 	// 狙う対象をセット(今回は自機をセットする)
 	virtual void SetTarget(Player* player) { player_ = player; }
 	virtual void SetPosition(lwp::Vector3 pos) { models_[0].transform.translation = pos; }
+	// カメラのアドレスを設定
+	virtual void SetCamera(FollowCamera* camera) { followCamera_ = camera; }
 
 protected: //*** 継承クラスで呼び出す共通処理 ***//
 
@@ -44,8 +42,11 @@ protected: //*** 継承クラスで呼び出す共通処理 ***//
 protected:
 	std::vector<LWP::Primitive::Mesh> models_;
 
+	// 追従カメラのアドレスを受け取る
+	FollowCamera* followCamera_;
+
 	// 敵の当たり判定
-	lwp::Collider::AABB* collider_ = nullptr;
+	lwp::Collider::AABB collider_;
 	bool isActive_ = false;
 	// 
 	Player* player_;

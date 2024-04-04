@@ -11,7 +11,7 @@ namespace L {
 		/// アップグレードの内容
 		/// </summary>
 		void Apply(UpgradeParameter* para) override {
-			para->power.base += 10;
+			para->slashPowerDelta.base += 10;
 		}
 
 		std::string GetTexturePass() override {

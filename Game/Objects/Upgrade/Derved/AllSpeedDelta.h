@@ -27,7 +27,7 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->speed.base += var;
+			para->allSpeedDelta.base += var;
 		}
 
 		std::string GetTexturePass() override

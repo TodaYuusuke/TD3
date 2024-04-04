@@ -31,6 +31,7 @@ void TItleScene::Initialize()
 
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->SetPlayer(player_.get());
+	enemyManager_->SetCamera(followCamera_.get());
 	enemyManager_->Init();
 
 	// 経験値タンク
@@ -56,7 +57,7 @@ void TItleScene::Update()
 	// スローを確認
 	if (player_->GetIsJustSlashing())
 	{
-		time_ += lwp::GetDeltaTime();
+		time_ += lwp::GetDeltaTimeF();
 		if (cTIMESLOW_ <= time_)
 		{
 			player_->EndJust();

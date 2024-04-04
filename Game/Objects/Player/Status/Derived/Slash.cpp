@@ -26,7 +26,9 @@ void Slash::Reset()
 
 	// 居合の方向を更新
 	// 居合中には変更しない
-	player_->slashData_.vector_ = player_->destinate_;
+	player_->slashData_.vector_ = player_->GetVectorTranspose(player_->destinate_);
+	// 移動量を消す
+	player_->rootData_.velocity_ = { 0.0f,0.0f,0.0f };
 
 	// デルタタイム変更
 	player_->EndJust();
@@ -43,6 +45,10 @@ void Slash::Reset()
 	// ジャスト判定中は無敵
 	player_->invincibleTime_ = 0.0f;
 	player_->maxInvincibleTime_ = player_->config_.Time_.JUSTTAKETIME_ + player_->config_.Time_.JUSTINVINCIBLECORRECTION_;
+
+	// モデルの向きを直す
+	player_->demoModel_.transform.rotation.y = std::atan2f(player_->slashData_.vector_.x, player_->slashData_.vector_.z);
+
 	// コライダーの設定
 	ResetCollider();
 
@@ -58,17 +64,16 @@ void Slash::Update()
 		player_->RegistStatus(Behavior::Slash);
 	}
 	// 一定方向を向く
-	lwp::Vector3 moveVector = player_->GetVectorTranspose(player_->slashData_.vector_);
-
-	moveVector *= player_->parameter_.slashSpeed * lwp::GetDefaultDeltaTimeF();
+	lwp::Vector3 moveVector = player_->slashData_.vector_ *
+		player_->parameter_.slashSpeed * lwp::GetDefaultDeltaTimeF();
 
 	player_->demoModel_.transform.translation += moveVector;
 
 	// 判定を取れるようにする
-	player_->colliders_.justSlash_->isActive = elapsedTime_ < player_->config_.Time_.JUSTTAKETIME_;
+	player_->colliders_.justSlash_.isActive = elapsedTime_ < player_->config_.Time_.JUSTTAKETIME_;
 
 	// 武器の判定を伸ばす
-	player_->colliders_.weapon_->end =
+	player_->colliders_.weapon_.end =
 		player_->demoModel_.transform.translation +
 		player_->slashData_.vector_ *
 		player_->config_.Length_.WEAPONPLUSCORRECTION_;
@@ -91,13 +96,13 @@ void Slash::ResetCollider()
 	// カプセルの設定
 	lwp::Vector3 start = player_->demoModel_.transform.translation;
 	lwp::Vector3 end = player_->demoModel_.transform.translation;
-	player_->colliders_.weapon_->Create(start, end);
-	player_->colliders_.weapon_->radius = player_->config_.Length_.WEAPONCOLLISIONRADIUS_;
-	player_->colliders_.weapon_->isActive = true;
+	player_->colliders_.weapon_.Create(start, end);
+	player_->colliders_.weapon_.radius = player_->config_.Length_.WEAPONCOLLISIONRADIUS_;
+	player_->colliders_.weapon_.isActive = true;
 	// ジャスト判定を作る
-	player_->colliders_.justSlash_->Create(start, end);
+	player_->colliders_.justSlash_.Create(start, end);
 	// サイズ
-	player_->colliders_.justSlash_->radius = player_->config_.Length_.JUSTCOLLISIONRADIUS_;
-	player_->colliders_.justSlash_->end = player_->demoModel_.transform.translation + player_->slashData_.vector_ * (player_->config_.Speed_.SLASH_ * player_->config_.Par_.JUSTENABLE_);
-	player_->colliders_.justSlash_->isActive = true;
+	player_->colliders_.justSlash_.radius = player_->config_.Length_.JUSTCOLLISIONRADIUS_;
+	player_->colliders_.justSlash_.end = player_->demoModel_.transform.translation + player_->slashData_.vector_ * (player_->config_.Speed_.SLASH_ * player_->config_.Parcent_.JUSTENABLE_);
+	player_->colliders_.justSlash_.isActive = true;
 }

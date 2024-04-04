@@ -44,11 +44,17 @@ public:
 	// 自機のアドレスを設定
 	void SetPlayer(Player* player) { player_ = player; }
 
+	// 追従カメラのアドレスを設定
+	void SetCamera(FollowCamera* camera) { followCamera_ = camera; }
+
 private:// 定数
 	// 敵発生頻度
 	const int kSpownFrequency = 120;
 
 private:
+	// 追従カメラのアドレス
+	FollowCamera* followCamera_;
+
 	// ボスも含めたすべての敵
 	std::list<IEnemy*> enemys_;
 	// 自機

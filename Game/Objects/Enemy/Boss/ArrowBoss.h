@@ -2,6 +2,7 @@
 #include "Game/Objects/Enemy/IEnemy/IEnemy.h"
 #include "../ArrowEnemy/Arrow/Arrow.h"
 #include "../ArrowEnemy/Arrow/HomingArrow.h"
+#include "../../FollowCamera/FollowCamera.h"
 
 class ArrowBoss : public IEnemy
 {
@@ -71,36 +72,39 @@ private:// プライベートなメンバ関数
 private:// 定数
 #pragma region 行動のフレーム情報
 	// 何もしない状態の全体フレーム
-	const int kStunAllFrame = 120;
+	const float kStunAllFrame = 120;
 	// 自機狙い状態の全体フレーム
-	const int kAimAllFrame = 120;
+	const float kAimAllFrame = 120;
 	// 通常射撃状態の全体フレーム
-	const int kNormalShotAllFrame = 180;
+	const float kNormalShotAllFrame = 180;
 	// ホーミング射撃の全体フレーム
-	const int kHomingShotAllFrame = 180;
+	const float kHomingShotAllFrame = 180;
 
 	// 通常弾の連射速度(次の弾を撃つまでの時間)
-	const int kNormalShotDelayFrame = 12;
+	const float kNormalShotDelayFrame = 0;
 	// ホーミング弾の連射速度(次の弾を撃つまでの時間)
-	const int kHomingShotDelayFrame = 6;
+	const float kHomingShotDelayFrame = 6;
 #pragma endregion
 
 	// 通常弾数
-	const int kMaxNormalShotCount = 3;
+	const int kMaxNormalShotCount = 4;
 	// ホーミング弾数
 	const int kMaxHomingShotCount = 9;
 
 	// 攻撃する範囲
 	const float kAttackRange = 40.0f;
 
+	// 大技を行うときの視野角
+	const float kEffectFov = 120;
+
 private:// プライベートな変数
 	// 何もしない状態の経過フレーム
-	int stunFrame_;
+	float stunFrame_;
 	// 通常射撃状態の経過フレーム
-	int shotFrame_;
+	float shotFrame_;
 
 	// 射撃のディレイ
-	int shotDelay_;
+	float shotDelay_;
 	// 射撃回数
 	int shotCount_;
 

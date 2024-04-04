@@ -41,13 +41,36 @@ public:
 	void ResetAngle();
 
 	// 抜刀のイージングをスタートする
-	void StartSlash();
-	// 通常抜刀時のイージングを終了する
-	void EndSlash();
+	void StartSlash() {
+		if (!isEffectEasing_) {
+			fovState_ = FovState::REDUCE;
+		}
+	}
+	// 抜刀時のイージングを終了する
+	void EndSlash() {
+		if (!isEffectEasing_) {
+			fovState_ = FovState::RESET;
+		}
+	}
+
+	// 抜刀以外のfovイージングを開始
+	void StartEffectFov(const float& goalFov) {
+		effectGoalFov_ = goalFov;
+		fovState_ = FovState::EFFECT;
+		isEffectEasing_ = true;
+	}
+	// 抜刀以外のfovイージングを終了
+	void EndEffectFov() {
+		fovState_ = FovState::RESET;
+		isEffectEasing_ = false;
+	}
 
 private:/// プライベートな関数
 	// キーボード,ゲームパッドの入力処理
 	void InputAngle();
+
+	// 他の演出でFovの数値をイージングするときに使用する
+	void StartFovEasing();
 
 	///
 	/// ジャスト抜刀時に呼ばれる処理
@@ -90,7 +113,7 @@ private:/// 定数
 
 	// 追従対象との距離
 	const LWP::Math::Vector3 kTargetDist = { 0.0f,0.0f,-30.0f };
-	
+
 	// 初期角度 
 	LWP::Math::Vector3 kStartAngle = { 0.2f, 0.0f, 0.0f };
 
@@ -122,15 +145,20 @@ private:/// プライベートな変数
 
 	// Fovの状態
 	enum FovState {
-		NORMAL, // 何もない
-		REDUCE, // 縮小
-		RESET   // 元の数値に戻す
+		NORMAL,		// 何もない
+		REDUCE,		// 縮小
+		RESET,		// 元の数値に戻す
+		EFFECT		// 抜刀以外のfovのイージング
 	};
 	// Fovの状態
 	FovState fovState_;
 	FovState preFovState_;
 	// 前のFovの値を保存
 	float tempFov_;
+	// 縮小するFovの目標値
+	float goalFov_;
+	// 抜刀以外に使用するfovの目標値
+	float effectGoalFov_;
 
 	// 現在の時間(frame単位)
 	float currentFrame_;
@@ -143,6 +171,7 @@ private:/// プライベートな変数
 
 	// 後追いのレート
 	float followRate_;
-	// 縮小するFovの目標値
-	float goalFov_;
+
+	// 抜刀以外のイージング
+	bool isEffectEasing_;
 };

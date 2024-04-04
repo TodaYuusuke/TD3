@@ -9,10 +9,11 @@ public:// パブリックなメンバ関数
 	/// Default Method
 	/// 
 
+	~ArrowEnemy()override;
 	void Init()override;
 	void Update()override;
 	void SetPosition(lwp::Vector3 pos)override;
-
+	void CreateCollider()override;
 	///
 	/// User Method
 	/// 
@@ -22,9 +23,6 @@ public:// パブリックなメンバ関数
 	/// Setter
 
 private:// プライベートなメンバ関数
-
-	// コライダーを生成
-	void CreateCollider() override;
 
 	// 移動
 	void Move()override;

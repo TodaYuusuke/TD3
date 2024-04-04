@@ -4,11 +4,11 @@
 using namespace LWP::Object::Collider;
 void NormalEnemy::Init()
 {
-	models_.push_back(LWP::Primitive::Mesh());
+	models_.emplace_back();
 	models_[0].LoadFile("cube/cube.obj");
-	//models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
+	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLACK);
 	models_[0].name = "NormalEnemy!!";
-	models_[0].isActive = true;
+
 	isActive_ = true;
 
 	attackWaitTime_ = kAttackWaitTime;
@@ -46,7 +46,7 @@ void NormalEnemy::Move()
 	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;
 	MoveVec = MoveVec.Normalize();
 	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * kMove * LWP::Info::GetDeltaTime();
+	models_[0].transform.translation += MoveVec * kMove * LWP::Info::GetDeltaTimeF();
 }
 
 void NormalEnemy::Attack()
@@ -78,7 +78,7 @@ void NormalEnemy::AttackAnimation()
 			attackWork.t = 0.0f;
 
 			attackStanbyWork.flag = true;
-			collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+			collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 		}
 	}
 	if (attackStanbyWork.flag) {
@@ -100,7 +100,7 @@ void NormalEnemy::AttackAnimation()
 			attackEndWork.flag = false;
 			attackEndWork.t = 0.0f;
 			isAttack = false;
-			collider_->mask.SetBelongFrag(MaskLayer::Enemy);
+			collider_.mask.SetBelongFrag(MaskLayer::Enemy);
 		}
 	}
 

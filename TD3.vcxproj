@@ -114,6 +114,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)DirectXGame\Adapter;$(SolutionDir)DirectXGame\Engine</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -161,6 +162,8 @@
     <ClCompile Include="Game\Objects\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.cpp" />
     <ClCompile Include="Game\Objects\FollowCamera\FollowCamera.cpp" />
+    <ClCompile Include="Game\Objects\Player\PlayerConfing.cpp" />
+    <ClCompile Include="Game\Objects\Player\PlayerParametaer.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Damage.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Moment.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Slash.cpp" />
@@ -190,6 +193,8 @@
     <ClInclude Include="Game\Objects\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.h" />
     <ClInclude Include="Game\Objects\FollowCamera\FollowCamera.h" />
+    <ClInclude Include="Game\Objects\Player\PlayerConfing.h" />
+    <ClInclude Include="Game\Objects\Player\PlayerParametaer.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Damage.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Moment.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Slash.h" />

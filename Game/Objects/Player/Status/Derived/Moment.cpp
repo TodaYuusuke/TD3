@@ -26,7 +26,7 @@ void Moment::Reset()
 	player_->momentData_.maxTime_ = player_->config_.Time_.MOMENTBASE_ + (player_->momentData_.relationSlash_ * player_->config_.Time_.MOMENTINCREMENT_);
 	player_->weapon_->SetBehavior(Weapon::Behavior::Moment);
 	// 武器の判定を消す
-	player_->colliders_.weapon_->isActive = false;
+	player_->colliders_.weapon_.isActive = false;
 }
 
 void Moment::Update()

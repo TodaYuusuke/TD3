@@ -14,7 +14,7 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->attackTotal += 1;
+			para->slashDelta += 1;
 		}
 
 		std::string GetTexturePass() override

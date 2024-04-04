@@ -23,14 +23,7 @@ Experience::Experience(const lwp::Vector3& pos)
 	Initialize(pos);
 }
 
-Experience::~Experience()
-{
-	// 表示も当たり判定も切る
-	model_.isActive = false;
-	collider_->isActive = false;
-
-	delete collider_;
-}
+Experience::~Experience() {}
 
 void Experience::Update()
 {
@@ -46,10 +39,10 @@ void Experience::Initialize(const lwp::Vector3& pos)
 	// 場所を設定
 	model_.transform.translation = pos;
 
+	// 場所を設定
+	collider_.Create(pos);
 	// 当たり判定を作成
 	CreateCollision();
-	// 場所を設定
-	collider_->Create(pos);
 
 	// 死んでない
 	isDead_ = false;
@@ -58,29 +51,24 @@ void Experience::Initialize(const lwp::Vector3& pos)
 
 void Experience::CreateCollision()
 {
-	// 当たり判定を作成
-	collider_ = new LWP::Object::Collider::Sphere();
 	// マスク
-	collider_->mask.SetBelongFrag(MaskLayer::Layer5);
+	collider_.mask.SetBelongFrag(MaskLayer::Layer5);
 	// プレイヤーと経験値取得範囲
 	// プレイヤーとの当たり判定は消してもいい
-	collider_->mask.SetHitFrag(MaskLayer::Layer4);
+	collider_.mask.SetHitFrag(MaskLayer::Layer4);
 	// 別個で用意した当たった時の関数
 	// 状態を切り替えたい
-	collider_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollision(data); });
-	// 当たる
-	collider_->isActive = true;
-#ifdef DEMO
-	collider_->name = "EXP";
-#endif // DEMO
+	collider_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollision(data); });
+	collider_.name = "EXP";
 }
 
 void Experience::OnCollision(const lwp::Collider::HitData& data)
 {
-	if (data.state == OnCollisionState::Trigger &&
+	if (data.state == OnCollisionState::Press &&
 		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 	{
 		// 本来はアニメーションをさせた後に消す
 		isDead_ = true;
+		collider_.isActive = false;
 	}
 }

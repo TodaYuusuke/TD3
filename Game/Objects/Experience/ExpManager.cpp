@@ -10,7 +10,7 @@ ExpManager::~ExpManager()
 	for (std::list<Experience*>::iterator itr = exps_.begin(); itr != exps_.end();)
 	{
 		// 消す
-		delete (*itr);
+		delete* itr;
 		itr = exps_.erase(itr);
 	}
 }
@@ -54,6 +54,8 @@ void ExpManager::Create(const lwp::Vector3& pos)
 	exps_.push_back(new Experience(pos));
 }
 
+#if DEMO
+
 void ExpManager::DebugWindow()
 {
 	static Experience* temp = nullptr;
@@ -77,6 +79,7 @@ void ExpManager::DebugWindow()
 			Create(pos);
 		}
 
+		ImGui::Text(temp ? "IN" : "NULL");
 		if (ImGui::Button("Delete") && temp)
 		{
 			temp->isDead_ = true;
@@ -111,3 +114,5 @@ void ExpManager::DebugWindow()
 
 	ImGui::End();
 }
+
+#endif

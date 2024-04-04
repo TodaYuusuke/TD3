@@ -5,11 +5,11 @@ using namespace LWP::Object::Collider;
 
 void ShieldEnemy::Init()
 {
-	models_.push_back(LWP::Primitive::Mesh());
+	models_.emplace_back();
 	models_[0].LoadFile("cube/cube.obj");
-	models_[0].name = "ShieldEnemy!!";
-	models_[0].isActive = true;
 	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::CYAN);
+	models_[0].name = "ShieldEnemy!!";
+
 	isActive_ = true;
 
 	attackWaitTime_ = kAttackWaitTime;
@@ -46,7 +46,7 @@ void ShieldEnemy::Move()
 	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;
 	MoveVec = MoveVec.Normalize();
 	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTime();
+	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTimeF();
 }
 
 void ShieldEnemy::Attack()
@@ -68,14 +68,14 @@ void ShieldEnemy::AttackAnimation()
 	if (attackWork.flag) {
 		if (attackWork.t < 1.0f) {
 			attackWork.t += attackWork.speed;
-			models_[0].transform.translation += attackWork.targetpoint * LWP::Info::GetDeltaTime();
+			models_[0].transform.translation += attackWork.targetpoint * LWP::Info::GetDeltaTimeF();
 		}
 		else if (attackWork.t >= 1.0f) {
 			attackWork.flag = false;
 			attackWork.t = 0.0f;
 
 			attackStanbyWork.flag = true;
-			collider_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+			collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 		}
 	}
 	if (attackStanbyWork.flag) {
@@ -91,13 +91,13 @@ void ShieldEnemy::AttackAnimation()
 		if (attackEndWork.t < 1.0f) {
 			attackEndWork.t += attackEndWork.speed;
 
-			models_[0].transform.translation += attackEndWork.targetpoint * LWP::Info::GetDeltaTime() * 10.0f;
+			models_[0].transform.translation += attackEndWork.targetpoint * LWP::Info::GetDeltaTimeF() * 10.0f;
 		}
 		else if (attackEndWork.t >= 1.0f) {
 			attackEndWork.flag = false;
 			attackEndWork.t = 0.0f;
 			isAttack = false;
-			collider_->mask.SetBelongFrag(MaskLayer::Enemy);
+			collider_.mask.SetBelongFrag(MaskLayer::Enemy);
 		}
 	}
 

@@ -22,13 +22,16 @@ public:
 
 	//*** Setter ***//
 	// 当たり判定の設定
-	void SetIsCollision(bool isActive) { aabb_->isActive = isActive; }
+	void SetIsCollision(bool isActive) { aabb_.isActive = isActive; }
 
 	/// <summary>
 	/// 発射角を設定
 	/// </summary>
 	/// <param name="angle">発射角</param>
 	void SetShootingAngle(LWP::Math::Vector3 angle) { shootingAngle_ = angle; }
+
+	// ホーミング開始時間を設定
+	void SetHomingStartFrame(int homingStartFrame) { homingStartFrame_ = homingStartFrame; }
 
 	// 自機のアドレスを設定
 	void SetPlayer(Player* player) { player_ = player; }
@@ -41,17 +44,17 @@ private:// プライベートな関数
 
 private:// 定数
 	// 弾の寿命
-	const int kLifeTime = 300;
+	const float kLifeTime = 300;
 
-	// ホーミング開始時間
-	const int kHomingStartFrame = 60;
+	// 何も設定されないときに呼ばれるホーミング開始時間
+	const float kHomingStartFrame = 60;
 	// ホーミング終了時間
-	const int kHomingEndFrame = 240;
+	const float kHomingEndFrame = 180;
 
 	// ホーミングの精度が変化する距離
-	const float kHomingStrengthRange = 3.0f;
+	const float kHomingStrengthRange = 5.0f;
 	// 自機との距離が遠い時のホーミング精度
-	const float kLongDistHomingAccuracy = 0.1f;
+	const float kLongDistHomingAccuracy = 0.3f;
 	// 自機との距離が近い時のホーミング精度
 	const float kShortDistHomingAccuracy = 0.01f;
 
@@ -65,7 +68,7 @@ private:
 	LWP::Primitive::Mesh model_;
 
 	// AABB判定
-	AABB* aabb_;
+	AABB aabb_;
 
 	MotionWork attackWork{
 		.speed = 5.0f,
@@ -73,10 +76,13 @@ private:
 	};
 
 	// 弾の寿命
-	int deadTimer_;
+	float deadTimer_;
 
 	// ホーミング弾の経過時間
-	int homingFrame_;
+	float homingFrame_;
+	// ホーミング開始時間
+	float homingStartFrame_;
+
 	// ホーミング機能
 	bool isHoming_;
 	// ホーミング精度

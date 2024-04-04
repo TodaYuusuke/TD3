@@ -23,7 +23,7 @@ void FollowCamera::Update() {
 	// 追従の計算
 	if (target_) {
 		// 追従座標の補間
-		interTarget_ = LWP::Math::Vector3::Slerp(interTarget_, target_->translation, 0.1);
+		interTarget_ = LWP::Math::Vector3::Slerp(interTarget_, target_->translation, 0.1f);
 
 		// オフセットの計算
 		LWP::Math::Vector3 offset = CalcOffset();
@@ -88,6 +88,18 @@ void FollowCamera::InputAngle() {
 	pCamera_->transform.rotation.x = LerpShortAngle(pCamera_->transform.rotation.x, destinationAngle_.x, kRotationSmoothness);
 }
 
+void FollowCamera::StartFovEasing() {
+	float t = Utility::Easing::OutExpo(currentFrame_ / 90);
+
+	if (t < 1.0f) {
+		pCamera_->fov = Lerp(tempFov_, effectGoalFov_, t);
+		currentFrame_++;
+	}
+	if (t >= 1.0f) {
+		fovState_ = FovState::NORMAL;
+	}
+}
+
 #pragma region ジャスト抜刀
 void FollowCamera::ReduceFov(const float& goalFov) {
 	float t = Utility::Easing::OutExpo(currentFrame_ / endFrame_);
@@ -111,14 +123,6 @@ void FollowCamera::ResetFov() {
 	if (t >= 1.0f) {
 		fovState_ = FovState::NORMAL;
 	}
-}
-
-void FollowCamera::StartSlash() {
-	fovState_ = FovState::REDUCE;
-}
-
-void FollowCamera::EndSlash() {
-	fovState_ = FovState::RESET;
 }
 
 void FollowCamera::JustSlashUpdate() {
@@ -156,6 +160,10 @@ void FollowCamera::JustSlashUpdate() {
 	case FollowCamera::RESET:
 		// 視野角を大きくする
 		ResetFov();
+		break;
+	case FollowCamera::EFFECT:
+		// 
+		StartFovEasing();
 		break;
 	}
 }

@@ -22,8 +22,11 @@ void Idol::Reset()
 
 	// 居合回数のリセット
 	player_->slashData_.relationSlash_ = 0u;
+	// 最大数もリセット
+	player_->slashData_.maxRelation_ = player_->parameter_.slashNum;
+
 	//slashData_.maxRelation_ = slashData_.cMAXRELATION_;
-	player_->slashData_.maxRelation_ = player_->config_.Count_.SLASHRELATIONMAX_;
+	//player_->slashData_.maxRelation_ = player_->config_.Count_.SLASHRELATIONMAX_;
 	player_->weapon_->SetBehavior(Weapon::Behavior::Root);
 	// UI に反映
 	player_->slashPanel_->Reset();
@@ -51,6 +54,10 @@ void Idol::Update()
 	{
 		player_->RegistStatus(Behavior::Root);
 	}
+	// 移動を続ける
+	player_->demoModel_.transform.translation += player_->rootData_.velocity_;
+	// 移動量を少なくする
+	player_->rootData_.velocity_ = 0.2f <= player_->rootData_.velocity_.Length() ? player_->rootData_.velocity_ *= 0.75f : lwp::Vector3(0.0f, 0.0f, 0.0f);
 }
 
 void Idol::CreateMotions()
