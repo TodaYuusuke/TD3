@@ -29,6 +29,7 @@ private:// プライベートなメンバ関数
 	void Attack()override;
 	// 対象を狙う
 	void Aim();
+	// 攻撃範囲かどうか判定
 	bool CheckAttackRange();
 	// 最短角度補間
 	float LerpShortAngle(float a, float b, float t);

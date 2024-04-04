@@ -21,6 +21,14 @@ void NormalEnemy::Init()
 
 void NormalEnemy::Update()
 {
+	ImGui::Begin("Enemy");
+	if (ImGui::Button("Die"))IsDead_ = true;
+	ImGui::End();
+
+	if (IsDead_ == true) {
+		DyingAnimation();
+	}
+
 	if (CheckAttackRange()) {
 		isAttack = true;
 	}
@@ -123,6 +131,21 @@ void NormalEnemy::AttackAnimation()
 		}
 	}
 
+}
+
+void NormalEnemy::DyingAnimation()
+{
+	float add = LWP::Utility::GenerateRandamNum(0.1f,1.0f);
+	if (deadFlame == 0) {
+		deadAnime.targetpoint = models_[0].transform.translation;
+	}
+	if (deadFlame == 120) {
+		isActive_ = false;
+	}
+	models_[0].transform.translation.x += deadAnime.targetpoint.x + add;
+	models_[0].transform.translation.z += deadAnime.targetpoint.z + add;
+	models_[0].transform.translation.y -= deadAnime.speed;
+	deadFlame++;
 }
 
 bool NormalEnemy::CheckAttackRange() {

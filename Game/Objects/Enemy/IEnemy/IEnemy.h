@@ -41,11 +41,21 @@ protected:
 
 	// 敵の当たり判定
 	lwp::Collider::AABB collider_;
-	bool isActive_ = false;
+
 	// 
 	Player* player_;
 	// 攻撃のクールタイム
 	int attackWaitTime_;
 	// 攻撃開始フラグ
 	bool isAttack = false;
+	// 死んだときに立つフラグ(アニメーション用)
+	bool IsDead_ = false;
+	// 死んだ時用アニメ
+	MotionWork deadAnime = {
+	// 下に沈んでいく速度
+	.speed = 0.3f,
+	};
+	int deadFlame = 0;
+	// 生きているかどうか
+	bool isActive_ = false;
 };
