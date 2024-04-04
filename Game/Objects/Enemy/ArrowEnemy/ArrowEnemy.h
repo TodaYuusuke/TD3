@@ -8,11 +8,15 @@ public:// パブリックなメンバ関数
 	/// 
 	/// Default Method
 	/// 
+	~ArrowEnemy() {
+		for (Arrow* arrow : arrows_) {
+			delete arrow;
+		}
+	}
 
 	void Init()override;
 	void Update()override;
 	void SetPosition(lwp::Vector3 pos)override;
-	void CreateCollider()override;
 	///
 	/// User Method
 	/// 

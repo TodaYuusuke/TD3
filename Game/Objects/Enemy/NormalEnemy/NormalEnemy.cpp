@@ -8,12 +8,6 @@ void NormalEnemy::Init()
 	models_.emplace_back();
 	models_[Model::Body].LoadFile("NormalEnemy/NormalEnemy.obj");
 	models_[Model::Body].name = "Normal";
-	//models_.emplace_back();
-	//models_[Model::L_Arm].LoadFile("NormalEnemy/L_Arm/L_Arm.obj");
-	//models_[Model::L_Arm].name = "LArm";
-	//models_.emplace_back();
-	//models_[Model::R_Arm].LoadFile("NormalEnemy/R_Arm/R_Arm.obj");
-	//models_[Model::R_Arm].name = "RArm";
 
 	attackWaitTime_ = kAttackWaitTime;
 
@@ -21,12 +15,10 @@ void NormalEnemy::Init()
 
 void NormalEnemy::Update()
 {
-	ImGui::Begin("Enemy");
-	if (ImGui::Button("Die"))IsDead_ = true;
-	ImGui::End();
-
-	if (IsDead_ == true) {
+	// 死亡時アニメーション
+	if (IsDead_) {
 		DyingAnimation();
+		return;
 	}
 
 	if (CheckAttackRange()) {
@@ -131,21 +123,6 @@ void NormalEnemy::AttackAnimation()
 		}
 	}
 
-}
-
-void NormalEnemy::DyingAnimation()
-{
-	float add = LWP::Utility::GenerateRandamNum<float>(0.1f,0.5f);
-	if (deadFlame == 0) {
-		deadAnime.targetpoint = models_[0].transform.translation;
-	}
-	if (deadFlame == 120) {
-		isActive_ = false;
-	}
-	models_[0].transform.translation.x += deadAnime.targetpoint.x + add;
-	models_[0].transform.translation.z += deadAnime.targetpoint.z + add;
-	models_[0].transform.translation.y -= deadAnime.speed;
-	deadFlame++;
 }
 
 bool NormalEnemy::CheckAttackRange() {

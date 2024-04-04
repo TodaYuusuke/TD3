@@ -21,7 +21,7 @@ public:
 	virtual void Update() = 0;
 	virtual void Move() = 0;
 	virtual void Attack() = 0;
-
+	void DyingAnimation();
 
 public: //*** ゲッターセッター ***//
 
@@ -53,7 +53,7 @@ protected:
 	// 死んだ時用アニメ
 	MotionWork deadAnime = {
 	// 下に沈んでいく速度
-	.speed = 0.3f,
+	.speed = 0.5f,
 	};
 	int deadFlame = 0;
 	// 生きているかどうか
