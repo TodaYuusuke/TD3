@@ -1,5 +1,7 @@
 #include "IEnemy.h"
 
+#include "Game/Objects/Player/Player.h"
+
 using namespace LWP::Object::Collider;
 
 void IEnemy::Initialize()
@@ -10,6 +12,17 @@ void IEnemy::Initialize()
 	collider_.mask.SetBelongFrag(MaskLayer::Enemy);
 }
 
+void IEnemy::Death()
+{
+	IsDead_ = true;
+	collider_.isActive = false;
+}
+
+void IEnemy::Dying()
+{
+	// 死んだときにしてほしい処理を書こうと思った
+}
+
 void IEnemy::DyingAnimation()
 {
 	std::random_device seedGenerator;
@@ -17,11 +30,13 @@ void IEnemy::DyingAnimation()
 	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 	float addx = distribution(randomEngine);
 	float addz = distribution(randomEngine);
-	if (deadFlame == 0) {
+	if (deadFlame == 0)
+	{
 		deadAnime.targetpoint = models_[0].transform.translation;
 		collider_.isActive = false;
 	}
-	if (deadFlame == 120) {
+	if (deadFlame == 120)
+	{
 		isActive_ = false;
 	}
 	models_[0].transform.translation.x = deadAnime.targetpoint.x + addx * LWP::Info::GetDeltaTime();
@@ -39,14 +54,33 @@ void IEnemy::CreateCollider()
 	// マスク処理
 	collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 	collider_.mask.SetHitFrag(MaskLayer::Layer3);
-	// 今のところは何もしていない
-	collider_.SetOnCollisionLambda([this](HitData data) {
-		data;
-		if (data.state == OnCollisionState::Press && isActive_ &&
-			data.hit &&
-			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3))
+	// 当たった時の処理
+	collider_.SetOnCollisionLambda([this](HitData data) {OnCollision(data);	});
+}
+
+void IEnemy::OnCollision(const HitData& data)
+{
+	// 当たり判定が有効なら
+	if (data.state == OnCollisionState::Trigger && isActive_ &&
+		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
+	{
+		// 当たったのがプレイヤーの居合攻撃なら
+		if (data.hit->mask.GetBelongFrag() & MaskLayer::Layer3)
 		{
-			IsDead_ = true;
+			// 攻撃力を参照してダメージを受ける
+			DecreaseHP(player_->parameter_.Attack.slashPower_);
+			return;
 		}
-		});
+	}
+}
+
+void IEnemy::DecreaseHP(int damage)
+{
+	// HP を減らす
+	hp_ -= damage;
+	// 死に至る
+	if (hp_ <= 0)
+	{
+		Death();
+	}
 }

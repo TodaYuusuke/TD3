@@ -21,6 +21,19 @@ public:
 	virtual void Update() = 0;
 	virtual void Move() = 0;
 	virtual void Attack() = 0;
+	
+	/// <summary>
+	/// 死んだ瞬間に呼び出す関数
+	/// </summary>
+	void Death();
+
+	/// <summary>
+	/// 死亡時の処理
+	/// </summary>
+	virtual void Dying();
+	/// <summary>
+	/// 死亡時のアニメーション
+	/// </summary>
 	void DyingAnimation();
 
 public: //*** ゲッターセッター ***//
@@ -35,6 +48,17 @@ protected: //*** 継承クラスで呼び出す共通処理 ***//
 
 	virtual void CreateCollider();
 
+	/// <summary>
+	/// 衝突判定を確認する関数
+	/// </summary>
+	/// <param name="data">ヒットデータ</param>
+	virtual void OnCollision(const lwp::Collider::HitData& data);
+
+	/// <summary>
+	/// 指定した分 HP を削る
+	/// </summary>
+	/// <param name="damage">ダメージ量</param>
+	void DecreaseHP(int damage);
 
 protected:
 	std::vector<LWP::Primitive::Mesh> models_;
@@ -58,4 +82,9 @@ protected:
 	int deadFlame = 0;
 	// 生きているかどうか
 	bool isActive_ = true;
+	
+	// 敵ごとのHP
+	// 初期化の時に設定する
+	// 今のフェーズ数とかを参照できれば可変にできる？
+	int hp_ = 1;
 };

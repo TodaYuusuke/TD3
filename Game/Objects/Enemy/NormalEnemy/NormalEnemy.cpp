@@ -11,6 +11,8 @@ void NormalEnemy::Init()
 
 	attackWaitTime_ = kAttackWaitTime;
 
+	// HP を設定
+	hp_ = 3;
 }
 
 void NormalEnemy::Update()
@@ -20,6 +22,7 @@ void NormalEnemy::Update()
 	if (ImGui::Button("death"))IsDead_ = true;
 	ImGui::End();
 	if (IsDead_) {
+		Dying();
 		DyingAnimation();
 		return;
 	}

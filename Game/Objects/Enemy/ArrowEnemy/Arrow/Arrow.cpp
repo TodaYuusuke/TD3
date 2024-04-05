@@ -19,10 +19,8 @@ void Arrow::Init(lwp::WorldTransform transform)
 	aabb_.mask.SetHitFrag(MaskLayer::Player | MaskLayer::Layer3);
 	aabb_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		data;
-		if (!(data.state == OnCollisionState::None) &&
-			data.hit &&
-			((data.hit->mask.GetBelongFrag() & MaskLayer::Player) ||
-			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3)))
+		if (!(data.state == OnCollisionState::None) && data.hit &&
+			(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 		{
 			Death();
 		}

@@ -13,10 +13,21 @@ void ShieldEnemy::Init()
 	isActive_ = true;
 
 	attackWaitTime_ = kAttackWaitTime;
+
+	// HP を設定
+	hp_ = 5;
 }
 
 void ShieldEnemy::Update()
 {
+	// 死んでいる時は死んだときのアニメーションと処理だけ
+	if (IsDead_)
+	{
+		Dying();
+		DyingAnimation();
+		return;
+	}
+
 	if (CheckAttackRange()) {
 		isAttack = true;
 	}
