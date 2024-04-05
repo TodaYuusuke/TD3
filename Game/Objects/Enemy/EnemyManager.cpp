@@ -76,17 +76,17 @@ void EnemyManager::EnemySpown()
 
 	lwp::Vector3 pos = { PtoE * divideX * signX , 0.5f , PtoE * divideZ * signY };
 	if (number <= 0.5f) {
-		//NormalEnemySpown(pos);
+		NormalEnemySpown(pos);
 		// ボスの発生
 		//DashBossSpown(pos);
-		ArrowEnemySpown(pos);
+		//ArrowEnemySpown(pos);
 	}
 	else if (number <= 0.8f) {
 		//ShieldEnemySpown(pos);
-		ArrowEnemySpown(pos);
+		NormalEnemySpown(pos);
 	}
 	else {
-		ArrowEnemySpown(pos);
+		NormalEnemySpown(pos);
 	}
 
 }

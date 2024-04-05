@@ -16,6 +16,7 @@ void NormalEnemy::Init()
 void NormalEnemy::Update()
 {
 	// 死亡時アニメーション
+	ImGui::Begin("");
 	if (IsDead_) {
 		DyingAnimation();
 		return;
