@@ -236,7 +236,7 @@ void Player::CreateCollisions()
 void Player::CreatePlayerCollision()
 {
 	// 当たり判定を設定
-	colliders_.player_ = LWP::Object::Collider::AABB();
+	//colliders_.player_ = LWP::Object::Collider::AABB();
 	// 武器との当たり判定を取る
 	colliders_.player_.Create(demoModel_.transform.translation);
 	// マスク
@@ -249,15 +249,11 @@ void Player::CreatePlayerCollision()
 
 	colliders_.player_.isActive = true;
 	flag_.isInvincible_ = false;
-#ifdef DEMO
 	colliders_.player_.name = "Player";
-#endif
 }
 
 void Player::CreateWeaponCollision()
 {
-	// 当たり判定を設定
-	//colliders_.weapon_ = LWP::Object::Collider::Capsule();
 	// 武器との当たり判定を取る
 	colliders_.weapon_.Create({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f });
 	colliders_.weapon_.radius = config_.Length_.WEAPONCOLLISIONRADIUS_;

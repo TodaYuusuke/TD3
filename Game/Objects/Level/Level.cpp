@@ -81,9 +81,7 @@ void Level::LevelUp()
 	// ここでアップデートする関数を呼び出す
 	L::UpgradeManager::LevelUp();
 }
-
-#if DEMO
-
+#ifdef DEMO
 void Level::DebugWindow()
 {
 	ImGui::Begin("Levels");
@@ -126,5 +124,6 @@ void Level::DebugWindow()
 
 	ImGui::End();
 }
+#endif // DEMO
 
-#endif
+

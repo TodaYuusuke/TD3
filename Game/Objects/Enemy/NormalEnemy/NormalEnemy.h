@@ -1,5 +1,11 @@
 #pragma once
 #include "Game/Objects/Enemy/IEnemy/IEnemy.h"
+enum Model{
+	Body = 0,
+	L_Arm = 1,
+	R_Arm = 2,
+	MaxValue = 3
+};
 
 class NormalEnemy: public IEnemy
 {
@@ -30,9 +36,16 @@ private:// 定数
 private:
 	lwp::Vector3 Rot;
 	lwp::Vector3 EndRot;
-	MotionWork attackWork = {
+	MotionWork attackRotWork = {
 	.targetpoint = 1.0f,
 	.speed = 0.05f,
+	};
+	MotionWork attackMoveWork = {
+	.targetpoint = 1.0f,
+	.speed = 0.05f,
+	};
+	MotionWork attackMoveEndWork = {
+		.speed = 0.1f,
 	};
 	MotionWork attackStanbyWork = {
 	.speed = 0.02f,

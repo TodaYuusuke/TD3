@@ -53,9 +53,7 @@ void ExpManager::Create(const lwp::Vector3& pos)
 {
 	exps_.push_back(new Experience(pos));
 }
-
-#if DEMO
-
+#ifdef DEMO
 void ExpManager::DebugWindow()
 {
 	static Experience* temp = nullptr;
@@ -114,5 +112,4 @@ void ExpManager::DebugWindow()
 
 	ImGui::End();
 }
-
-#endif
+#endif //DEMO

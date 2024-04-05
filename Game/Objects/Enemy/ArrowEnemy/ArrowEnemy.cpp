@@ -8,8 +8,7 @@ void ArrowEnemy::Init()
 {
 	// これでできる
 	models_.emplace_back(); 
-	models_[0].LoadFile("cube/cube.obj");
-	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::GREEN);
+	models_[0].LoadFile("ArrowEnemy/ArrowEnemy.obj");
 	models_[0].name = "ArrowEnemy!!";
 
 	// 最初から描画
@@ -21,12 +20,29 @@ void ArrowEnemy::Init()
 
 void ArrowEnemy::Update()
 {
+	// 矢の更新処理
+	for (Arrow* arrow : arrows_)
+	{
+		arrow->Update();
+	}
+	// 死亡時アニメーション
+	if (IsDead_) {
+		DyingAnimation();
+		return;
+	}
+
 	if (CheckAttackRange()) {
 		isAttack = true;
 	}
 	if (isAttack) {
 		// 攻撃処理
-		Attack();
+		// 矢の発射
+		if(attackWaitTime_ > 60){
+			Aim();
+		}
+		else if (attackWaitTime_ <= 0){
+			Attack();
+		}
 	}
 	else {
 		Aim();
@@ -36,11 +52,7 @@ void ArrowEnemy::Update()
 		attackWaitTime_--;
 	}
 
-	// 矢の更新処理
-	for (Arrow* arrow : arrows_)
-	{
-		arrow->Update();
-	}
+
 
 	arrows_.remove_if([](Arrow* arrow) {
 		if (!arrow->GetIsAlive())
@@ -50,7 +62,7 @@ void ArrowEnemy::Update()
 			return true;
 		}
 		return false;
-		});
+	});
 
 
 }
@@ -58,34 +70,6 @@ void ArrowEnemy::Update()
 void ArrowEnemy::SetPosition(lwp::Vector3 pos)
 {
 	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
-}
-
-void ArrowEnemy::CreateCollider()
-{
-	// 当たり判定を設定
-	collider_ = LWP::Object::Collider::AABB();
-	// 当たり判定を取る
-	collider_.CreateFromPrimitive(&models_[0]);
-	// マスク処理
-	collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	collider_.mask.SetHitFrag(MaskLayer::Layer3);
-	// 今のところは何もしていない
-	collider_.SetOnCollisionLambda([this](HitData data) {
-		data;
-		if (data.state == OnCollisionState::Press && isActive_ &&
-			data.hit &&
-			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3))
-		{
-			isActive_ = false;
-			//models_[0].isActive = false;
-			//collider_.isActive = false;
-			arrows_.remove_if([](Arrow* arrow) {
-				arrow->Death();
-				delete arrow;
-				return true;
-				});
-		}
-		});
 }
 
 void ArrowEnemy::Move()
@@ -98,24 +82,19 @@ void ArrowEnemy::Move()
 
 void ArrowEnemy::Attack()
 {
-	// 矢の発射
-	if (attackWaitTime_ <= 0)
-	{
-		Aim();
 		Arrow* arrow = new Arrow();
 		arrow->Init(models_[0].transform);
 		arrows_.push_back(arrow);
 		attackWaitTime_ = kAttackWaitTime;
 		isAttack = false;
-
-	}
 }
 
 void ArrowEnemy::Aim()
 {
 	// 狙う対象に身体を向ける
 	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0].transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0].transform.translation.z);
-	models_[0].transform.rotation.y = radian;
+
+	models_[0].transform.rotation.y = LerpShortAngle(models_[0].transform.rotation.y,radian,0.5f);
 }
 
 bool ArrowEnemy::CheckAttackRange() {
@@ -125,4 +104,29 @@ bool ArrowEnemy::CheckAttackRange() {
 		return true;
 	}
 	return false;
+}
+
+float ArrowEnemy::LerpShortAngle(float a, float b, float t) {
+	// 角度差分を求める
+	float diff = b - a;
+
+	float pi = 3.14f;
+
+	diff = std::fmod(diff, 2 * pi);
+	if (diff < 2 * -pi) {
+		diff += 2 * pi;
+	}
+	else if (diff >= 2 * pi) {
+		diff -= 2 * pi;
+	}
+
+	diff = std::fmod(diff, 2 * pi);
+	if (diff < -pi) {
+		diff += 2 * pi;
+	}
+	else if (diff >= pi) {
+		diff -= 2 * pi;
+	}
+
+	return a + diff * t;
 }
