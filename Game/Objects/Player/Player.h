@@ -118,8 +118,12 @@ public: //*** パブリック関数 ***//
 	void StartJust();
 	// ジャスト終了
 	void EndJust();
-
-
+	
+	// 体力を回復する
+	void IncreaseHP();
+	// 体力が減少する
+	void DecreaseHP();
+	
 	/// <summary>
 	/// アップグレードを適応するための関数
 	/// <para>UpgradeManagerがアップグレードの選択確定時に呼び出します</para>

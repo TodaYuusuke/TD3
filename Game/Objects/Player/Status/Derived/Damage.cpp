@@ -32,7 +32,7 @@ void Damage::Reset()
 	// アニメーション作成
 	//CreateMotions();
 	// プレイヤーにダメージを与える
-	player_->parameter_.Hp.hp_--;
+	player_->DecreaseHP();
 }
 
 void Damage::Update()

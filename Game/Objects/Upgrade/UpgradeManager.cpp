@@ -5,6 +5,7 @@
 #include "Game/Objects/Upgrade/Derved/PowerDelta.h"
 #include "Game/Objects/Upgrade/Derved/PowerPerDelta.h"
 #include "Game/Objects/Upgrade/Derved/AllSpeedDelta.h"
+#include "Game/Objects/Upgrade/Derved/AllSpeedPerDelta.h"
 #include "Game/Objects/Upgrade/Derved/AttackRangeDelta.h"
 #include "Game/Objects/Upgrade/Derved/AttackTotalDelta.h"
 #include "Game/Objects/Upgrade/Derved/LifeMaxDelta.h"
@@ -30,17 +31,16 @@ void L::UpgradeManager::Init()
 	// アップグレードをすべて取得
 	//upgrades_.push_back(new AllSpeedDelta);
 	upgrades_.push_back(new AllSpeedDelta(10));
-	upgrades_.push_back(new AllSpeedDelta(20));
-	upgrades_.push_back(new AllSpeedDelta(30));
-	upgrades_.push_back(new AllSpeedDelta(40));
-	 
-	//upgrades_.push_back(new PowerUp);
-	//upgrades_.push_back(new PowerUp);
-	//upgrades_.push_back(new PowerUp);
-	//upgrades_.push_back(new PowerUp);
-	//upgrades_.push_back(new PowerUp);
-	//upgrades_.push_back(new PowerPerUp10);
-	//upgrades_.push_back(new PowerPerUp30);
+	upgrades_.push_back(new AllSpeedPerDelta(20));
+	upgrades_.push_back(new AllSpeedPerDelta(30));
+	upgrades_.push_back(new AllSpeedPerDelta(40));
+
+	upgrades_.push_back(new LifeMaxDelta(1));
+	upgrades_.push_back(new LifeMaxDelta(1));
+	upgrades_.push_back(new LifeMaxDelta(1));
+	upgrades_.push_back(new LifeMaxDelta(1));
+	//upgrades_.push_back(new AllSpeedPerDelta(40));
+
 
 	// すべてを初期化する
 	for (size_t i = 0; i < upgrades_.size(); i++)
@@ -68,9 +68,10 @@ void L::UpgradeManager::DebugWindow(Player* player)
 {
 	ImGui::Begin("UpgradeManager");
 
-	if (ImGui::Checkbox("isLevelUpFlag", &isLevelUpping) &&
-		isLevelUpping == true)
+	if (ImGui::Button("isLevelUpFlag") &&
+		isLevelUpping == false)
 	{
+		isLevelUpping = true;
 		// 押された瞬間
 		LevelUp();
 	}
@@ -85,7 +86,13 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	ImGui::Text("choice : %d", choiceIndex_);
 	ImGui::Separator();
 
+	ImGui::Text("ChoseUpgrade : %d", candidata_.size());
+	for (size_t i = 0; i < candidata_.size(); i++)
+	{
+		ImGui::Bullet();	ImGui::Text(upgrades_[candidata_[i]]->GetUpgradeName().c_str());
+	}
 
+	ImGui::Separator();
 	ImGui::Text("Nums : %d", upgrades_.size());
 	if (ImGui::TreeNode("All"))
 	{
@@ -249,4 +256,31 @@ void L::UpgradeManager::Apply(Player* player)
 	player->ApplyUpgrade(para);
 	// フラグを戻す
 	isLevelUpping = false;
+
+	// プレイヤーの最大HPが変更されていたら通知
+	if (preParam_.HP.hpDelta.base != para.HP.hpDelta.base)
+	{
+		// どの程度変更されているか
+		int sub = (int)para.HP.hpDelta.base - (int)preParam_.HP.hpDelta.base;
+		// 上昇している分だけ回復させる
+		if (0 < sub)
+		{
+			for (size_t i = 0; i < sub; i++)
+			{
+				player->IncreaseHP();
+			}
+		}
+		// 下降している分だけ減少する
+		else
+		{
+			for (size_t i = 0; i < -sub; i++)
+			{
+				player->DecreaseHP();
+			}
+		}
+	}
+
+
+	// 情報を保存
+	preParam_ = para;
 }

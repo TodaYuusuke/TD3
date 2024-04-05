@@ -69,10 +69,8 @@ void Player::Update()
 {
 	//*** プレイヤーの生き死にを判別 ***//
 
-	if (parameter_.Hp.hp_ <= 0u)
-	{
-		flag_.isAlive_ = false;
-	}
+	if (!flag_.isAlive_)
+		return;
 
 #ifdef DEMO
 	// デバッグ表示
@@ -154,6 +152,23 @@ void Player::EndJust()
 	pScene_->EndJustSlash();
 }
 
+void Player::IncreaseHP()
+{
+	if (parameter_.Hp.hp_ < parameter_.Hp.maxHP_)
+	{
+		parameter_.Hp.hp_++;
+	}
+}
+
+void Player::DecreaseHP()
+{
+	parameter_.Hp.hp_--;
+	if (parameter_.Hp.hp_ <= 0u)
+	{
+		flag_.isAlive_ = false;
+	}
+}
+
 void Player::ApplyUpgrade(const UpgradeParameter& para)
 {
 	parameter_.ApplyUpgrade(para);
@@ -172,9 +187,11 @@ lwp::Vector3 Player::GetVectorTranspose(const lwp::Vector3& vec)
 	return vector.Normalize();
 }
 
+
 #pragma region BehaviorFunc
 
 #pragma region BehaviorData
+
 
 void Player::InitDatas()
 {
@@ -518,8 +535,10 @@ void Player::DebugWindow()
 
 	ImGui::Separator();
 
+	ImGui::Text("Alive : ");	ImGui::SameLine();
+	ImGui::Text(flag_.isAlive_ ? "TRUE" : "FAlSE");
 	ImGui::Text("HP / MAX");
-	ImGui::Bullet();	ImGui::Text("%d / %d(%d)",parameter_.Hp.hp_,parameter_.Hp.maxHP_,config_.Count_.MAXHP_);
+	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", parameter_.Hp.hp_, parameter_.Hp.maxHP_, config_.Count_.MAXHP_);
 	ImGui::Text("SlashRelation");
 	ImGui::Bullet();	ImGui::Text("Num / Max(Base)");
 	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", slashData_.relationSlash_, slashData_.maxRelation_, parameter_.Attack.slashNum_);

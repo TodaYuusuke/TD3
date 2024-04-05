@@ -59,6 +59,9 @@ namespace L {
 		// アップグレードを取得した回数
 		static int upgradedConut_;
 
+		// プレイヤーの HP を監視
+		UpgradeParameter preParam_;
+
 	private: // プライベート関数
 
 		/// <summary>

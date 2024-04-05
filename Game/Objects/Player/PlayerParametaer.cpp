@@ -56,9 +56,13 @@ void PlayerParameter::ApplyHP()
 	// 倍率を掛けない計算
 	HPParam base;
 
+	base.hp_ = this->Hp.hp_;
 	// 最大 HP のアップグレード
-	base.maxHP_ = param.HP.hpDelta.base;
-
+	base.maxHP_ = config_->Count_.MAXHP_ + (int)param.HP.hpDelta.base;
+	if (base.maxHP_ < 1u)
+	{
+		base.maxHP_ = 1u;
+	}
 
 	this->Hp = base;
 }
