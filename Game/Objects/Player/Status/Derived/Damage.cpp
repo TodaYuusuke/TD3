@@ -31,6 +31,8 @@ void Damage::Reset()
 	player_->colliders_.weapon_.isActive = false;
 	// アニメーション作成
 	//CreateMotions();
+	// プレイヤーにダメージを与える
+	player_->parameter_.Hp.hp_--;
 }
 
 void Damage::Update()

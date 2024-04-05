@@ -67,10 +67,19 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	//*** プレイヤーの生き死にを判別 ***//
+
+	if (parameter_.Hp.hp_ <= 0u)
+	{
+		flag_.isAlive_ = false;
+	}
+
 #ifdef DEMO
 	// デバッグ表示
 	DebugWindow();
 #endif
+
+	//*** 入力系 ***//
 
 	// 移動入力を受け付ける
 	CheckInputMove();
@@ -509,6 +518,8 @@ void Player::DebugWindow()
 
 	ImGui::Separator();
 
+	ImGui::Text("HP / MAX");
+	ImGui::Bullet();	ImGui::Text("%d / %d(%d)",parameter_.Hp.hp_,parameter_.Hp.maxHP_,config_.Count_.MAXHP_);
 	ImGui::Text("SlashRelation");
 	ImGui::Bullet();	ImGui::Text("Num / Max(Base)");
 	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", slashData_.relationSlash_, slashData_.maxRelation_, parameter_.Attack.slashNum_);
@@ -635,6 +646,18 @@ void Player::DebugCounts()
 		if (ImGui::DragInt("SLASHRELATION", &i, 1, 10))
 		{
 			config_.Count_.SLASHRELATIONMAX_ = i;
+		}
+		int j = config_.Count_.BASEHP_;
+		// 入力されたら
+		if (ImGui::DragInt("BASEHP", &j, 1, 10))
+		{
+			config_.Count_.BASEHP_ = j;
+		}
+		int k = config_.Count_.MAXHP_;
+		// 入力されたら
+		if (ImGui::DragInt("MAXHP", &k, 1, 10))
+		{
+			config_.Count_.MAXHP_ = j;
 		}
 
 		ImGui::TreePop();

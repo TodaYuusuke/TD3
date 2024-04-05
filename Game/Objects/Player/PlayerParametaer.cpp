@@ -25,6 +25,7 @@ void PlayerParameter::ApplyUpgrade(const UpgradeParameter& para)
 void PlayerParameter::ResetParameter()
 {
 	Hp.hp_ = config_->Count_.BASEHP_;
+	Hp.maxHP_ = config_->Count_.MAXHP_;
 
 	Attack.slashPower_ = config_->Power_.BASEPOWER_;
 	Attack.slashRange_ = config_->Length_.WEAPONCOLLISIONRADIUS_;

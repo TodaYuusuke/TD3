@@ -79,6 +79,7 @@ private: //*** サブクラス ***//
 		bool isDamage_ = false;			// ダメージを受けたか
 		bool isInputMove_ = false;		// 移動入力があったか
 		bool isInputSlash_ = false;		// 攻撃入力があったか
+		bool isAlive_ = true;			// プレイヤーが生きているか
 
 	};
 

@@ -66,6 +66,8 @@ public: //*** サブクラス ***//
 		uint32_t SLASHRELATIONMAX_ = 3u;
 		// 体力
 		uint32_t BASEHP_ = 3u;
+		// 最大体力
+		uint32_t MAXHP_ = 3u;
 	};
 
 	// 割合系
