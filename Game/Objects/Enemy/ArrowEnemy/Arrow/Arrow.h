@@ -7,12 +7,12 @@ using namespace LWP::Object::Collider;
 class Arrow
 {
 public:
-	~Arrow();
+	~Arrow() = default;
 	void Init(lwp::WorldTransform transform);
 	void Update();
 	void Attack();
 	bool GetIsAlive() { return attackWork.flag; }
-	void SetIsCollision(bool isActive) { aabb_->isActive = isActive; }
+	void SetIsCollision(bool isActive) { aabb_.isActive = isActive; }
 public:
 
 	void Death();
@@ -26,11 +26,11 @@ private:
 	LWP::Primitive::Mesh model_;
 
 	// AABB判定
-	AABB* aabb_;
+	AABB aabb_;
 
 	MotionWork attackWork{
 		.speed = 5.0f,
-		.flag = false,
+		.flag = true,
 	};
 
 	// 弾の寿命

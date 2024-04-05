@@ -1,11 +1,5 @@
 #include "Arrow.h"
 
-
-Arrow::~Arrow() {
-	//delete model_;
-	delete aabb_;
-}
-
 void Arrow::Init(lwp::WorldTransform transform)
 {
 	// モデルの作成
@@ -21,11 +15,11 @@ void Arrow::Init(lwp::WorldTransform transform)
 	attackWork.targetpoint = attackWork.targetpoint.Normalize();
 
 	// 当たり判定を設定
-	aabb_ = new LWP::Object::Collider::AABB();
-	aabb_->CreateFromPrimitive(&model_);
-	aabb_->mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	aabb_->mask.SetHitFrag(MaskLayer::Player | MaskLayer::Layer3);
-	aabb_->SetOnCollisionLambda([this](lwp::Collider::HitData data) {
+	aabb_ = LWP::Object::Collider::AABB();
+	aabb_.CreateFromPrimitive(&model_);
+	aabb_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+	aabb_.mask.SetHitFrag(MaskLayer::Player | MaskLayer::Layer3);
+	aabb_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		data;
 		if (!(data.state == OnCollisionState::None) &&
 			data.hit &&
@@ -35,7 +29,7 @@ void Arrow::Init(lwp::WorldTransform transform)
 			Death();
 		}
 		});
-	aabb_->isActive = true;
+	aabb_.isActive = true;
 }
 
 void Arrow::Update()
@@ -58,13 +52,10 @@ void Arrow::Update()
 void Arrow::Attack()
 {
 	model_.transform.translation += attackWork.targetpoint * attackWork.speed * LWP::Info::GetDeltaTimeF();
-	attackWork.flag = true;
 }
 
 void Arrow::Death()
 {
 	attackWork.flag = false;
-	//model_->isActive = false;
-	//aabb_->isActive = false;
 }
 

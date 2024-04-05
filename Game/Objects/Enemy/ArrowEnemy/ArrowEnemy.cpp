@@ -26,6 +26,10 @@ void ArrowEnemy::Update()
 		arrow->Update();
 	}
 	// 死亡時アニメーション
+	ImGui::Begin("Enemy");
+	if (ImGui::Button("death"))IsDead_ = true;
+	ImGui::End();
+	// 死亡時アニメーション
 	if (IsDead_) {
 		DyingAnimation();
 		return;

@@ -121,10 +121,6 @@ void L::UpgradeManager::DebugWindow(Player* player)
 }
 #endif //  DEMO
 
-
-
-#endif
-
 void L::UpgradeManager::RandomUpgrade()
 {
 	candidata_.clear();
