@@ -489,6 +489,14 @@ void Player::DebugWindow()
 {
 	ImGui::Begin("PlayerWindow");
 
+	ImGui::Text("How To Controll");
+	ImGui::Bullet();
+	ImGui::Text("WASD or LStick : MOVE");
+	ImGui::Bullet();
+	ImGui::Text("SPACE or A  : SLASH");
+
+	ImGui::Separator();
+
 	ImGui::Text("\"Reset\" can Revive!");
 	if (ImGui::Button("Reset"))
 	{
@@ -505,11 +513,13 @@ void Player::DebugWindow()
 	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", parameter_.Hp.hp_, parameter_.Hp.maxHP_, config_.Count_.MAXHP_);	
 	ImGui::Separator();
 
-	ImGui::Text("How To Controll");
-	ImGui::Bullet();
-	ImGui::Text("WASD or LStick : MOVE");
-	ImGui::Bullet();
-	ImGui::Text("SPACE or A  : SLASH");
+
+	ImGui::Text("SlashRelation");
+	ImGui::Bullet();	ImGui::Text("Num / Max(Base)");
+	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", slashData_.relationSlash_, slashData_.maxRelation_, parameter_.Attack.slashNum_);
+	ImGui::Text("INCREMENTMOMENT : %.3f", config_.Time_.MOMENTINCREMENT_);
+	ImGui::Text("Invincible : "); ImGui::SameLine();
+	ImGui::Text(flag_.isInvincible_ ? "TRUE" : "FALSE");
 
 	ImGui::Separator();
 	ImGui::Text("%f", rootData_.velocity_.x);
@@ -549,15 +559,6 @@ void Player::DebugWindow()
 	}
 
 	ImGui::Text("t : %.3f", t);
-
-	ImGui::Separator();
-
-	ImGui::Text("SlashRelation");
-	ImGui::Bullet();	ImGui::Text("Num / Max(Base)");
-	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", slashData_.relationSlash_, slashData_.maxRelation_, parameter_.Attack.slashNum_);
-	ImGui::Text("INCREMENTMOMENT : %.3f", config_.Time_.MOMENTINCREMENT_);
-	ImGui::Text("Invincible : "); ImGui::SameLine();
-	ImGui::Text(flag_.isInvincible_ ? "TRUE" : "FALSE");
 
 	ImGui::Separator();
 
