@@ -34,6 +34,7 @@ void EnemyManager::Update()
 		// 消えているなら
 		if (!(*itr)->GetIsActive())
 		{
+			// 敵が死んだ瞬間
 			delete* itr;
 			itr = enemys_.erase(itr);
 			continue;
@@ -96,6 +97,7 @@ void EnemyManager::NormalEnemySpown(lwp::Vector3 pos)
 	NEnemy->Initialize();
 	NEnemy->SetTarget(player_);
 	NEnemy->SetPosition(pos);
+	NEnemy->SetManager(exp_);
 	enemys_.push_back(NEnemy);
 }
 void EnemyManager::ShieldEnemySpown(lwp::Vector3 pos)
@@ -104,15 +106,16 @@ void EnemyManager::ShieldEnemySpown(lwp::Vector3 pos)
 	NEnemy->Initialize();
 	NEnemy->SetTarget(player_);
 	NEnemy->SetPosition(pos);
+	NEnemy->SetManager(exp_);
 	enemys_.push_back(NEnemy);
 }
 void EnemyManager::ArrowEnemySpown(lwp::Vector3 pos)
 {
-
 	ArrowEnemy* NEnemy = new ArrowEnemy();
 	NEnemy->Initialize();
 	NEnemy->SetTarget(player_);
 	NEnemy->SetPosition(pos);
+	NEnemy->SetManager(exp_);
 	enemys_.push_back(NEnemy);
 }
 
@@ -121,5 +124,6 @@ void EnemyManager::DashBossSpown(lwp::Vector3 pos) {
 	dashBoss->Initialize();
 	dashBoss->SetTarget(player_);
 	dashBoss->SetPosition(pos);
+	dashBoss->SetManager(exp_);
 	enemys_.push_back(dashBoss);
 }

@@ -9,13 +9,15 @@ void IEnemy::Initialize()
 	Init();
 
 	CreateCollider();
-	collider_.mask.SetBelongFrag(MaskLayer::Enemy);
+	//collider_.mask.SetBelongFrag(MaskLayer::Enemy);
 }
 
 void IEnemy::Death()
 {
 	IsDead_ = true;
 	collider_.isActive = false;
+	// 経験値を生成
+	manager_->Create(models_[0].transform.translation);
 }
 
 void IEnemy::Dying()
@@ -61,17 +63,18 @@ void IEnemy::CreateCollider()
 void IEnemy::OnCollision(const HitData& data)
 {
 	// 当たり判定が有効なら
-	if (data.state == OnCollisionState::Trigger && isActive_ &&
-		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
-	{
-		// 当たったのがプレイヤーの居合攻撃なら
-		if (data.hit->mask.GetBelongFrag() & MaskLayer::Layer3)
+	if (data.state == OnCollisionState::Trigger && isActive_)
+		if
+			(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag())
 		{
-			// 攻撃力を参照してダメージを受ける
-			DecreaseHP(player_->parameter_.Attack.slashPower_);
-			return;
+			// 当たったのがプレイヤーの居合攻撃なら
+			if (data.hit->mask.GetBelongFrag() & MaskLayer::Layer3)
+			{
+				// 攻撃力を参照してダメージを受ける
+				DecreaseHP(player_->parameter_.Attack.slashPower_);
+				return;
+			}
 		}
-	}
 }
 
 void IEnemy::DecreaseHP(int damage)

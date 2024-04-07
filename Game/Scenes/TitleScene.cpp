@@ -37,6 +37,9 @@ void TItleScene::Initialize()
 	expManager_ = std::make_unique<ExpManager>();
 	expManager_->Initialize();
 
+	// 経験値マネージャーをエネミーマネージャーに設定
+	enemyManager_->SetExpManager(expManager_.get());
+
 	// レベル
 	level_ = std::make_unique<Level>();
 	level_->Initialize(player_->GetWorldTransform()->translation);

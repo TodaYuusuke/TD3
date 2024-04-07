@@ -4,6 +4,8 @@
 #include "ShieldEnemy/ShieldEnemy.h"
 #include "ArrowEnemy/ArrowEnemy.h"
 #include "Boss/DashBoss.h"
+#include "Game/Objects/Experience/ExpManager.h"
+
 #include <random>
 #include <numbers>
 
@@ -14,7 +16,7 @@ public:
 	/// 
 	/// Default Method
 	/// 
-	
+
 	void Init();
 	void Update();
 
@@ -40,6 +42,7 @@ public:
 	/// Setter
 	// 自機のアドレスを設定
 	void SetPlayer(Player* player) { player_ = player; }
+	void SetExpManager(ExpManager* p) { exp_ = p; }
 
 private:// 定数
 	// 敵発生頻度
@@ -50,6 +53,9 @@ private:
 	std::list<IEnemy*> enemys_;
 	// 自機
 	Player* player_;
+
+	// 経験値マネージャー
+	ExpManager* exp_;
 
 	// 現在のフレーム
 	int currentFrame_ = 0;
