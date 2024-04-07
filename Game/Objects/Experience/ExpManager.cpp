@@ -51,7 +51,9 @@ void ExpManager::Update()
 
 void ExpManager::Create(const lwp::Vector3& pos)
 {
-	exps_.push_back(new Experience(pos));
+	Experience* data = new Experience(pos);
+	data->Update();
+	exps_.push_back(data);
 }
 #ifdef DEMO
 void ExpManager::DebugWindow()

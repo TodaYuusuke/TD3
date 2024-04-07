@@ -67,15 +67,15 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	//*** プレイヤーの生き死にを判別 ***//
-
-	if (!flag_.isAlive_)
-		return;
-
 #ifdef DEMO
 	// デバッグ表示
 	DebugWindow();
 #endif
+
+	//*** プレイヤーの生き死にを判別 ***//
+
+	if (!flag_.isAlive_)
+		return;
 
 	//*** 入力系 ***//
 
@@ -318,11 +318,12 @@ void Player::CreateJustCollision()
 void Player::OnCollisionPlayer(lwp::Collider::HitData& data)
 {
 	if (data.state == OnCollisionState::Press &&
-		!flag_.isInvincible_ &&
-		(data.hit->mask.GetBelongFrag() & (MaskLayer::Enemy | MaskLayer::Layer2)))
-	{
-		reqBehavior_ = Behavior::Damage;
-	}
+		!flag_.isInvincible_)
+		if
+			(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag())
+		{
+			reqBehavior_ = Behavior::Damage;
+		}
 }
 
 void Player::OnCollisionWeapon(lwp::Collider::HitData& data)
@@ -488,6 +489,22 @@ void Player::DebugWindow()
 {
 	ImGui::Begin("PlayerWindow");
 
+	ImGui::Text("\"Reset\" can Revive!");
+	if (ImGui::Button("Reset"))
+	{
+		invincibleTime_ = 0.0f;
+		maxInvincibleTime_ = 0.0f;
+		flag_.isAlive_ = true;
+		parameter_.ResetParameter();
+	}
+	ImGui::Text("Alive : ");	ImGui::SameLine();
+	ImGui::Text(flag_.isAlive_ ? "TRUE" : "FAlSE");
+	ImGui::Text("Invincible : ");	ImGui::SameLine();
+	ImGui::Text(flag_.isInvincible_ ? "TRUE" : "FAlSE");
+	ImGui::Text("HP / MAX");
+	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", parameter_.Hp.hp_, parameter_.Hp.maxHP_, config_.Count_.MAXHP_);	
+	ImGui::Separator();
+
 	ImGui::Text("How To Controll");
 	ImGui::Bullet();
 	ImGui::Text("WASD or LStick : MOVE");
@@ -535,10 +552,6 @@ void Player::DebugWindow()
 
 	ImGui::Separator();
 
-	ImGui::Text("Alive : ");	ImGui::SameLine();
-	ImGui::Text(flag_.isAlive_ ? "TRUE" : "FAlSE");
-	ImGui::Text("HP / MAX");
-	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", parameter_.Hp.hp_, parameter_.Hp.maxHP_, config_.Count_.MAXHP_);
 	ImGui::Text("SlashRelation");
 	ImGui::Bullet();	ImGui::Text("Num / Max(Base)");
 	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", slashData_.relationSlash_, slashData_.maxRelation_, parameter_.Attack.slashNum_);
@@ -548,10 +561,6 @@ void Player::DebugWindow()
 
 	ImGui::Separator();
 
-	if (ImGui::Button("Reset"))
-	{
-		parameter_.ResetParameter();
-	}
 	DebugSpeeds();
 	DebugTimes();
 	DebugLengths();

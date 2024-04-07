@@ -19,15 +19,7 @@ void EnemyManager::Update()
 	//	}
 	//	currentFrame_ = 0;
 	//}
-	ImGui::Begin("EnemyMa");
-	ImGui::InputInt("Spawn", &SpawnNum);
-	if (ImGui::Button("Create")) {
-		for (int it = 0; it < SpawnNum; it++) {
-			EnemySpown();
-		}
-	}
-	ImGui::Text("%d", enemys_.size());
-	ImGui::End();
+	DebugWindow();
 	// 消しながら更新
 	for (std::list<IEnemy*>::iterator itr = enemys_.begin(); itr != enemys_.end();)
 	{
@@ -77,14 +69,14 @@ void EnemyManager::EnemySpown()
 
 	lwp::Vector3 pos = { PtoE * divideX * signX , 0.5f , PtoE * divideZ * signY };
 	if (number <= 0.5f) {
-		//NormalEnemySpown(pos);
+		NormalEnemySpown(pos);
 		// ボスの発生
 		//DashBossSpown(pos);
-		ArrowEnemySpown(pos);
+		//ArrowEnemySpown(pos);
 	}
 	else if (number <= 0.8f) {
-		//ShieldEnemySpown(pos);
-		ArrowEnemySpown(pos);
+		ShieldEnemySpown(pos);
+		//ArrowEnemySpown(pos);
 	}
 	else {
 		ArrowEnemySpown(pos);
@@ -126,4 +118,37 @@ void EnemyManager::DashBossSpown(lwp::Vector3 pos) {
 	dashBoss->SetPosition(pos);
 	dashBoss->SetManager(exp_);
 	enemys_.push_back(dashBoss);
+}
+
+void EnemyManager::DebugWindow()
+{
+	ImGui::Begin("EnemyManager");
+	ImGui::InputInt("Spawn", &SpawnNum);
+	if (ImGui::Button("Create"))
+	{
+		for (int it = 0; it < SpawnNum; it++)
+		{
+			EnemySpown();
+		}
+	}
+	ImGui::Text("%d", enemys_.size());
+
+	ImGui::BeginChild(ImGui::GetID((void*)0));
+
+	int index = 0;
+	for (std::list<IEnemy*>::iterator itr = enemys_.begin(); itr != enemys_.end(); ++itr)
+	{
+		if (ImGui::TreeNode(("Enemy" + std::to_string(index)).c_str()))
+		{
+			(*itr)->DebugPrint();
+
+			ImGui::TreePop();
+			ImGui::Separator();
+		}
+		index++;
+	}
+
+	ImGui::EndChild();
+
+	ImGui::End();
 }

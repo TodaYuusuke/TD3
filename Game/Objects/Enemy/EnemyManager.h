@@ -61,4 +61,9 @@ private:
 	int currentFrame_ = 0;
 
 	int SpawnNum = 0;
+
+private: //*** プライベート関数 ***//
+
+	void DebugWindow();
+
 };

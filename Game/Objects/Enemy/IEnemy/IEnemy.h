@@ -40,6 +40,12 @@ public:
 	/// </summary>
 	void DyingAnimation();
 
+	/// <summary>
+	/// デバッグ表示
+	/// 外部呼出し
+	/// </summary>
+	virtual void DebugPrint();
+
 public: //*** ゲッターセッター ***//
 
 	/// <summary>
@@ -68,11 +74,28 @@ protected: //*** 継承クラスで呼び出す共通処理 ***//
 	/// <param name="data">ヒットデータ</param>
 	virtual void OnCollision(const lwp::Collider::HitData& data);
 
+	virtual bool CheckSlash(uint32_t hitBelong);
+
 	/// <summary>
 	/// 指定した分 HP を削る
 	/// </summary>
 	/// <param name="damage">ダメージ量</param>
 	void DecreaseHP(int damage);
+
+	/// <summary>
+	/// 時間を指定して無敵になる関数
+	/// </summary>
+	/// <param name="time">何秒無敵になるか</param>
+	void BecomeInvincible(float time);
+	/// <summary>
+	/// 時間を指定して無量空処になる関数
+	/// </summary>
+	/// <param name="time">何秒無量空処になるか</param>
+	void BecomeUtopia(float time);
+
+
+	// 無敵状態や無量空処状態を計算する
+	void CheckFlags();
 
 protected:
 	std::vector<LWP::Primitive::Mesh> models_;
@@ -110,15 +133,24 @@ protected:
 	// 攻撃に当たった時の無敵時間(活動できない)を発生させる
 	// 攻撃に当たった時と別の判定に当たった時の処理は分ける
 
-	// 何かしらの攻撃に当たった(当たったことを検知)
-	bool wasHitAttack_ = false;
+	// 何かしらの判定に当たった(当たったことを検知)
+	//bool wasHitCollision_ = false;
 
 	// 無量空処かどうか
-	bool isUtopia = false;
+	bool isUtopia_ = false;
+
+	// 無敵判定中ですか？
+	bool isInvincible_ = false;
 
 	// 硬直、内部の処理が進行しない時間
 	// 当たった攻撃とか、場合や種類によって時間を設定する
 	// この時間が 0 になるまで動けない
 	float utopiaTime_ = 0.0f;
+
+	// 攻撃に当たった後に少しだけ攻撃を受け付けない時間
+	// 持続する系とかもあるかもだから一定の値を入れておきたい
+	// 設定とかで固定値?
+	// 0 じゃないと無敵(別でフラグを立てとく)
+	float invincibleTime_ = 0.0f;
 
 };

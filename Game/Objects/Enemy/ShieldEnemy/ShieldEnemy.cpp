@@ -21,10 +21,21 @@ void ShieldEnemy::Init()
 void ShieldEnemy::Update()
 {
 	// 死んでいる時は死んだときのアニメーションと処理だけ
+	// 死亡時アニメーション
+	// 死んだかどうかはすぐに判別
 	if (IsDead_)
 	{
 		Dying();
 		DyingAnimation();
+		return;
+	}
+
+	// 無敵とかを調べる
+	CheckFlags();
+	// ここで無量空処されてる時は処理しない
+	// アニメーションとかあるなら処理する
+	if (isUtopia_)
+	{
 		return;
 	}
 

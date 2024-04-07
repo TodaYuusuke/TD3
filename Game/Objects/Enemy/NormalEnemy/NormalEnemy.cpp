@@ -18,12 +18,20 @@ void NormalEnemy::Init()
 void NormalEnemy::Update()
 {
 	// 死亡時アニメーション
-	ImGui::Begin("Enemy");
-	if (ImGui::Button("death"))IsDead_ = true;
-	ImGui::End();
-	if (IsDead_) {
+	// 死んだかどうかはすぐに判別
+	if (IsDead_)
+	{
 		Dying();
 		DyingAnimation();
+		return;
+	}
+
+	// 無敵とかを調べる
+	CheckFlags();
+	// ここで無量空処されてる時は処理しない
+	// アニメーションとかあるなら処理する
+	if (isUtopia_)
+	{
 		return;
 	}
 
