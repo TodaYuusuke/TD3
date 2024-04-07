@@ -43,8 +43,11 @@ void Slash::Reset()
 	//colliders_.player_->isActive = false;
 	player_->flag_.isInvincible_ = true;
 	// ジャスト判定中は無敵
+	// ↑ 居合中は無敵
+	// 居合が終わった後の無敵時間に利用
 	player_->invincibleTime_ = 0.0f;
-	player_->maxInvincibleTime_ = player_->config_.Time_.JUSTTAKETIME_ + player_->config_.Time_.JUSTINVINCIBLECORRECTION_;
+	// 終わるまで無敵
+	player_->maxInvincibleTime_ = player_->config_.Time_.SLASHBASE_ + player_->config_.Time_.SLASHENDINVINCIBLETIME_;
 
 	// モデルの向きを直す
 	player_->demoModel_.transform.rotation.y = std::atan2f(player_->slashData_.vector_.x, player_->slashData_.vector_.z);
@@ -92,6 +95,9 @@ void Slash::CreateMotions()
 
 void Slash::ResetCollider()
 {
+	// プレイヤーは無敵になる
+	player_->colliders_.player_.isActive = false;
+
 	// 武器の当たり判定を出す
 	// カプセルの設定
 	lwp::Vector3 start = player_->demoModel_.transform.translation;

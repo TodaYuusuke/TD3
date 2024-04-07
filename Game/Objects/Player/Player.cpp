@@ -626,7 +626,7 @@ void Player::DebugTimes()
 		if (ImGui::TreeNode("SLASH"))
 		{
 			ImGui::DragFloat("JUSTTAKE", &config_.Time_.JUSTTAKETIME_, 0.001f, 0.0f, config_.Time_.SLASHBASE_);
-			ImGui::DragFloat("JUSTINVINCIGLECORRECTION", &config_.Time_.JUSTINVINCIBLECORRECTION_, 0.001f, 0.0f, config_.Time_.SLASHBASE_ - config_.Time_.JUSTTAKETIME_);
+			ImGui::DragFloat("JUSTINVINCIGLECORRECTION", &config_.Time_.SLASHENDINVINCIBLETIME_, 0.001f, 0.0f, config_.Time_.SLASHBASE_ - config_.Time_.JUSTTAKETIME_);
 			ImGui::DragFloat("JUSTINVINCIGLEADD", &config_.Time_.JUSTINVINCIBLEADD_, 0.001f, 0.0f);
 
 			ImGui::TreePop();

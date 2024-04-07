@@ -36,10 +36,10 @@ public: //*** サブクラス ***//
 
 		// 居合による後隙の加算分
 		float MOMENTINCREMENT_ = 0.25f;
+		// 居合攻撃が終わった後に加える無敵時間
+		float SLASHENDINVINCIBLETIME_ = 0.05f;
 		// ジャスト居合を取る時間
 		float JUSTTAKETIME_ = 0.1f;
-		// ジャスト抜刀判定時間に加える無敵時間
-		float JUSTINVINCIBLECORRECTION_ = 0.05f;
 		// ジャスト抜刀成功時に加える無敵時間
 		float JUSTINVINCIBLEADD_ = 0.1f;
 		// 被ダメージ時の無敵時間
