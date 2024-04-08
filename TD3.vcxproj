@@ -167,6 +167,7 @@
     <ClCompile Include="Game\Objects\Player\Status\Derived\Moment.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Slash.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\IStatus.cpp" />
+    <ClCompile Include="Game\Objects\Upgrade\Function\Pursuit.cpp" />
     <ClCompile Include="Game\Objects\Upgrade\ISkill.cpp" />
     <ClCompile Include="Game\Scenes\TitleScene.cpp" />
     <ClCompile Include="Game\Objects\Level\Level.cpp" />
@@ -212,6 +213,8 @@
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp10.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp30.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerUp.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Derved\PursuitFlag.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Function\Pursuit.h" />
     <ClInclude Include="Game\Objects\Upgrade\ISkill.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\UpgradeList.h" />
     <ClInclude Include="Game\Scenes\TitleScene.h" />

@@ -20,6 +20,10 @@ void ShieldEnemy::Init()
 
 void ShieldEnemy::Update()
 {
+	ImGui::Begin("Enemy");
+	if (ImGui::Button("death"))IsDead_ = true;
+	ImGui::Text("HP : %d", hp_);
+	ImGui::End();
 	// 死んでいる時は死んだときのアニメーションと処理だけ
 	// 死亡時アニメーション
 	// 死んだかどうかはすぐに判別

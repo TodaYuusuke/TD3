@@ -69,6 +69,8 @@ void Player::Initialize()
 	parameter_.ResetParameter();
 	// 今の状態を設定
 	currStatus_ = statuses_[static_cast<size_t>(behavior_)];
+
+	pursuit = new Pursuit();
 }
 
 void Player::Update()
@@ -110,6 +112,9 @@ void Player::Update()
 	weapon_->Update();
 	slashPanel_->Update();
 
+	if (pursuitFlag) {
+		pursuitFlag = pursuit->Execution();
+	}
 	// 経験値が更新された後かと思ったけど別にプレイヤーの更新が終わった後ならどこでもいい
 	level_->Update(demoModel_.transform.translation);
 
@@ -182,7 +187,6 @@ void Player::ApplyUpgrade(const UpgradeParameter& para)
 {
 	parameter_.ApplyUpgrade(para);
 }
-
 
 void Player::RegistStatus(IStatus::Behavior request)
 {
@@ -296,7 +300,9 @@ void Player::CreateWeaponCollision()
 	colliders_.weapon_.mask.SetBelongFrag(GameMask::Weapon());
 	colliders_.weapon_.mask.SetHitFrag(GameMask::Enemy());
 	// 別個で用意した当たった時の関数
-	colliders_.weapon_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionWeapon(data); });
+	colliders_.weapon_.SetOnCollisionLambda([this](lwp::Collider::HitData data){
+		OnCollisionWeapon(data);
+	});
 	colliders_.weapon_.isActive = false;
 #ifdef DEMO
 	colliders_.weapon_.name = "Weapon";
@@ -420,6 +426,7 @@ void Player::CheckInputSlash()
 		lwp::Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
 		flag_.isInputSlash_ = true;
+		pursuitFlag = true;
 	}
 	else
 		flag_.isInputSlash_ = false;
