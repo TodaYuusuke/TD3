@@ -15,7 +15,7 @@ void ShieldEnemy::Init()
 	attackWaitTime_ = kAttackWaitTime;
 
 	// HP を設定
-	hp_ = 5;
+	hp_ = 50;
 }
 
 void ShieldEnemy::Update()

@@ -30,11 +30,6 @@ namespace L
 			para->HP.hpDelta.base += var;
 		}
 
-		std::string GetTexturePass() override
-		{
-			return "powerUp/PowerUp.png";
-		}
-
 		std::string GetUpgradeName() override
 		{
 			return "LifeMaxDelta : " + std::to_string(var);

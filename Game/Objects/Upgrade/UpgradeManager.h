@@ -1,5 +1,5 @@
 #pragma once
-#include "IUpgrade.h"
+#include "ISkill.h"
 
 // 前方宣言
 class Player;
@@ -39,7 +39,7 @@ namespace L {
 	private: // ** メンバ変数 ** //
 
 		// アップグレードのリスト
-		static std::vector<IUpgrade*> upgrades_;
+		static std::vector<ISkill*> upgrades_;
 
 		// レベルアップ中フラグ
 		static bool isLevelUpping;

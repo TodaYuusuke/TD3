@@ -2,13 +2,7 @@
 
 #include "Game/Objects/Player/Player.h"
 #pragma region Upgrades
-#include "Game/Objects/Upgrade/Derved/PowerDelta.h"
-#include "Game/Objects/Upgrade/Derved/PowerPerDelta.h"
-#include "Game/Objects/Upgrade/Derved/AllSpeedDelta.h"
-#include "Game/Objects/Upgrade/Derved/AllSpeedPerDelta.h"
-#include "Game/Objects/Upgrade/Derved/AttackRangeDelta.h"
-#include "Game/Objects/Upgrade/Derved/AttackTotalDelta.h"
-#include "Game/Objects/Upgrade/Derved/LifeMaxDelta.h"
+#include "Game/Objects/Upgrade/SkDerved/SkillList.h"
 #pragma endregion
 
 using namespace LWP;
@@ -16,7 +10,7 @@ using namespace LWP::Math;
 
 
 // 実体宣言
-std::vector<L::IUpgrade*> L::UpgradeManager::upgrades_;
+std::vector<L::ISkill*> L::UpgradeManager::upgrades_;
 bool L::UpgradeManager::isLevelUpping;
 int L::UpgradeManager::kUpgradNum_;
 std::vector<int> L::UpgradeManager::candidata_;
@@ -29,17 +23,9 @@ void L::UpgradeManager::Init()
 
 	upgrades_.clear();
 	// アップグレードをすべて取得
-	//upgrades_.push_back(new AllSpeedDelta);
-	upgrades_.push_back(new AllSpeedDelta(10));
-	upgrades_.push_back(new AllSpeedPerDelta(20));
-	upgrades_.push_back(new AllSpeedPerDelta(30));
-	upgrades_.push_back(new AllSpeedPerDelta(40));
-
-	upgrades_.push_back(new LifeMaxDelta(1));
-	upgrades_.push_back(new LifeMaxDelta(1));
-	upgrades_.push_back(new LifeMaxDelta(1));
-	upgrades_.push_back(new LifeMaxDelta(1));
-	//upgrades_.push_back(new AllSpeedPerDelta(40));
+	upgrades_.push_back(new SmallPower());
+	upgrades_.push_back(new SmallPower());
+	upgrades_.push_back(new SmallPower());
 
 
 	// すべてを初期化する
@@ -89,7 +75,7 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	ImGui::Text("ChoseUpgrade : %d", candidata_.size());
 	for (size_t i = 0; i < candidata_.size(); i++)
 	{
-		ImGui::Bullet();	ImGui::Text(upgrades_[candidata_[i]]->GetUpgradeName().c_str());
+		upgrades_[candidata_[i]]->DebugTree();
 	}
 
 	ImGui::Separator();
@@ -101,7 +87,7 @@ void L::UpgradeManager::DebugWindow(Player* player)
 
 		for (size_t i = 0; i < upgrades_.size(); i++)
 		{
-			ImGui::Text(upgrades_[i]->GetUpgradeName().c_str());
+			upgrades_[i]->DebugTree();
 		}
 
 		ImGui::EndChild();
@@ -117,7 +103,7 @@ void L::UpgradeManager::DebugWindow(Player* player)
 		{
 			if (upgrades_[i]->isApplied)
 			{
-				ImGui::Text(upgrades_[i]->GetUpgradeName().c_str());
+				upgrades_[i]->DebugTree();
 			}
 		}
 

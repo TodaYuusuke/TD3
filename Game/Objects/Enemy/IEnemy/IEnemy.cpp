@@ -122,7 +122,7 @@ void IEnemy::BecomeUtopia(float time)
 {
 	// とりあえず無量空処させとく
 	isUtopia_ = true;
-	utopiaTime_ = 0.1f;
+	utopiaTime_ = time;
 }
 
 void IEnemy::CheckFlags()

@@ -4,21 +4,21 @@
 namespace L
 {
 	/// <summary>
-	/// 純粋な攻撃範囲アップ！（定数）
+	/// 純粋な移動速度アップ！（定数）
 	/// </summary>
-	class AttackRangeDelta : public IUpgrade
+	class AllSpeedDelta : public IUpgrade
 	{
 	private:
 		// 変化させる値
 		float var = 0.0f;
 	public:
 		/// <summary>
-		/// 純粋な攻撃範囲アップ！（定数）
+		/// 純粋な移動速度アップ！（定数）
 		/// <para>ここで値を定義する</para>
 		/// <para>受け取った値によって読み込む画像を変えたい</para>
 		/// </summary>
 		/// <param name="v">プラスでもマイナスでもいい</param>
-		AttackRangeDelta(float v = 5.0f) : var(v) {};
+		AllSpeedDelta(float v = 10.0f) : var(v) {};
 
 
 
@@ -27,17 +27,12 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->Attack.slashRangeDelta.base += var;
-		}
-
-		std::string GetTexturePass() override
-		{
-			return "powerUp/PowerUp.png";
+			para->Speed.allSpeedDelta.base += var;
 		}
 
 		std::string GetUpgradeName() override
 		{
-			return "AttackRangeDelta : " + std::to_string(var);
+			return "AllSpeedDelta : " + std::to_string(var);
 		}
 	};
 }

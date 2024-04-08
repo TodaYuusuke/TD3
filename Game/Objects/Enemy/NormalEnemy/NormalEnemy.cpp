@@ -12,7 +12,7 @@ void NormalEnemy::Init()
 	attackWaitTime_ = kAttackWaitTime;
 
 	// HP を設定
-	hp_ = 3;
+	hp_ = 30;
 }
 
 void NormalEnemy::Update()
@@ -35,21 +35,25 @@ void NormalEnemy::Update()
 		return;
 	}
 
-	if (CheckAttackRange()) {
+	if (CheckAttackRange())
+	{
 		isAttack = true;
 	}
-	if (isAttack) {
+	if (isAttack)
+	{
 		// 攻撃処理
 		Attack();
 		// 攻撃アニメーション
 		AttackAnimation();
 	}
-	else {
+	else
+	{
 		Aim();
 		Move();
 	}
 
-	if (attackWaitTime_ >= 0) {
+	if (attackWaitTime_ >= 0)
+	{
 		attackWaitTime_--;
 	}
 }
@@ -69,8 +73,9 @@ void NormalEnemy::Move()
 
 void NormalEnemy::Attack()
 {
-	if (attackWaitTime_ <= 0) {
-	#pragma region
+	if (attackWaitTime_ <= 0)
+	{
+#pragma region
 		attackRotWork.flag = true;
 		Rot = models_[Model::Body].transform.rotation;
 		attackRotWork.targetpoint = Rot;
@@ -82,7 +87,7 @@ void NormalEnemy::Attack()
 		attackMoveWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0].transform.rotation))/*ベクトルを反転*/;
 		attackMoveWork.targetpoint = attackMoveWork.targetpoint.Normalize();
 		attackMoveEndWork.targetpoint = attackMoveWork.targetpoint * -1/*ベクトルを反転*/;
-	#pragma endregion Body
+#pragma endregion Body
 
 		attackWaitTime_ = kAttackWaitTime;
 		Aim();
@@ -92,8 +97,10 @@ void NormalEnemy::Attack()
 void NormalEnemy::AttackAnimation()
 {
 	lwp::Vector3 point = { 0.0f,0.0f,0.0f };
-	if (attackRotWork.flag) {
-		if (attackRotWork.t < 1.0f) {
+	if (attackRotWork.flag)
+	{
+		if (attackRotWork.t < 1.0f)
+		{
 			// 回転
 			attackRotWork.t += attackRotWork.speed;
 			point = lwp::Vector3::Lerp(Rot, attackRotWork.targetpoint, attackRotWork.t);
@@ -102,7 +109,8 @@ void NormalEnemy::AttackAnimation()
 			models_[Model::Body].transform.translation += attackMoveWork.targetpoint * LWP::Info::GetDeltaTime() * 10.0f;
 
 		}
-		else if (attackRotWork.t >= 1.0f) {
+		else if (attackRotWork.t >= 1.0f)
+		{
 			attackRotWork.flag = false;
 			attackRotWork.t = 0.0f;
 
@@ -110,17 +118,21 @@ void NormalEnemy::AttackAnimation()
 			collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 		}
 	}
-	if (attackStanbyWork.flag) {
+	if (attackStanbyWork.flag)
+	{
 		attackStanbyWork.t += attackStanbyWork.speed;
-		if (attackStanbyWork.t >= 1.0f) {
+		if (attackStanbyWork.t >= 1.0f)
+		{
 			attackStanbyWork.flag = false;
 			attackStanbyWork.t = 0.0f;
 
 			attackEndWork.flag = true;
 		}
 	}
-	if (attackEndWork.flag) {
-		if (attackEndWork.t < 1.0f) {
+	if (attackEndWork.flag)
+	{
+		if (attackEndWork.t < 1.0f)
+		{
 			attackEndWork.t += attackEndWork.speed;
 			point = lwp::Vector3::Lerp(EndRot, Rot, attackEndWork.t);
 			models_[Model::Body].transform.rotation = point;
@@ -129,7 +141,8 @@ void NormalEnemy::AttackAnimation()
 
 
 		}
-		else if (attackEndWork.t >= 1.0f) {
+		else if (attackEndWork.t >= 1.0f)
+		{
 			attackEndWork.flag = false;
 			attackEndWork.t = 0.0f;
 			isAttack = false;
@@ -139,10 +152,12 @@ void NormalEnemy::AttackAnimation()
 
 }
 
-bool NormalEnemy::CheckAttackRange() {
+bool NormalEnemy::CheckAttackRange()
+{
 	// 自機との距離
 	float distance = (models_[Model::Body].transform.translation - player_->GetWorldTransform()->translation).Length();
-	if (distance <= kAttackRange) {
+	if (distance <= kAttackRange)
+	{
 		return true;
 	}
 	return false;

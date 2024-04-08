@@ -4,21 +4,21 @@
 namespace L
 {
 	/// <summary>
-	/// 純粋な攻撃倍率アップ！（定数）
+	/// 純粋な攻撃力アップ！（定数）
 	/// </summary>
-	class PowerPerDelta : public IUpgrade
+	class PowerDelta : public IUpgrade
 	{
 	private:
 		// 変化させる値
 		float var = 0.0f;
 	public:
 		/// <summary>
-		/// 純粋な攻撃倍率アップ！（定数）
+		/// 純粋な攻撃力アップ！（定数）
 		/// <para>ここで値を定義する</para>
 		/// <para>受け取った値によって読み込む画像を変えたい</para>
 		/// </summary>
 		/// <param name="v">プラスでもマイナスでもいい</param>
-		PowerPerDelta(float v = 10.0f) : var(v) {};
+		PowerDelta(float v = 10.0f) : var(v) {};
 
 
 
@@ -27,17 +27,12 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->Attack.slashPowerDelta.percent += var;
-		}
-
-		std::string GetTexturePass() override
-		{
-			return "powerUp/PowerUp.png";
+			para->Attack.slashPowerDelta.base += var;
 		}
 
 		std::string GetUpgradeName() override
 		{
-			return "PowerPerDelta : " + std::to_string(var);
+			return "PowerDelta : " + std::to_string(var);
 		}
 	};
 }

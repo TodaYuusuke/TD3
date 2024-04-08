@@ -81,7 +81,7 @@ public: //*** サブクラス ***//
 	struct Power
 	{
 		// 初期攻撃力
-		float BASEPOWER_ = 1.0f;
+		float BASEPOWER_ = 10.0f;
 	};
 
 	struct Configs

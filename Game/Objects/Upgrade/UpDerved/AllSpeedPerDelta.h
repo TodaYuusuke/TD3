@@ -30,11 +30,6 @@ namespace L
 			para->Speed.allSpeedDelta.percent += var;
 		}
 
-		std::string GetTexturePass() override
-		{
-			return "powerUp/PowerUp.png";
-		}
-
 		std::string GetUpgradeName() override
 		{
 			return "AllSpeedPerDelta : " + std::to_string(var);
