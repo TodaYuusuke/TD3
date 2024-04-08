@@ -4,31 +4,19 @@
 namespace L
 {
 	/// <summary>
-	/// そこそこの力
+	/// 強力な力
 	/// </summary>
-	class MediumPower : public ISkill
+	class Skill_PowerUP3 : public ISkill
 	{
 	public:
 		/// <summary>
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
-		MediumPower()
+		Skill_PowerUP3()
 		{
 			upgrades_.clear();
-			upgrades_.push_back(new PowerDelta(5.0f));
-			upgrades_.push_back(new PowerPerDelta(20.0f));
+			upgrades_.push_back(new PowerPerDelta(40.0f));
 		}
-
-		///// <summary>
-		///// アップグレード数を返す
-		///// <para>オーバーロードする</para>
-		///// </summary>
-		///// <returns>配列数</returns>
-		//size_t GetUpgradeNum() override
-		//{
-		//	return 2;
-		//}
-
 
 		/// <summary>
 		/// アップグレードの内容
@@ -48,7 +36,7 @@ namespace L
 
 		std::string GetUpgradeName() override
 		{
-			return "MediumPower";
+			return "Skill_PowerUP3";
 		}
 
 	};

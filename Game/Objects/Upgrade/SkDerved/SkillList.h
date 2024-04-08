@@ -1,5 +1,5 @@
 #pragma once
 
-#include "SmallPower.h"
-#include "MediumPower.h"
-#include "LargePower.h"
+#include "Skill_PowerUp1.h"
+#include "Skill_PowerUp2.h"
+#include "Skill_PowerUp3.h"

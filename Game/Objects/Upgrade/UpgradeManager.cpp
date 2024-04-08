@@ -25,10 +25,9 @@ void L::UpgradeManager::Init()
 
 	upgrades_.clear();
 	// アップグレードをすべて取得
-	upgrades_.push_back(new SmallPower());
-	upgrades_.push_back(new MediumPower());
-	upgrades_.push_back(new LargePower());
-	upgrades_.push_back(new LargePower());
+	upgrades_.push_back(new Skill_PowerUp1());
+	upgrades_.push_back(new Skill_PowerUp2());
+	upgrades_.push_back(new Skill_PowerUp3());
 
 
 	// すべてを初期化する
