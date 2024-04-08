@@ -9,6 +9,7 @@
 #include "../FollowCamera/FollowCamera.h"
 
 #include "Game/Objects/Player/Weapon/Weapon.h"
+#include "Game/Objects/Level/Level.h"
 #include "Game/Objects/Player/SlashPanel.h"
 #include "Status/IStatus.h"
 #include "PlayerConfing.h"
@@ -259,6 +260,10 @@ public: //*** プライベート変数 ***//
 	LWP::Primitive::Mesh demoModel_;
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
+
+	// レベルアップ機能
+	std::unique_ptr<Level> level_;
+	
 
 	// 現在の状態
 	IStatus::Behavior behavior_ = IStatus::Behavior::Root;

@@ -41,6 +41,10 @@ void Player::Initialize()
 	// コライダー生成
 	CreateCollisions();
 
+	// レベル関係を生成
+	level_ = std::make_unique<Level>();
+	level_->Initialize(demoModel_.transform.translation);
+
 	// 状態作成
 	statuses_.clear();
 
@@ -103,6 +107,9 @@ void Player::Update()
 	t += (float)lwp::GetDeltaTime();
 	weapon_->Update();
 	slashPanel_->Update();
+
+	// 経験値が更新された後かと思ったけど別にプレイヤーの更新が終わった後ならどこでもいい
+	level_->Update(demoModel_.transform.translation);
 
 
 	//*** ここから下はフラグによって管理されている ***//

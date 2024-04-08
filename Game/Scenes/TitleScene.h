@@ -4,7 +4,6 @@
 #pragma region GameInclude
 #include "Game/Objects/FollowCamera/FollowCamera.h"
 #include "Game/Objects/Player/Player.h"
-#include "Game/Objects/Level/Level.h"
 #include "Game/Objects/Enemy/EnemyManager.h"
 #include "Game/Objects/Experience/ExpManager.h"
 //#include "Game/Scenes/UpgradeScreen/UpgradeScreen.h"
@@ -50,7 +49,7 @@ private: //*** 変数群 ***//
 	std::unique_ptr<Player> player_;
 
 	// レベルアップ機能
-	std::unique_ptr<Level> level_;
+	//std::unique_ptr<Level> level_;
 
 	// ジャストからの時間
 	float time_ = 0.0f;
