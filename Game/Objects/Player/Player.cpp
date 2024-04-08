@@ -3,6 +3,8 @@
 // ゲームシーン
 #include "Game/Scenes/TitleScene.h"
 
+#include "Game/Objects/GameMask.h"
+
 #include "Status/Derived/Idol.h"
 #include "Status/Derived/Move.h"
 #include "Status/Derived/Slash.h"
@@ -273,9 +275,9 @@ void Player::CreatePlayerCollision()
 	// 武器との当たり判定を取る
 	colliders_.player_.Create(demoModel_.transform.translation);
 	// マスク
-	colliders_.player_.mask.SetBelongFrag(MaskLayer::Player);
+	colliders_.player_.mask.SetBelongFrag(GameMask::Player());
 	// 敵または敵の攻撃
-	colliders_.player_.mask.SetHitFrag(MaskLayer::Enemy | MaskLayer::Layer2);
+	colliders_.player_.mask.SetHitFrag(GameMask::Enemy() | GameMask::EnemyAttack());
 	// チョットした後隙
 	// 別個で用意した当たった時の関数
 	colliders_.player_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionPlayer(data); });
@@ -291,8 +293,8 @@ void Player::CreateWeaponCollision()
 	colliders_.weapon_.Create({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f });
 	colliders_.weapon_.radius = config_.Length_.WEAPONCOLLISIONRADIUS_;
 	// マスク
-	colliders_.weapon_.mask.SetBelongFrag(MaskLayer::Layer3);
-	colliders_.weapon_.mask.SetHitFrag(MaskLayer::Enemy);
+	colliders_.weapon_.mask.SetBelongFrag(GameMask::Weapon());
+	colliders_.weapon_.mask.SetHitFrag(GameMask::Enemy());
 	// 別個で用意した当たった時の関数
 	colliders_.weapon_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionWeapon(data); });
 	colliders_.weapon_.isActive = false;
@@ -307,8 +309,8 @@ void Player::CreateJustCollision()
 	//colliders_.justSlash_ = new LWP::Object::Collider::Capsule();
 	colliders_.justSlash_.Create(demoModel_.transform.translation, demoModel_.transform.translation);
 	// マスク
-	colliders_.justSlash_.mask.SetBelongFrag(MaskLayer::Player);
-	colliders_.justSlash_.mask.SetHitFrag(MaskLayer::Layer2);
+	colliders_.justSlash_.mask.SetBelongFrag(GameMask::Player());
+	colliders_.justSlash_.mask.SetHitFrag(GameMask::EnemyAttack());
 	// ジャスト居合したことを通知
 	// 別個で用意した当たった時の関数
 	colliders_.justSlash_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionJust(data); });
@@ -335,6 +337,7 @@ void Player::OnCollisionPlayer(lwp::Collider::HitData& data)
 
 void Player::OnCollisionWeapon(lwp::Collider::HitData& data)
 {
+	// 攻撃が当たった時のアニメーション？
 	data;
 }
 
@@ -342,7 +345,7 @@ void Player::OnCollisionJust(lwp::Collider::HitData& data)
 {
 	if (!(data.state == OnCollisionState::None) &&
 		!flag_.isJustSlashing_ && data.hit &&
-		(data.hit->mask.GetBelongFrag() & MaskLayer::Layer2))
+		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 	{
 		StartJust();
 	}

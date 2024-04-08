@@ -1,5 +1,6 @@
 #include "Level.h"
 
+#include "Game/Objects/GameMask.h"
 #include "Game/Objects/Upgrade/UpgradeManager.h"
 
 using namespace LWP;
@@ -41,9 +42,9 @@ void Level::Update(const lwp::Vector3& position)
 void Level::CreateCollision()
 {
 	// マスク
-	collider_.mask.SetBelongFrag(MaskLayer::Layer4);
+	collider_.mask.SetBelongFrag(GameMask::ExpGetter());
 	// 経験値
-	collider_.mask.SetHitFrag(MaskLayer::Layer5);
+	collider_.mask.SetHitFrag(GameMask::Exp());
 	// 別個で用意した当たった時の関数
 	// 状態を切り替えたい
 	collider_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollision(data); });
