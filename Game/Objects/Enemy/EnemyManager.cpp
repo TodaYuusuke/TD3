@@ -3,6 +3,7 @@
 
 void EnemyManager::Init()
 {
+	//NormalEnemySpown({1,0.5f,0});
 }
 
 void EnemyManager::Update()
@@ -72,14 +73,14 @@ void EnemyManager::EnemySpown()
 		//NormalEnemySpown(pos);
 		// ボスの発生
 		//DashBossSpown(pos);
-		ArrowEnemySpown(pos);
+		NormalEnemySpown(pos);
 	}
 	else if (number <= 0.8f) {
 		//ShieldEnemySpown(pos);
-		ArrowEnemySpown(pos);
+		NormalEnemySpown(pos);
 	}
 	else {
-		ArrowEnemySpown(pos);
+		NormalEnemySpown(pos);
 	}
 
 }

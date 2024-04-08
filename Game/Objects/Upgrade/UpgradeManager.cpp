@@ -3,6 +3,7 @@
 #include "Game/Objects/Player/Player.h"
 #pragma region Upgrades
 #include "Game/Objects/Upgrade/SkDerved/SkillList.h"
+#include "Game/Objects/Upgrade/Derved/PursuitFlag.h"
 #pragma endregion
 
 using namespace LWP;

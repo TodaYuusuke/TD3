@@ -15,6 +15,11 @@
 #include "PlayerConfing.h"
 #include "PlayerParametaer.h"
 
+#pragma region
+
+#include "Game/Objects/Upgrade/Function/Pursuit.h"
+
+#pragma endregion アップグレード
 
 // 前方宣言
 class TItleScene;
@@ -104,11 +109,7 @@ public: //*** パブリック関数 ***//
 	// コンストラクタ
 	Player() = default;
 	// デストラクタ
-	~Player() {
-		//delete colliders_.justSlash_;
-		//delete colliders_.player_;
-		//delete colliders_.weapon_;
-	};
+	~Player() = default;
 
 	// 初期化
 	void Initialize();
@@ -143,6 +144,10 @@ public:	//*** セッター,ゲッター ***//
 	void RegistStatus(IStatus::Behavior request);
 	// Vector3 をカメラ方向に変える
 	lwp::Vector3 GetVectorTranspose(const lwp::Vector3& vec);
+	// フラグ
+	bool GetPursuitFlag()const { return pursuitFlag; }
+	// 
+	Pursuit* GetPursuit()const { return pursuit; }
 
 private: //*** プライベート関数 ***//
 
@@ -303,4 +308,8 @@ public: //*** プライベート変数 ***//
 
 private: //*** プライベート関数 ***//
 
+private: //*** アップデート関連クラス ***//
+	Pursuit* pursuit;
+	// Pursuitを管理するフラグ
+	bool pursuitFlag = false;
 };

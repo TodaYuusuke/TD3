@@ -39,6 +39,11 @@ public:
 	/// 死亡時のアニメーション
 	/// </summary>
 	void DyingAnimation();
+	/// <summary>
+	/// 指定した分 HP を削る
+	/// </summary>
+	/// <param name="damage">ダメージ量</param>
+	void DecreaseHP(int damage);
 
 	/// <summary>
 	/// デバッグ表示
@@ -55,10 +60,13 @@ public: //*** ゲッターセッター ***//
 	bool GetIsActive() const { return isActive_; }
 	const lwp::Vector3& GetPosition() { return models_[0].transform.translation; }
 
+	lwp::Vector3 GetPosition()const { return models_[0].transform.translation; }
+
 	// 狙う対象をセット(今回は自機をセットする)
 	virtual void SetTarget(Player* player) { player_ = player; }
 	virtual void SetPosition(lwp::Vector3 pos) { models_[0].transform.translation = pos; }
 	void SetManager(ExpManager* p) { manager_ = p; }
+
 
 protected: //*** 継承クラスで呼び出す共通処理 ***//
 

@@ -55,7 +55,7 @@ void IEnemy::CreateCollider()
 	collider_.CreateFromPrimitive(&models_[0]);
 	// マスク処理
 	collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	collider_.mask.SetHitFrag(MaskLayer::Layer3);
+	collider_.mask.SetHitFrag(MaskLayer::Layer3 | MaskLayer::Layer7);
 	// 当たった時の処理
 	collider_.SetOnCollisionLambda([this](HitData data) {OnCollision(data);	});
 }
@@ -67,6 +67,10 @@ void IEnemy::OnCollision(const HitData& data)
 	if (data.state == OnCollisionState::Press && isActive_ &&
 		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 	{
+		// 追撃クラスに登録
+		if (player_->parameter_.GetParameter().pursuitFlag && player_->GetPursuitFlag()) {
+			player_->GetPursuit()->AddEnemy(this);
+		}
 		// 敵の攻撃に当たれる場合か
 		// とりあえずなんかに当たった
 		//wasHitCollision_ = true;
