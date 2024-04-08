@@ -84,11 +84,6 @@ protected: //*** 継承クラスで呼び出す共通処理 ***//
 
 	virtual bool CheckSlash(uint32_t hitBelong);
 
-	/// <summary>
-	/// 指定した分 HP を削る
-	/// </summary>
-	/// <param name="damage">ダメージ量</param>
-	void DecreaseHP(int damage);
 
 	/// <summary>
 	/// 時間を指定して無敵になる関数
