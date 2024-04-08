@@ -3,6 +3,7 @@
 
 void EnemyManager::Init()
 {
+	//NormalEnemySpown({1,0.5f,0});
 }
 
 void EnemyManager::Update()

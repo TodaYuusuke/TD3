@@ -45,6 +45,8 @@ public: //*** ゲッターセッター ***//
 
 	bool GetIsActive() const { return isActive_; }
 
+	lwp::Vector3 GetPosition()const { return models_[0].transform.translation; }
+
 	// 狙う対象をセット(今回は自機をセットする)
 	virtual void SetTarget(Player* player) { player_ = player; }
 	virtual void SetPosition(lwp::Vector3 pos) { models_[0].transform.translation = pos; }

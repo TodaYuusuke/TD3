@@ -143,6 +143,10 @@ public:	//*** セッター,ゲッター ***//
 	void RegistStatus(IStatus::Behavior request);
 	// Vector3 をカメラ方向に変える
 	lwp::Vector3 GetVectorTranspose(const lwp::Vector3& vec);
+	// フラグ
+	bool GetPursuitFlag()const { return pursuitFlag; }
+	// 
+	Pursuit* GetPursuit()const { return pursuit; }
 
 private: //*** プライベート関数 ***//
 

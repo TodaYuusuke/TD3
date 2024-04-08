@@ -16,42 +16,32 @@ bool Pursuit::Execution()
 		return false;
 	}
 
-	if (interval == 0) {
+	if (interval == 10) {
+		// モデルを作る
 		models_.reserve(enemys_.size());
 		for (int It = 0; It < enemys_.size(); It++) {
 			models_.emplace_back();
 			models_[It].LoadFile("cube/cube.obj");
-			models_[It].transform.translation = enemys_[It]->GetWorldPosition();
-			models_[It].transform.translation.y += 1.5f;
-		}		
-		//CreateCollider();
+			models_[It].name = "pursuit";
+			models_[It].transform.translation = enemys_[It]->GetPosition();
+		}
 		interval--;
 		return true;
 	}
-	else {
-		interval--;
-	}
-	// 0以下になったら当たり判定を作る
-	if (interval < 30) {
+	else if (interval < 0) {
 		interval = kInterval;
+		// ダメージを与える
+		for (int It = 0; It < enemys_.size(); It++) {
+			enemys_[It]->DecreaseHP(damage_);
+		}
 		// 最後にクリアする
 		enemys_.clear();
-		//models_.clear();
-		//aabb_.clear();
+		models_.clear();
+		aabb_.clear();
 		return false;
 	}
-}
-
-void Pursuit::CreateCollider()
-{
-	for (int It = 0;It < enemys_.size(); It++) {
-		// 当たり判定を設定
-		AABB aabb;
-		aabb.CreateFromPrimitive(&models_[It]);
-		aabb.mask.SetBelongFrag(MaskLayer::Layer7);
-		aabb.mask.SetHitFrag(MaskLayer::Enemy);
-		aabb.name = "Pur";
-		aabb.SetOnCollisionLambda([this](lwp::Collider::HitData data) {data;});
-		aabb_.push_back(aabb);
+	else {
+		interval--;
+		return true;
 	}
 }

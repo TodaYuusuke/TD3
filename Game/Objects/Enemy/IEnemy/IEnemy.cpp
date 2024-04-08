@@ -64,6 +64,9 @@ void IEnemy::OnCollision(const HitData& data)
 	if (data.state == OnCollisionState::Trigger && isActive_ &&
 		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 	{
+		if (player_->parameter_.GetParameter().pursuitFlag && player_->GetPursuitFlag()) {
+			player_->GetPursuit()->AddEnemy(this);
+		}
 		// 当たったのがプレイヤーの居合攻撃なら
 		if (data.hit->mask.GetBelongFrag() & MaskLayer::Layer3)
 		{

@@ -333,16 +333,7 @@ void Player::OnCollisionPlayer(lwp::Collider::HitData& data)
 
 void Player::OnCollisionWeapon(lwp::Collider::HitData& data)
 {
-	if (data.state == OnCollisionState::Trigger &&
-		(data.hit->mask.GetBelongFrag() & (MaskLayer::Enemy)))
-	{
-		if (data.hit->mask.GetBelongFrag() & (MaskLayer::Layer2)) {
-			return;
-		}
-		if (parameter_.GetParameter().pursuitFlag && pursuitFlag) {
-			pursuit->AddEnemy(data.hit);
-		}
-	}
+
 }
 
 void Player::OnCollisionJust(lwp::Collider::HitData& data)

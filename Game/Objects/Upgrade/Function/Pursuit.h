@@ -6,14 +6,13 @@ class Pursuit {
 public:
 	void Init();
 	bool Execution();
-	void AddEnemy(ICollider* enemy) {
+	void AddEnemy(IEnemy* enemy) {
 		enemys_.push_back(enemy);
 	}
 private:
-	void CreateCollider();
 
 	// ボスも含めたすべての敵
-	std::vector<ICollider*> enemys_;
+	std::vector<IEnemy*> enemys_;
 	// 攻撃力
 	int damage_ = 1;
 	const int kInterval = 120;
