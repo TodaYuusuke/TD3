@@ -6,13 +6,13 @@ namespace L
 	/// <summary>
 	/// 強力な力
 	/// </summary>
-	class Skill_PowerUP3 : public ISkill
+	class Skill_PowerUp3 : public ISkill
 	{
 	public:
 		/// <summary>
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
-		Skill_PowerUP3()
+		Skill_PowerUp3()
 		{
 			upgrades_.clear();
 			upgrades_.push_back(new PowerPerDelta(40.0f));
