@@ -1,6 +1,7 @@
 #include "UpgradeManager.h"
 
 #include "Game/Objects/Player/Player.h"
+#include "Game/Objects/GameTimer/GameTimer.h"
 #pragma region Upgrades
 #include "Game/Objects/Upgrade/SkDerved/SkillList.h"
 #pragma endregion
@@ -46,6 +47,7 @@ void L::UpgradeManager::Update(Player* player)
 
 void L::UpgradeManager::LevelUp()
 {
+	GameTimer::GetInstance()->Stop();
 	isLevelUpping = true;
 	RandomUpgrade();
 }
@@ -269,4 +271,5 @@ void L::UpgradeManager::Apply(Player* player)
 
 	// 情報を保存
 	preParam_ = para;
+	GameTimer::GetInstance()->Start();
 }

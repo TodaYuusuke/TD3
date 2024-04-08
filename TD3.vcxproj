@@ -161,6 +161,7 @@
     <ClCompile Include="Game\Objects\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.cpp" />
     <ClCompile Include="Game\Objects\FollowCamera\FollowCamera.cpp" />
+    <ClCompile Include="Game\Objects\GameTimer\GameTimer.cpp" />
     <ClCompile Include="Game\Objects\Player\PlayerConfing.cpp" />
     <ClCompile Include="Game\Objects\Player\PlayerParametaer.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Damage.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="Game\Objects\Enemy\EnemyManager.h" />
     <ClInclude Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.h" />
     <ClInclude Include="Game\Objects\FollowCamera\FollowCamera.h" />
+    <ClInclude Include="Game\Objects\GameTimer\GameTimer.h" />
     <ClInclude Include="Game\Objects\Player\PlayerConfing.h" />
     <ClInclude Include="Game\Objects\Player\PlayerParametaer.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Damage.h" />
