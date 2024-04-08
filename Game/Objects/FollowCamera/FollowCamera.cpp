@@ -13,7 +13,7 @@ FollowCamera::FollowCamera() {
 	isEndEase_ = false;
 	fovState_ = FovState::NORMAL;
 	preFovState_ = fovState_;
-	followRate_ = 1.0f;
+	followRate_ = kFollowRate;
 }
 
 void FollowCamera::Update() {
@@ -23,7 +23,7 @@ void FollowCamera::Update() {
 	// 追従の計算
 	if (target_) {
 		// 追従座標の補間
-		interTarget_ = LWP::Math::Vector3::Slerp(interTarget_, target_->translation, 0.1f);
+		interTarget_ = LWP::Math::Vector3::Slerp(interTarget_, target_->translation, followRate_);
 
 		// オフセットの計算
 		LWP::Math::Vector3 offset = CalcOffset();
@@ -149,11 +149,11 @@ void FollowCamera::JustSlashUpdate() {
 
 	switch (fovState_) {
 	case FollowCamera::NORMAL:
-		followRate_ = 1.0f;
+		//followRate_ = 1.0f;
 		break;
 	case FollowCamera::REDUCE:
 		// カメラを後追いさせる
-		followRate_ = kFollowRate;
+		//followRate_ = kFollowRate;
 		// 視野角を小さくする
 		ReduceFov(goalFov_);
 		break;

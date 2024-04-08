@@ -1,6 +1,7 @@
 #include "ArrowBoss.h"
 #include "Game/Objects/Player/Player.h"
 
+using namespace LWP;
 using namespace LWP::Utility;
 using namespace LWP::Object::Collider;
 
@@ -20,7 +21,7 @@ ArrowBoss::~ArrowBoss() {
 void ArrowBoss::Init()
 {
 	// 当たり判定のインスタンス生成
-	models_.push_back(LWP::Primitive::Mesh());
+	models_.emplace_back();
 	models_[0].LoadFile("cube/cube.obj");
 	// 色
 	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::RED);
@@ -30,6 +31,32 @@ void ArrowBoss::Init()
 	isActive_ = true;
 
 	shotCount_ = 0;
+
+#pragma region ミサイル起動パーティクル
+	// 形を決定
+	missileContrail_.SetPrimitive<Primitive::Billboard3D>();
+	// 初期化処理
+	missileContrail_.initFunction =
+		[](Primitive::IPrimitive* primitive) {
+		Object::ParticleData data;
+		data.wtf.translation = primitive->transform.GetWorldPosition();
+		data.wtf.rotation = primitive->transform.rotation;
+		data.wtf.scale = primitive->transform.scale;
+
+		// データを返す
+		return data;
+	};
+	// 更新処理
+	missileContrail_.updateFunction =
+		[](Object::ParticleData* data) {
+		// 経過フレーム追加
+		data->elapsedFrame++;
+
+		// 180フレーム経ったら削除
+		return data->elapsedFrame > 180 ? true : false;
+	};
+	missileContrail_.isActive = true;
+#pragma endregion
 }
 
 void ArrowBoss::Update()
@@ -122,28 +149,27 @@ void ArrowBoss::Attack()
 	Aim();
 #pragma region 通常弾
 	if (behavior_ == Behavior::kNormalShot) {
-		//// 弾を生成
-		//Arrow* arrow = new Arrow();
-		//// 初期化
-		//arrow->Init(models_[0].transform);
-
-		//normalArrows_.push_back(arrow);
-
 		// 右に飛んでいく弾
 		for (int i = 0; i < 2; i++) {
 			// 弾を生成
-			HomingArrow* homingArrow = new HomingArrow();
+			HomingArrow* homingArrow = new HomingArrow(
+				[this](Math::Vector3 pos) {
+					// 座標を変更してパーティクルを一つ生成
+					*missileContrail_.Transform() = pos;
+					missileContrail_.Add(1);
+				}
+			);
 			// 上に弾を撃つ(x,y軸をランダムで少し回転)
 			LWP::Math::Vector3 rotate = { -M_PI / 10.0f * (i + 1), 2.0f * M_PI / 3.0f, 0 };
 			homingArrow->SetShootingAngle(rotate);
 			// ホーミング開始時間
 			homingArrow->SetHomingStartFrame(30);
 
-			// 初期化
-			homingArrow->Init(models_[0].transform);
-
 			// 自機のアドレスを設定
 			homingArrow->SetPlayer(player_);
+
+			// 初期化
+			homingArrow->Init(models_[0].transform);
 
 			homingArrows_.push_back(homingArrow);
 		}
@@ -151,18 +177,24 @@ void ArrowBoss::Attack()
 		// 左に飛んでいく弾
 		for (int i = 0; i < 2; i++) {
 			// 弾を生成
-			HomingArrow* homingArrow = new HomingArrow();
+			HomingArrow* homingArrow = new HomingArrow(
+				[this](Math::Vector3 pos) {
+					// 座標を変更してパーティクルを一つ生成
+					*missileContrail_.Transform() = pos;
+					missileContrail_.Add(1);
+				}
+			);
 			// 上に弾を撃つ(x,y軸をランダムで少し回転)
 			LWP::Math::Vector3 rotate = { -M_PI / 10.0f * (i + 1), -2.0f * M_PI / 3.0f, 0 };
 			homingArrow->SetShootingAngle(rotate);
 			// ホーミング開始時間
 			homingArrow->SetHomingStartFrame(30);
 
-			// 初期化
-			homingArrow->Init(models_[0].transform);
-
 			// 自機のアドレスを設定
 			homingArrow->SetPlayer(player_);
+
+			// 初期化
+			homingArrow->Init(models_[0].transform);
 
 			homingArrows_.push_back(homingArrow);
 		}
@@ -172,16 +204,22 @@ void ArrowBoss::Attack()
 #pragma region ホーミング弾
 	else if (behavior_ == Behavior::kHomingShot) {
 		// 弾を生成
-		HomingArrow* homingArrow = new HomingArrow();
+		HomingArrow* homingArrow = new HomingArrow(
+			[this](Math::Vector3 pos) {
+				// 座標を変更してパーティクルを一つ生成
+				*missileContrail_.Transform() = pos;
+				missileContrail_.Add(1);
+			}
+		);
 		// 上に弾を撃つ(x,y軸をランダムで少し回転)
 		LWP::Math::Vector3 rotate = RandomShootingAngle();
 		homingArrow->SetShootingAngle(rotate);
 
-		// 初期化
-		homingArrow->Init(models_[0].transform);
-
 		// 自機のアドレスを設定
 		homingArrow->SetPlayer(player_);
+
+		// 初期化
+		homingArrow->Init(models_[0].transform);
 
 		homingArrows_.push_back(homingArrow);
 	}
@@ -256,7 +294,7 @@ void ArrowBoss::B_RootInit() {
 	// 自機狙い状態のクールタイム
 	stunFrame_ = kStunAllFrame;
 
-	followCamera_->EndSlash();
+	followCamera_->EndEffectFov();
 }
 void ArrowBoss::B_RootUpdate() {
 	// 攻撃の待ち時間
@@ -350,7 +388,7 @@ void ArrowBoss::B_HomingShotUpdate() {
 	// 既定の時間を過ぎたら攻撃終了
 	if (shotFrame_ <= 0) {
 		behaviorRequest_ = Behavior::kRoot;
-		followCamera_->EndEffectFov();
+		//followCamera_->EndEffectFov();
 	}
 
 	shotDelay_--;

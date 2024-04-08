@@ -8,6 +8,10 @@ class Player;
 class HomingArrow
 {
 public:
+	// デフォルトコンストラクタを禁止
+	HomingArrow() = delete;
+	HomingArrow(std::function<void(LWP::Math::Vector3)>);
+
 	~HomingArrow();
 	void Init(lwp::WorldTransform transform);
 	void Update();
@@ -52,9 +56,9 @@ private:// 定数
 	const float kHomingEndFrame = 180;
 
 	// ホーミングの精度が変化する距離
-	const float kHomingStrengthRange = 5.0f;
+	const float kHomingStrengthRange = 2.0f;
 	// 自機との距離が遠い時のホーミング精度
-	const float kLongDistHomingAccuracy = 0.3f;
+	const float kLongDistHomingAccuracy = 0.6f;
 	// 自機との距離が近い時のホーミング精度
 	const float kShortDistHomingAccuracy = 0.01f;
 
@@ -92,4 +96,12 @@ private:
 	LWP::Math::Vector3 shootingAngle_;
 	// 方向ベクトル
 	LWP::Math::Vector3 velocity_;
+
+	// イージング開始時のベクトル
+	LWP::Math::Vector3 startEaseVel_;
+	// イージング終了時のベクトル
+	LWP::Math::Vector3 endEaseVel_;
+
+	// ミサイル起動パーティクル生成関数
+	std::function<void(LWP::Math::Vector3)> summonContrail_ = nullptr;
 };

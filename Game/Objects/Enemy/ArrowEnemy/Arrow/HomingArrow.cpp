@@ -1,13 +1,17 @@
 #include "HomingArrow.h"
 #include "../../../Player/Player.h"
 
+HomingArrow::HomingArrow(std::function<void(LWP::Math::Vector3)> func) {
+	summonContrail_ = func;
+}
+
+
 HomingArrow::~HomingArrow() {
 	
 }
 
 void HomingArrow::Init(lwp::WorldTransform transform) {
 	// モデルの作成
-	model_ = LWP::Primitive::Mesh();
 	model_.LoadFile("cube/cube.obj");
 	model_.commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::WHITE);
 	model_.transform.translation = transform.translation;
@@ -45,6 +49,11 @@ void HomingArrow::Init(lwp::WorldTransform transform) {
 
 	// 撃ちだす方向にモデルを回転
 	model_.transform.rotation += shootingAngle_;
+	
+	// イージング開始時のベクトル
+	LWP::Math::Vector3 velocity = { 0,0,1 };
+	startEaseVel_ = (velocity * LWP::Math::Matrix4x4::CreateRotateXYZMatrix(model_.transform.rotation));
+	startEaseVel_ = startEaseVel_.Normalize() * 30;
 }
 
 void HomingArrow::Update() {
@@ -56,6 +65,11 @@ void HomingArrow::Update() {
 	{
 		Death();
 	}
+
+	if (static_cast<int>(deadTimer_) % 10 == 0) {
+		//summonContrail_(model_.transform.GetWorldPosition());
+	}
+
 	// 寿命を進める
 	deadTimer_++;
 }
@@ -85,6 +99,12 @@ void HomingArrow::Attack() {
 		LWP::Math::Matrix4x4 rotateMatrix = LWP::Math::Matrix4x4::CreateRotateXYZMatrix(model_.transform.rotation);
 		velocity = velocity * rotateMatrix;
 		velocity_ = velocity.Normalize() * kSpeed;
+
+		// イージング
+		if (homingFrame_ >= kHomingEndFrame - homingStartFrame_) {
+			LWP::Math::Vector3 endEaseVel = { 0,0,0 };
+			velocity_ = LWP::Math::Vector3::Slerp(startEaseVel_, endEaseVel, deadTimer_ / homingStartFrame_);
+		}
 	}
 
 	// 加算

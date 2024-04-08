@@ -39,6 +39,9 @@
     <ClCompile Include="Game\Objects\Enemy\Boss\DashBoss.cpp" />
     <ClCompile Include="Game\Objects\Enemy\Boss\ArrowBoss.cpp" />
     <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\Arrow\HomingArrow.cpp" />
+    <ClCompile Include="Game\Objects\Player\PlayerConfing.cpp" />
+    <ClCompile Include="Game\Objects\Player\PlayerParametaer.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\Boss\JumpBoss.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.h" />
@@ -87,12 +90,14 @@
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp30.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerUp.h" />
     <ClInclude Include="Game\Objects\Player\Motion\IStatus.h" />
-    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\AttackRangeUp.h" />
     <ClInclude Include="Game\Objects\Enemy\Boss\ArrowBoss.h" />
     <ClInclude Include="Game\Objects\Upgrade\Derved\AllSpeedDelta.h" />
     <ClInclude Include="Game\Objects\Upgrade\Derved\AttackRangeUp2.h" />
     <ClInclude Include="Game\Objects\Upgrade\Derved\AttackTotalUp1.h" />
     <ClInclude Include="Game\Objects\Upgrade\Derved\LifeMaxUp10.h" />
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\Arrow\HomingArrow.h" />
+    <ClInclude Include="Game\Objects\Player\PlayerConfing.h" />
+    <ClInclude Include="Game\Objects\Player\PlayerParametaer.h" />
+    <ClInclude Include="Game\Objects\Enemy\Boss\JumpBoss.h" />
   </ItemGroup>
 </Project>

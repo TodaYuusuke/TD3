@@ -5,6 +5,7 @@
 #include "ArrowEnemy/ArrowEnemy.h"
 #include "Boss/DashBoss.h"
 #include "Boss/ArrowBoss.h"
+#include "Boss/JumpBoss.h"
 #include <random>
 #include <numbers>
 
@@ -36,6 +37,8 @@ public:
 	void DashBossSpown(lwp::Vector3 pos);
 	// 遠距離ボス
 	void ArrowBossSpown(lwp::Vector3 pos);
+	// ジャンプ攻撃するボス
+	void JumpBossSpown(lwp::Vector3 pos);
 #pragma endregion
 
 	/// Getter

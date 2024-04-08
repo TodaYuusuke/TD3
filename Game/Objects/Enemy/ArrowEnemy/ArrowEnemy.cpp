@@ -59,8 +59,6 @@ void ArrowEnemy::Update()
 		}
 		return false;
 		});
-
-
 }
 
 void ArrowEnemy::SetPosition(lwp::Vector3 pos)
@@ -115,7 +113,6 @@ void ArrowEnemy::Attack()
 		arrows_.push_back(arrow);
 		attackWaitTime_ = kAttackWaitTime;
 		isAttack = false;
-
 	}
 }
 

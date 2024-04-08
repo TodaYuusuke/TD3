@@ -62,6 +62,7 @@ public:
 	// 抜刀以外のfovイージングを終了
 	void EndEffectFov() {
 		fovState_ = FovState::RESET;
+		endFrame_ = kJustSlashFrame;
 		isEffectEasing_ = false;
 	}
 
@@ -109,7 +110,7 @@ private:/// 定数
 	// 視点移動の滑らかさ(0~1の間で設定)
 	const float kRotationSmoothness = 0.2f;
 	// カメラの後追い速度(0~1の間で設定)
-	const float kFollowRate = 0.1f;
+	const float kFollowRate = 0.25f;
 
 	// 追従対象との距離
 	const LWP::Math::Vector3 kTargetDist = { 0.0f,0.0f,-30.0f };

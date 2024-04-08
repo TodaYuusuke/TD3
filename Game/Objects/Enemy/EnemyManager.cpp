@@ -3,7 +3,10 @@
 
 void EnemyManager::Init()
 {
-	ArrowBossSpown(LWP::Math::Vector3{ 0,0,10 });
+	//JumpBossSpown(LWP::Math::Vector3{ 0,0,10 });
+	//ArrowBossSpown(LWP::Math::Vector3{ 0,0,10 });
+	NormalEnemySpown(LWP::Math::Vector3{ 10,0,0 });
+	//ShieldEnemySpown(LWP::Math::Vector3{ 10,0,0 });
 }
 
 void EnemyManager::Update()
@@ -121,6 +124,15 @@ void EnemyManager::DashBossSpown(lwp::Vector3 pos) {
 
 void EnemyManager::ArrowBossSpown(lwp::Vector3 pos) {
 	ArrowBoss* boss = new ArrowBoss();
+	boss->Initialize();
+	boss->SetCamera(followCamera_);
+	boss->SetTarget(player_);
+	boss->SetPosition(pos);
+	enemys_.push_back(boss);
+}
+
+void EnemyManager::JumpBossSpown(lwp::Vector3 pos) {
+	JumpBoss* boss = new JumpBoss();
 	boss->Initialize();
 	boss->SetCamera(followCamera_);
 	boss->SetTarget(player_);

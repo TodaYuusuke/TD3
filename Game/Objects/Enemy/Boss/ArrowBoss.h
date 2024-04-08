@@ -120,4 +120,9 @@ private:// プライベートな変数
 	std::list<Arrow*> normalArrows_;
 	// ホーミング弾
 	std::list<HomingArrow*> homingArrows_;
+
+
+
+	// パーティクル
+	LWP::Object::Particle missileContrail_;
 };
