@@ -53,7 +53,7 @@ void IEnemy::CreateCollider()
 	collider_.CreateFromPrimitive(&models_[0]);
 	// マスク処理
 	collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	collider_.mask.SetHitFrag(MaskLayer::Layer3);
+	collider_.mask.SetHitFrag(MaskLayer::Layer3 | MaskLayer::Layer7);
 	// 当たった時の処理
 	collider_.SetOnCollisionLambda([this](HitData data) {OnCollision(data);	});
 }
@@ -66,6 +66,13 @@ void IEnemy::OnCollision(const HitData& data)
 	{
 		// 当たったのがプレイヤーの居合攻撃なら
 		if (data.hit->mask.GetBelongFrag() & MaskLayer::Layer3)
+		{
+			// 攻撃力を参照してダメージを受ける
+			DecreaseHP(player_->parameter_.Attack.slashPower_);
+			return;
+		}
+		// 当たったのがプレイヤーの追加攻撃なら
+		if (data.hit->mask.GetBelongFrag() & MaskLayer::Layer7)
 		{
 			// 攻撃力を参照してダメージを受ける
 			DecreaseHP(player_->parameter_.Attack.slashPower_);

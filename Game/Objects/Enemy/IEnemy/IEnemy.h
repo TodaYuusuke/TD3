@@ -35,6 +35,11 @@ public:
 	/// 死亡時のアニメーション
 	/// </summary>
 	void DyingAnimation();
+	/// <summary>
+	/// 指定した分 HP を削る
+	/// </summary>
+	/// <param name="damage">ダメージ量</param>
+	void DecreaseHP(int damage);
 
 public: //*** ゲッターセッター ***//
 
@@ -43,6 +48,7 @@ public: //*** ゲッターセッター ***//
 	// 狙う対象をセット(今回は自機をセットする)
 	virtual void SetTarget(Player* player) { player_ = player; }
 	virtual void SetPosition(lwp::Vector3 pos) { models_[0].transform.translation = pos; }
+
 
 protected: //*** 継承クラスで呼び出す共通処理 ***//
 
@@ -54,11 +60,7 @@ protected: //*** 継承クラスで呼び出す共通処理 ***//
 	/// <param name="data">ヒットデータ</param>
 	virtual void OnCollision(const lwp::Collider::HitData& data);
 
-	/// <summary>
-	/// 指定した分 HP を削る
-	/// </summary>
-	/// <param name="damage">ダメージ量</param>
-	void DecreaseHP(int damage);
+
 
 protected:
 	std::vector<LWP::Primitive::Mesh> models_;

@@ -9,6 +9,7 @@
 #include "Game/Objects/Upgrade/Derved/AttackRangeDelta.h"
 #include "Game/Objects/Upgrade/Derved/AttackTotalDelta.h"
 #include "Game/Objects/Upgrade/Derved/LifeMaxDelta.h"
+#include "Game/Objects/Upgrade/Derved/PursuitFlag.h"
 #pragma endregion
 
 using namespace LWP;
@@ -30,15 +31,16 @@ void L::UpgradeManager::Init()
 	upgrades_.clear();
 	// アップグレードをすべて取得
 	//upgrades_.push_back(new AllSpeedDelta);
-	upgrades_.push_back(new AllSpeedDelta(10));
-	upgrades_.push_back(new AllSpeedPerDelta(20));
-	upgrades_.push_back(new AllSpeedPerDelta(30));
-	upgrades_.push_back(new AllSpeedPerDelta(40));
+	//upgrades_.push_back(new AllSpeedDelta(10));
+	//upgrades_.push_back(new AllSpeedPerDelta(20));
+	//upgrades_.push_back(new AllSpeedPerDelta(30));
+	//upgrades_.push_back(new AllSpeedPerDelta(40));
+	upgrades_.push_back(new PursuitFlag);
 
-	upgrades_.push_back(new LifeMaxDelta(1));
-	upgrades_.push_back(new LifeMaxDelta(1));
-	upgrades_.push_back(new LifeMaxDelta(1));
-	upgrades_.push_back(new LifeMaxDelta(1));
+	//upgrades_.push_back(new LifeMaxDelta(1));
+	//upgrades_.push_back(new LifeMaxDelta(1));
+	//upgrades_.push_back(new LifeMaxDelta(1));
+	//upgrades_.push_back(new LifeMaxDelta(1));
 	//upgrades_.push_back(new AllSpeedPerDelta(40));
 
 

@@ -31,6 +31,13 @@ public:	//*** パブリック関数 ***//
 	/// </summary>
 	void ResetParameter();
 
+	/// <summary>
+	/// パラメーターを取得
+	/// </summary>
+	UpgradeParameter GetParameter() {
+		return param;
+	};
+
 public: //*** オペレーターオーバーロード ***//
 
 	PlayerParameter operator*(const PlayerParameter& obj);

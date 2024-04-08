@@ -72,6 +72,8 @@ struct UpgradeParameter
 	UpgradeSpeed Speed;
 	// 時間のみ
 	UpgradeTime Time;
+	// 攻撃後追撃
+	bool pursuitFlag = false;
 };
 
 namespace L
