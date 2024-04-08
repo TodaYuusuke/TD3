@@ -9,7 +9,7 @@
 #include "../FollowCamera/FollowCamera.h"
 
 #include "Game/Objects/Player/Weapon/Weapon.h"
-#include "Game/Objects/Level/Level.h"
+#include "Level/Level.h"
 #include "Game/Objects/Player/SlashPanel.h"
 #include "Status/IStatus.h"
 #include "PlayerConfing.h"
