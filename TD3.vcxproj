@@ -196,6 +196,8 @@
     <ClInclude Include="Game\Objects\Player\Status\Derived\Moment.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Slash.h" />
     <ClInclude Include="Game\Objects\Player\Status\IStatus.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\LargePower.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\MediumPower.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\SmallPower.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\SkillList.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\AllSpeedDelta.h" />

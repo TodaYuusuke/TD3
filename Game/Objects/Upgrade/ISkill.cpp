@@ -30,3 +30,16 @@ void L::ISkill::ShowUI(const LWP::Math::Vector2& pos)
 	sprite_.transform.translation.x = pos.x;
 	sprite_.transform.translation.y = pos.y;
 }
+
+void L::ISkill::DebugTree()
+{
+	if (ImGui::TreeNode(GetUpgradeName().c_str()))
+	{
+		for (IUpgrade* up : upgrades_)
+		{
+			ImGui::Text(up->GetUpgradeName().c_str());
+		}
+		ImGui::TreePop();
+		ImGui::Separator();
+	}
+}

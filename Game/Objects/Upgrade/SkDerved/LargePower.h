@@ -4,30 +4,19 @@
 namespace L
 {
 	/// <summary>
-	/// 小さな力
+	/// 強力な力
 	/// </summary>
-	class SmallPower : public ISkill
+	class LargePower : public ISkill
 	{
 	public:
 		/// <summary>
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
-		SmallPower()
+		LargePower()
 		{
 			upgrades_.clear();
-			upgrades_.push_back(new PowerDelta(5.0f));
+			upgrades_.push_back(new PowerPerDelta(40.0f));
 		}
-
-		///// <summary>
-		///// アップグレード数を返す
-		///// <para>オーバーロードする</para>
-		///// </summary>
-		///// <returns>配列数</returns>
-		//size_t GetUpgradeNum() override
-		//{
-		//	return 2;
-		//}
-
 
 		/// <summary>
 		/// アップグレードの内容
@@ -47,7 +36,7 @@ namespace L
 
 		std::string GetUpgradeName() override
 		{
-			return "SmallPower";
+			return "LargePower";
 		}
 
 	};

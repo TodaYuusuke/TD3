@@ -43,18 +43,7 @@ namespace L
 		/// <summary>
 		/// デバッグ表示で Tree を作る関数
 		/// </summary>
-		virtual void DebugTree()
-		{
-			if (ImGui::TreeNode("PowerUp"))
-			{
-				for (IUpgrade* up : upgrades_)
-				{
-					ImGui::Text(up->GetUpgradeName().c_str());
-				}
-				ImGui::TreePop();
-				ImGui::Separator();
-			}
-		}
+		virtual void DebugTree();
 
 		/// <summary>
 		/// アップグレードスキルの名前を返す関数
