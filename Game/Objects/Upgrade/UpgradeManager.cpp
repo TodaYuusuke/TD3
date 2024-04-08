@@ -4,6 +4,7 @@
 #include "Game/Objects/GameTimer/GameTimer.h"
 #pragma region Upgrades
 #include "Game/Objects/Upgrade/SkDerved/SkillList.h"
+#include "Game/Objects/Upgrade/UpDerved/PursuitFlag.h"
 #pragma endregion
 
 using namespace LWP;
@@ -26,6 +27,7 @@ void L::UpgradeManager::Init()
 	// アップグレードをすべて取得
 	upgrades_.push_back(new SmallPower());
 	upgrades_.push_back(new MediumPower());
+	upgrades_.push_back(new LargePower());
 	upgrades_.push_back(new LargePower());
 
 
