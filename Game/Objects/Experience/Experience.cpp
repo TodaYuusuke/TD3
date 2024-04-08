@@ -1,5 +1,7 @@
 #include "Experience.h"
 
+#include "Game/Objects/GameMask.h"
+
 using namespace LWP;
 using namespace LWP::Resource;
 using namespace LWP::Object::Collider;
@@ -52,10 +54,10 @@ void Experience::Initialize(const lwp::Vector3& pos)
 void Experience::CreateCollision()
 {
 	// マスク
-	collider_.mask.SetBelongFrag(MaskLayer::Layer5);
+	collider_.mask.SetBelongFrag(GameMask::Exp());
 	// プレイヤーと経験値取得範囲
 	// プレイヤーとの当たり判定は消してもいい
-	collider_.mask.SetHitFrag(MaskLayer::Layer4);
+	collider_.mask.SetHitFrag(GameMask::ExpGetter());
 	// 別個で用意した当たった時の関数
 	// 状態を切り替えたい
 	collider_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollision(data); });
