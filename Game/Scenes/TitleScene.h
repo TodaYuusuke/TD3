@@ -2,11 +2,11 @@
 #include <scene/IScene.h>
 
 #pragma region GameInclude
+#include "Game/Objects/GameTimer/GameTimer.h"
 #include "Game/Objects/FollowCamera/FollowCamera.h"
 #include "Game/Objects/Player/Player.h"
 #include "Game/Objects/Enemy/EnemyManager.h"
 #include "Game/Objects/Experience/ExpManager.h"
-//#include "Game/Scenes/UpgradeScreen/UpgradeScreen.h"
 #include "Game/Objects/Upgrade/UpgradeManager.h"
 #pragma endregion
 
@@ -32,11 +32,14 @@ public: //*** 関数群 ***//
 
 	// ジャスト抜刀開始
 	void StartJustSlash();
-	
+
 	// ジャスト抜刀終了
 	void EndJustSlash();
 
 private: //*** 変数群 ***//
+
+	// ゲーム内タイマー
+	GameTimer* gameTimer_ = nullptr;
 
 	// 追従カメラ
 	std::unique_ptr<FollowCamera> followCamera_;

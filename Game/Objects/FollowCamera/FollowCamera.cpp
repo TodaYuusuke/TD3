@@ -33,11 +33,6 @@ void FollowCamera::Update() {
 
 	// ジャスト抜刀時のFovの更新処理
 	JustSlashUpdate();
-
-	ImGui::Begin("FollowCamera");
-	ImGui::DragFloat3("main:translation", &pCamera_->transform.translation.x, 0, -100, 100);
-	ImGui::DragFloat3("inter:translation", &interTarget_.x, 0, -100, 100);
-	ImGui::End();
 }
 
 void FollowCamera::ResetAngle() {

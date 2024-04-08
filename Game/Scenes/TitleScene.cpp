@@ -9,6 +9,10 @@ using namespace LWP::Utility;
 // 初期化
 void TItleScene::Initialize()
 {
+	// タイマー
+	gameTimer_ = GameTimer::GetInstance();
+	gameTimer_->Initialize();
+
 	// プレイヤー
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
@@ -48,11 +52,18 @@ void TItleScene::Initialize()
 	//level_->SetUpgradeScreen(scUpgrade_.get());
 	upgradeManager_ = std::make_unique<L::UpgradeManager>();
 	upgradeManager_->Init();
+
+	// ゲームが始まってから計測開始
+	gameTimer_->Start();
 }
 
 // 更新
 void TItleScene::Update()
 {
+
+	// 時間を計測
+	gameTimer_->Update();
+
 	// スローを確認
 	if (player_->GetIsJustSlashing())
 	{
@@ -72,7 +83,6 @@ void TItleScene::Update()
 
 	if (!upgradeManager_->GetLevelUpFlag())
 	{
-
 		// プレイヤー
 		player_->Update();
 
