@@ -7,7 +7,7 @@ using namespace LWP::Resource;
 void L::ISkill::Init()
 {
 	// スプライトを生成
-	sprite_ = LWP::Primitive::Sprite();
+	//sprite_ = LWP::Primitive::Sprite();
 	// 画像を設定
 	sprite_.texture = LoadTexture(GetTexturePass());
 	sprite_.anchorPoint = { 0.5f,0.5f };

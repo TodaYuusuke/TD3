@@ -2,6 +2,9 @@
 
 #include <Adapter.h>
 
+#include "GameCounter.h"
+
+
 /// <summary>
 /// シングルトンインスタンス
 /// </summary>
@@ -35,12 +38,12 @@ public: //*** パブリック関数 ***//
 	/// </summary>
 	void Update();
 
-	/// <summary>
-	/// デバッグ
-	/// </summary>
-	void DebugWindow();
-
 private: //*** プライベート変数 ***//
+
+	// 中心からの距離
+	float kPaddingCenter_ = 50.0f;
+	// 数字同士の距離
+	float kPaddingNumber_ = 60.0f;
 
 	// 計測するかのフラグ
 	bool isWatch_ = false;
@@ -50,5 +53,26 @@ private: //*** プライベート変数 ***//
 
 	// 今の経過時間を格納
 	uint32_t currentSec_ = 0u;
+
+	// タイマーを表示する場所
+	lwp::Vector3 timerPosition_;
+
+	// 秒
+	GameCounter countS0_;
+	GameCounter countS1_;
+	// 分
+	GameCounter countM0_;
+	GameCounter countM1_;
+
+private: //*** プライベート関数 ***//
+
+	/// <summary>
+	/// デバッグ
+	/// </summary>
+	void DebugWindow();
+
+
+	
+
 
 };
