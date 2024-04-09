@@ -56,14 +56,14 @@ private:// 定数
 	const float kHomingEndFrame = 180;
 
 	// ホーミングの精度が変化する距離
-	const float kHomingStrengthRange = 2.0f;
+	const float kHomingStrengthRange = 4.0f;
 	// 自機との距離が遠い時のホーミング精度
-	const float kLongDistHomingAccuracy = 0.6f;
+	const float kLongDistHomingAccuracy = 0.2f;
 	// 自機との距離が近い時のホーミング精度
 	const float kShortDistHomingAccuracy = 0.01f;
 
 	// 弾の速度
-	const float kSpeed = 30.0f;
+	const float kSpeed = 40.0f;
 
 private:
 	Player* player_;

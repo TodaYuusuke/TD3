@@ -123,14 +123,16 @@ void HomingArrow::Death() {
 }
 
 void HomingArrow::HomingUpdate() {
+	// 自機座標より少し上をホーミング
+	LWP::Math::Vector3 playerPos = { player_->GetWorldTransform()->translation.x, player_->GetWorldTransform()->translation.y + 0.5f, player_->GetWorldTransform()->translation.z };
 	// 弾から自機への方向ベクトルを算出
-	LWP::Math::Vector3 toPlayer = player_->GetWorldTransform()->translation - model_.transform.translation;
+	LWP::Math::Vector3 toPlayer = playerPos - model_.transform.translation;
 	// 正規化
 	toPlayer = toPlayer.Normalize();
 	velocity_ = velocity_.Normalize();
 
 	// 球面線形保管により、今の速度と自キャラへのベクトルを内挿し、新たな速度とする
-	velocity_ = LWP::Math::Vector3::Lerp(velocity_, toPlayer, homingAccuracy_);
+	velocity_ = LWP::Math::Vector3::Slerp(velocity_, toPlayer, homingAccuracy_);
 
 	velocity_ *= kSpeed;
 

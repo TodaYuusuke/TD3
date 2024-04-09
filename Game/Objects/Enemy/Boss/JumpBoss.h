@@ -44,6 +44,11 @@ private:// プライベートなメンバ関数
 	void Attack()override;
 	// 当たり判定の作成
 	void CreateCollider() override;
+	// 衝突応答
+	void OnCollision(lwp::Collider::HitData& data);
+
+	// 衝撃波の広がる処理
+	void WaveAttackSpread();
 
 	// 攻撃条件
 	bool CheckAttackRange();
@@ -92,6 +97,9 @@ private:// 定数
 	const float kJumpHighestPoint = 3.0f;
 
 private:// プライベートな変数
+	// 当たり判定をオンオフするための変数
+	lwp::Collider::Sphere waveAttackCollider_;
+
 	// ジャンプ方向ベクトル
 	LWP::Math::Vector3 jumpVel_;
 
@@ -99,12 +107,16 @@ private:// プライベートな変数
 	LWP::Math::Vector3 jumpGoalPos_;
 	// ジャンプフラグ
 	bool isJump_;
+	// 衝撃波フラグ
+	bool isWaveAttack_;
 
 	// ジャンプ挙動に使用するイージングデータ
 	EaseData jumpEase_;
 
 	// 現在のフレーム
 	int currentFrame_;
+	// 衝撃波の経過フレーム
+	float waveAttackFrame_;
 
 	// 現在の振るまい
 	Behavior behavior_ = Behavior::kRoot;

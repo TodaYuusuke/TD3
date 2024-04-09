@@ -1,5 +1,4 @@
 #include "Level.h"
-
 #include "Game/Objects/Upgrade/UpgradeManager.h"
 
 using namespace LWP;

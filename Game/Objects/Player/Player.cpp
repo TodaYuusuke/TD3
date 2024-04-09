@@ -256,6 +256,7 @@ void Player::CreatePlayerCollision()
 
 void Player::CreateWeaponCollision()
 {
+	
 	// 当たり判定を設定
 	//colliders_.weapon_ = LWP::Object::Collider::Capsule();
 	// 武器との当たり判定を取る

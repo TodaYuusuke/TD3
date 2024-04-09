@@ -3,9 +3,9 @@
 
 void EnemyManager::Init()
 {
-	//JumpBossSpown(LWP::Math::Vector3{ 0,0,10 });
+	JumpBossSpown(LWP::Math::Vector3{ 0,0,10 });
 	//ArrowBossSpown(LWP::Math::Vector3{ 0,0,10 });
-	NormalEnemySpown(LWP::Math::Vector3{ 10,0,0 });
+	//NormalEnemySpown(LWP::Math::Vector3{ 10,0,0 });
 	//ShieldEnemySpown(LWP::Math::Vector3{ 10,0,0 });
 }
 
