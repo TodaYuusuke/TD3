@@ -6,13 +6,13 @@ namespace L
 	/// <summary>
 	/// そこそこの力
 	/// </summary>
-	class MediumPower : public ISkill
+	class Skill_PowerUp2 : public ISkill
 	{
 	public:
 		/// <summary>
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
-		MediumPower()
+		Skill_PowerUp2()
 		{
 			upgrades_.clear();
 			upgrades_.push_back(new PowerDelta(5.0f));
@@ -48,7 +48,7 @@ namespace L
 
 		std::string GetUpgradeName() override
 		{
-			return "MediumPower";
+			return "Skill_PowerUp2";
 		}
 
 	};

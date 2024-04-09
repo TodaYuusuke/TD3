@@ -6,13 +6,13 @@ namespace L
 	/// <summary>
 	/// 強力な力
 	/// </summary>
-	class LargePower : public ISkill
+	class Skill_PowerUp3 : public ISkill
 	{
 	public:
 		/// <summary>
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
-		LargePower()
+		Skill_PowerUp3()
 		{
 			upgrades_.clear();
 			upgrades_.push_back(new PowerPerDelta(40.0f));
@@ -36,7 +36,7 @@ namespace L
 
 		std::string GetUpgradeName() override
 		{
-			return "LargePower";
+			return "Skill_PowerUP3";
 		}
 
 	};
