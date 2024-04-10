@@ -163,8 +163,8 @@
     <ClCompile Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.cpp" />
     <ClCompile Include="Game\Objects\FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="Game\Objects\GameTimer\GameTimer.cpp" />
-    <ClCompile Include="Game\Objects\Player\PlayerConfing.cpp" />
-    <ClCompile Include="Game\Objects\Player\PlayerParametaer.cpp" />
+    <ClCompile Include="Game\Objects\Player\Config\PlayerConfing.cpp" />
+    <ClCompile Include="Game\Objects\Player\Parameter\PlayerParametaer.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Damage.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Moment.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Slash.cpp" />
@@ -181,6 +181,7 @@
     <ClCompile Include="Game\Objects\Player\SlashPanel.cpp" />
     <ClCompile Include="Game\Objects\Upgrade\UpgradeManager.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Move.cpp" />
+    <ClCompile Include="Game\Objects\Player\HP\PlayerHP.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Objects\GameTimer\GameCounter.h" />
@@ -196,8 +197,8 @@
     <ClInclude Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.h" />
     <ClInclude Include="Game\Objects\FollowCamera\FollowCamera.h" />
     <ClInclude Include="Game\Objects\GameTimer\GameTimer.h" />
-    <ClInclude Include="Game\Objects\Player\PlayerConfing.h" />
-    <ClInclude Include="Game\Objects\Player\PlayerParametaer.h" />
+    <ClInclude Include="Game\Objects\Player\Config\PlayerConfing.h" />
+    <ClInclude Include="Game\Objects\Player\Parameter\PlayerParametaer.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Damage.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Moment.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Slash.h" />
@@ -231,6 +232,7 @@
     <ClInclude Include="Game\Objects\Upgrade\UpgradeManager.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Idol.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Move.h" />
+    <ClInclude Include="Game\Objects\Player\HP\PlayerHP.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

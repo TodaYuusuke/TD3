@@ -8,12 +8,12 @@
 #include "Game/Objects/Upgrade/IUpgrade.h"
 #include "../FollowCamera/FollowCamera.h"
 
-#include "Game/Objects/Player/Weapon/Weapon.h"
 #include "Level/Level.h"
-#include "Game/Objects/Player/SlashPanel.h"
 #include "Status/IStatus.h"
-#include "PlayerConfing.h"
-#include "PlayerParametaer.h"
+#include "Game/Objects/Player/Weapon/Weapon.h"
+#include "Game/Objects/Player/SlashPanel.h"
+#include "Game/Objects/Player/Config/PlayerConfing.h"
+#include "Game/Objects/Player/Parameter/PlayerParametaer.h"
 
 #pragma region
 
