@@ -9,8 +9,8 @@ class GameCounter
 {
 public: //*** パブリック関数 ***//
 
-	// わかりやすく位置とフラグを設定
-	lwp::Vector3 position_ = { 0.0f,0.0f,0.0f };
+	// わかりやすく wtf とフラグを設定
+	lwp::WorldTransform transform_;
 
 	bool isActive_ = false;
 
