@@ -14,14 +14,14 @@ void GameCounter::Initialize(const std::string& textureName)
 	sprite_.isUI = true;
 	sprite_.isActive = false;
 
-	position_ = { 0.0f,0.0f };
+	transform_.translation = { 0.0f,0.0f };
 	isActive_ = false;
 	Reset();
 }
 
 void GameCounter::Update()
 {
-	sprite_.transform.translation = position_;
+	sprite_.transform = transform_;
 	sprite_.isActive = isActive_;
 	if (count_ != preCount_)
 	{

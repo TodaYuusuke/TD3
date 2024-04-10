@@ -20,23 +20,24 @@ void GameTimer::Initialize()
 
 	// タイマーを綺麗に表示する
 	countS0_.Initialize();
-	countS0_.position_ = timerPosition_;
-	countS0_.position_.x += kPaddingCenter_ + kPaddingNumber_;
+	countS0_.transform_.translation = timerPosition_;
+	countS0_.transform_.translation.x += kPaddingCenter_ + kPaddingNumber_;
 	countS0_.isActive_ = true;
 	countS1_.Initialize();
-	countS1_.position_ = timerPosition_;
-	countS1_.position_.x += kPaddingCenter_;
+	countS1_.transform_.translation = timerPosition_;
+	countS1_.transform_.translation.x += kPaddingCenter_;
 	countS1_.isActive_ = true;
 	countM0_.Initialize();
-	countM0_.position_ = timerPosition_;
-	countM0_.position_.x -= kPaddingCenter_;
+	countM0_.transform_.translation = timerPosition_;
+	countM0_.transform_.translation.x -= kPaddingCenter_;
 	countM0_.isActive_ = true;
 	countM1_.Initialize();
-	countM1_.position_ = timerPosition_;
-	countM1_.position_.x -= kPaddingCenter_ + kPaddingNumber_;
+	countM1_.transform_.translation = timerPosition_;
+	countM1_.transform_.translation.x -= kPaddingCenter_ + kPaddingNumber_;
 	countM1_.isActive_ = true;
 	// 10 分生存
 	countM1_.Reset(1);
+
 }
 
 void GameTimer::Start()
@@ -106,14 +107,14 @@ void GameTimer::DebugWindow()
 		ImGui::DragFloat("PaddingCenter", &kPaddingCenter_) ||
 		ImGui::DragFloat("PaddingNumber", &kPaddingNumber_))
 	{
-		countS0_.position_ = timerPosition_;
-		countS0_.position_.x += kPaddingCenter_ + kPaddingNumber_;
-		countS1_.position_ = timerPosition_;
-		countS1_.position_.x += kPaddingCenter_;
-		countM0_.position_ = timerPosition_;
-		countM0_.position_.x -= kPaddingCenter_;
-		countM1_.position_ = timerPosition_;
-		countM1_.position_.x -= kPaddingCenter_ + kPaddingNumber_;
+		countS0_.transform_.translation = timerPosition_;
+		countS0_.transform_.translation.x += kPaddingCenter_ + kPaddingNumber_;
+		countS1_.transform_.translation = timerPosition_;
+		countS1_.transform_.translation.x += kPaddingCenter_;
+		countM0_.transform_.translation = timerPosition_;
+		countM0_.transform_.translation.x -= kPaddingCenter_;
+		countM1_.transform_.translation = timerPosition_;
+		countM1_.transform_.translation.x -= kPaddingCenter_ + kPaddingNumber_;
 	}
 
 	ImGui::End();
