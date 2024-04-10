@@ -606,7 +606,7 @@ void Player::DebugTimes()
 		if (ImGui::TreeNode("Base"))
 		{
 			ImGui::DragFloat("ROOT", &config_.Time_.ROOTBASE_, 0.001f);
-			ImGui::DragFloat("MOVE", &config_.Time_.MOVEBASE_, 0.001f);
+			//ImGui::DragFloat("MOVE", &config_.Time_.MOVEBASE_, 0.001f);
 			ImGui::DragFloat("SLASH", &config_.Time_.SLASHBASE_, 0.001f);
 			ImGui::DragFloat("MOMENT", &config_.Time_.MOMENTBASE_, 0.001f);
 			ImGui::DragFloat("DAMAGE", &config_.Time_.DAMAGEBASE_, 0.001f);
@@ -614,7 +614,7 @@ void Player::DebugTimes()
 			ImGui::TreePop();
 			ImGui::Separator();
 		}
-		if (ImGui::TreeNode("ROOT"))
+		/*if (ImGui::TreeNode("ROOT"))
 		{
 			ImGui::TreePop();
 			ImGui::Separator();
@@ -623,7 +623,7 @@ void Player::DebugTimes()
 		{
 			ImGui::TreePop();
 			ImGui::Separator();
-		}
+		}*/
 		if (ImGui::TreeNode("SLASH"))
 		{
 			ImGui::DragFloat("JUSTTAKE", &config_.Time_.JUSTTAKETIME_, 0.001f, 0.0f, config_.Time_.SLASHBASE_);
