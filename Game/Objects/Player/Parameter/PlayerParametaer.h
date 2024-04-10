@@ -3,7 +3,7 @@
 
 #include <Adapter.h>
 #include "Game/Objects/Upgrade/IUpgrade.h"
-#include "PlayerConfing.h"
+#include "Game/Objects/Player/Config/PlayerConfing.h"
 
 /// <summary>
 /// プレイヤーの持つパラメーターをまとめたクラス

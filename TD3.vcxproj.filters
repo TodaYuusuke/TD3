@@ -27,7 +27,6 @@
     <ClCompile Include="Game\Objects\Enemy\Boss\DashBoss.cpp" />
     <ClCompile Include="Game\Objects\Experience\Experience.cpp" />
     <ClCompile Include="Game\Objects\Experience\ExpManager.cpp" />
-    <ClCompile Include="Game\Objects\Level\Level.cpp" />
     <ClCompile Include="Game\Objects\Upgrade\UpgradeManager.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\IStatus.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Idol.cpp" />
@@ -36,9 +35,14 @@
     <ClCompile Include="Game\Objects\Player\Status\Derived\Damage.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Moment.cpp" />
     <ClCompile Include="Game\Objects\Enemy\Boss\DashBoss.cpp" />
-    <ClCompile Include="Game\Objects\Player\PlayerParametaer.cpp" />
-    <ClCompile Include="Game\Objects\Player\PlayerConfing.cpp" />
+    <ClCompile Include="Game\Objects\Player\Parameter\PlayerParametaer.cpp" />
+    <ClCompile Include="Game\Objects\Player\Config\PlayerConfing.cpp" />
     <ClCompile Include="Game\Objects\Upgrade\ISkill.cpp" />
+    <ClCompile Include="Game\Objects\GameTimer\GameCounter.cpp" />
+    <ClCompile Include="Game\Objects\GameTimer\GameTimer.cpp" />
+    <ClCompile Include="Game\Objects\Upgrade\Function\Pursuit.cpp" />
+    <ClCompile Include="Game\Objects\Player\Level\Level.cpp" />
+    <ClCompile Include="Game\Objects\Player\HP\PlayerHP.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.h" />
@@ -66,7 +70,6 @@
     <ClInclude Include="Game\Objects\Enemy\Boss\DashBoss.h" />
     <ClInclude Include="Game\Objects\Experience\Experience.h" />
     <ClInclude Include="Game\Objects\Experience\ExpManager.h" />
-    <ClInclude Include="Game\Objects\Level\Level.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp10.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp30.h" />
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerUp.h" />
@@ -85,8 +88,8 @@
     <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerUp.h" />
     <ClInclude Include="Game\Objects\Player\Motion\IStatus.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\AllSpeedDelta.h" />
-    <ClInclude Include="Game\Objects\Player\PlayerParametaer.h" />
-    <ClInclude Include="Game\Objects\Player\PlayerConfing.h" />
+    <ClInclude Include="Game\Objects\Player\Parameter\PlayerParametaer.h" />
+    <ClInclude Include="Game\Objects\Player\Config\PlayerConfing.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\PowerPerDelta.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\PowerDelta.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\AttackRangeDelta.h" />
@@ -96,6 +99,15 @@
     <ClInclude Include="Game\Objects\Upgrade\ISkill.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\UpgradeList.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\SkillList.h" />
-    <ClInclude Include="Game\Objects\Upgrade\SkDerved\SmallPower.h" />
+    <ClInclude Include="Game\Objects\GameTimer\GameCounter.h" />
+    <ClInclude Include="Game\Objects\GameMask.h" />
+    <ClInclude Include="Game\Objects\GameTimer\GameTimer.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp3.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp2.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp1.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Derved\PursuitFlag.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Function\Pursuit.h" />
+    <ClInclude Include="Game\Objects\Player\Level\Level.h" />
+    <ClInclude Include="Game\Objects\Player\HP\PlayerHP.h" />
   </ItemGroup>
 </Project>
