@@ -55,6 +55,11 @@ void GameTimer::Reset()
 	isWatch_ = true;
 	checkSec_ = 0.0f;
 	currentSec_ = 0u;
+	countS0_.Reset(0);
+	countS1_.Reset(0);
+	countM0_.Reset(0);
+	// 10 分生存
+	countM1_.Reset(1);
 }
 
 void GameTimer::Update()
