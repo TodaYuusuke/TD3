@@ -21,7 +21,7 @@ public: //*** サブクラス ***//
 		float SLASH_ = 100.0f;
 		// プレイヤーの後隙
 		// 移動する距離
-		float MOMENT_ = 10.0f;
+		float MOMENT_ = 5.0f;
 	};
 
 	// 秒時間

@@ -18,7 +18,7 @@ void Moment::Init(Player* p)
 void Moment::Reset()
 {
 	elapsedTime_ = 0.0f;
-	EndTime_ = player_->config_.Time_.MOMENTBASE_;
+	EndTime_ = player_->config_.Time_.MOMENTBASE_ + (player_->momentData_.relationSlash_ * player_->config_.Time_.MOMENTINCREMENT_);
 	// デルタタイム変更
 	player_->EndJust();
 	player_->momentData_.relationSlash_ = player_->slashData_.relationSlash_;
@@ -46,7 +46,7 @@ void Moment::Update()
 		player_->demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 		// パラメータも使う
-		moveVector *= player_->parameter_.Speed.move_ * (float)lwp::GetDeltaTime();
+		moveVector *= player_->parameter_.Speed.moment_ * (float)lwp::GetDeltaTime();
 
 		player_->demoModel_.transform.translation += moveVector;
 	}

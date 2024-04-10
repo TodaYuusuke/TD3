@@ -38,14 +38,28 @@ void Idol::Reset()
 void Idol::Update()
 {
 	// 移動に向かう
-	if (player_->flag_.isInputMove_)
+	/*if (player_->flag_.isInputMove_)
 	{
 		player_->RegistStatus(Behavior::Move);
-	}
+	}*/
 	// 居合するか
 	if (player_->flag_.isInputSlash_)
 	{
 		player_->RegistStatus(Behavior::Slash);
+	}
+	// 移動入力されていたら
+	if (player_->flag_.isInputMove_)
+	{
+		// 移動方向をカメラに合わせる
+		lwp::Vector3 moveVector = player_->GetVectorTranspose(player_->destinate_);
+
+		// モデル回転
+		player_->demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+
+		// パラメータも使う
+		moveVector *= player_->parameter_.Speed.move_ * lwp::GetDeltaTimeF();
+
+		player_->demoModel_.transform.translation += moveVector;
 	}
 
 	// 経過時間を加算
@@ -54,13 +68,7 @@ void Idol::Update()
 	{
 		player_->RegistStatus(Behavior::Root);
 	}
-	// 移動を続ける
-	player_->demoModel_.transform.translation += player_->rootData_.velocity_;
-	// 移動量を少なくする
-	player_->rootData_.velocity_ =
-		0.2f <= player_->rootData_.velocity_.Length() ?
-		player_->rootData_.velocity_ *= 0.85f :
-		lwp::Vector3(0.0f, 0.0f, 0.0f);
+	
 }
 
 void Idol::CreateMotions()
