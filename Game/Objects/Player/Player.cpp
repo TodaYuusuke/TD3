@@ -51,7 +51,7 @@ void Player::Initialize()
 	statuses_.clear();
 
 	statuses_.push_back(new Idol);
-	statuses_.push_back(new Move);
+	//statuses_.push_back(new Move);
 	statuses_.push_back(new Slash);
 	statuses_.push_back(new Moment);
 	statuses_.push_back(new Damage);
@@ -226,7 +226,6 @@ void Player::InitRootData()
 {
 	//rootData_.cBASETIME = 0.5f;
 	rootData_.maxTime_ = 0.0f;
-	rootData_.velocity_ = { 0.0f,0.0f,0.0f };
 }
 
 void Player::InitMoveData()
@@ -466,14 +465,14 @@ void Player::CheckBehavior()
 		case Behavior::Root:
 			reqBehavior_ = Behavior::Root;
 			break;
-		case Behavior::Move:
-			// 移動は待機状態からの派生とか
-			if (behavior_ == Behavior::Root ||
-				behavior_ == Behavior::Move)
-			{
-				reqBehavior_ = Behavior::Move;
-			}
-			break;
+		//case Behavior::Move:
+		//	// 移動は待機状態からの派生とか
+		//	if (behavior_ == Behavior::Root ||
+		//		behavior_ == Behavior::Move)
+		//	{
+		//		reqBehavior_ = Behavior::Move;
+		//	}
+		//	break;
 		case Behavior::Slash:
 			// 居合に入る条件を記述
 			// 最大回数に達していないか
@@ -535,12 +534,8 @@ void Player::DebugWindow()
 	ImGui::Bullet();	ImGui::Text("Num / Max(Base)");
 	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", slashData_.relationSlash_, slashData_.maxRelation_, parameter_.Attack.slashNum_);
 	ImGui::Text("INCREMENTMOMENT : %.3f", config_.Time_.MOMENTINCREMENT_);
-	ImGui::Text("Invincible : "); ImGui::SameLine();
-	ImGui::Text(flag_.isInvincible_ ? "TRUE" : "FALSE");
 
 	ImGui::Separator();
-	ImGui::Text("%f", rootData_.velocity_.x);
-	ImGui::Text("%f", rootData_.velocity_.z);
 
 	ImGui::Text("Behavior : ");
 	ImGui::SameLine();
@@ -551,11 +546,11 @@ void Player::DebugWindow()
 		ImGui::Text("BaseFrame : %.3f", config_.Time_.ROOTBASE_);
 		ImGui::Text("MaxFrame  : %.3f", rootData_.maxTime_);
 		break;
-	case Behavior::Move:
+	/*case Behavior::Move:
 		ImGui::Text("MOVE");
 		ImGui::Text("BaseFrame : %.3f", config_.Time_.MOVEBASE_);
 		ImGui::Text("MaxFrame  : %.3f", moveData_.maxTime_);
-		break;
+		break;*/
 	case Behavior::Slash:
 		ImGui::Text("SLASH");
 		ImGui::Text("BaseFrame : %.3f", config_.Time_.SLASHBASE_);
@@ -586,18 +581,6 @@ void Player::DebugWindow()
 	DebugParcentages();
 
 	ImGui::Separator();
-
-	static float multi = 1.0f;
-	if (ImGui::DragFloat("DeltaMulti", &multi, 0.001f))
-	{
-		lwp::SetDeltaTimeMultiply(multi);
-	}
-	static bool exec = false;
-	ImGui::Checkbox("AppleyDelta", &exec);
-	if (exec)
-	{
-		lwp::SetDeltaTimeMultiply(multi);
-	}
 
 	ImGui::End();
 }

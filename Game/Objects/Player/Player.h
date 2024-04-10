@@ -45,7 +45,6 @@ private: //*** サブクラス ***//
 
 	struct RootData : public BaseData
 	{
-		lwp::Vector3 velocity_ = { 0.0f,0.0f,0.0f };	// 移動量
 	};
 
 	struct MoveData : public BaseData
