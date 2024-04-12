@@ -17,7 +17,7 @@ public: //*** パブリック関数 ***//
 
 
 	// wtf
-	lwp::WorldTransform transform_;
+	//lwp::WorldTransform transform_;
 
 	// 表示するか
 	bool isActive_;
@@ -53,11 +53,17 @@ public: //*** パブリック関数 ***//
 private: //*** プライベート変数 ***//
 
 	// HP バーを固定のスケール指定できるようにする
+	lwp::Vector3 kHPBackConvertScale_ = { 1.0f,1.0f,1.0f };
+	// HP バーの下の画像の基本サイズにプラスする値
+	lwp::Vector3 kHPBackPlus_ = { 10.0f,10.0f,1.0f };
+
+	// HP バーを固定のスケール指定できるようにする
 	lwp::Vector3 kHPSpriteConvertScale_ = { 1.0f,1.0f,1.0f };
-
 	// HP バーの基本サイズ
-	lwp::Vector3 kHPBaseSize_ = { 500.0f,200.0f,1.0f };
+	lwp::Vector3 kHPBaseSize_ = { 200.0f,50.0f,1.0f };
 
+	// HP の下の画像
+	lwp::Sprite sprBackHp_;
 	// HP の画像
 	lwp::Sprite sprHp_;
 
