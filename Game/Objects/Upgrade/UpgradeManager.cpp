@@ -246,31 +246,32 @@ void L::UpgradeManager::Apply(Player* player)
 	// フラグを戻す
 	isLevelUpping = false;
 
-	// プレイヤーの最大HPが変更されていたら通知
-	if (preParam_.HP.hpDelta.base != para.HP.hpDelta.base)
-	{
-		// どの程度変更されているか
-		int sub = (int)para.HP.hpDelta.base - (int)preParam_.HP.hpDelta.base;
-		// 上昇している分だけ回復させる
-		if (0 < sub)
-		{
-			for (size_t i = 0; i < sub; i++)
-			{
-				player->IncreaseHP();
-			}
-		}
-		// 下降している分だけ減少する
-		else
-		{
-			for (size_t i = 0; i < -sub; i++)
-			{
-				player->DecreaseHP();
-			}
-		}
-	}
+	//// プレイヤーの最大HPが変更されていたら通知
+	//if (preParam_.HP.hpDelta.base != para.HP.hpDelta.base)
+	//{
+	//	// どの程度変更されているか
+	//	int sub = (int)para.HP.hpDelta.base - (int)preParam_.HP.hpDelta.base;
+	//	// 上昇している分だけ回復させる
+	//	if (0 < sub)
+	//	{
+	//		for (size_t i = 0; i < sub; i++)
+	//		{
+	//			player->IncreaseHP();
+	//		}
+	//	}
+	//	// 下降している分だけ減少する
+	//	// これ死ぬくね?
+	//	else
+	//	{
+	//		for (size_t i = 0; i < -sub; i++)
+	//		{
+	//			player->DecreaseHP();
+	//		}
+	//	}
+	//}
 
 
-	// 情報を保存
-	preParam_ = para;
+	//// 情報を保存
+	//preParam_ = para;
 	GameTimer::GetInstance()->Start();
 }

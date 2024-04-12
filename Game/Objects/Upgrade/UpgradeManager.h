@@ -60,7 +60,7 @@ namespace L {
 		static int upgradedConut_;
 
 		// プレイヤーの HP を監視
-		UpgradeParameter preParam_;
+		//UpgradeParameter preParam_;
 
 	private: // プライベート関数
 

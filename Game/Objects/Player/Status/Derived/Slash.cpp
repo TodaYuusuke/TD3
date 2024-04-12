@@ -27,8 +27,6 @@ void Slash::Reset()
 	// 居合の方向を更新
 	// 居合中には変更しない
 	player_->slashData_.vector_ = player_->GetVectorTranspose(player_->destinate_);
-	// 移動量を消す
-	player_->rootData_.velocity_ = { 0.0f,0.0f,0.0f };
 
 	// デルタタイム変更
 	player_->EndJust();

@@ -18,7 +18,7 @@ public:	// ** パブリックなメンバ変数 ** //
 	enum class Behavior : size_t
 	{
 		Root = 0u,	// 待機状態
-		Move,		// 移動
+		//Move,		// 移動
 		Slash,		// 居合攻撃
 		Moment,		// とりあえず居合の後隙
 		Damage,		// 攻撃を受けた時

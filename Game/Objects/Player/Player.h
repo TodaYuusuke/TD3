@@ -8,12 +8,13 @@
 #include "Game/Objects/Upgrade/IUpgrade.h"
 #include "../FollowCamera/FollowCamera.h"
 
-#include "Game/Objects/Player/Weapon/Weapon.h"
 #include "Level/Level.h"
-#include "Game/Objects/Player/SlashPanel.h"
 #include "Status/IStatus.h"
-#include "PlayerConfing.h"
-#include "PlayerParametaer.h"
+#include "Game/Objects/Player/Weapon/Weapon.h"
+#include "Game/Objects/Player/SlashPanel.h"
+#include "Game/Objects/Player/Config/PlayerConfing.h"
+#include "Game/Objects/Player/Parameter/PlayerParametaer.h"
+#include "Game/Objects/Player/HP/PlayerHP.h"
 
 #pragma region
 
@@ -45,7 +46,6 @@ private: //*** サブクラス ***//
 
 	struct RootData : public BaseData
 	{
-		lwp::Vector3 velocity_ = { 0.0f,0.0f,0.0f };	// 移動量
 	};
 
 	struct MoveData : public BaseData
@@ -215,6 +215,8 @@ private: //*** Behavior 管理に使う関数 ***//
 
 	// デバッグ表示
 	void DebugWindow();
+	// ビヘイビア表示
+	void DebugBehavior();
 	// 各コンフィグをいじる
 	void DebugSpeeds();
 	void DebugTimes();
