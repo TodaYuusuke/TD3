@@ -8,6 +8,11 @@ void PlayerParameter::Initialize(PlayerConfig* p)
 	ResetParameter();
 }
 
+void PlayerParameter::Update()
+{
+	Hp.Update();
+}
+
 void PlayerParameter::ApplyUpgrade()
 {
 	ApplyHP();
@@ -25,7 +30,7 @@ void PlayerParameter::ApplyUpgrade(const UpgradeParameter& para)
 void PlayerParameter::ResetParameter()
 {
 	Hp.hp_ = config_->Count_.BASEHP_;
-	Hp.maxHP_ = config_->Count_.MAXHP_;
+	Hp.maxHp_ = config_->Count_.MAXHP_;
 
 	Attack.slashPower_ = config_->Power_.BASEPOWER_;
 	Attack.slashRange_ = config_->Length_.WEAPONCOLLISIONRADIUS_;
@@ -35,6 +40,16 @@ void PlayerParameter::ResetParameter()
 	Speed.slash_ = (config_->Speed_.SLASH_);
 	Speed.moment_ = (config_->Speed_.MOMENT_);
 
+}
+
+void PlayerParameter::IncreaseHP()
+{
+	Hp.Increase();
+}
+
+bool PlayerParameter::DecreaseHP()
+{
+	return Hp.Decrease();
 }
 
 PlayerParameter PlayerParameter::operator*(const PlayerParameter& obj)
@@ -53,18 +68,36 @@ PlayerParameter PlayerParameter::operator*(const PlayerParameter& obj)
 
 void PlayerParameter::ApplyHP()
 {
-	// 倍率を掛けない計算
-	HPParam base;
-
-	base.hp_ = this->Hp.hp_;
-	// 最大 HP のアップグレード
-	base.maxHP_ = config_->Count_.MAXHP_ + (int)param.HP.hpDelta.base;
-	if (base.maxHP_ < 1u)
+	// 別で用意したクラスに反映
+	// ここで回復とかもすればいい
+	Hp.maxHp_ = config_->Count_.MAXHP_ + (int)param.HP.hpDelta.base;
+	if (Hp.maxHp_ < 1u)
 	{
-		base.maxHP_ = 1u;
+		Hp.maxHp_ = 1u;
+	}
+	// 最大数が増加したら HP も増加
+	if (0.0f < param.HP.hpDelta.base)
+	{
+		Hp.Increase();
 	}
 
-	this->Hp = base;
+	// HP を最大超えないようにする
+	if (Hp.maxHp_ < Hp.hp_)
+	{
+		Hp.hp_ = Hp.maxHp_;
+	}
+	//	// 倍率を掛けない計算
+	//	HPParam base;
+	//
+	//	//base.hp_ = this->Hp.hp_;
+	//	// 最大 HP のアップグレード
+	//	base.maxHP_ = config_->Count_.MAXHP_ + (int)param.HP.hpDelta.base;
+	//	if (base.maxHP_ < 1u)
+	//	{
+	//		base.maxHP_ = 1u;
+	//	}
+	//
+	//	this->Hp = base;
 }
 
 void PlayerParameter::ApplyAttack()
