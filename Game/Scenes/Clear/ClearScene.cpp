@@ -20,6 +20,7 @@ void ClearScene::Update()
 {
 	ImGui::Begin("Scene");
 	ImGui::Text("Clear");
+	ImGui::Text("Space");
 	ImGui::End();
 
 	if (Keyboard::GetTrigger(DIK_SPACE))

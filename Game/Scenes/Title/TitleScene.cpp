@@ -19,6 +19,7 @@ void TitleScene::Update()
 {
 	ImGui::Begin("Scene");
 	ImGui::Text("Title");
+	ImGui::Text("Space");
 	ImGui::End();
 
 	if (Keyboard::GetTrigger(DIK_SPACE))

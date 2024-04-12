@@ -20,6 +20,7 @@ void GameOverScene::Update()
 {
 	ImGui::Begin("Scene");
 	ImGui::Text("GameOver");
+	ImGui::Text("Space");
 	ImGui::End();
 
 	if (Keyboard::GetTrigger(DIK_SPACE))
