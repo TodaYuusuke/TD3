@@ -20,11 +20,31 @@ void ClearScene::Update()
 {
 	ImGui::Begin("Scene");
 	ImGui::Text("Clear");
-	ImGui::Text("Space");
+	ImGui::Text("Space : NextScene");
+	ImGui::Text("LEFT or RIGHT : Title or Game");
+	ImGui::Text("Next : %s", choise_ == 0 ? "Title" : "Game");
 	ImGui::End();
 
-	if (Keyboard::GetTrigger(DIK_SPACE))
+	// 選択肢を与える
+	// 左
+	if (Keyboard::GetTrigger(DIK_A) || Keyboard::GetTrigger(DIK_LEFT) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_LEFT))
 	{
-		nextSceneFunction = []() {return new TitleScene; };
+		choise_ = 0;
+	}
+	//　右
+	else if (Keyboard::GetTrigger(DIK_D) || Keyboard::GetTrigger(DIK_RIGHT) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_RIGHT))
+	{
+		choise_ = 1;
+	}
+
+	if (Keyboard::GetTrigger(DIK_SPACE) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_A))
+	{
+		if (choise_ == 0)
+			nextSceneFunction = []() {return new TitleScene; };
+		else
+			nextSceneFunction = []() {return new GameScene; };
 	}
 }
