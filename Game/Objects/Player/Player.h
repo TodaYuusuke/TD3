@@ -215,6 +215,8 @@ private: //*** Behavior 管理に使う関数 ***//
 
 	// デバッグ表示
 	void DebugWindow();
+	// ビヘイビア表示
+	void DebugBehavior();
 	// 各コンフィグをいじる
 	void DebugSpeeds();
 	void DebugTimes();

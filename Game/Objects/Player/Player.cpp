@@ -114,6 +114,9 @@ void Player::Update()
 	weapon_->Update();
 	slashPanel_->Update();
 
+	// ダメージ処理が終わった後なら？
+	parameter_.Update();
+
 	if (pursuitFlag)
 	{
 		pursuitFlag = pursuit->Execution();
@@ -543,52 +546,61 @@ void Player::DebugWindow()
 
 	ImGui::Separator();
 
-	ImGui::Text("Behavior : ");
-	ImGui::SameLine();
-	switch (behavior_)
-	{
-	case Behavior::Root:
-		ImGui::Text("ROOT");
-		ImGui::Text("BaseFrame : %.3f", config_.Time_.ROOTBASE_);
-		ImGui::Text("MaxFrame  : %.3f", rootData_.maxTime_);
-		break;
-		/*case Behavior::Move:
-			ImGui::Text("MOVE");
-			ImGui::Text("BaseFrame : %.3f", config_.Time_.MOVEBASE_);
-			ImGui::Text("MaxFrame  : %.3f", moveData_.maxTime_);
-			break;*/
-	case Behavior::Slash:
-		ImGui::Text("SLASH");
-		ImGui::Text("BaseFrame : %.3f", config_.Time_.SLASHBASE_);
-		ImGui::Text("MaxFrame  : %.3f", slashData_.maxTime_);
-		break;
-	case Behavior::Moment:
-		ImGui::Text("MOMENT");
-		ImGui::Text("BaseFrame : %.3f", config_.Time_.MOMENTBASE_);
-		ImGui::Text("MaxFrame  : %.3f", momentData_.maxTime_);
-		break;
-	case Behavior::Damage:
-		ImGui::Text("DAMAGE");
-		ImGui::Text("BaseFrame : %.3f", config_.Time_.DAMAGEBASE_);
-		ImGui::Text("MaxFrame  : %.3f", damageData_.maxTime_);
-		break;
-	default:
-		break;
-	}
+	DebugBehavior();
 
-	ImGui::Text("t : %.3f", t);
-
-	ImGui::Separator();
-
-	DebugSpeeds();
-	DebugTimes();
-	DebugLengths();
+	//DebugSpeeds();
+	//DebugTimes();
+	//DebugLengths();
 	//DebugCounts();
-	DebugParcentages();
+	//DebugParcentages();
 
 	ImGui::Separator();
 
 	ImGui::End();
+}
+
+void Player::DebugBehavior()
+{
+	if (ImGui::TreeNode("Behavior"))
+	{
+		ImGui::Text("Behavior : ");
+		ImGui::SameLine();
+		switch (behavior_)
+		{
+		case Behavior::Root:
+			ImGui::Text("ROOT");
+			ImGui::Text("BaseFrame : %.3f", config_.Time_.ROOTBASE_);
+			ImGui::Text("MaxFrame  : %.3f", rootData_.maxTime_);
+			break;
+			/*case Behavior::Move:
+				ImGui::Text("MOVE");
+				ImGui::Text("BaseFrame : %.3f", config_.Time_.MOVEBASE_);
+				ImGui::Text("MaxFrame  : %.3f", moveData_.maxTime_);
+				break;*/
+		case Behavior::Slash:
+			ImGui::Text("SLASH");
+			ImGui::Text("BaseFrame : %.3f", config_.Time_.SLASHBASE_);
+			ImGui::Text("MaxFrame  : %.3f", slashData_.maxTime_);
+			break;
+		case Behavior::Moment:
+			ImGui::Text("MOMENT");
+			ImGui::Text("BaseFrame : %.3f", config_.Time_.MOMENTBASE_);
+			ImGui::Text("MaxFrame  : %.3f", momentData_.maxTime_);
+			break;
+		case Behavior::Damage:
+			ImGui::Text("DAMAGE");
+			ImGui::Text("BaseFrame : %.3f", config_.Time_.DAMAGEBASE_);
+			ImGui::Text("MaxFrame  : %.3f", damageData_.maxTime_);
+			break;
+		default:
+			break;
+		}
+
+		ImGui::Text("t : %.3f", t);
+
+		ImGui::TreePop();
+		ImGui::Separator();
+	}
 }
 
 void Player::DebugSpeeds()

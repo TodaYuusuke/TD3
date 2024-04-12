@@ -6,6 +6,8 @@ void PlayerParameter::Initialize(PlayerConfig* p)
 	assert(p);
 	config_ = p;
 	ResetParameter();
+	// 変数の初期化
+	Hp.Initialize();
 }
 
 void PlayerParameter::Update()
