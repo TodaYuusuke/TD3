@@ -31,7 +31,8 @@ void Player::Initialize()
 	weapon_->SetTPointer(&easeT_);
 
 	// 状態の情報を設定
-	InitDatas();
+	//InitDatas();
+	behavior_ = Behavior::Root;
 
 	// 居合攻撃の UI
 	slashPanel_.reset(new SlashPanel);
@@ -67,6 +68,7 @@ void Player::Initialize()
 	parameter_.Initialize(&config_);
 	// パラメータを反映させる
 	parameter_.ResetParameter();
+
 	// 今の状態を設定
 	currStatus_ = statuses_[static_cast<size_t>(behavior_)];
 
@@ -112,7 +114,8 @@ void Player::Update()
 	weapon_->Update();
 	slashPanel_->Update();
 
-	if (pursuitFlag) {
+	if (pursuitFlag)
+	{
 		pursuitFlag = pursuit->Execution();
 	}
 	// 経験値が更新された後かと思ったけど別にプレイヤーの更新が終わった後ならどこでもいい
@@ -168,19 +171,22 @@ void Player::EndJust()
 
 void Player::IncreaseHP()
 {
+	parameter_.IncreaseHP();
+	/*
 	if (parameter_.Hp.hp_ < parameter_.Hp.maxHP_)
 	{
 		parameter_.Hp.hp_++;
-	}
+	}*/
 }
 
 void Player::DecreaseHP()
 {
-	parameter_.Hp.hp_--;
+	flag_.isAlive_ = !parameter_.DecreaseHP();
+	/*parameter_.Hp.hp_--;
 	if (parameter_.Hp.hp_ <= 0u)
 	{
 		flag_.isAlive_ = false;
-	}
+	}*/
 }
 
 void Player::ApplyUpgrade(const UpgradeParameter& para)
@@ -299,9 +305,9 @@ void Player::CreateWeaponCollision()
 	colliders_.weapon_.mask.SetBelongFrag(GameMask::Weapon());
 	colliders_.weapon_.mask.SetHitFrag(GameMask::Enemy());
 	// 別個で用意した当たった時の関数
-	colliders_.weapon_.SetOnCollisionLambda([this](lwp::Collider::HitData data){
+	colliders_.weapon_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		OnCollisionWeapon(data);
-	});
+		});
 	colliders_.weapon_.isActive = false;
 #ifdef DEMO
 	colliders_.weapon_.name = "Weapon";
@@ -465,14 +471,14 @@ void Player::CheckBehavior()
 		case Behavior::Root:
 			reqBehavior_ = Behavior::Root;
 			break;
-		//case Behavior::Move:
-		//	// 移動は待機状態からの派生とか
-		//	if (behavior_ == Behavior::Root ||
-		//		behavior_ == Behavior::Move)
-		//	{
-		//		reqBehavior_ = Behavior::Move;
-		//	}
-		//	break;
+			//case Behavior::Move:
+			//	// 移動は待機状態からの派生とか
+			//	if (behavior_ == Behavior::Root ||
+			//		behavior_ == Behavior::Move)
+			//	{
+			//		reqBehavior_ = Behavior::Move;
+			//	}
+			//	break;
 		case Behavior::Slash:
 			// 居合に入る条件を記述
 			// 最大回数に達していないか
@@ -526,7 +532,7 @@ void Player::DebugWindow()
 	ImGui::Text("Invincible : ");	ImGui::SameLine();
 	ImGui::Text(flag_.isInvincible_ ? "TRUE" : "FAlSE");
 	ImGui::Text("HP / MAX");
-	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", parameter_.Hp.hp_, parameter_.Hp.maxHP_, config_.Count_.MAXHP_);	
+	ImGui::Bullet();	ImGui::Text("%d / %d(%d)", parameter_.Hp.hp_, parameter_.Hp.maxHp_, config_.Count_.MAXHP_);
 	ImGui::Separator();
 
 
@@ -546,11 +552,11 @@ void Player::DebugWindow()
 		ImGui::Text("BaseFrame : %.3f", config_.Time_.ROOTBASE_);
 		ImGui::Text("MaxFrame  : %.3f", rootData_.maxTime_);
 		break;
-	/*case Behavior::Move:
-		ImGui::Text("MOVE");
-		ImGui::Text("BaseFrame : %.3f", config_.Time_.MOVEBASE_);
-		ImGui::Text("MaxFrame  : %.3f", moveData_.maxTime_);
-		break;*/
+		/*case Behavior::Move:
+			ImGui::Text("MOVE");
+			ImGui::Text("BaseFrame : %.3f", config_.Time_.MOVEBASE_);
+			ImGui::Text("MaxFrame  : %.3f", moveData_.maxTime_);
+			break;*/
 	case Behavior::Slash:
 		ImGui::Text("SLASH");
 		ImGui::Text("BaseFrame : %.3f", config_.Time_.SLASHBASE_);

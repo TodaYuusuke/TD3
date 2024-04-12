@@ -4,6 +4,7 @@
 #include <Adapter.h>
 #include "Game/Objects/Upgrade/IUpgrade.h"
 #include "Game/Objects/Player/Config/PlayerConfing.h"
+#include "Game/Objects/Player/HP/PlayerHP.h"
 
 /// <summary>
 /// プレイヤーの持つパラメーターをまとめたクラス
@@ -17,6 +18,11 @@ public:	//*** パブリック関数 ***//
 	/// </summary>
 	/// <param name="p">コンフィグを取得</param>
 	void Initialize(PlayerConfig* p);
+
+	/// <summary>
+	/// パラメータ自体が持っている変数を更新する
+	/// </summary>
+	void Update();
 
 	/// <summary>
 	/// アップグレードを適応するための関数
@@ -38,6 +44,15 @@ public:	//*** パブリック関数 ***//
 		return param;
 	};
 
+	/// <summary>
+	/// HP を増やす
+	/// </summary>
+	void IncreaseHP();
+	/// <summary>
+	/// HP を減らす
+	/// </summary>
+	bool DecreaseHP();
+
 public: //*** オペレーターオーバーロード ***//
 
 	PlayerParameter operator*(const PlayerParameter& obj);
@@ -47,11 +62,11 @@ public:	//*** サブクラス ***//
 	/// <summary>
 	/// HP に関するパラメータ
 	/// </summary>
-	struct HPParam
-	{
-		int hp_ = 0;	// 今のHP
-		int maxHP_ = 0;	// 最大HP
-	};
+	//struct HPParam
+	//{
+	//	//int hp_ = 0;	// 今のHP
+	//	int maxHP_ = 0;	// 最大HP
+	//};
 
 	/// <summary>
 	/// 攻撃自体に対してのパラメータ
@@ -117,7 +132,8 @@ public:	//*** サブクラス ***//
 public:	//*** パブリック変数 ***//
 
 	// HP のみ
-	HPParam Hp;
+	//HPParam Hp;
+	PlayerHP Hp;
 
 	// 攻撃の処理に関する
 	AttackParam Attack;

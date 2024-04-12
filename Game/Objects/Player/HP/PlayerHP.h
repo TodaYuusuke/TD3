@@ -9,6 +9,13 @@ class PlayerHP
 {
 public: //*** パブリック関数 ***//
 
+	// 今の HP
+	int hp_ = 0;
+
+	// 最大 HP
+	int maxHp_ = 0;
+
+
 	// wtf
 	lwp::WorldTransform transform_;
 
@@ -32,7 +39,7 @@ public: //*** パブリック関数 ***//
 	/// <summary>
 	/// HP を減らす
 	/// </summary>
-	void Decrease();
+	bool Decrease();
 	/// <summary>
 	/// 最大 HP を増やす
 	/// </summary>
@@ -45,9 +52,18 @@ public: //*** パブリック関数 ***//
 
 private: //*** プライベート変数 ***//
 
-	lwp::Sprite sprite_;
+	// HP バーを固定のスケール指定できるようにする
+	lwp::Vector3 kHPSpriteConvertScale_ = { 1.0f,1.0f,1.0f };
 
-	LWP::Utility::Observer<int> hp_ = 0;
+	// HP バーの基本サイズ
+	lwp::Vector3 kHPBaseSize_ = { 500.0f,200.0f,1.0f };
+
+	// HP の画像
+	lwp::Sprite sprHp_;
+
+private: //*** プライベート関数 ***//
+
+
 
 };
 

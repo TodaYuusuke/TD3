@@ -14,6 +14,7 @@
 #include "Game/Objects/Player/SlashPanel.h"
 #include "Game/Objects/Player/Config/PlayerConfing.h"
 #include "Game/Objects/Player/Parameter/PlayerParametaer.h"
+#include "Game/Objects/Player/HP/PlayerHP.h"
 
 #pragma region
 
