@@ -1,4 +1,7 @@
-#include "TitleScene.h"
+#include "GameScene.h"
+
+#include "Game/Scenes/Clear/ClearScene.h"
+#include "Game/Scenes/GameOver/GameOverScene.h"
 
 using namespace LWP;
 using namespace LWP::Input;
@@ -7,7 +10,7 @@ using namespace LWP::Math;
 using namespace LWP::Utility;
 
 // 初期化
-void TItleScene::Initialize()
+void GameScene::Initialize()
 {
 	// タイマー
 	gameTimer_ = GameTimer::GetInstance();
@@ -58,11 +61,51 @@ void TItleScene::Initialize()
 }
 
 // 更新
-void TItleScene::Update()
+void GameScene::Update()
 {
+	ImGui::Begin("Scene");
+	ImGui::Text("Game");
+	ImGui::End();
 
 	// 時間を計測
 	gameTimer_->Update();
+
+	// タイマーのカウントが終了したとき
+	if (gameTimer_->isEnd_)
+	{
+		// プレイヤーが生きているとき
+		if (player_->flag_.isAlive_)
+		{
+			// クリアしたときの処理
+
+			// 何か演出を出す
+			if (Keyboard::GetTrigger(DIK_SPACE))
+			{
+				// タイマーを消す
+				gameTimer_->isActive_ = false;
+				// 描画を消す
+				gameTimer_->Update();
+				nextSceneFunction = []() {return new ClearScene; };
+			}
+			return;
+		}
+		// プレイヤーが死んでいた時
+		else
+		{
+			// ゲームオーバーしたときの処理
+
+			// 何か演出を出す
+			if (Keyboard::GetTrigger(DIK_SPACE))
+			{
+				// タイマーを消す
+				gameTimer_->isActive_ = false;
+				// 描画を消す
+				gameTimer_->Update();
+				nextSceneFunction = []() {return new GameOverScene; };
+			}
+			return;
+		}
+	}
 
 	// スローを確認
 	if (player_->GetIsJustSlashing())
@@ -102,17 +145,16 @@ void TItleScene::Update()
 	{
 		upgradeManager_->Update(player_.get());
 	}
-
 }
 
-void TItleScene::StartJustSlash()
+void GameScene::StartJustSlash()
 {
 	time_ = 0.0f;
 	LWP::Info::SetDeltaTimeMultiply(0.1f);
 	followCamera_->StartSlash();
 }
 
-void TItleScene::EndJustSlash()
+void GameScene::EndJustSlash()
 {
 	LWP::Info::SetDeltaTimeMultiply(1.0f);
 	followCamera_->EndSlash();

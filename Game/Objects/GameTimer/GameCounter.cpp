@@ -13,7 +13,7 @@ void GameCounter::Initialize(const std::string& textureName)
 	sprite_.anchorPoint = { 0.5f,0.5f };
 	sprite_.isUI = true;
 	sprite_.isActive = false;
-
+	sprite_.name = "Counter";
 	transform_.translation = { 0.0f,0.0f };
 	isActive_ = false;
 	Reset();

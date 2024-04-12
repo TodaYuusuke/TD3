@@ -1,7 +1,7 @@
 #include "Player.h"
 
 // ゲームシーン
-#include "Game/Scenes/TitleScene.h"
+#include "Game/Scenes/Game/GameScene.h"
 
 #include "Game/Objects/GameMask.h"
 
@@ -85,7 +85,9 @@ void Player::Update()
 	//*** プレイヤーの生き死にを判別 ***//
 
 	if (!flag_.isAlive_)
+	{
 		return;
+	}
 
 	//*** 入力系 ***//
 
@@ -185,6 +187,7 @@ void Player::IncreaseHP()
 void Player::DecreaseHP()
 {
 	flag_.isAlive_ = !parameter_.DecreaseHP();
+	GameTimer::GetInstance()->isEnd_ = !flag_.isAlive_;
 	/*parameter_.Hp.hp_--;
 	if (parameter_.Hp.hp_ <= 0u)
 	{
@@ -529,6 +532,7 @@ void Player::DebugWindow()
 		maxInvincibleTime_ = 0.0f;
 		flag_.isAlive_ = true;
 		parameter_.ResetParameter();
+		parameter_.ApplyUpgrade();
 	}
 	ImGui::Text("Alive : ");	ImGui::SameLine();
 	ImGui::Text(flag_.isAlive_ ? "TRUE" : "FAlSE");
