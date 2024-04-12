@@ -73,10 +73,18 @@ void GameScene::Update()
 	// タイマーのカウントが終了したとき
 	if (gameTimer_->isEnd_)
 	{
+		ImGui::Begin("Scene");
+		ImGui::Text("Space");
+		ImGui::End();
+
 		// プレイヤーが生きているとき
 		if (player_->flag_.isAlive_)
 		{
 			// クリアしたときの処理
+
+			ImGui::Begin("Scene");
+			ImGui::Text("Clear");
+			ImGui::End();
 
 			// 何か演出を出す
 			if (Keyboard::GetTrigger(DIK_SPACE))
@@ -93,6 +101,10 @@ void GameScene::Update()
 		else
 		{
 			// ゲームオーバーしたときの処理
+
+			ImGui::Begin("Scene");
+			ImGui::Text("GameOver");
+			ImGui::End();
 
 			// 何か演出を出す
 			if (Keyboard::GetTrigger(DIK_SPACE))
