@@ -3,6 +3,7 @@
 
 using namespace LWP;
 using namespace LWP::Object::Collider;
+using namespace LWP::Resource;
 
 void JumpBoss::Init()
 {
@@ -36,6 +37,11 @@ void JumpBoss::Init()
 	attackWaitTime_ = kAttackWaitTime;
 	// 現在の時間
 	currentFrame_ = 0;
+
+	// 攻撃モーションを追加
+	jumpMotion_
+		.Add(&models_[0].transform.scale, LWP::Math::Vector3{ 0, -2.0f, 0 }, 0, 0.05f)
+		.Add(&models_[0].transform.scale, LWP::Math::Vector3{ 0, 2.0f, 0 }, 0.05f, 0.1f);
 }
 
 void JumpBoss::Update()
@@ -49,7 +55,7 @@ void JumpBoss::Update()
 		default:
 			B_RootInit();
 			break;
-			// ダッシュ
+			// ジャンプ
 		case Behavior::kJump:
 			B_JumpInit();
 			break;
@@ -72,7 +78,7 @@ void JumpBoss::Update()
 		// 移動処理
 		Move();
 		break;
-		// ダッシュ
+		// ジャンプ
 	case Behavior::kJump:
 		B_JumpUpdate();
 		break;
@@ -84,8 +90,7 @@ void JumpBoss::Update()
 
 	// 衝撃波の当たり判定を作成
 	waveAttackCollider_.Create(models_[0].transform.translation);
-
-	// 
+	// 衝撃波の広がる処理
 	if (isWaveAttack_) {
 		WaveAttackSpread();
 	}
@@ -216,6 +221,9 @@ void JumpBoss::B_JumpInit() {
 	// ジャンプの目標座標を取得
 	jumpEase_.end = { player_->GetWorldTransform()->translation };
 	jumpEase_.end.y += kJumpHighestPoint;
+
+	// 攻撃モーション開始
+	jumpMotion_.Start();
 }
 void JumpBoss::B_JumpUpdate() {
 	float t = Utility::Easing::OutQuint(currentFrame_ / kJumpAllFrame);

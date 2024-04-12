@@ -122,4 +122,7 @@ private:// プライベートな変数
 	Behavior behavior_ = Behavior::kRoot;
 	// 次の振るまいリクエスト
 	std::optional<Behavior> behaviorRequest_ = std::nullopt;
+
+	// 攻撃アニメーション
+	LWP::Resource::Motion jumpMotion_;
 };
