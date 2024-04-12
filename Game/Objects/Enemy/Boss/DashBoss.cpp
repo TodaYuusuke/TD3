@@ -4,8 +4,21 @@
 void DashBoss::Init()
 {
 	// 当たり判定のインスタンス生成
-	models_.push_back(LWP::Primitive::Mesh());
+	models_.reserve(3);
+	models_.emplace_back();
 	models_[0].LoadFile("cube/cube.obj");
+	models_.emplace_back();
+	models_[1].LoadFile("L_arm/L_arm.obj");
+	models_.emplace_back();
+	models_[2].LoadFile("R_arm/R_arm.obj");
+
+	// 手のモデルをペアレント
+	models_[1].transform.Parent(&models_[0].transform);
+	models_[2].transform.Parent(&models_[0].transform);
+	// 手のモデルの位置を設定
+	models_[1].transform.translation = { -1.5f, 0.25f, 0.5f };
+	models_[2].transform.translation = { 1.5f, 0.25f, 0.5f };
+
 	// 色
 	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::RED);
 	// 大きさ
