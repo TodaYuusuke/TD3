@@ -692,11 +692,11 @@ void Player::DebugCounts()
 {
 	if (ImGui::TreeNode("Count"))
 	{
-		int i = config_.Count_.SLASHRELATIONMAX_;
+		int i = config_.Count_.SLASHRELATIONBASE_;
 		// 入力されたら
 		if (ImGui::DragInt("SLASHRELATION", &i, 1, 10))
 		{
-			config_.Count_.SLASHRELATIONMAX_ = i;
+			config_.Count_.SLASHRELATIONBASE_ = i;
 		}
 		int j = config_.Count_.BASEHP_;
 		// 入力されたら
