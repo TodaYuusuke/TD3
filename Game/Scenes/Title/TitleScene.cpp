@@ -22,7 +22,8 @@ void TitleScene::Update()
 	ImGui::Text("Space");
 	ImGui::End();
 
-	if (Keyboard::GetTrigger(DIK_SPACE))
+	if (Keyboard::GetTrigger(DIK_SPACE) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
 		nextSceneFunction = []() {return new GameScene; };
 	}

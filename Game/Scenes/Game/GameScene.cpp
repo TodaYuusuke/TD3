@@ -87,7 +87,8 @@ void GameScene::Update()
 			ImGui::End();
 
 			// 何か演出を出す
-			if (Keyboard::GetTrigger(DIK_SPACE))
+			if (Keyboard::GetTrigger(DIK_SPACE) || 
+				Pad::GetTrigger(XINPUT_GAMEPAD_A))
 			{
 				// タイマーを消す
 				gameTimer_->isActive_ = false;
@@ -107,7 +108,8 @@ void GameScene::Update()
 			ImGui::End();
 
 			// 何か演出を出す
-			if (Keyboard::GetTrigger(DIK_SPACE))
+			if (Keyboard::GetTrigger(DIK_SPACE) ||
+				Pad::GetTrigger(XINPUT_GAMEPAD_A))
 			{
 				// タイマーを消す
 				gameTimer_->isActive_ = false;
