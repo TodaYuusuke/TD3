@@ -17,6 +17,13 @@ public:
 	/// Default Method
 	/// 
 
+	~EnemyManager()
+	{
+		for (IEnemy* e : enemys_)
+		{
+			delete e;
+		}
+	}
 	void Init();
 	void Update();
 
