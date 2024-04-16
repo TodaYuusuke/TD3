@@ -7,7 +7,7 @@ HomingArrow::HomingArrow(std::function<void(LWP::Math::Vector3)> func) {
 
 
 HomingArrow::~HomingArrow() {
-	
+
 }
 
 void HomingArrow::Init(lwp::WorldTransform transform) {
@@ -49,7 +49,7 @@ void HomingArrow::Init(lwp::WorldTransform transform) {
 
 	// 撃ちだす方向にモデルを回転
 	model_.transform.rotation += shootingAngle_;
-	
+
 	// イージング開始時のベクトル
 	LWP::Math::Vector3 velocity = { 0,0,1 };
 	startEaseVel_ = (velocity * LWP::Math::Matrix4x4::CreateRotateXYZMatrix(model_.transform.rotation));
@@ -90,6 +90,11 @@ void HomingArrow::Attack() {
 		ChangeHomingAccuracy();
 		// ホーミングの処理
 		HomingUpdate();
+
+		// 弾の向きを自機に向ける
+		if (homingFrame_ >= kHomingEndFrame - homingStartFrame_ - kNormal2HomingFrame) {
+			velocity_ = { 0,0,0 };
+		}
 	}
 	// ホーミングしないときの処理
 	else {
@@ -100,7 +105,7 @@ void HomingArrow::Attack() {
 		velocity = velocity * rotateMatrix;
 		velocity_ = velocity.Normalize() * kSpeed;
 
-		// イージング
+		// 発射された弾はだんだん遅くなり止まる
 		if (homingFrame_ >= kHomingEndFrame - homingStartFrame_) {
 			LWP::Math::Vector3 endEaseVel = { 0,0,0 };
 			velocity_ = LWP::Math::Vector3::Slerp(startEaseVel_, endEaseVel, deadTimer_ / homingStartFrame_);

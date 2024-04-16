@@ -40,6 +40,9 @@ public:
 	// 自機のアドレスを設定
 	void SetPlayer(Player* player) { player_ = player; }
 
+	// ホーミング弾の精度を設定
+	void SetHomingAccuracy(float homingAccuracy) { homingAccuracy_ = homingAccuracy; }
+
 private:// プライベートな関数
 	// ホーミングの更新処理
 	void HomingUpdate();
@@ -54,11 +57,13 @@ private:// 定数
 	const float kHomingStartFrame = 60;
 	// ホーミング終了時間
 	const float kHomingEndFrame = 180;
+	// 通常弾からホーミング弾に切り替わるまでにかかる時間
+	const float kNormal2HomingFrame = 30;
 
 	// ホーミングの精度が変化する距離
-	const float kHomingStrengthRange = 4.0f;
+	const float kHomingStrengthRange = 3.5f;
 	// 自機との距離が遠い時のホーミング精度
-	const float kLongDistHomingAccuracy = 0.2f;
+	const float kLongDistHomingAccuracy = 0.15f;
 	// 自機との距離が近い時のホーミング精度
 	const float kShortDistHomingAccuracy = 0.01f;
 

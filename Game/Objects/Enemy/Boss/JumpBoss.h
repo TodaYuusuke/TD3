@@ -14,6 +14,13 @@ private:// 構造体
 		kWaveAttack	 //	攻撃開始
 	};
 
+	enum BodyParts {
+		BODY,
+		L_ARM,
+		R_ARM,
+		BODYPARTSCOUNT
+	};
+
 	// イージングで使用する
 	struct EaseData {
 		LWP::Math::Vector3 start;
@@ -124,5 +131,5 @@ private:// プライベートな変数
 	std::optional<Behavior> behaviorRequest_ = std::nullopt;
 
 	// 攻撃アニメーション
-	LWP::Resource::Motion jumpMotion_;
+	LWP::Resource::Motion jumpMotion_[3];
 };

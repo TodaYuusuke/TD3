@@ -20,13 +20,13 @@ void JumpBoss::Init()
 	models_[1].transform.Parent(&models_[0].transform);
 	models_[2].transform.Parent(&models_[0].transform);
 	// 手のモデルの位置を設定
-	models_[1].transform.translation = { -1.5f, 0.25f, 0.5f };
-	models_[2].transform.translation = { 1.5f, 0.25f, 0.5f };
+	models_[1].transform.translation = { -1.0f, 0.25f, 0.5f };
+	models_[2].transform.translation = { 1.0f, 0.25f, 0.5f };
 
 	// 色
 	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::RED);
 	// 大きさ
-	models_[0].transform.scale = { 1,3,1 };
+	models_[0].transform.scale = kBossSize;
 	// 当たり判定を有効化
 	isActive_ = true;
 
@@ -38,10 +38,16 @@ void JumpBoss::Init()
 	// 現在の時間
 	currentFrame_ = 0;
 
-	// 攻撃モーションを追加
-	jumpMotion_
-		.Add(&models_[0].transform.scale, LWP::Math::Vector3{ 0, -2.0f, 0 }, 0, 0.05f)
-		.Add(&models_[0].transform.scale, LWP::Math::Vector3{ 0, 2.0f, 0 }, 0.05f, 0.1f);
+	// ジャンプモーションを追加
+	jumpMotion_[BODY]
+		.Add(&models_[BODY].transform.scale, -1 * kBossSize, 0, 0.05f)
+		.Add(&models_[BODY].transform.scale, kBossSize, 0.05f, 0.1f);
+	//jumpMotion_[L_ARM]
+	//	.Add(&models_[L_ARM].transform.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
+	//	.Add(&models_[L_ARM].transform.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
+	//jumpMotion_[R_ARM]
+	//	.Add(&models_[R_ARM].transform.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
+	//	.Add(&models_[R_ARM].transform.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
 }
 
 void JumpBoss::Update()
@@ -223,7 +229,9 @@ void JumpBoss::B_JumpInit() {
 	jumpEase_.end.y += kJumpHighestPoint;
 
 	// 攻撃モーション開始
-	jumpMotion_.Start();
+	for (int i = 0; i < BODYPARTSCOUNT;i++) {
+		jumpMotion_[i].Start();
+	}
 }
 void JumpBoss::B_JumpUpdate() {
 	float t = Utility::Easing::OutQuint(currentFrame_ / kJumpAllFrame);

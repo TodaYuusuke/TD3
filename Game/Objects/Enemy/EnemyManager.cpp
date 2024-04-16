@@ -3,9 +3,9 @@
 
 void EnemyManager::Init()
 {
-	JumpBossSpown(LWP::Math::Vector3{ 0,0,10 });
+	//JumpBossSpown(LWP::Math::Vector3{ 0,0,10 });
 	//ArrowBossSpown(LWP::Math::Vector3{ 0,0,10 });
-	//NormalEnemySpown(LWP::Math::Vector3{ 10,0,0 });
+	ArrowEnemySpown(LWP::Math::Vector3{ 10,0,0 });
 	//ShieldEnemySpown(LWP::Math::Vector3{ 10,0,0 });
 }
 
@@ -76,12 +76,14 @@ void EnemyManager::EnemySpown()
 		// ボスの発生
 		//DashBossSpown(pos);
 		//ArrowBossSpown(pos);
+		ArrowEnemySpown(pos);
 	}
 	else if (number <= 0.8f) {
 		//ShieldEnemySpown(pos);
+		ArrowEnemySpown(pos);
 	}
 	else {
-		//ArrowEnemySpown(pos);
+		ArrowEnemySpown(pos);
 	}
 
 }

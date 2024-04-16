@@ -113,7 +113,7 @@ private:/// 定数
 	const float kFollowRate = 0.25f;
 
 	// 追従対象との距離
-	const LWP::Math::Vector3 kTargetDist = { 0.0f,0.0f,-30.0f };
+	const LWP::Math::Vector3 kTargetDist = { 0.0f,0.0f,-60.0f };
 
 	// 初期角度 
 	LWP::Math::Vector3 kStartAngle = { 0.2f, 0.0f, 0.0f };

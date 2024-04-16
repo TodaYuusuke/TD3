@@ -101,8 +101,8 @@ void TItleScene::Update()
 
 void TItleScene::StartJustSlash()
 {
-	time_ = 0.0f;
-	LWP::Info::SetDeltaTimeMultiply(0.1f);
+	//time_ = 0.0f;
+	//LWP::Info::SetDeltaTimeMultiply(0.1f);
 	followCamera_->StartSlash();
 }
 

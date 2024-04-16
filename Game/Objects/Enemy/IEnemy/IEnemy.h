@@ -38,6 +38,8 @@ protected: //*** 継承クラスで呼び出す共通処理 ***//
 
 	virtual void CreateCollider();
 
+protected:// 定数
+	const LWP::Math::Vector3 kBossSize = { 4,5,4 };
 
 protected:
 	std::vector<LWP::Primitive::Mesh> models_;
