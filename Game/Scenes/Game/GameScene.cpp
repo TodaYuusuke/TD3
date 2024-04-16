@@ -56,6 +56,8 @@ void GameScene::Initialize()
 	upgradeManager_ = std::make_unique<L::UpgradeManager>();
 	upgradeManager_->Init();
 
+	// いったん五分
+	gameTimer_->Reset(300);
 	// ゲームが始まってから計測開始
 	gameTimer_->Start();
 }
