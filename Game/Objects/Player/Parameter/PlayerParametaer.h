@@ -53,6 +53,15 @@ public:	//*** パブリック関数 ***//
 	/// </summary>
 	bool DecreaseHP();
 
+	/// <summary>
+	/// 最大 HP を増やす
+	/// </summary>
+	void IncreaseHPMAX();
+	/// <summary>
+	/// 最大 HP を減らす
+	/// </summary>
+	void DecreaseHPMAX();
+
 public: //*** オペレーターオーバーロード ***//
 
 	PlayerParameter operator*(const PlayerParameter& obj);

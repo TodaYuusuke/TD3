@@ -4,7 +4,7 @@ using namespace LWP;
 using namespace LWP::Primitive;
 using namespace LWP::Resource;
 
-void PlayerHP::Initialize()
+void PlayerHP::Initialize(uint32_t m)
 {
 	// 下の画像を設定
 
@@ -41,11 +41,25 @@ void PlayerHP::Initialize()
 	//// 一応更新
 	//sprBackHp_.Update();
 	//sprHp_.Update();
-	
-	// HP に使うスプライトを設定
-	sprite_.Initialize();
 
+	maxHp_ = m;
 	hp_ = maxHp_;
+
+	// データを消す
+	for (HPSprite* s : hpSprites_)
+	{
+		delete s;
+	}
+	hpSprites_.clear();
+	// HP に使うスプライトを設定
+	for (size_t i = 0; i < maxHp_; i++)
+	{
+		HPSprite* s = new HPSprite;
+		s->Initialize();
+		s->SetPosition({ 20.0f + 128.0f * i,20.0f,0.0f });
+		s->Update();
+		hpSprites_.push_back(s);
+	}
 }
 
 void PlayerHP::Update()
@@ -55,25 +69,58 @@ void PlayerHP::Update()
 	// 一応更新
 	//sprBackHp_.Update();
 	//sprHp_.Update();
+	for (HPSprite* s : hpSprites_)
+	{
+		s->Update();
+	}
 }
 
 void PlayerHP::Increase()
 {
+	hpSprites_[hp_ - 1]->mainSprite.isActive = true;
 	hp_ += hp_ < maxHp_ ? 1 : 0;
 }
 
 bool PlayerHP::Decrease()
 {
+	hpSprites_[hp_ - 1]->mainSprite.isActive = false;
 	// 0 になったら true
-	return !--hp_;
+	--hp_;
+	return hp_ <= 0;
 }
 
 void PlayerHP::IncreaseMax()
 {
 	maxHp_++;
+	// 表示を修正
+	hp_++;
+	HPSprite* s = new HPSprite;
+	s->Initialize();
+	s->SetPosition({ 20.0f + 128.0f * hpSprites_.size(),20.0f,0.0f});
+	s->Update();
+	hpSprites_.push_back(s);
+	RevisionHP();
 }
 
 void PlayerHP::DecreaseMax()
 {
-	maxHp_ -= 1 < maxHp_ ? 1 : 0;
+	if (1 < maxHp_)
+	{
+		maxHp_--;
+		// HP が最大を超えないようにする
+		if (maxHp_ < hp_)
+		{
+			Decrease();
+		}
+		delete hpSprites_[maxHp_];
+		hpSprites_.erase(hpSprites_.end() - 1);
+	}
+}
+
+void PlayerHP::RevisionHP()
+{
+	for (size_t i = 0; i < maxHp_; i++)
+	{
+		hpSprites_[i]->mainSprite.isActive = i < hp_;
+	}
 }

@@ -21,13 +21,18 @@ void HPSprite::Initialize()
 	mainSprite.name = "HPMainSprite";
 	mainSprite.commonColor = new Utility::Color(0xAF1010FF);
 
+	subSprite.Update();
+	mainSprite.Update();
+}
+
+void HPSprite::Update()
+{
 	// 場所と大きさ
 	subSprite.transform.scale = { subScale,subScale };
 	subSprite.transform.translation = basePosition;
 	lwp::Vector2 size = subSprite.texture.t->GetTextureSize();
 	mainSprite.transform.translation.x = basePosition.x + size.x * (subScale - 1.0f) * 0.5f;
 	mainSprite.transform.translation.y = basePosition.y + size.y * (subScale - 1.0f) * 0.5f;
-
 
 	subSprite.Update();
 	mainSprite.Update();

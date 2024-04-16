@@ -7,7 +7,7 @@ void PlayerParameter::Initialize(PlayerConfig* p)
 	config_ = p;
 	ResetParameter();
 	// 変数の初期化
-	Hp.Initialize();
+	Hp.Initialize(config_->Count_.MAXHP_);
 }
 
 void PlayerParameter::Update()
@@ -52,6 +52,16 @@ void PlayerParameter::IncreaseHP()
 bool PlayerParameter::DecreaseHP()
 {
 	return Hp.Decrease();
+}
+
+void PlayerParameter::IncreaseHPMAX()
+{
+	Hp.IncreaseMax();
+}
+
+void PlayerParameter::DecreaseHPMAX()
+{
+	Hp.DecreaseMax();
 }
 
 PlayerParameter PlayerParameter::operator*(const PlayerParameter& obj)

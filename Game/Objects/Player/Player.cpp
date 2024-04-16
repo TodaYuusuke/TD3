@@ -552,6 +552,24 @@ void Player::DebugWindow()
 
 	DebugBehavior();
 
+	ImGui::Begin("PlayerHP");
+
+	if (ImGui::Button("Increase"))
+	{
+		IncreaseHP();
+	}if (ImGui::Button("Decrease"))
+	{
+		DecreaseHP();
+	}if (ImGui::Button("IncreaseMax"))
+	{
+		parameter_.IncreaseHPMAX();
+	}if (ImGui::Button("DecreaseMax"))
+	{
+		parameter_.DecreaseHPMAX();
+	}
+
+	ImGui::End();
+
 	//DebugSpeeds();
 	//DebugTimes();
 	//DebugLengths();

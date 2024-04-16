@@ -24,10 +24,19 @@ public: //*** パブリック関数 ***//
 	// 表示するか
 	bool isActive_;
 
+	~PlayerHP()
+	{
+		// データを消す
+		for (HPSprite* s : hpSprites_)
+		{
+			delete s;
+		}
+	}
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize(uint32_t m);
 
 	/// <summary>
 	/// 更新
@@ -54,7 +63,7 @@ public: //*** パブリック関数 ***//
 
 private: //*** プライベート変数 ***//
 
-	HPSprite sprite_;
+	std::vector<HPSprite*> hpSprites_;
 
 	//// HP バーを固定のスケール指定できるようにする
 	//lwp::Vector3 kHPBackConvertScale_ = { 1.0f,1.0f,1.0f };
@@ -73,7 +82,10 @@ private: //*** プライベート変数 ***//
 
 private: //*** プライベート関数 ***//
 
-
+	/// <summary>
+	/// 表示を今の HP にあわせる
+	/// </summary>
+	void RevisionHP();
 
 };
 

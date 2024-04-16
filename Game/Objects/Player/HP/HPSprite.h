@@ -20,15 +20,20 @@ public:
 
 public:
 
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
 
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
 
 	void SetPosition(const lwp::Vector3& pos)
 	{
-		mainSprite.transform.translation = pos;
-		subSprite.transform.translation = pos;
+		basePosition = pos;
 	}
-
 
 	std::string GetTexturePass()
 	{
