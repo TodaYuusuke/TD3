@@ -177,6 +177,7 @@
     <ClCompile Include="Game\Scenes\Title\TitleScene.cpp" />
     <ClCompile Include="Game\Objects\Player\Level\Level.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Idol.cpp" />
+    <ClCompile Include="Game\Objects\Player\HP\HPSprite.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Game\Objects\Player\Player.cpp" />
     <ClCompile Include="Game\Objects\Player\Weapon\Weapon.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="Game\Objects\Player\Status\Derived\Idol.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Move.h" />
     <ClInclude Include="Game\Objects\Player\HP\PlayerHP.h" />
+    <ClInclude Include="Game\Objects\Player\HP\HPSprite.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
