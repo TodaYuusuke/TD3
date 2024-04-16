@@ -121,6 +121,8 @@ void PlayerParameter::ApplyAttack()
 	base.slashPower_ = (config_->Power_.BASEPOWER_ + param.Attack.slashPowerDelta.base);
 	// 攻撃範囲
 	base.slashRange_ = (config_->Length_.WEAPONCOLLISIONRADIUS_ + param.Attack.slashRangeDelta.base);
+	// 攻撃距離
+	base.slashLength_ = (config_->Speed_.SLASH_ + param.Attack.slashLengthDelta.base);
 	// 攻撃回数
 	base.slashNum_ = config_->Count_.SLASHRELATIONBASE_ + (int)param.Attack.slashNumDelta.base;
 
@@ -131,6 +133,8 @@ void PlayerParameter::ApplyAttack()
 	multi.slashPower_ = (0.01f * param.Attack.slashPowerDelta.percent);
 	// 攻撃範囲
 	multi.slashRange_ = (0.01f * param.Attack.slashRangeDelta.percent);
+	// 攻撃距離
+	multi.slashLength_ = (0.01f * param.Attack.slashLengthDelta.percent);
 	// 攻撃回数(最低値)
 	multi.slashNum_ = 1;
 

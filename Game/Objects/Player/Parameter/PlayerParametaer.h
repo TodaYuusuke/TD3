@@ -86,6 +86,7 @@ public:	//*** サブクラス ***//
 		int slashNum_ = 0;			// 回数
 		float slashPower_ = 0.0f;	// 強さ
 		float slashRange_ = 0.0f;	// カプセル範囲
+		float slashLength_ = 0.0f;	// スラッシュ距離補正
 
 		AttackParam operator*(const AttackParam& obj)
 		{
@@ -93,6 +94,7 @@ public:	//*** サブクラス ***//
 			temp.slashNum_ = std::max<int>(this->slashNum_, obj.slashNum_);
 			temp.slashPower_ = this->slashPower_ * obj.slashPower_;
 			temp.slashRange_ = this->slashRange_ * obj.slashRange_;
+			temp.slashLength_ = this->slashLength_ * obj.slashLength_;
 			return temp;
 		}
 	};

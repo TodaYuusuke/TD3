@@ -1,5 +1,6 @@
 #include "Level.h"
 
+#include "Game/Objects/Player/Player.h"
 #include "Game/Objects/GameMask.h"
 #include "Game/Objects/Upgrade/UpgradeManager.h"
 
@@ -10,8 +11,9 @@ Level::~Level()
 {
 }
 
-void Level::Initialize(const lwp::Vector3& position)
+void Level::Initialize(Player* p)
 {
+	player_ = p;
 	// 経験値初期化
 	exp_ = 0.0f;
 	// とりあえず 10
@@ -21,16 +23,15 @@ void Level::Initialize(const lwp::Vector3& position)
 	CreateCollision();
 	// 場所を設定
 	//collider_->Create(position, position);
-	collider_.Create(position);
+	collider_.Create(player_->demoModel_.transform.translation);
 }
 
-void Level::Update(const lwp::Vector3& position)
+void Level::Update()
 {
 	// 当たり判定を 1 フレーム毎に更新
 	//collider_->start = collider_->end;
 	//collider_->end = position;
-	collider_.Create(position);
-
+	collider_.Create(player_->demoModel_.transform.translation);
 
 #ifdef DEMO
 

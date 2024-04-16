@@ -2,6 +2,8 @@
 
 #include <Adapter.h>
 
+class Player;
+
 class Level
 {
 public: //*** パブリック関数 ***//
@@ -13,10 +15,10 @@ public: //*** パブリック関数 ***//
 	~Level();
 
 	// 初期化
-	void Initialize(const lwp::Vector3& position = { 0.0f,0.0f,0.0f });
+	void Initialize(Player* p);
 
 	// 更新
-	void Update(const lwp::Vector3& position);
+	void Update();
 
 public: //*** ゲッターセッター ***//
 
@@ -42,6 +44,9 @@ private: //*** プライベート関数 ***//
 #endif // DEMO
 
 private: //*** プライベート変数 ***//
+
+	// プレイヤーのポインタ
+	Player* player_ = nullptr;
 
 	// 今のレベル
 	uint32_t lv_ = 1u;
