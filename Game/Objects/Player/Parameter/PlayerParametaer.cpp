@@ -36,7 +36,7 @@ void PlayerParameter::ResetParameter()
 
 	Attack.slashPower_ = config_->Power_.BASEPOWER_;
 	Attack.slashRange_ = config_->Length_.WEAPONCOLLISIONRADIUS_;
-	Attack.slashNum_ = config_->Count_.SLASHRELATIONMAX_;
+	Attack.slashNum_ = config_->Count_.SLASHRELATIONBASE_;
 
 	Speed.move_ = (config_->Speed_.MOVE_);
 	Speed.slash_ = (config_->Speed_.SLASH_);
@@ -112,7 +112,7 @@ void PlayerParameter::ApplyAttack()
 	// 攻撃範囲
 	base.slashRange_ = (config_->Length_.WEAPONCOLLISIONRADIUS_ + param.Attack.slashRangeDelta.base);
 	// 攻撃回数
-	base.slashNum_ = config_->Count_.SLASHRELATIONMAX_ + (int)param.Attack.slashNumDelta.base;
+	base.slashNum_ = config_->Count_.SLASHRELATIONBASE_ + (int)param.Attack.slashNumDelta.base;
 
 	// 掛け算部分の計算
 	AttackParam multi;

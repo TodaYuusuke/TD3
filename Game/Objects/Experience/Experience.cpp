@@ -62,6 +62,8 @@ void Experience::CreateCollision()
 	// 状態を切り替えたい
 	collider_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollision(data); });
 	collider_.name = "EXP";
+	// 判定を描画しない
+	collider_.isShowWireFrame = false;
 }
 
 void Experience::OnCollision(const lwp::Collider::HitData& data)

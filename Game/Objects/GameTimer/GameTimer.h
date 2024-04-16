@@ -14,6 +14,11 @@ public: //*** パブリック関数 ***//
 
 	static GameTimer* GetInstance();
 
+	// 描画するかどうか
+	bool isActive_ = false;
+	// カウントが終わっているかフラグ
+	bool isEnd_ = false;
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -32,6 +37,11 @@ public: //*** パブリック関数 ***//
 	/// タイマーをリセットする
 	/// </summary>
 	void Reset();
+	/// <summary>
+	/// タイマーを指定した秒数でリセット
+	/// </summary>
+	/// <param name="limit">秒数</param>
+	void Reset(uint32_t limit);
 
 	/// <summary>
 	/// 時間を進める時だけ進める
@@ -48,20 +58,25 @@ private: //*** プライベート変数 ***//
 	// 計測するかのフラグ
 	bool isWatch_ = false;
 
+
 	// 一秒経過するまでを計測する
 	float checkSec_ = 0.0f;
 
 	// 今の経過時間を格納
 	uint32_t currentSec_ = 0u;
+	// 耐久する最大時間
+	uint32_t limitSec_ = 0u;
 
 	// タイマーを表示する場所
 	lwp::Vector3 timerPosition_;
 
-	// 秒
+	// 1 秒
 	GameCounter countS0_;
+	// 10
 	GameCounter countS1_;
-	// 分
+	// 1 分
 	GameCounter countM0_;
+	// 10
 	GameCounter countM1_;
 
 private: //*** プライベート関数 ***//

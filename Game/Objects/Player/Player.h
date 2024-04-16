@@ -23,7 +23,7 @@
 #pragma endregion アップグレード
 
 // 前方宣言
-class TItleScene;
+class GameScene;
 
 class Player final
 {
@@ -139,7 +139,7 @@ public:	//*** セッター,ゲッター ***//
 	bool GetIsJustSlashing() { return flag_.isJustSlashing_; }
 	bool GetIsSlash() { return behavior_ == IStatus::Behavior::Slash; }
 	void SetCameraPointer(FollowCamera* p) { pCamera_ = p; }
-	void SetScene(TItleScene* p) { pScene_ = p; }
+	void SetScene(GameScene* p) { pScene_ = p; }
 	// 状態を外部から設定する
 	void RegistStatus(IStatus::Behavior request);
 	// Vector3 をカメラ方向に変える
@@ -252,7 +252,7 @@ public: //*** プライベート変数 ***//
 	FollowCamera* pCamera_ = nullptr;
 
 	// 今のシーン
-	TItleScene* pScene_ = nullptr;
+	GameScene* pScene_ = nullptr;
 
 	// アップグレードで作成されたパラメータを反映
 	PlayerParameter parameter_;

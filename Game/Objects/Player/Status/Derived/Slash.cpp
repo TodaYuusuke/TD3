@@ -108,5 +108,5 @@ void Slash::ResetCollider()
 	// サイズ
 	player_->colliders_.justSlash_.radius = player_->config_.Length_.JUSTCOLLISIONRADIUS_;
 	player_->colliders_.justSlash_.end = player_->demoModel_.transform.translation + player_->slashData_.vector_ * (player_->config_.Speed_.SLASH_ * player_->config_.Parcent_.JUSTENABLE_);
-	player_->colliders_.justSlash_.isActive = true;
+	//player_->colliders_.justSlash_.isActive = true;
 }

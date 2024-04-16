@@ -10,12 +10,12 @@
 #include "Game/Objects/Upgrade/UpgradeManager.h"
 #pragma endregion
 
-class TItleScene final
+class GameScene final
 	: public IScene
 {
 public:
-	TItleScene() = default;	// コンストラクタは自由に定義可能
-	~TItleScene() = default;
+	GameScene() = default;	// コンストラクタは自由に定義可能
+	~GameScene() = default;
 
 	//*** 純粋仮想関数の実体宣言 ***//
 

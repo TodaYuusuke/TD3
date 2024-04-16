@@ -151,6 +151,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\Scenes\GameOver\GameOverScene.cpp" />
+    <ClCompile Include="Game\Scenes\Clear\ClearScene.cpp" />
+    <ClCompile Include="Game\Scenes\Game\GameScene.cpp" />
     <ClCompile Include="Game\Objects\GameTimer\GameCounter.cpp" />
     <ClCompile Include="Game\Objects\Enemy\Boss\DashBoss.cpp" />
     <ClCompile Include="Game\Objects\Experience\ExpManager.cpp" />
@@ -171,7 +174,7 @@
     <ClCompile Include="Game\Objects\Player\Status\IStatus.cpp" />
     <ClCompile Include="Game\Objects\Upgrade\Function\Pursuit.cpp" />
     <ClCompile Include="Game\Objects\Upgrade\ISkill.cpp" />
-    <ClCompile Include="Game\Scenes\TitleScene.cpp" />
+    <ClCompile Include="Game\Scenes\Title\TitleScene.cpp" />
     <ClCompile Include="Game\Objects\Player\Level\Level.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Idol.cpp" />
     <ClCompile Include="main.cpp" />
@@ -184,6 +187,9 @@
     <ClCompile Include="Game\Objects\Player\HP\PlayerHP.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\Scenes\GameOver\GameOverScene.h" />
+    <ClInclude Include="Game\Scenes\Clear\ClearScene.h" />
+    <ClInclude Include="Game\Scenes\Game\GameScene.h" />
     <ClInclude Include="Game\Objects\GameTimer\GameCounter.h" />
     <ClInclude Include="Game\Objects\GameMask.h" />
     <ClInclude Include="Game\Objects\Enemy\Boss\DashBoss.h" />
@@ -222,7 +228,7 @@
     <ClInclude Include="Game\Objects\Upgrade\Function\Pursuit.h" />
     <ClInclude Include="Game\Objects\Upgrade\ISkill.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\UpgradeList.h" />
-    <ClInclude Include="Game\Scenes\TitleScene.h" />
+    <ClInclude Include="Game\Scenes\Title\TitleScene.h" />
     <ClInclude Include="Game\Objects\Player\Player.h" />
     <ClInclude Include="Game\Objects\Player\Weapon\Weapon.h" />
     <ClInclude Include="Game\Objects\UIPanel\UIPanel.h" />

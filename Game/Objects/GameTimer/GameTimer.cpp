@@ -12,8 +12,12 @@ GameTimer* GameTimer::GetInstance()
 void GameTimer::Initialize()
 {
 	isWatch_ = false;
+	isEnd_ = false;
 	checkSec_ = 0.0f;
 	currentSec_ = 0u;
+	limitSec_ = 0u;
+	// 最大時間を設定
+	limitSec_ = 60 * 10;
 
 	// タイマーの場所
 	timerPosition_ = { 1600.0f,100.f,0.0f };
@@ -43,6 +47,7 @@ void GameTimer::Initialize()
 void GameTimer::Start()
 {
 	isWatch_ = true;
+	isActive_ = true;
 }
 
 void GameTimer::Stop()
@@ -53,17 +58,35 @@ void GameTimer::Stop()
 void GameTimer::Reset()
 {
 	isWatch_ = true;
+	isActive_ = false;
+	isEnd_ = false;
 	checkSec_ = 0.0f;
 	currentSec_ = 0u;
-	countS0_.Reset(0);
-	countS1_.Reset(0);
-	countM0_.Reset(0);
-	// 10 分生存
-	countM1_.Reset(1);
+	// 分
+	int m = limitSec_ / 60;
+	// 秒
+	int s = limitSec_ % 60;
+	countM1_.Reset(m / 10);
+	countM0_.Reset(m % 10);
+	countS1_.Reset(s / 10);
+	countS0_.Reset(s % 10);
+}
+
+void GameTimer::Reset(uint32_t limit)
+{
+	limitSec_ = limit;
+	Reset();
 }
 
 void GameTimer::Update()
 {
+	countS0_.isActive_ =
+		countS1_.isActive_ =
+		countM0_.isActive_ =
+		countM1_.isActive_ = isActive_;
+	// 終わっていたらカウントしない
+	isWatch_ = !isEnd_;
+
 	DebugWindow();
 	checkSec_ += isWatch_ ? GetDeltaTimeF() : 0.0f;
 	// 1 秒立っていたら
@@ -71,6 +94,7 @@ void GameTimer::Update()
 	{
 		currentSec_++;
 		checkSec_ = 0.0f;
+		limitSec_--;
 		// 1 秒経つ
 		if (countS0_.Decrease())
 		{
@@ -88,6 +112,10 @@ void GameTimer::Update()
 			}
 		}
 	}
+	if (limitSec_ == 0u)
+	{
+		isEnd_ = true;
+	}
 	countS0_.Update();
 	countS1_.Update();
 	countM0_.Update();
@@ -103,7 +131,9 @@ void GameTimer::DebugWindow()
 		Reset();
 	}
 	ImGui::Checkbox("Watch", &isWatch_);
+	ImGui::Checkbox("End", &isEnd_);
 	ImGui::Text("Time   : %d", currentSec_);
+	ImGui::Text("Limit  : %d", limitSec_);
 	ImGui::Text("Second : %.4f", checkSec_);
 
 	ImGui::Separator();

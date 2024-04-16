@@ -43,7 +43,7 @@ void PlayerConfig::InitLength()
 
 void PlayerConfig::InitCount()
 {
-	Count_.SLASHRELATIONMAX_ = 3u;
+	Count_.SLASHRELATIONBASE_ = 3u;
 	Count_.BASEHP_ = 3u;
 }
 

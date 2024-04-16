@@ -63,7 +63,7 @@ public: //*** サブクラス ***//
 	struct Counts
 	{
 		// 居合回数の初期値
-		uint32_t SLASHRELATIONMAX_ = 3u;
+		uint32_t SLASHRELATIONBASE_ = 3u;
 		// 体力
 		uint32_t BASEHP_ = 3u;
 		// 最大体力
