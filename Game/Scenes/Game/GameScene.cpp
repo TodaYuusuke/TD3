@@ -136,9 +136,9 @@ void GameScene::Update()
 	}
 
 	// デバッグ
-#ifdef DEMO
+//#ifdef DEMO
 	upgradeManager_->DebugWindow(player_.get());
-#endif // DEMO
+//#endif // DEMO
 
 
 	if (!upgradeManager_->GetLevelUpFlag())
