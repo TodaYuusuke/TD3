@@ -155,6 +155,7 @@
     <ClCompile Include="Game\Scenes\Clear\ClearScene.cpp" />
     <ClCompile Include="Game\Scenes\Game\GameScene.cpp" />
     <ClCompile Include="Game\Objects\GameTimer\GameCounter.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\Boss\ArrowBoss.cpp" />
     <ClCompile Include="Game\Objects\Enemy\Boss\DashBoss.cpp" />
     <ClCompile Include="Game\Objects\Experience\ExpManager.cpp" />
     <ClCompile Include="Game\Objects\Experience\Experience.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Game\Objects\Player\Level\Level.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Idol.cpp" />
     <ClCompile Include="Game\Objects\Player\HP\HPSprite.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\Arrow\HomingArrow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Game\Objects\Player\Player.cpp" />
     <ClCompile Include="Game\Objects\Player\Weapon\Weapon.cpp" />
@@ -186,6 +188,7 @@
     <ClCompile Include="Game\Objects\Upgrade\UpgradeManager.cpp" />
     <ClCompile Include="Game\Objects\Player\Status\Derived\Move.cpp" />
     <ClCompile Include="Game\Objects\Player\HP\PlayerHP.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\Boss\JumpBoss.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Scenes\GameOver\GameOverScene.h" />
@@ -193,6 +196,7 @@
     <ClInclude Include="Game\Scenes\Game\GameScene.h" />
     <ClInclude Include="Game\Objects\GameTimer\GameCounter.h" />
     <ClInclude Include="Game\Objects\GameMask.h" />
+    <ClInclude Include="Game\Objects\Enemy\Boss\ArrowBoss.h" />
     <ClInclude Include="Game\Objects\Enemy\Boss\DashBoss.h" />
     <ClInclude Include="Game\Objects\Experience\ExpManager.h" />
     <ClInclude Include="Game\Objects\Experience\Experience.h" />
@@ -241,6 +245,8 @@
     <ClInclude Include="Game\Objects\Player\Status\Derived\Move.h" />
     <ClInclude Include="Game\Objects\Player\HP\PlayerHP.h" />
     <ClInclude Include="Game\Objects\Player\HP\HPSprite.h" />
+    <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\Arrow\HomingArrow.h" />
+    <ClInclude Include="Game\Objects\Enemy\Boss\JumpBoss.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

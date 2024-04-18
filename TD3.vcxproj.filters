@@ -46,6 +46,11 @@
     <ClCompile Include="Game\Scenes\Game\GameScene.cpp" />
     <ClCompile Include="Game\Scenes\Clear\ClearScene.cpp" />
     <ClCompile Include="Game\Scenes\GameOver\GameOverScene.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\Boss\ArrowBoss.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\Arrow\HomingArrow.cpp" />
+    <ClCompile Include="Game\Objects\Player\PlayerConfing.cpp" />
+    <ClCompile Include="Game\Objects\Player\PlayerParametaer.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\Boss\JumpBoss.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.h" />

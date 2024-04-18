@@ -13,7 +13,7 @@ FollowCamera::FollowCamera() {
 	isEndEase_ = false;
 	fovState_ = FovState::NORMAL;
 	preFovState_ = fovState_;
-	followRate_ = 1.0f;
+	followRate_ = kFollowRate;
 }
 
 void FollowCamera::Update() {
@@ -23,7 +23,7 @@ void FollowCamera::Update() {
 	// 追従の計算
 	if (target_) {
 		// 追従座標の補間
-		interTarget_ = LWP::Math::Vector3::Slerp(interTarget_, target_->translation, 0.1f);
+		interTarget_ = LWP::Math::Vector3::Slerp(interTarget_, target_->translation, followRate_);
 
 		// オフセットの計算
 		LWP::Math::Vector3 offset = CalcOffset();
@@ -68,6 +68,9 @@ void FollowCamera::InputAngle() {
 	destinationAngle_.x -= Controller::GetRStick().y * sensitivity.y;
 	destinationAngle_.y += Controller::GetRStick().x * sensitivity.x;
 
+	// 上下の回転に制限をかける
+	destinationAngle_.x = std::clamp<float>(destinationAngle_.x, kMinAxisX, kMaxAxisX);
+
 	// Rスティック押し込み
 	// 角度リセット
 	if (Controller::GetTrigger(XINPUT_GAMEPAD_RIGHT_THUMB)) {
@@ -78,6 +81,18 @@ void FollowCamera::InputAngle() {
 	// 最短角度補間
 	pCamera_->transform.rotation.y = LerpShortAngle(pCamera_->transform.rotation.y, destinationAngle_.y, kRotationSmoothness);
 	pCamera_->transform.rotation.x = LerpShortAngle(pCamera_->transform.rotation.x, destinationAngle_.x, kRotationSmoothness);
+}
+
+void FollowCamera::StartFovEasing() {
+	float t = Utility::Easing::OutExpo(currentFrame_ / 90);
+
+	if (t < 1.0f) {
+		pCamera_->fov = Lerp(tempFov_, effectGoalFov_, t);
+		currentFrame_++;
+	}
+	if (t >= 1.0f) {
+		fovState_ = FovState::NORMAL;
+	}
 }
 
 #pragma region ジャスト抜刀
@@ -105,14 +120,6 @@ void FollowCamera::ResetFov() {
 	}
 }
 
-void FollowCamera::StartSlash() {
-	fovState_ = FovState::REDUCE;
-}
-
-void FollowCamera::EndSlash() {
-	fovState_ = FovState::RESET;
-}
-
 void FollowCamera::JustSlashUpdate() {
 	// ジャスト抜刀の場合
 	if (player_->GetIsJustSlashing() && player_->GetIsSlash()) {
@@ -137,17 +144,21 @@ void FollowCamera::JustSlashUpdate() {
 
 	switch (fovState_) {
 	case FollowCamera::NORMAL:
-		followRate_ = 1.0f;
+		//followRate_ = 1.0f;
 		break;
 	case FollowCamera::REDUCE:
 		// カメラを後追いさせる
-		followRate_ = kFollowRate;
+		//followRate_ = kFollowRate;
 		// 視野角を小さくする
 		ReduceFov(goalFov_);
 		break;
 	case FollowCamera::RESET:
 		// 視野角を大きくする
 		ResetFov();
+		break;
+	case FollowCamera::EFFECT:
+		// 
+		StartFovEasing();
 		break;
 	}
 }

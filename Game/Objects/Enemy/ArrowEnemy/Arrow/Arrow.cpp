@@ -14,17 +14,21 @@ void Arrow::Init(lwp::WorldTransform transform)
 	attackWork.targetpoint = attackWork.targetpoint.Normalize();
 
 	// 当たり判定を設定
+	//aabb_ = new LWP::Object::Collider::AABB();
 	aabb_.CreateFromPrimitive(&model_);
 	aabb_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
 	aabb_.mask.SetHitFrag(MaskLayer::Player | MaskLayer::Layer3);
 	aabb_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		data;
-		if (data.state == OnCollisionState::Press &&
-			(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
+		if (!(data.state == OnCollisionState::None) &&
+			data.hit &&
+			((data.hit->mask.GetBelongFrag() & MaskLayer::Player) ||
+				(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3)))
 		{
 			Death();
 		}
 		});
+
 	aabb_.isActive = true;
 }
 
@@ -40,18 +44,24 @@ void Arrow::Update()
 	}
 	// 寿命を進める
 	deadTimer_++;
-#ifdef DEMO
-	ImGui::Text("isAlive : %d", attackWork.flag);
-#endif
 }
 
 void Arrow::Attack()
 {
-	model_.transform.translation += attackWork.targetpoint * attackWork.speed * LWP::Info::GetDeltaTimeF();
+	// 弾が向いている方向に動く処理
+	LWP::Math::Vector3 velocity = { 0,0,1 };
+	LWP::Math::Matrix4x4 rotateMatrix = LWP::Math::Matrix4x4::CreateRotateXYZMatrix(model_.transform.rotation);
+	velocity = velocity * rotateMatrix;
+	velocity_ = velocity.Normalize();
+	velocity_ *= kNormalSpeed;
+
+	// 加算
+	model_.transform.translation += velocity_ * LWP::Info::GetDeltaTime();
+
+	attackWork.flag = true;
 }
 
 void Arrow::Death()
 {
 	attackWork.flag = false;
 }
-
