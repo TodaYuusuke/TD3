@@ -26,7 +26,7 @@ void Damage::Reset()
 	// 無敵判定を出す
 	player_->flag_.isInvincible_ = true;
 	player_->invincibleTime_ = 0.0f;
-	player_->maxInvincibleTime_ = player_->config_.Time_.DAMAGEINVINCIBLE_;
+	player_->maxInvincibleTime_ = player_->parameter_.Time.invincibleDamage_;
 	// 武器の判定を消す
 	player_->colliders_.weapon_.isActive = false;
 	// アニメーション作成

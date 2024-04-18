@@ -343,13 +343,15 @@ void Player::CreateJustCollision()
 
 void Player::OnCollisionPlayer(lwp::Collider::HitData& data)
 {
-	if (data.state == OnCollisionState::Press &&
+	if (data.state == OnCollisionState::Trigger &&
 		!flag_.isInvincible_)
+	{
 		if
 			(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag())
 		{
 			reqBehavior_ = Behavior::Damage;
 		}
+	}
 }
 
 void Player::OnCollisionWeapon(lwp::Collider::HitData& data)

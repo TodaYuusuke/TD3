@@ -6,3 +6,4 @@
 #include "Skill_AttackRangeUp.h"
 #include "Skill_AttackLengthUp.h"
 #include "PursuitFlag.h"
+#include "Skill_DamageInvincibleAdd.h"

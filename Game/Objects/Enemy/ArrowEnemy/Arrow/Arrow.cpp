@@ -1,5 +1,7 @@
 #include "Arrow.h"
 
+#include "Game/Objects/GameMask.h"
+
 void Arrow::Init(lwp::WorldTransform transform)
 {
 	// モデルの作成
@@ -16,14 +18,13 @@ void Arrow::Init(lwp::WorldTransform transform)
 	// 当たり判定を設定
 	//aabb_ = new LWP::Object::Collider::AABB();
 	aabb_.CreateFromPrimitive(&model_);
-	aabb_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	aabb_.mask.SetHitFrag(MaskLayer::Player | MaskLayer::Layer3);
+	aabb_.mask.SetBelongFrag(GameMask::EnemyAttack());
+	aabb_.mask.SetHitFrag(GameMask::Player() | GameMask::Weapon());
 	aabb_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {
 		data;
 		if (!(data.state == OnCollisionState::None) &&
 			data.hit &&
-			((data.hit->mask.GetBelongFrag() & MaskLayer::Player) ||
-				(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3)))
+			(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 		{
 			Death();
 		}

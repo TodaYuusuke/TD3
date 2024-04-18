@@ -42,6 +42,9 @@ void PlayerParameter::ResetParameter()
 	Speed.slash_ = (config_->Speed_.SLASH_);
 	Speed.moment_ = (config_->Speed_.MOMENT_);
 
+	Time.invincibleDamage_ = config_->Time_.DAMAGEINVINCIBLE_;
+	Time.justTake_ = config_->Time_.JUSTTAKETIME_;
+	Time.momentTime_ = config_->Time_.MOMENTBASE_;
 }
 
 void PlayerParameter::IncreaseHP()
@@ -177,9 +180,9 @@ void PlayerParameter::ApplyTime()
 	// 掛け算部分の計算
 	TimeParam multi;
 
-	base.justTake_ = (0.01f * param.Time.justTimeDelta.percent);
-	base.momentTime_ = (0.01f * param.Time.momentTimeDelta.percent);
-	base.invincibleDamage_ = (0.01f * param.Time.damageInvincibleTimeDelta.percent);
+	multi.justTake_ = (0.01f * param.Time.justTimeDelta.percent);
+	multi.momentTime_ = (0.01f * param.Time.momentTimeDelta.percent);
+	multi.invincibleDamage_ = (0.01f * param.Time.damageInvincibleTimeDelta.percent);
 
 	this->Time = base * multi;
 }

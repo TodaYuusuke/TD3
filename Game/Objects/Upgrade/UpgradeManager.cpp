@@ -33,7 +33,7 @@ void L::UpgradeManager::Init()
 	attackUpgrades_.push_back(new Skill_AttackRangeUp);
 
 	// 逃走
-	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
+	escapeUpgrades_.push_back(new Skill_DamageInvincibleAdd);
 	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
 	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
 	escapeUpgrades_.push_back(new Skill_AttackLengthUp);

@@ -1,6 +1,7 @@
 #include "IEnemy.h"
 
 #include "Game/Objects/Player/Player.h"
+#include "Game/Objects/GameMask.h"
 
 using namespace LWP::Object::Collider;
 
@@ -54,8 +55,9 @@ void IEnemy::CreateCollider()
 	// 当たり判定を取る
 	collider_.CreateFromPrimitive(&models_[0]);
 	// マスク処理
-	collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	collider_.mask.SetHitFrag(MaskLayer::Layer3 | MaskLayer::Layer7);
+	collider_.mask.SetBelongFrag(GameMask::Enemy() | GameMask::EnemyAttack());
+	// 追撃のマスクしらない
+	collider_.mask.SetHitFrag(GameMask::Weapon() | MaskLayer::Layer7);
 	// 当たった時の処理
 	collider_.SetOnCollisionLambda([this](HitData data) {OnCollision(data);	});
 }

@@ -8,3 +8,4 @@
 #include "LifeMaxDelta.h"
 #include "PowerDelta.h"
 #include "PowerPerDelta.h"
+#include "InvincibleDamageDelta.h"
