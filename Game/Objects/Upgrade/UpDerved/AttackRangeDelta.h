@@ -18,7 +18,7 @@ namespace L
 		/// <para>受け取った値によって読み込む画像を変えたい</para>
 		/// </summary>
 		/// <param name="v">プラスでもマイナスでもいい</param>
-		AttackRangeDelta(float v = 5.0f) : var(v) {};
+		AttackRangeDelta(float v = 0.5f) : var(v) {};
 
 
 

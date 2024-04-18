@@ -192,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\PursuitFlag.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_AttackRangeUp.h" />
     <ClInclude Include="Game\Scenes\GameOver\GameOverScene.h" />
     <ClInclude Include="Game\Scenes\Clear\ClearScene.h" />
     <ClInclude Include="Game\Scenes\Game\GameScene.h" />

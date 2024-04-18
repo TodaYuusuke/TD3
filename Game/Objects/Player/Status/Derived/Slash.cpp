@@ -101,7 +101,7 @@ void Slash::ResetCollider()
 	lwp::Vector3 start = player_->demoModel_.transform.translation;
 	lwp::Vector3 end = player_->demoModel_.transform.translation;
 	player_->colliders_.weapon_.Create(start, end);
-	player_->colliders_.weapon_.radius = player_->config_.Length_.WEAPONCOLLISIONRADIUS_;
+	player_->colliders_.weapon_.radius = player_->parameter_.Attack.slashRange_;
 	player_->colliders_.weapon_.isActive = true;
 	// ジャスト判定を作る
 	player_->colliders_.justSlash_.Create(start, end);
