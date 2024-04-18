@@ -33,13 +33,13 @@ void ArrowBoss::Init()
 	models_[1].transform.Parent(&models_[0].transform);
 	models_[2].transform.Parent(&models_[0].transform);
 	// 手のモデルの位置を設定
-	models_[1].transform.translation = { -1.5f, 0.25f, 0.5f };
-	models_[2].transform.translation = { 1.5f, 0.25f, 0.5f };
+	models_[1].transform.translation = { -1.0f, 0.25f, 0.5f };
+	models_[2].transform.translation = { 1.0f, 0.25f, 0.5f };
 
 	// 色
-	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::RED);
+	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::YELLOW);
 	// 大きさ
-	models_[0].transform.scale = { 1,2,1 };
+	models_[0].transform.scale = {2,3,2};
 	// 当たり判定を有効化
 	isActive_ = true;
 
@@ -70,10 +70,30 @@ void ArrowBoss::Init()
 	};
 	missileContrail_.isActive = true;
 #pragma endregion
+
+	hp_ = 50;
 }
 
 void ArrowBoss::Update()
 {
+	// 死亡時アニメーション
+	// 死んだかどうかはすぐに判別
+	if (IsDead_)
+	{
+		Dying();
+		DyingAnimation();
+		return;
+	}
+
+	// 無敵とかを調べる
+	CheckFlags();
+	// ここで無量空処されてる時は処理しない
+	// アニメーションとかあるなら処理する
+	if (isUtopia_)
+	{
+		return;
+	}
+
 	// 初期化
 	if (behaviorRequest_) {
 		//  振るまいを変更
@@ -128,25 +148,6 @@ void ArrowBoss::SetPosition(lwp::Vector3 pos)
 
 LWP::Math::Vector3 ArrowBoss::GetDirectVel() {
 	return (player_->GetWorldTransform()->translation - models_[0].transform.translation).Normalize();
-}
-
-void ArrowBoss::CreateCollider()
-{
-	// 当たり判定を取る
-	collider_.CreateFromPrimitive(&models_[0]);
-	// マスク処理
-	collider_.mask.SetBelongFrag(MaskLayer::Enemy | MaskLayer::Layer2);
-	collider_.mask.SetHitFrag(MaskLayer::Layer3);
-	// 今のところは何もしていない
-	collider_.SetOnCollisionLambda([this](HitData data) {
-		data;
-		if (data.state == OnCollisionState::Press && isActive_ &&
-			data.hit &&
-			(data.hit->mask.GetBelongFrag() & MaskLayer::Layer3))
-		{
-			isActive_ = false;
-		}
-		});
 }
 
 void ArrowBoss::Move()

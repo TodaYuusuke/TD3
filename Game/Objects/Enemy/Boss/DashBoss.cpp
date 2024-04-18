@@ -16,13 +16,13 @@ void DashBoss::Init()
 	models_[1].transform.Parent(&models_[0].transform);
 	models_[2].transform.Parent(&models_[0].transform);
 	// 手のモデルの位置を設定
-	models_[1].transform.translation = { -1.5f, 0.25f, 0.5f };
-	models_[2].transform.translation = { 1.5f, 0.25f, 0.5f };
+	models_[1].transform.translation = { -1.0f, 0.25f, 0.5f };
+	models_[2].transform.translation = { 1.0f, 0.25f, 0.5f };
 
 	// 色
-	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::RED);
+	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLUE);
 	// 大きさ
-	models_[0].transform.scale = { 1,2,1 };
+	models_[0].transform.scale = kBossSize;
 	// 当たり判定を有効化
 	isActive_ = true;
 
@@ -33,12 +33,45 @@ void DashBoss::Init()
 	attackWaitTime_ = kAttackWaitTime;
 	// 現在の時間
 	currentFrame_ = 0;
+
+	//// 攻撃モーションを追加
+	//attackMotion_[BODY]
+	//	.Add(&models_[BODY].transform.scale, , 0, 0.05f)
+	//	.Add(&models_[BODY].transform.scale, , 0.05f, 0.1f);
+	//attackMotion_[L_ARM]
+	//	.Add(&models_[L_ARM].transform.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
+	//	.Add(&models_[L_ARM].transform.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
+	//attackMotion_[R_ARM]
+	//	.Add(&models_[R_ARM].transform.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
+	//	.Add(&models_[R_ARM].transform.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
+
+	// HP を設定
+	hp_ = 60;
 }
 
 void DashBoss::Update()
 {
 	// 前のフレームの攻撃状態を更新
 	isPreAttack_ = isAttack;
+
+	// 死亡時アニメーション
+	// 死んだかどうかはすぐに判別
+	if (IsDead_)
+	{
+		Dying();
+		DyingAnimation();
+		return;
+	}
+
+	// 無敵とかを調べる
+	CheckFlags();
+	// ここで無量空処されてる時は処理しない
+	// アニメーションとかあるなら処理する
+	if (isUtopia_)
+	{
+		return;
+	}
+
 
 	// 初期化
 	if (behaviorRequest_) {
@@ -62,15 +95,14 @@ void DashBoss::Update()
 	case Behavior::kRoot:
 	default:
 		B_RootUpdate();
+		// 体を自機に向ける
+		Aim();
 		break;
 		// ダッシュ
 	case Behavior::kDash:
 		B_DashUpdate();
 		break;
 	}
-
-	// 体を自機に向ける
-	Aim();
 
 	// 移動処理
 	Move();
@@ -130,7 +162,7 @@ void DashBoss::B_RootUpdate() {
 		// 自機との方向ベクトルを取得(ただしy方向のベクトルは取得しない)
 		dashVel_ = GetDirectVel();
 		dashVel_.y = 0;
-		
+
 		// 攻撃可能状態か
 		if (isAttack) {
 			behaviorRequest_ = Behavior::kDash;
@@ -140,6 +172,9 @@ void DashBoss::B_RootUpdate() {
 
 void DashBoss::B_DashInit() {
 	isAttack = false;
+	for (int i = 0; i < BODYPARTSCOUNT; i++) {
+		attackMotion_[i].Start();
+	}
 }
 
 void DashBoss::B_DashUpdate() {

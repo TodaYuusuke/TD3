@@ -14,13 +14,6 @@ private:// 構造体
 		kWaveAttack	 //	攻撃開始
 	};
 
-	enum BodyParts {
-		BODY,
-		L_ARM,
-		R_ARM,
-		BODYPARTSCOUNT
-	};
-
 	// イージングで使用する
 	struct EaseData {
 		LWP::Math::Vector3 start;

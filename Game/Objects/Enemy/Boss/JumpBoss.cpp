@@ -42,12 +42,12 @@ void JumpBoss::Init()
 	jumpMotion_[BODY]
 		.Add(&models_[BODY].transform.scale, -1 * kBossSize, 0, 0.05f)
 		.Add(&models_[BODY].transform.scale, kBossSize, 0.05f, 0.1f);
-	//jumpMotion_[L_ARM]
-	//	.Add(&models_[L_ARM].transform.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
-	//	.Add(&models_[L_ARM].transform.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
-	//jumpMotion_[R_ARM]
-	//	.Add(&models_[R_ARM].transform.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
-	//	.Add(&models_[R_ARM].transform.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
+	jumpMotion_[L_ARM]
+		.Add(&models_[L_ARM].transform.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
+		.Add(&models_[L_ARM].transform.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
+	jumpMotion_[R_ARM]
+		.Add(&models_[R_ARM].transform.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
+		.Add(&models_[R_ARM].transform.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
 }
 
 void JumpBoss::Update()

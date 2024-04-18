@@ -7,7 +7,7 @@
 #include "Boss/ArrowBoss.h"
 #include "Boss/JumpBoss.h"
 #include "Game/Objects/Experience/ExpManager.h"
-
+#include "Game/Objects/GameTimer/GameTimer.h"
 #include <random>
 #include <numbers>
 
@@ -35,19 +35,22 @@ public:
 
 #pragma region 敵の発生
 	// 敵の発生場所をランダムで決める
-	void EnemySpown();
+	void EnemySpawn();
 	// 通常
-	void NormalEnemySpown(lwp::Vector3 pos);
+	void NormalEnemySpawn(lwp::Vector3 pos);
 	// 盾
-	void ShieldEnemySpown(lwp::Vector3 pos);
+	void ShieldEnemySpawn(lwp::Vector3 pos);
 	// 弓
-	void ArrowEnemySpown(lwp::Vector3 pos);
+	void ArrowEnemySpawn(lwp::Vector3 pos);
+
+	// ボスの発生条件と場所
+	void BossSpawn();
 	// ダッシュするボス
-	void DashBossSpown(lwp::Vector3 pos);
+	void DashBossSpawn(lwp::Vector3 pos);
 	// 遠距離ボス
-	void ArrowBossSpown(lwp::Vector3 pos);
+	void ArrowBossSpawn(lwp::Vector3 pos);
 	// ジャンプ攻撃するボス
-	void JumpBossSpown(lwp::Vector3 pos);
+	void JumpBossSpawn(lwp::Vector3 pos);
 #pragma endregion
 
 	/// Getter
@@ -55,16 +58,19 @@ public:
 	/// Setter
 	// 自機のアドレスを設定
 	void SetPlayer(Player* player) { player_ = player; }
+	// 経験値マネージャを設定
 	void SetExpManager(ExpManager* p) { exp_ = p; }
-
 	// 追従カメラのアドレスを設定
 	void SetCamera(FollowCamera* camera) { followCamera_ = camera; }
 
 private:// 定数
 	// 敵発生頻度
-	const int kSpownFrequency = 120;
+	const int kSpawnFrequency = 120;
 
 private:
+	// ゲームタイマー
+	GameTimer* gameTimer_;
+
 	// 追従カメラのアドレス
 	FollowCamera* followCamera_;
 
@@ -80,6 +86,9 @@ private:
 	int currentFrame_ = 0;
 
 	int SpawnNum = 0;
+
+	// ボスのスポーンフラグ
+	bool isBossSpawn_;
 
 private: //*** プライベート関数 ***//
 

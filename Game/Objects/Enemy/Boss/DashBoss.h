@@ -58,15 +58,15 @@ private:// プライベートなメンバ関数
 
 private:// 定数
 	// 攻撃する範囲
-	const float kAttackRange = 10.0f;
+	const float kAttackRange = 20.0f;
 
 	// 突進速度の係数
 	const float kDashSpeedCoefficient = 1.0f;
 
 	// 攻撃のクールタイム
-	const int kAttackWaitTime = 120;
+	const int kAttackWaitTime = 240;
 	// 突進攻撃の全体フレーム
-	const int kDashAttackAllFrame = 15;
+	const int kDashAttackAllFrame = 30;
 
 private:// プライベートな変数
 	// ダッシュの方向ベクトル
@@ -82,4 +82,7 @@ private:// プライベートな変数
 	Behavior behavior_ = Behavior::kRoot;
 	// 次の振るまいリクエスト
 	std::optional<Behavior> behaviorRequest_ = std::nullopt;
+
+	// 攻撃アニメーション
+	LWP::Resource::Motion attackMotion_[3];
 };

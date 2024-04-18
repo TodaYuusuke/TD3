@@ -16,6 +16,15 @@ class Player;
 
 class IEnemy
 {
+protected:
+	// 体のパーツ
+	enum BodyParts {
+		BODY,
+		L_ARM,
+		R_ARM,
+		BODYPARTSCOUNT
+	};
+
 public:
 	// デストラクタ
 	virtual ~IEnemy() = default;

@@ -48,6 +48,13 @@ public: //*** パブリック関数 ***//
 	/// </summary>
 	void Update();
 
+	//*** Getter ***//
+
+	/// <summary>
+	/// 経過秒数を取得
+	/// </summary>
+	uint32_t GetCurrentSecond() { return currentSec_; }
+
 private: //*** プライベート変数 ***//
 
 	// 中心からの距離
