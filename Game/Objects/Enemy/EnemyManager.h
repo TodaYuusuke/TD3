@@ -4,6 +4,8 @@
 #include "ShieldEnemy/ShieldEnemy.h"
 #include "ArrowEnemy/ArrowEnemy.h"
 #include "Boss/DashBoss.h"
+#include "Boss/ArrowBoss.h"
+#include "Boss/JumpBoss.h"
 #include "Game/Objects/Experience/ExpManager.h"
 
 #include <random>
@@ -42,6 +44,10 @@ public:
 	void ArrowEnemySpown(lwp::Vector3 pos);
 	// ダッシュするボス
 	void DashBossSpown(lwp::Vector3 pos);
+	// 遠距離ボス
+	void ArrowBossSpown(lwp::Vector3 pos);
+	// ジャンプ攻撃するボス
+	void JumpBossSpown(lwp::Vector3 pos);
 #pragma endregion
 
 	/// Getter
@@ -51,11 +57,17 @@ public:
 	void SetPlayer(Player* player) { player_ = player; }
 	void SetExpManager(ExpManager* p) { exp_ = p; }
 
+	// 追従カメラのアドレスを設定
+	void SetCamera(FollowCamera* camera) { followCamera_ = camera; }
+
 private:// 定数
 	// 敵発生頻度
 	const int kSpownFrequency = 120;
 
 private:
+	// 追従カメラのアドレス
+	FollowCamera* followCamera_;
+
 	// ボスも含めたすべての敵
 	std::list<IEnemy*> enemys_;
 	// 自機

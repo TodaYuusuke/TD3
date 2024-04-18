@@ -4,7 +4,7 @@
 #include "Game/Objects/GameTimer/GameTimer.h"
 #pragma region Upgrades
 #include "Game/Objects/Upgrade/SkDerved/SkillList.h"
-#include "Game/Objects/Upgrade/UpDerved/PursuitFlag.h"
+#include "Game/Objects/Upgrade/SkDerved/PursuitFlag.h"
 #pragma endregion
 
 using namespace LWP;
@@ -116,13 +116,22 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	ImGui::Text("Nums : %d", upgradedConut_);
 	if (ImGui::TreeNode("Selected"))
 	{
-		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
+		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 70));
 
 		for (size_t i = 0; i < attackUpgrades_.size(); i++)
 		{
 			if (attackUpgrades_[i]->isApplied)
 			{
 				attackUpgrades_[i]->DebugTree();
+			}
+		}
+		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 70));
+
+		for (size_t i = 0; i < escapeUpgrades_.size(); i++)
+		{
+			if (escapeUpgrades_[i]->isApplied)
+			{
+				escapeUpgrades_[i]->DebugTree();
 			}
 		}
 

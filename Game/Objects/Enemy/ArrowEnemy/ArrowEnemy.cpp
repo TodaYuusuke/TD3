@@ -97,11 +97,16 @@ void ArrowEnemy::Move()
 
 void ArrowEnemy::Attack()
 {
-	Arrow* arrow = new Arrow();
-	arrow->Init(models_[0].transform);
-	arrows_.push_back(arrow);
-	attackWaitTime_ = kAttackWaitTime;
-	isAttack = false;
+	// 矢の発射
+	if (attackWaitTime_ <= 0)
+	{
+		Aim();
+		Arrow* arrow = new Arrow();
+		arrow->Init(models_[0].transform);
+		arrows_.push_back(arrow);
+		attackWaitTime_ = kAttackWaitTime;
+		isAttack = false;
+	}
 }
 
 void ArrowEnemy::Aim()

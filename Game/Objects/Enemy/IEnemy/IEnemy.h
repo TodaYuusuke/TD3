@@ -1,5 +1,6 @@
 #pragma once
 #include <Adapter.h>
+#include "../../FollowCamera/FollowCamera.h"
 
 #include "Game/Objects/Experience/ExpManager.h"
 
@@ -58,6 +59,7 @@ public: //*** ゲッターセッター ***//
 	/// </summary>
 	/// <returns></returns>
 	bool GetIsActive() const { return isActive_; }
+	bool GetIsDeath() const { return IsDead_; }
 	const lwp::Vector3& GetPosition() { return models_[0].transform.translation; }
 
 	lwp::Vector3 GetPosition()const { return models_[0].transform.translation; }
@@ -65,6 +67,8 @@ public: //*** ゲッターセッター ***//
 	// 狙う対象をセット(今回は自機をセットする)
 	virtual void SetTarget(Player* player) { player_ = player; }
 	virtual void SetPosition(lwp::Vector3 pos) { models_[0].transform.translation = pos; }
+	// カメラのアドレスを設定
+	virtual void SetCamera(FollowCamera* camera) { followCamera_ = camera; }
 	void SetManager(ExpManager* p) { manager_ = p; }
 
 
@@ -100,8 +104,14 @@ protected: //*** 継承クラスで呼び出す共通処理 ***//
 	// 無敵状態や無量空処状態を計算する
 	void CheckFlags();
 
+protected:// 定数
+	const LWP::Math::Vector3 kBossSize = { 4,5,4 };
+
 protected:
 	std::vector<LWP::Primitive::Mesh> models_;
+
+	// 追従カメラのアドレスを受け取る
+	FollowCamera* followCamera_;
 
 	// 敵の当たり判定
 	lwp::Collider::AABB collider_;

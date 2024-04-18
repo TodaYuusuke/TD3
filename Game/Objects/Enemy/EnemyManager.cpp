@@ -3,7 +3,10 @@
 
 void EnemyManager::Init()
 {
-	//NormalEnemySpown({1,0.5f,0});
+	//JumpBossSpown(LWP::Math::Vector3{ 0,0,10 });
+	//ArrowBossSpown(LWP::Math::Vector3{ 0,0,10 });
+	ArrowEnemySpown(LWP::Math::Vector3{ 10,0,0 });
+	//ShieldEnemySpown(LWP::Math::Vector3{ 10,0,0 });
 }
 
 void EnemyManager::Update()
@@ -21,6 +24,7 @@ void EnemyManager::Update()
 	//	currentFrame_ = 0;
 	//}
 	DebugWindow();
+
 	// 消しながら更新
 	for (std::list<IEnemy*>::iterator itr = enemys_.begin(); itr != enemys_.end();)
 	{
@@ -32,11 +36,11 @@ void EnemyManager::Update()
 			itr = enemys_.erase(itr);
 			continue;
 		}
-		// 更新
-		(*itr)->Update();
-
 		// 次へ
 		++itr;
+	}
+	for (IEnemy* enemy : enemys_) {
+		enemy->Update();
 	}
 }
 
@@ -73,11 +77,12 @@ void EnemyManager::EnemySpown()
 		//NormalEnemySpown(pos);
 		// ボスの発生
 		//DashBossSpown(pos);
-		NormalEnemySpown(pos);
+		//ArrowBossSpown(pos);
+		ArrowEnemySpown(pos);
 	}
 	else if (number <= 0.8f) {
 		//ShieldEnemySpown(pos);
-		NormalEnemySpown(pos);
+		ArrowEnemySpown(pos);
 	}
 	else {
 		NormalEnemySpown(pos);
@@ -86,39 +91,63 @@ void EnemyManager::EnemySpown()
 }
 void EnemyManager::NormalEnemySpown(lwp::Vector3 pos)
 {
-	NormalEnemy* NEnemy = new NormalEnemy();
-	NEnemy->Initialize();
-	NEnemy->SetTarget(player_);
-	NEnemy->SetPosition(pos);
-	NEnemy->SetManager(exp_);
-	enemys_.push_back(NEnemy);
+	NormalEnemy* enemy = new NormalEnemy();
+	enemy->Initialize();
+	enemy->SetCamera(followCamera_);
+	enemy->SetTarget(player_);
+	enemy->SetPosition(pos);
+	enemy->SetManager(exp_);
+	enemys_.push_back(enemy);
 }
 void EnemyManager::ShieldEnemySpown(lwp::Vector3 pos)
 {
-	ShieldEnemy* NEnemy = new ShieldEnemy();
-	NEnemy->Initialize();
-	NEnemy->SetTarget(player_);
-	NEnemy->SetPosition(pos);
-	NEnemy->SetManager(exp_);
-	enemys_.push_back(NEnemy);
+	ShieldEnemy* enemy = new ShieldEnemy();
+	enemy->Initialize();
+	enemy->SetCamera(followCamera_);
+	enemy->SetTarget(player_);
+	enemy->SetPosition(pos);
+	enemy->SetManager(exp_);
+	enemys_.push_back(enemy);
 }
 void EnemyManager::ArrowEnemySpown(lwp::Vector3 pos)
 {
-	ArrowEnemy* NEnemy = new ArrowEnemy();
-	NEnemy->Initialize();
-	NEnemy->SetTarget(player_);
-	NEnemy->SetPosition(pos);
-	NEnemy->SetManager(exp_);
-	enemys_.push_back(NEnemy);
+	ArrowEnemy* enemy = new ArrowEnemy();
+	enemy->Initialize();
+	enemy->SetCamera(followCamera_);
+	enemy->SetTarget(player_);
+	enemy->SetPosition(pos);
+	enemy->SetManager(exp_);
+	enemys_.push_back(enemy);
 }
 
 void EnemyManager::DashBossSpown(lwp::Vector3 pos) {
-	DashBoss* dashBoss = new DashBoss();
-	dashBoss->Initialize();
-	dashBoss->SetTarget(player_);
-	dashBoss->SetPosition(pos);
-	dashBoss->SetManager(exp_);
-	enemys_.push_back(dashBoss);
+	DashBoss* boss = new DashBoss();
+	boss->Initialize();
+	boss->SetCamera(followCamera_);
+	boss->SetTarget(player_);
+	boss->SetPosition(pos);
+	boss->SetManager(exp_);
+	enemys_.push_back(boss);
+}
+
+void EnemyManager::ArrowBossSpown(lwp::Vector3 pos) {
+	ArrowBoss* boss = new ArrowBoss();
+	boss->Initialize();
+	boss->SetCamera(followCamera_);
+	boss->SetTarget(player_);
+	boss->SetPosition(pos);
+	boss->SetManager(exp_);
+	enemys_.push_back(boss);
+}
+
+void EnemyManager::JumpBossSpown(lwp::Vector3 pos) {
+	JumpBoss* boss = new JumpBoss();
+	boss->Initialize();
+	boss->SetCamera(followCamera_);
+	boss->SetTarget(player_);
+	boss->SetPosition(pos);
+	boss->SetManager(exp_);
+	enemys_.push_back(boss);
 }
 
 void EnemyManager::DebugWindow()

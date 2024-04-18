@@ -11,15 +11,29 @@ public:
 	void Init(lwp::WorldTransform transform);
 	void Update();
 	void Attack();
-	bool GetIsAlive() { return attackWork.flag; }
-	void SetIsCollision(bool isActive) { aabb_.isActive = isActive; }
-public:
 
+	// ホーミングの更新処理
+	void HomingUpdate();
+
+	//*** Getter ***//
+	bool GetIsAlive() { return attackWork.flag; }
+
+	//*** Setter ***//
+	void SetIsCollision(bool isActive) { aabb_.isActive = isActive; }
+	// 向きを設定
+	void SetRotate(LWP::Math::Vector3 rotate) { model_.transform.rotation = rotate; }
+	// 速度を設定
+	void SetVelocity(LWP::Math::Vector3 velocity) { velocity_ = velocity; }
+
+public:
 	void Death();
 
 private:// 定数
 	// 弾の寿命
-	const int kLifeTime = 600;
+	const float kLifeTime = 600;
+
+	// 通常弾の速度
+	const float kNormalSpeed = 10.0f;
 
 private:
 	// 矢のモデル
@@ -34,5 +48,8 @@ private:
 	};
 
 	// 弾の寿命
-	int deadTimer_;
+	float deadTimer_;
+
+	// 方向ベクトル
+	LWP::Math::Vector3 velocity_;
 };

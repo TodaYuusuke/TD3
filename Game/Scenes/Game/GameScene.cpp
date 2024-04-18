@@ -36,16 +36,17 @@ void GameScene::Initialize()
 	followCamera_->pCamera_->transform.rotation.x = 0.3f;
 	player_->SetCameraPointer(followCamera_.get());
 
-	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->SetPlayer(player_.get());
-	enemyManager_->Init();
-
 	// 経験値タンク
 	expManager_ = std::make_unique<ExpManager>();
 	expManager_->Initialize();
 
+	// エネミーマネージャ
+	enemyManager_ = std::make_unique<EnemyManager>();
+	enemyManager_->SetPlayer(player_.get());
+	enemyManager_->SetCamera(followCamera_.get());
 	// 経験値マネージャーをエネミーマネージャーに設定
 	enemyManager_->SetExpManager(expManager_.get());
+	enemyManager_->Init();
 
 
 	// アップグレード
@@ -165,8 +166,8 @@ void GameScene::Update()
 
 void GameScene::StartJustSlash()
 {
-	time_ = 0.0f;
-	LWP::Info::SetDeltaTimeMultiply(0.1f);
+	//time_ = 0.0f;
+	//LWP::Info::SetDeltaTimeMultiply(0.1f);
 	followCamera_->StartSlash();
 }
 
