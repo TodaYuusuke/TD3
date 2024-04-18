@@ -264,7 +264,7 @@ int L::UpgradeManager::ChooseOnce(bool f)
 void L::UpgradeManager::Selecting(Player* player)
 {
 	// 場所
-	Vector2 pos{ 0.0f,100.0f };
+	Vector2 pos{ 0.0f,360.0f };
 	//for (size_t i = 0; i < kUpgradNum_; i++)
 	{
 		pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 1);
@@ -272,7 +272,6 @@ void L::UpgradeManager::Selecting(Player* player)
 		attackUpgrades_[candidata_[0]]->Update();
 		attackUpgrades_[candidata_[0]]->ShowUI(pos);
 		// 
-		pos.y += 100;
 		pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 1) * 2;
 		// 抽選されたアップグレードを更新
 		escapeUpgrades_[candidata_[1]]->Update();

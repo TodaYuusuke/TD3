@@ -42,7 +42,7 @@ namespace L
 
 		std::string GetTexturePass() override
 		{
-			return "saya128.png";
+			return "PowerUp/AttackLengthUp.png";
 		}
 
 		std::string GetUpgradeName() override
