@@ -16,7 +16,7 @@ namespace L
 		// 適応ずみかフラグ
 		bool isApplied = false;
 		// リストにまとめて複数対応
-		std::vector<IUpgrade*> upgrades_;
+		std::vector<IUpgrade*> attackUpgrades_;
 
 		/// <summary>
 		/// アップグレード数を返す
@@ -24,7 +24,7 @@ namespace L
 		/// <returns>配列数</returns>
 		size_t GetUpgradeNum() const
 		{
-			return upgrades_.size();
+			return attackUpgrades_.size();
 		}
 
 		/// <summary>

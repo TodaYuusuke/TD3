@@ -31,7 +31,7 @@ public: //*** サブクラス ***//
 		float ROOTBASE_ = 0.5f;
 		float MOVEBASE_ = 0.0f;
 		float SLASHBASE_ = 0.3f;
-		float MOMENTBASE_ = 0.5f;
+		float MOMENTBASE_ = 3.0f;
 		float DAMAGEBASE_ = 0.5f;
 
 		// 居合による後隙の加算分
@@ -63,7 +63,7 @@ public: //*** サブクラス ***//
 	struct Counts
 	{
 		// 居合回数の初期値
-		uint32_t SLASHRELATIONBASE_ = 3u;
+		uint32_t SLASHRELATIONBASE_ = 1u;
 		// 体力
 		uint32_t BASEHP_ = 3u;
 		// 最大体力

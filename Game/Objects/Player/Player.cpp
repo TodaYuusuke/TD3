@@ -46,7 +46,7 @@ void Player::Initialize()
 
 	// レベル関係を生成
 	level_ = std::make_unique<Level>();
-	level_->Initialize(demoModel_.transform.translation);
+	level_->Initialize(this);
 
 	// 状態作成
 	statuses_.clear();
@@ -124,7 +124,7 @@ void Player::Update()
 		pursuitFlag = pursuit->Execution();
 	}
 	// 経験値が更新された後かと思ったけど別にプレイヤーの更新が終わった後ならどこでもいい
-	level_->Update(demoModel_.transform.translation);
+	level_->Update();
 
 
 	//*** ここから下はフラグによって管理されている ***//

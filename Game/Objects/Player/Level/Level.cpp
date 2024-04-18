@@ -77,6 +77,10 @@ void Level::GainEXP()
 
 void Level::LevelUp()
 {
+	if (5 <= lv_)
+	{
+		return;
+	}
 	exp_ = 0.0f;
 	reqEXP_ += 1.0f;
 	lv_++;
@@ -96,6 +100,7 @@ void Level::DebugWindow()
 
 	if (ImGui::TreeNode("Level"))
 	{
+		ImGui::Text("lv      : %d", lv_);
 		ImGui::Text("Gain    : Button or Press 9");
 		ImGui::Text("LevelUp : Button or Press 0");
 

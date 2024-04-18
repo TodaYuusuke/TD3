@@ -13,8 +13,8 @@ namespace L
 		bool pursuitFlag_;
 	public:
 		Skill_PursuitFlag() {
-			upgrades_.clear();
-			upgrades_.push_back(new PowerDelta(5.0f));
+			attackUpgrades_.clear();
+			attackUpgrades_.push_back(new PowerDelta(5.0f));
 		}
 		/// <summary>
 		/// 純粋な移動速度アップ！（定数）

@@ -12,7 +12,8 @@ using namespace LWP::Math;
 
 
 // 実体宣言
-std::vector<L::ISkill*> L::UpgradeManager::upgrades_;
+std::vector<L::ISkill*> L::UpgradeManager::attackUpgrades_;
+std::vector<L::ISkill*> L::UpgradeManager::escapeUpgrades_;
 bool L::UpgradeManager::isLevelUpping;
 int L::UpgradeManager::kUpgradNum_;
 std::vector<int> L::UpgradeManager::candidata_;
@@ -23,21 +24,36 @@ void L::UpgradeManager::Init()
 	// フラグ初期化
 	isLevelUpping = false;
 
-	upgrades_.clear();
+	attackUpgrades_.clear();
 	// アップグレードをすべて取得
-	upgrades_.push_back(new Skill_PowerUp1());
-	upgrades_.push_back(new Skill_PowerUp2());
-	upgrades_.push_back(new Skill_PowerUp3());
+	// 最大 4 つ
+	// 攻撃
+	attackUpgrades_.push_back(new Skill_PowerUp1());
+	attackUpgrades_.push_back(new Skill_PowerUp1());
+	attackUpgrades_.push_back(new Skill_PowerUp1());
+	attackUpgrades_.push_back(new Skill_PowerUp1());
+
+	// 逃走
+	escapeUpgrades_.push_back(new Skill_PowerUp3());
+	escapeUpgrades_.push_back(new Skill_PowerUp3());
+	escapeUpgrades_.push_back(new Skill_PowerUp3());
+	escapeUpgrades_.push_back(new Skill_PowerUp3());
 
 
 	// すべてを初期化する
-	for (size_t i = 0; i < upgrades_.size(); i++)
+	for (size_t i = 0; i < attackUpgrades_.size(); i++)
 	{
-		upgrades_[i]->Init();
+		attackUpgrades_[i]->Init();
+	}
+
+	// すべてを初期化する
+	for (size_t i = 0; i < escapeUpgrades_.size(); i++)
+	{
+		escapeUpgrades_[i]->Init();
 	}
 	// アップグレード回数を初期化
 	upgradedConut_ = 0;
-	kUpgradNum_ = 3;
+	kUpgradNum_ = 2;
 }
 
 void L::UpgradeManager::Update(Player* player)
@@ -78,19 +94,19 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	ImGui::Text("ChoseUpgrade : %d", candidata_.size());
 	for (size_t i = 0; i < candidata_.size(); i++)
 	{
-		upgrades_[candidata_[i]]->DebugTree();
+		attackUpgrades_[candidata_[i]]->DebugTree();
 	}
 
 	ImGui::Separator();
-	ImGui::Text("Nums : %d", upgrades_.size());
+	ImGui::Text("Nums : %d", attackUpgrades_.size());
 	if (ImGui::TreeNode("All"))
 	{
 
 		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
 
-		for (size_t i = 0; i < upgrades_.size(); i++)
+		for (size_t i = 0; i < attackUpgrades_.size(); i++)
 		{
-			upgrades_[i]->DebugTree();
+			attackUpgrades_[i]->DebugTree();
 		}
 
 		ImGui::EndChild();
@@ -102,11 +118,11 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	{
 		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
 
-		for (size_t i = 0; i < upgrades_.size(); i++)
+		for (size_t i = 0; i < attackUpgrades_.size(); i++)
 		{
-			if (upgrades_[i]->isApplied)
+			if (attackUpgrades_[i]->isApplied)
 			{
-				upgrades_[i]->DebugTree();
+				attackUpgrades_[i]->DebugTree();
 			}
 		}
 
@@ -122,37 +138,113 @@ void L::UpgradeManager::DebugWindow(Player* player)
 void L::UpgradeManager::RandomUpgrade()
 {
 	candidata_.clear();
-	// 抽選数分だけ抽選候補に入れる
-	while (candidata_.size() < kUpgradNum_)
+
+	// 攻撃要素を取得
+	candidata_.push_back(ChooseOnce(true));
+
+	// 逃走要素を取得
+	candidata_.push_back(ChooseOnce(false));
+
+
+	//// 抽選数分だけ抽選候補に入れる
+	//while (candidata_.size() < kUpgradNum_)
+	//{
+	//	// アップグレードの数が足りなくなったら
+	//	if (attackUpgrades_.size() - upgradedConut_ < kUpgradNum_)
+	//	{
+	//		kUpgradNum_ = int(attackUpgrades_.size()) - upgradedConut_;
+	//	}
+	//	// 取得する範囲の添え字を受け取る
+	//	int rand = Utility::GenerateRandamNum(0, (int)attackUpgrades_.size() - 1);
+	//	// 判断
+	//	bool isFind = false;
+	//	// 既に選択しているものは出ない
+	//	isFind = attackUpgrades_[rand]->isApplied;
+
+	//	// 被りが発生しても無理
+	//	for (size_t i = 0; i < candidata_.size(); i++)
+	//	{
+	//		if (candidata_[i] == rand)
+	//		{
+	//			isFind = true;
+	//			break;
+	//		}
+	//	}
+	//	// 重なっていたらもう一度抽選
+	//	if (isFind)
+	//	{
+	//		continue;
+	//	}
+
+	//	candidata_.push_back(rand);
+	//}
+}
+
+int L::UpgradeManager::ChooseOnce(bool f)
+{
+	// 返す値
+	int result = 0;
+	// 攻撃
+	if (f)
 	{
-		// アップグレードの数が足りなくなったら
-		if (upgrades_.size() - upgradedConut_ < kUpgradNum_)
+		// 抽選候補に入れる
+		while (1)
 		{
-			kUpgradNum_ = int(upgrades_.size()) - upgradedConut_;
-		}
-		// 取得する範囲の添え字を受け取る
-		int rand = Utility::GenerateRandamNum(0, (int)upgrades_.size() - 1);
-		// 判断
-		bool isFind = false;
-		// 既に選択しているものは出ない
-		isFind = upgrades_[rand]->isApplied;
-
-		// 被りが発生しても無理
-		for (size_t i = 0; i < candidata_.size(); i++)
-		{
-			if (candidata_[i] == rand)
+			// 取得する範囲の添え字を受け取る
+			// 同じ数だけ作れば問題なし
+			int rand = Utility::GenerateRandamNum(0, (int)attackUpgrades_.size() - 1);
+			// 判断
+			bool isFind = false;
+			// 既に選択しているものは出ない
+			isFind = attackUpgrades_[rand]->isApplied;
+		
+			// 被りが発生しても無理
+			//for (size_t i = 0; i < candidata_.size(); i++)
 			{
-				isFind = true;
-				break;
+				if (!candidata_.empty() && candidata_[0] == rand)
+				{
+					isFind = true;
+					break;
+				}
 			}
+			// 重なっていたらもう一度抽選
+			if (isFind)
+			{
+				continue;
+			}
+			return rand;
 		}
-		// 重なっていたらもう一度抽選
-		if (isFind)
+	}
+	// hoge
+	else
+	{
+		// 抽選候補に入れる
+		while (1)
 		{
-			continue;
-		}
+			// 取得する範囲の添え字を受け取る
+			// 同じ数だけ作れば問題なし
+			int rand = Utility::GenerateRandamNum(0, (int)escapeUpgrades_.size() - 1);
+			// 判断
+			bool isFind = false;
+			// 既に選択しているものは出ない
+			isFind = escapeUpgrades_[rand]->isApplied;
 
-		candidata_.push_back(rand);
+			// 被りが発生しても無理
+			//for (size_t i = 0; i < candidata_.size(); i++)
+			{
+				if (candidata_.size() == 2 && candidata_[1] == rand)
+				{
+					isFind = true;
+					break;
+				}
+			}
+			// 重なっていたらもう一度抽選
+			if (isFind)
+			{
+				continue;
+			}
+			return rand;
+		}
 	}
 }
 
@@ -160,12 +252,17 @@ void L::UpgradeManager::Selecting(Player* player)
 {
 	// 場所
 	Vector2 pos{ 0.0f,100.0f };
-	for (size_t i = 0; i < kUpgradNum_; i++)
+	//for (size_t i = 0; i < kUpgradNum_; i++)
 	{
-		pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 1) * (i + 1);
+		pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 1) * (0 + 1);
 		// 抽選されたアップグレードを更新
-		upgrades_[candidata_[i]]->Update();
-		upgrades_[candidata_[i]]->ShowUI(pos);
+		attackUpgrades_[candidata_[0]]->Update();
+		attackUpgrades_[candidata_[0]]->ShowUI(pos);
+		// 
+		pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 1) * (1 + 1);
+		// 抽選されたアップグレードを更新
+		escapeUpgrades_[candidata_[1]]->Update();
+		escapeUpgrades_[candidata_[1]]->ShowUI(pos);
 	}
 
 	// カーソル移動
@@ -221,7 +318,10 @@ void L::UpgradeManager::Selecting(Player* player)
 void L::UpgradeManager::Selected()
 {
 	// 選択されたアップグレードを適応させる
-	upgrades_[candidata_[choiceIndex_]]->isApplied = true;
+	if (choiceIndex_ == 0)
+		attackUpgrades_[candidata_[choiceIndex_]]->isApplied = true;
+	else
+		escapeUpgrades_[candidata_[choiceIndex_]]->isApplied = true;
 	upgradedConut_++;
 }
 
@@ -231,14 +331,25 @@ void L::UpgradeManager::Apply(Player* player)
 	UpgradeParameter para;
 
 	// すべて更新
-	for (size_t i = 0; i < upgrades_.size(); i++)
+	for (size_t i = 0; i < attackUpgrades_.size(); i++)
 	{
 		// 描画を消す
-		upgrades_[i]->Update();
+		attackUpgrades_[i]->Update();
 		// 選択されているものだけ適応
-		if (upgrades_[i]->isApplied)
+		if (attackUpgrades_[i]->isApplied)
 		{
-			upgrades_[i]->Apply(&para);
+			attackUpgrades_[i]->Apply(&para);
+		}
+	}
+	// すべて更新
+	for (size_t i = 0; i < escapeUpgrades_.size(); i++)
+	{
+		// 描画を消す
+		escapeUpgrades_[i]->Update();
+		// 選択されているものだけ適応
+		if (escapeUpgrades_[i]->isApplied)
+		{
+			escapeUpgrades_[i]->Apply(&para);
 		}
 	}
 	// プレイヤーに適応
