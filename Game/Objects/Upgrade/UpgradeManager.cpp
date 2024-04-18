@@ -4,7 +4,7 @@
 #include "Game/Objects/GameTimer/GameTimer.h"
 #pragma region Upgrades
 #include "Game/Objects/Upgrade/SkDerved/SkillList.h"
-#include "Game/Objects/Upgrade/UpDerved/PursuitFlag.h"
+#include "Game/Objects/Upgrade/SkDerved/PursuitFlag.h"
 #pragma endregion
 
 using namespace LWP;
