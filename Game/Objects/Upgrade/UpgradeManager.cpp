@@ -33,10 +33,10 @@ void L::UpgradeManager::Init()
 	attackUpgrades_.push_back(new Skill_AttackRangeUp);
 
 	// 逃走
-	escapeUpgrades_.push_back(new Skill_PowerUp2);
-	escapeUpgrades_.push_back(new Skill_PowerUp2);
-	escapeUpgrades_.push_back(new Skill_PowerUp2);
-	escapeUpgrades_.push_back(new Skill_PowerUp2);
+	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
+	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
+	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
+	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
 
 
 	// すべてを初期化する
@@ -72,13 +72,14 @@ void L::UpgradeManager::DebugWindow(Player* player)
 {
 	ImGui::Begin("UpgradeManager");
 
-	if (ImGui::Button("isLevelUpFlag") &&
-		isLevelUpping == false)
-	{
-		isLevelUpping = true;
-		// 押された瞬間
-		LevelUp();
-	}
+
+	//if (ImGui::Button("isLevelUpFlag") &&
+	//	isLevelUpping == false)
+	//{
+	//	isLevelUpping = true;
+	//	// 押された瞬間
+	//	LevelUp();
+	//}
 	if (ImGui::Button("ReApply"))
 	{
 		Apply(player);
@@ -362,7 +363,7 @@ void L::UpgradeManager::Apply(Player* player)
 		// 選択されているものだけ適応
 		if (escapeUpgrades_[i]->isApplied)
 		{
-			escapeUpgrades_[i]->Apply(&para);
+ 			escapeUpgrades_[i]->Apply(&para);
 		}
 	}
 	// プレイヤーに適応

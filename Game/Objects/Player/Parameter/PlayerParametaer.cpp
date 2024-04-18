@@ -148,7 +148,8 @@ void PlayerParameter::ApplySpeed()
 	// 移動速度
 	base.all_ = (param.Speed.allSpeedDelta.base);
 	base.move_ = (config_->Speed_.MOVE_ + param.Speed.moveSpeedDelta.base);
-	base.slash_ = (config_->Speed_.SLASH_ + param.Speed.slashSpeedDelta.base);
+	// 攻撃として設定済み
+	base.slash_ = param.Speed.slashSpeedDelta.base;
 	base.moment_ = (config_->Speed_.MOMENT_ + param.Speed.momentSpeedDelta.base);
 
 	// 掛け算部分の計算
@@ -160,6 +161,8 @@ void PlayerParameter::ApplySpeed()
 	multi.moment_ = (0.01f * param.Speed.momentSpeedDelta.percent);
 
 	this->Speed = base * multi;
+	// 居合の距離を再設定
+	Speed.slash_ += Attack.slashLength_;
 }
 
 void PlayerParameter::ApplyTime()

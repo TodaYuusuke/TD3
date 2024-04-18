@@ -15,7 +15,7 @@ void PlayerConfig::Initialize()
 void PlayerConfig::InitSpeed()
 {
 	Speed_.MOVE_ = 15.0f;
-	Speed_.SLASH_ = 100.0f;
+	Speed_.SLASH_ = 75.0f;
 	Speed_.MOMENT_ = 10.0f;
 }
 
