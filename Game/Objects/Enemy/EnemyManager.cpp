@@ -25,7 +25,9 @@ void EnemyManager::Update()
 	// ボスキャラの出現
 	BossSpawn();
 
+#ifdef DEMO
 	DebugWindow();
+#endif
 
 	enemys_.remove_if([](IEnemy* enemy) {
 		if (!enemy->GetIsActive())
@@ -99,7 +101,7 @@ void EnemyManager::EnemySpawn()
 
 }
 
-void EnemyManager::BossSpawn(){
+void EnemyManager::BossSpawn() {
 	//ランダム生成用
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
@@ -122,7 +124,7 @@ void EnemyManager::BossSpawn(){
 	}
 	// 2分
 	// ホーミング弾を撃つボスを出現
-	else if(gameTimer_->GetCurrentSecond() == 120 && isBossSpawn_){
+	else if (gameTimer_->GetCurrentSecond() == 120 && isBossSpawn_) {
 		ArrowBossSpawn(pos);
 		isBossSpawn_ = false;
 	}
@@ -209,7 +211,9 @@ void EnemyManager::DebugWindow()
 	{
 		if (ImGui::TreeNode(("Enemy" + std::to_string(index)).c_str()))
 		{
+		#ifdef DEMO
 			(*itr)->DebugPrint();
+		#endif
 
 			ImGui::TreePop();
 			ImGui::Separator();
