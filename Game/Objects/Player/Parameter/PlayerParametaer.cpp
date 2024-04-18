@@ -85,16 +85,36 @@ void PlayerParameter::ApplyHP()
 {
 	// 別で用意したクラスに反映
 	// ここで回復とかもすればいい
-	Hp.maxHp_ = config_->Count_.MAXHP_ + (int)param.HP.hpDelta.base;
+	// 今の最大 HP の差異を保存
+	int tempSub = Hp.maxHp_ - config_->Count_.MAXHP_ + (int)param.HP.hpDelta.base;
+	// その差異分ループ
+	// プラス分
+	if (0 < tempSub)
+	{
+		for (size_t i = 0; i < tempSub; i++)
+		{
+			IncreaseHPMAX();
+		}
+	}
+	// 一応マイナス分
+	else if (tempSub < 0)
+	{
+		for (size_t i = 0; i < -tempSub; i++)
+		{
+			DecreaseHPMAX();
+		}
+	}
+
+	//Hp.maxHp_ = config_->Count_.MAXHP_ + (int)param.HP.hpDelta.base;
 	if (Hp.maxHp_ < 1u)
 	{
 		Hp.maxHp_ = 1u;
 	}
 	// 最大数が増加したら HP も増加
-	if (0.0f < param.HP.hpDelta.base)
-	{
-		Hp.Increase();
-	}
+	//if (0.0f < param.HP.hpDelta.base)
+	//{
+	//	Hp.Increase();
+	//}
 
 	// HP を最大超えないようにする
 	if (Hp.maxHp_ < Hp.hp_)

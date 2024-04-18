@@ -195,6 +195,7 @@
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_AttackLengthUp.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_AttackRangeUp.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_DamageInvincibleAdd.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_HPUp.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\AttackLengthDelta.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\InvincibleDamageDelta.h" />
     <ClInclude Include="Game\Scenes\GameOver\GameOverScene.h" />
