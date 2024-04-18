@@ -27,7 +27,8 @@ void L::UpgradeManager::Init()
 	// アップグレードをすべて取得
 	upgrades_.push_back(new Skill_PowerUp1());
 	upgrades_.push_back(new Skill_PowerUp2());
-	upgrades_.push_back(new Skill_PowerUp3());
+	//upgrades_.push_back(new Skill_PowerUp3());
+	upgrades_.push_back(new Skill_PursuitFlag);
 
 
 	// すべてを初期化する
