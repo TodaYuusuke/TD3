@@ -14,8 +14,8 @@ namespace L
 		/// </summary>
 		Skill_PowerUp1()
 		{
-			upgrades_.clear();
-			upgrades_.push_back(new PowerDelta(5.0f));
+			attackUpgrades_.clear();
+			attackUpgrades_.push_back(new PowerDelta(5.0f));
 		}
 
 		///// <summary>
@@ -34,7 +34,7 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			for (IUpgrade* up : upgrades_)
+			for (IUpgrade* up : attackUpgrades_)
 			{
 				up->Apply(para);
 			}

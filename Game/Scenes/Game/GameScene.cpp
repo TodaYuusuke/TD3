@@ -58,7 +58,7 @@ void GameScene::Initialize()
 	upgradeManager_->Init();
 
 	// いったん五分
-	gameTimer_->Reset(300);
+	gameTimer_->Reset(180);
 	// ゲームが始まってから計測開始
 	gameTimer_->Start();
 }

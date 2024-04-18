@@ -14,8 +14,8 @@ namespace L
 		/// </summary>
 		Skill_PowerUp3()
 		{
-			upgrades_.clear();
-			upgrades_.push_back(new PowerPerDelta(40.0f));
+			attackUpgrades_.clear();
+			attackUpgrades_.push_back(new PowerPerDelta(40.0f));
 		}
 
 		/// <summary>
@@ -23,7 +23,7 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			for (IUpgrade* up : upgrades_)
+			for (IUpgrade* up : attackUpgrades_)
 			{
 				up->Apply(para);
 			}
@@ -31,7 +31,7 @@ namespace L
 
 		std::string GetTexturePass() override
 		{
-			return "powerUp/PowerUp.png";
+			return "katana128.png";
 		}
 
 		std::string GetUpgradeName() override

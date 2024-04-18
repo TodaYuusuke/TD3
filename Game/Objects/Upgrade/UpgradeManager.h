@@ -39,7 +39,8 @@ namespace L {
 	private: // ** メンバ変数 ** //
 
 		// アップグレードのリスト
-		static std::vector<ISkill*> upgrades_;
+		static std::vector<ISkill*> attackUpgrades_;
+		static std::vector<ISkill*> escapeUpgrades_;
 
 		// レベルアップ中フラグ
 		static bool isLevelUpping;
@@ -47,13 +48,14 @@ namespace L {
 		// 表示するアップグレードの数
 		static int kUpgradNum_;
 
-		// ランダムで生成した三つのアップグレード
+		// ランダムで生成した n つのアップグレード
 		static std::vector<int> candidata_;
 
 		// カーソルを合わせているアップグレード(何番目か)
 		int cursorIndex_ = 0;
 
-		// 選択しているアップグレード(何番目か)
+		// 選択しているアップグレード
+		// 0 : 攻撃, 1 : hoge
 		int choiceIndex_ = 0;
 
 		// アップグレードを取得した回数
@@ -69,6 +71,13 @@ namespace L {
 		/// <para>レベルアップしたときに抽選する</para>
 		/// </summary>
 		static void RandomUpgrade();
+
+		/// <summary>
+		/// リストから要素を取得
+		/// </summary>
+		/// <param name="f">true : 攻撃, false : 逃走</param>
+		/// <returns></returns>
+		static int ChooseOnce(bool f);
 
 		/// <summary>
 		/// アップグレードを選択中に呼び出す関数

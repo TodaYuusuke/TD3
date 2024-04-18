@@ -35,7 +35,7 @@ void L::ISkill::DebugTree()
 {
 	if (ImGui::TreeNode(GetUpgradeName().c_str()))
 	{
-		for (IUpgrade* up : upgrades_)
+		for (IUpgrade* up : attackUpgrades_)
 		{
 			ImGui::Text(up->GetUpgradeName().c_str());
 		}
