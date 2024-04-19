@@ -86,7 +86,7 @@ void EnemyManager::EnemySpawn()
 	std::uniform_real_distribution<float> distribution2(8.0f, 10.0f);
 	float PtoE = distribution2(randomEngine);
 
-	lwp::Vector3 pos = { PtoE * divideX * signX , 0.5f , PtoE * divideZ * signY };
+	lwp::Vector3 pos = { PtoE * divideX * signX * 5 , 0.5f , PtoE * divideZ * signY * 5 };
 	if (number <= 0.5f) {
 		NormalEnemySpawn(pos);
 		//ArrowEnemySpawn(pos);

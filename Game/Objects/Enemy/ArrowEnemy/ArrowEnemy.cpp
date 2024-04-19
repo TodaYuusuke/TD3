@@ -18,7 +18,7 @@ void ArrowEnemy::Init()
 	attackWaitTime_ = kAttackWaitTime;
 
 	// HP を設定
-	hp_ = 20;
+	hp_ = 10;
 }
 
 void ArrowEnemy::Update()
