@@ -92,7 +92,7 @@ void PlayerParameter::ApplyHP()
 	if (0 < tempSub)
 	{
 		for (size_t i = 0; i < tempSub; i++)
-		{
+		{	    
 			IncreaseHPMAX();
 		}
 	}
