@@ -71,7 +71,10 @@ void GameScene::Update()
 	ImGui::End();
 
 	// 時間を計測
-	gameTimer_->Update();
+	// チュートリアルの時は計測しない
+	if (!enemyManager_->GetIsTutorial()) {
+		gameTimer_->Update();
+	}
 
 	// タイマーのカウントが終了したとき
 	if (gameTimer_->isEnd_)
