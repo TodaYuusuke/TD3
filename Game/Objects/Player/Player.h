@@ -18,7 +18,8 @@
 
 #pragma region
 
-#include "Game/Objects/Upgrade/Function/Pursuit.h"
+#include "Game/Objects/Upgrade/Function/Pursuit/Pursuit.h"
+#include "Game/Objects/Upgrade/Function/EXLife/EXLife.h"
 
 #pragma endregion アップグレード
 
@@ -147,7 +148,7 @@ public:	//*** セッター,ゲッター ***//
 	// フラグ
 	bool GetPursuitFlag()const { return pursuitFlag; }
 	// 
-	Pursuit* GetPursuit()const { return pursuit; }
+	Pursuit* GetPursuit()const { return pursuit_; }
 
 private: //*** プライベート関数 ***//
 
@@ -311,7 +312,10 @@ public: //*** プライベート変数 ***//
 private: //*** プライベート関数 ***//
 
 private: //*** アップデート関連クラス ***//
-	Pursuit* pursuit;
+	Pursuit* pursuit_;
 	// Pursuitを管理するフラグ
 	bool pursuitFlag = false;
+	EXLife* eXLife_;
+	// Pursuitを管理するフラグ
+	bool eXLifeFlag = false;
 };

@@ -72,7 +72,7 @@ void Player::Initialize()
 	// 今の状態を設定
 	currStatus_ = statuses_[static_cast<size_t>(behavior_)];
 
-	pursuit = new Pursuit();
+	pursuit_ = new Pursuit();
 }
 
 void Player::Update()
@@ -121,7 +121,7 @@ void Player::Update()
 
 	if (pursuitFlag)
 	{
-		pursuitFlag = pursuit->Execution();
+		pursuitFlag = pursuit_->Execution();
 	}
 	// 経験値が更新された後かと思ったけど別にプレイヤーの更新が終わった後ならどこでもいい
 	level_->Update();
