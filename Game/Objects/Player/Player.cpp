@@ -73,6 +73,8 @@ void Player::Initialize()
 	currStatus_ = statuses_[static_cast<size_t>(behavior_)];
 
 	pursuit_ = new Pursuit();
+	eXLife_ = new EXLife();
+	eXLife_->Init();
 }
 
 void Player::Update()
@@ -81,7 +83,7 @@ void Player::Update()
 	// デバッグ表示
 	DebugWindow();
 #endif
-
+	eXLife_->Execution();
 	//*** プレイヤーの生き死にを判別 ***//
 
 	if (!flag_.isAlive_)
