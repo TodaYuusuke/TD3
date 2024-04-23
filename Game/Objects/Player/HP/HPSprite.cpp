@@ -30,7 +30,7 @@ void HPSprite::Update()
 	// 場所と大きさ
 	subSprite.transform.scale = { subScale,subScale };
 	subSprite.transform.translation = basePosition;
-	lwp::Vector2 size = subSprite.texture.t->GetTextureSize();
+	lwp::Vector2 size = subSprite.texture.t.GetSize();
 	mainSprite.transform.translation.x = basePosition.x + size.x * (subScale - 1.0f) * 0.5f;
 	mainSprite.transform.translation.y = basePosition.y + size.y * (subScale - 1.0f) * 0.5f;
 
