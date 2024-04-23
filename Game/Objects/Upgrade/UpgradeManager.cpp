@@ -74,13 +74,13 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	ImGui::Begin("UpgradeManager");
 
 
-	//if (ImGui::Button("isLevelUpFlag") &&
-	//	isLevelUpping == false)
-	//{
-	//	isLevelUpping = true;
-	//	// 押された瞬間
-	//	LevelUp();
-	//}
+	if (ImGui::Button("isLevelUpFlag") &&
+		isLevelUpping == false)
+	{
+		isLevelUpping = true;
+		// 押された瞬間
+		LevelUp();
+	}
 	if (ImGui::Button("ReApply"))
 	{
 		Apply(player);

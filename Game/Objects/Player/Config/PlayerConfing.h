@@ -65,9 +65,9 @@ public: //*** サブクラス ***//
 		// 居合回数の初期値
 		uint32_t SLASHRELATIONBASE_ = 1u;
 		// 体力
-		uint32_t BASEHP_ = 3u;
+		uint32_t BASEHP_ = 5u;
 		// 最大体力
-		uint32_t MAXHP_ = 3u;
+		uint32_t MAXHP_ = 5u;
 	};
 
 	// 割合系
