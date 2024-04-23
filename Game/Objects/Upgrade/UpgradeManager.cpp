@@ -70,6 +70,8 @@ void L::UpgradeManager::LevelUp()
 //#ifdef  DEMO
 void L::UpgradeManager::DebugWindow(Player* player)
 {
+#ifdef DEMO
+
 	ImGui::Begin("UpgradeManager");
 
 
@@ -145,6 +147,7 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	}
 
 	ImGui::End();
+#endif // DEMO
 }
 //#endif //  DEMO
 

@@ -18,12 +18,16 @@ void ClearScene::Initialize()
 // 更新
 void ClearScene::Update()
 {
+#ifdef DEMO
+
 	ImGui::Begin("Scene");
 	ImGui::Text("Clear");
 	ImGui::Text("Space : NextScene");
 	ImGui::Text("LEFT or RIGHT : Title or Game");
 	ImGui::Text("Next : %s", choise_ == 0 ? "Title" : "Game");
 	ImGui::End();
+
+#endif // DEMO
 
 	// 選択肢を与える
 	// 左

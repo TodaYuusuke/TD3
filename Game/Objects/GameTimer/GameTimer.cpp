@@ -85,7 +85,7 @@ void GameTimer::Update()
 		countM0_.isActive_ =
 		countM1_.isActive_ = isActive_;
 	// 終わっていたらカウントしない
-	isWatch_ = !isEnd_;
+	isWatch_ = isEnd_ ? false : isWatch_;
 
 	DebugWindow();
 	checkSec_ += isWatch_ ? GetDeltaTimeF() : 0.0f;
@@ -124,6 +124,8 @@ void GameTimer::Update()
 
 void GameTimer::DebugWindow()
 {
+#ifdef DEMO
+
 	ImGui::Begin("GameTimer");
 
 	if (ImGui::Button("Reset"))
@@ -153,4 +155,6 @@ void GameTimer::DebugWindow()
 	}
 
 	ImGui::End();
+
+#endif // DEMO
 }
