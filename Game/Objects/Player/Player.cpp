@@ -74,7 +74,7 @@ void Player::Initialize()
 
 	pursuit_ = new Pursuit();
 	eXLife_ = new EXLife();
-	eXLife_->Init();
+	eXLife_->Init(this);
 }
 
 void Player::Update()
