@@ -10,6 +10,9 @@ void EnemyManager::Init()
 	// チュートリアルフラグ
 	isTutorial_ = true;
 
+	// static初期化
+	IEnemy::InitStaticVariable();
+
 	// チュートリアル用の敵を発生させる
 	tutorialEnemy_ = new NormalEnemy();
 	tutorialEnemy_->Initialize();
@@ -17,6 +20,7 @@ void EnemyManager::Init()
 	tutorialEnemy_->SetTarget(player_);
 	tutorialEnemy_->SetPosition(LWP::Math::Vector3{ 0,0.5f,10 });
 	tutorialEnemy_->SetIsTutorial(true);
+	tutorialEnemy_->SetHP(10);
 	tutorialEnemy_->SetManager(exp_);
 	enemys_.push_back(tutorialEnemy_);
 }
@@ -125,8 +129,9 @@ void EnemyManager::BossSpawn() {
 
 	// 1分
 	// ダッシュボスを出現
-	if (gameTimer_->GetCurrentSecond() == 60 && !isBossSpawn_) {
-		DashBossSpawn(pos);
+	if (gameTimer_->GetCurrentSecond() == 1 && !isBossSpawn_) {
+		//DashBossSpawn(pos);
+		ArrowBossSpawn(pos);
 		isBossSpawn_ = true;
 	}
 	// 2分

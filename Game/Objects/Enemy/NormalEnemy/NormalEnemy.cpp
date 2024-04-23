@@ -8,6 +8,7 @@ void NormalEnemy::Init()
 	models_.emplace_back();
 	models_[Model::Body].LoadFile("NormalEnemy/NormalEnemy.obj");
 	models_[Model::Body].name = "Normal";
+	models_[Model::Body].material.enableLighting = true;
 
 	attackWaitTime_ = kAttackWaitTime;
 

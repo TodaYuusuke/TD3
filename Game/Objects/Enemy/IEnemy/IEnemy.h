@@ -61,6 +61,13 @@ public:
 	/// </summary>
 	virtual void DebugPrint();
 
+
+	/// <summary>
+	/// 静的変数の初期化
+	/// </summary>
+	static void InitStaticVariable();
+
+
 public: //*** ゲッターセッター ***//
 
 	/// <summary>
@@ -76,6 +83,7 @@ public: //*** ゲッターセッター ***//
 	// 狙う対象をセット(今回は自機をセットする)
 	virtual void SetTarget(Player* player) { player_ = player; }
 	virtual void SetPosition(lwp::Vector3 pos) { models_[0].transform.translation = pos; }
+	void SetHP(int HP) { hp_ = HP; }
 	// カメラのアドレスを設定
 	virtual void SetCamera(FollowCamera* camera) { followCamera_ = camera; }
 	void SetManager(ExpManager* p) { manager_ = p; }
@@ -175,4 +183,6 @@ protected:
 	// 0 じゃないと無敵(別でフラグを立てとく)
 	float invincibleTime_ = 0.0f;
 
+	// パーティクル
+	static std::function<void(int, lwp::Vector3)> damageEffect_;
 };
