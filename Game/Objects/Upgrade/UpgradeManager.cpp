@@ -33,7 +33,7 @@ void L::UpgradeManager::Init()
 	attackUpgrades_.push_back(new Skill_AttackRangeUp);
 
 	// 逃走
-	escapeUpgrades_.push_back(new Skill_DamageInvincibleAdd);
+	//escapeUpgrades_.push_back(new Skill_DamageInvincibleAdd);
 	escapeUpgrades_.push_back(new Skill_EXLifeFlag);
 	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
 	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
@@ -73,13 +73,13 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	ImGui::Begin("UpgradeManager");
 
 
-	if (ImGui::Button("isLevelUpFlag") &&
-		isLevelUpping == false)
-	{
-		isLevelUpping = true;
-		// 押された瞬間
-		LevelUp();
-	}
+	//if (ImGui::Button("isLevelUpFlag") &&
+	//	isLevelUpping == false)
+	//{
+	//	isLevelUpping = true;
+	//	// 押された瞬間
+	//	LevelUp();
+	//}
 	if (ImGui::Button("ReApply"))
 	{
 		Apply(player);
