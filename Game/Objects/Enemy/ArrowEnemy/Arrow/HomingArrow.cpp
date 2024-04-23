@@ -18,6 +18,7 @@ void HomingArrow::Init(lwp::WorldTransform transform) {
 	model_.transform.rotation = transform.rotation;
 	model_.transform.scale = { 0.5f,0.5f,1.0f };
 	model_.name = "HomingArrow!!";
+	model_.material.enableLighting = true;
 
 	// 当たり判定を設定
 	//aabb_ = new LWP::Object::Collider::AABB();
@@ -67,7 +68,7 @@ void HomingArrow::Update() {
 	}
 
 	if (static_cast<int>(deadTimer_) % 10 == 0) {
-		//summonContrail_(model_.transform.GetWorldPosition());
+		summonContrail_(model_.transform.GetWorldPosition());
 	}
 
 	// 寿命を進める

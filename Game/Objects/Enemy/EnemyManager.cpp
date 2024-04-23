@@ -4,26 +4,53 @@
 void EnemyManager::Init()
 {
 	gameTimer_ = GameTimer::GetInstance();
+
+	// ボスの発生フラグ
+	isBossSpawn_ = false;
+	// チュートリアルフラグ
+	isTutorial_ = true;
+
+	// static初期化
+	IEnemy::InitStaticVariable();
+
+	// チュートリアル用の敵を発生させる
+	tutorialEnemy_ = new NormalEnemy();
+	tutorialEnemy_->Initialize();
+	tutorialEnemy_->SetCamera(followCamera_);
+	tutorialEnemy_->SetTarget(player_);
+	tutorialEnemy_->SetPosition(LWP::Math::Vector3{ 0,0.5f,10 });
+	tutorialEnemy_->SetIsTutorial(true);
+	tutorialEnemy_->SetHP(10);
+	tutorialEnemy_->SetManager(exp_);
+	enemys_.push_back(tutorialEnemy_);
 }
 
 void EnemyManager::Update()
 {
-	currentFrame_++;
+	if (!isTutorial_) {
+		currentFrame_++;
 
-	// 通常敵の出現
-	if (currentFrame_ >= kSpawnFrequency) {
-		//ランダム生成用
-		std::random_device seedGenerator;
-		std::mt19937 randomEngine(seedGenerator());
-		std::uniform_int_distribution<int> distribution(1, 3);
-		int spawn = distribution(randomEngine);
-		for (int It = 0; It < spawn; It++) {
-			EnemySpawn();
+		// 通常敵の出現
+		if (currentFrame_ >= kSpawnFrequency) {
+			//ランダム生成用
+			std::random_device seedGenerator;
+			std::mt19937 randomEngine(seedGenerator());
+			std::uniform_int_distribution<int> distribution(1, 3);
+			int spawn = distribution(randomEngine);
+			for (int It = 0; It < spawn; It++) {
+				EnemySpawn();
+			}
+			currentFrame_ = 0;
 		}
-		currentFrame_ = 0;
+		// ボスキャラの出現
+		BossSpawn();
 	}
-	// ボスキャラの出現
-	BossSpawn();
+	else {
+		// チュートリアルの敵を倒したらゲームスタート
+		if (!tutorialEnemy_->GetIsTutorial()) {
+			isTutorial_ = false;
+		}
+	}
 
 #ifdef DEMO
 	DebugWindow();
@@ -32,27 +59,11 @@ void EnemyManager::Update()
 	enemys_.remove_if([](IEnemy* enemy) {
 		if (!enemy->GetIsActive())
 		{
-			//enemy->Death();
 			delete enemy;
 			return true;
 		}
 		return false;
 		});
-
-	// 消しながら更新
-	//for (std::list<IEnemy*>::iterator itr = enemys_.begin(); itr != enemys_.end();)
-	//{
-	//	// 消えているなら
-	//	if (!(*itr)->GetIsActive())
-	//	{
-	//		// 敵が死んだ瞬間
-	//		delete* itr;
-	//		itr = enemys_.erase(itr);
-	//		continue;
-	//	}
-	//	// 次へ
-	//	++itr;
-	//}
 	for (IEnemy* enemy : enemys_) {
 		enemy->Update();
 	}
@@ -86,7 +97,7 @@ void EnemyManager::EnemySpawn()
 	std::uniform_real_distribution<float> distribution2(8.0f, 10.0f);
 	float PtoE = distribution2(randomEngine);
 
-	lwp::Vector3 pos = { PtoE * divideX * signX , 0.5f , PtoE * divideZ * signY };
+	lwp::Vector3 pos = { PtoE * divideX * signX * 5 , 0.5f , PtoE * divideZ * signY * 5 };
 	if (number <= 0.5f) {
 		NormalEnemySpawn(pos);
 		//ArrowEnemySpawn(pos);
@@ -118,8 +129,9 @@ void EnemyManager::BossSpawn() {
 
 	// 1分
 	// ダッシュボスを出現
-	if (gameTimer_->GetCurrentSecond() == 60 && !isBossSpawn_) {
-		DashBossSpawn(pos);
+	if (gameTimer_->GetCurrentSecond() == 1 && !isBossSpawn_) {
+		//DashBossSpawn(pos);
+		ArrowBossSpawn(pos);
 		isBossSpawn_ = true;
 	}
 	// 2分

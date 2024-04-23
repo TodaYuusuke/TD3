@@ -26,6 +26,7 @@ void GameScene::Initialize()
 	ground.transform.translation.y = -0.5f;
 	ground.transform.scale = { 10.0f,0.1f, 10.0f };
 	ground.name = "Ground";
+	ground.material.enableLighting = true;
 
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
@@ -61,6 +62,12 @@ void GameScene::Initialize()
 	gameTimer_->Reset(180);
 	// ゲームが始まってから計測開始
 	gameTimer_->Start();
+
+	// 点光源
+	sun_.transform.translation.y = 30.0f;
+	sun_.intensity = 2.0f;
+	sun_.radius = 100.0f;
+	sun_.decay = 1.5f;
 }
 
 // 更新
@@ -71,7 +78,10 @@ void GameScene::Update()
 	ImGui::End();
 
 	// 時間を計測
-	gameTimer_->Update();
+	// チュートリアルの時は計測しない
+	if (!enemyManager_->GetIsTutorial()) {
+		gameTimer_->Update();
+	}
 
 	// タイマーのカウントが終了したとき
 	if (gameTimer_->isEnd_)

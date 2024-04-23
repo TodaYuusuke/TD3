@@ -3,6 +3,7 @@
 #include "Game/Objects/Player/Player.h"
 #include "Game/Objects/GameMask.h"
 
+using namespace LWP;
 using namespace LWP::Object::Collider;
 
 void IEnemy::Initialize()
@@ -11,6 +12,8 @@ void IEnemy::Initialize()
 
 	CreateCollider();
 	//collider_.mask.SetBelongFrag(MaskLayer::Enemy);
+
+
 }
 
 void IEnemy::Death()
@@ -51,7 +54,7 @@ void IEnemy::DyingAnimation()
 void IEnemy::CreateCollider()
 {
 	// 当たり判定を設定
-	collider_ = LWP::Object::Collider::AABB();
+	//collider_ = LWP::Object::Collider::AABB();
 	// 当たり判定を取る
 	collider_.CreateFromPrimitive(&models_[0]);
 	// マスク処理
@@ -109,6 +112,8 @@ bool IEnemy::CheckSlash(uint32_t hitBelong)
 
 void IEnemy::DecreaseHP(int damage)
 {
+	// エフェクト出す
+	damageEffect_(16, models_[0].transform.translation);
 	// HP を減らす
 	hp_ -= damage;
 	// 死に至る
@@ -142,6 +147,10 @@ void IEnemy::CheckFlags()
 		invincibleTime_ - lwp::GetDeltaTimeF() :
 		0.0f;
 
+	if (isInvincible_) {
+
+	}
+
 	// 無敵なら当たり判定も消す
 	collider_.isActive = !isInvincible_;
 
@@ -167,3 +176,48 @@ void IEnemy::DebugPrint()
 	ImGui::Text("utopia     : %.4f", utopiaTime_);
 	ImGui::Text("invincible :%.4f", invincibleTime_);
 }
+
+void IEnemy::InitStaticVariable() {
+	static LWP::Object::Particle damageParticle_;
+	damageParticle_.SetPrimitive<Primitive::Cube>();
+	damageParticle_.P()->transform.scale = { 0.01f,0.01f, 0.01f };
+	damageParticle_.P()->material.enableLighting = true;
+	damageParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::RED);
+	damageParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
+		Object::ParticleData newData{};
+		newData.wtf.translation = lwp::Vector3{0,1,0} + primitive->transform.GetWorldPosition();
+		newData.wtf.rotation = primitive->transform.rotation;
+		newData.wtf.scale = { 0.25f,0.25f, 0.25f };
+
+		// 速度ベクトルを生成
+		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
+		int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
+		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
+		// 発射のベクトル
+		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
+		newData.velocity = dir.Normalize() * 0.3f;
+
+		// パーティクル追加
+		return newData;
+	};
+	damageParticle_.updateFunction = [](Object::ParticleData* data) {
+		// 経過フレーム追加
+		data->elapsedFrame++;
+
+		data->wtf.translation += data->velocity;    // 速度ベクトルを加算
+		data->wtf.rotation += data->velocity;    // ついでに回転させとく
+		data->wtf.translation.y += -9.8f / 80.0f;    // 重力を加算
+
+		// 速度ベクトルを弱める
+		data->velocity *= 0.9f;
+
+		return data->elapsedFrame > 180 ? true : false;
+	};
+	damageParticle_.isActive = true;
+	damageEffect_ = [&](int i, lwp::Vector3 pos) { 
+		damageParticle_.P()->transform = pos;
+		damageParticle_.Add(i);
+	};
+}
+
+std::function<void(int, lwp::Vector3)> IEnemy::damageEffect_ = nullptr;

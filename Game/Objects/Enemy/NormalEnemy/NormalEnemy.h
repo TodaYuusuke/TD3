@@ -14,6 +14,16 @@ public:
 	void Update()override;
 	void SetPosition(lwp::Vector3 pos)override;
 
+	/// Getter
+
+	// チュートリアルモードが起動してるかを取得
+	bool GetIsTutorial() { return isTutorial_; }
+
+	/// Setter
+
+	// チュートリアルモードを起動するかを設定
+	void SetIsTutorial(bool isActive) { isTutorial_ = isActive; }
+
 private:
 	void Move()override;
 	void Attack()override;
@@ -54,4 +64,7 @@ private:
 	.targetpoint = 0.0f,
 	.speed = 0.1f,
 	};
+
+	// チュートリアルモード(エネミーマネージャからSetterで設定する)
+	bool isTutorial_;
 };
