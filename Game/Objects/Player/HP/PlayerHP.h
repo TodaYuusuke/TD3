@@ -60,10 +60,10 @@ public: //*** パブリック関数 ***//
 	/// </summary>
 	void DecreaseMax();
 
-
+	std::vector<HPSprite*> hpSprites_;
 private: //*** プライベート変数 ***//
 
-	std::vector<HPSprite*> hpSprites_;
+
 
 	//// HP バーを固定のスケール指定できるようにする
 	//lwp::Vector3 kHPBackConvertScale_ = { 1.0f,1.0f,1.0f };

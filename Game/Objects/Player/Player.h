@@ -150,6 +150,10 @@ public:	//*** セッター,ゲッター ***//
 	bool GetPursuitFlag()const { return pursuitFlag; }
 	// 
 	Pursuit* GetPursuit()const { return pursuit_; }
+	// フラグ
+	bool GeteXLifeFlag()const { return eXLifeFlag; }
+	// 
+	EXLife* GeteXLife()const { return eXLife_; }
 
 private: //*** プライベート関数 ***//
 

@@ -32,6 +32,10 @@ void Damage::Reset()
 	// アニメーション作成
 	//CreateMotions();
 	// プレイヤーにダメージを与える
+	if (player_->GeteXLifeFlag()) {
+		player_->GeteXLife()->DecreaseHP();
+		return;
+	}
 	player_->DecreaseHP();
 }
 

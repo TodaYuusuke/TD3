@@ -83,7 +83,7 @@ void Player::Update()
 	// デバッグ表示
 	DebugWindow();
 #endif
-	eXLife_->Execution();
+
 	//*** プレイヤーの生き死にを判別 ***//
 
 	if (!flag_.isAlive_)
@@ -125,6 +125,11 @@ void Player::Update()
 	{
 		pursuitFlag = pursuit_->Execution();
 	}
+	if (parameter_.GetParameter().eXLifeFlag) {
+		eXLifeFlag = eXLife_->Execution();
+	}
+
+
 	// 経験値が更新された後かと思ったけど別にプレイヤーの更新が終わった後ならどこでもいい
 	level_->Update();
 

@@ -1,6 +1,6 @@
 #pragma once
 #pragma once
-#include "../IUpgrade.h"
+#include "../ISkill.h"
 
 namespace L
 {

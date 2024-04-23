@@ -8,3 +8,4 @@
 #include "PursuitFlag.h"
 #include "Skill_DamageInvincibleAdd.h"
 #include "Skill_HPUp.h"
+#include "EXLifeFlag.h"

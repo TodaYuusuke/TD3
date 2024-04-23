@@ -74,6 +74,8 @@ struct UpgradeParameter
 	UpgradeTime Time;
 	// 攻撃後追撃
 	bool pursuitFlag = false;
+	// バリア
+	bool eXLifeFlag = false;
 };
 
 namespace L

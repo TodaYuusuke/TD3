@@ -9,10 +9,8 @@ void EXLife::Init(Player* Player)
 	sprite.texture = LWP::Resource::LoadTexture("white.png");
 	sprite.anchorPoint = { 0.0f,0.0f };
 	sprite.isUI = true;
-	sprite.isActive = true;
+	sprite.isActive = false;
 	sprite.name = "HPMainSprite";
-	//sprite.commonColor = new LWP::Utility::Color("");
-	sprite.isActive = true;
 }
 
 bool EXLife::Execution()
@@ -23,11 +21,11 @@ bool EXLife::Execution()
 	if (ImGui::Button("MuinusHp"))EXLife_--;
 	ImGui::End();
 	if (EXLife_ == 1) {
-		sprite.transform.scale = { 1.05f,1.05f };
-		sprite.transform.translation = { 20.0f,20.0f,0.0f };
-		//lwp::Vector2 size = subSprite.texture.t->GetTextureSize();
-		sprite.transform.translation.x = 20.0f + 1 * (1.05f - 1.0f) * 0.5f;
-		//player_->GetPlayerParameter()->Hp.hp_
+		sprite.transform.translation.x = (256.0f * 0.5f) * player_->GetPlayerParameter()->Hp.hp_;
+		sprite.transform.translation.y = basePosition.y;
+		sprite.transform.translation.y = basePosition.y;
+		sprite.isActive = true;
+		return true;
 	}
 
 	if (EXLife_ == 0) {
@@ -46,4 +44,5 @@ bool EXLife::Execution()
 void EXLife::DecreaseHP()
 {
 	EXLife_ -= 1;
+	sprite.isActive = false;
 }

@@ -15,4 +15,7 @@ private:
 	uint32_t EXLife_ = 1;
 	const float kHealInterval = 60.0f;
 	lwp::Sprite sprite;
+
+	// Œ³‚ÌˆÊ’u
+	lwp::Vector3 basePosition{ 20.0f,26.0f,0.0f };
 };
