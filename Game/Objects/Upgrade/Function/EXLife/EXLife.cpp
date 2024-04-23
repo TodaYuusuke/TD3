@@ -15,11 +15,6 @@ void EXLife::Init(Player* Player)
 
 bool EXLife::Execution()
 {
-	ImGui::Begin("EXLife");
-	ImGui::Text("%d",EXLife_);
-	ImGui::Text("%f",time_);
-	if (ImGui::Button("MuinusHp"))EXLife_--;
-	ImGui::End();
 	if (EXLife_ == 1) {
 		sprite.transform.translation.x = (256.0f * 0.5f) * player_->GetPlayerParameter()->Hp.hp_;
 		sprite.transform.translation.y = basePosition.y;
