@@ -13,7 +13,8 @@ private:
 	Player* player_;
 	float time_ = 0;
 	uint32_t EXLife_ = 1;
-	const float kHealInterval = 10.0f;
+	
+	const float kHealInterval = 60.0f;
 	lwp::Sprite sprite;
 
 	// Œ³‚ÌˆÊ’u
