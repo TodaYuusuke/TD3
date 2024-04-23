@@ -18,6 +18,4 @@ private:
 	const int kInterval = 120;
 	int interval = 120;
 	std::vector<LWP::Primitive::Mesh> models_;
-	//LWP::Primitive::Mesh models_;
-	std::vector<LWP::Object::Collider::AABB> aabb_;
 };
