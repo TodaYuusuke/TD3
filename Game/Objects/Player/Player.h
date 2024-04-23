@@ -110,7 +110,10 @@ public: //*** パブリック関数 ***//
 	// コンストラクタ
 	Player() = default;
 	// デストラクタ
-	~Player() = default;
+	~Player() {
+		delete pursuit_;
+		delete eXLife_;
+	};
 
 	// 初期化
 	void Initialize();

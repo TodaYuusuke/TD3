@@ -2,12 +2,13 @@
 
 void Pursuit::Init()
 {
+	interval = kInterval;
 }
 
 bool Pursuit::Execution()
 {
 
-	if (interval > 0) {
+	if (interval > 10) {
 		interval--;
 		return true;
 	}
@@ -24,6 +25,7 @@ bool Pursuit::Execution()
 			models_[It].LoadFile("cube/cube.obj");
 			models_[It].name = "pursuit";
 			models_[It].transform.translation = enemys_[It]->GetPosition();
+			models_[It].transform.translation.y += 1.0f;
 		}
 		interval--;
 		return true;
@@ -37,7 +39,6 @@ bool Pursuit::Execution()
 		// 最後にクリアする
 		enemys_.clear();
 		models_.clear();
-		aabb_.clear();
 		return false;
 	}
 	else {
