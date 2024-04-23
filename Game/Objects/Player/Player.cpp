@@ -579,7 +579,7 @@ void Player::DebugWindow()
 
 	ImGui::End();
 
-	//DebugSpeeds();
+	DebugSpeeds();
 	//DebugTimes();
 	//DebugLengths();
 	//DebugCounts();

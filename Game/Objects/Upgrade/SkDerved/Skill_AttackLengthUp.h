@@ -15,7 +15,7 @@ namespace L
 		Skill_AttackLengthUp()
 		{
 			attackUpgrades_.clear();
-			attackUpgrades_.push_back(new AttackLengthDelta(100));
+			attackUpgrades_.push_back(new AttackLengthDelta(20));
 		}
 
 		///// <summary>

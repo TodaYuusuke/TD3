@@ -33,11 +33,10 @@ void L::UpgradeManager::Init()
 	attackUpgrades_.push_back(new Skill_AttackRangeUp);
 
 	// 逃走
-	//escapeUpgrades_.push_back(new Skill_DamageInvincibleAdd);
+	escapeUpgrades_.push_back(new Skill_DamageInvincibleAdd);
 	escapeUpgrades_.push_back(new Skill_EXLifeFlag);
 	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
 	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
-
 
 	// すべてを初期化する
 	for (size_t i = 0; i < attackUpgrades_.size(); i++)
