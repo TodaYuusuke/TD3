@@ -20,8 +20,6 @@ bool EXLife::Execution()
 		sprite.transform.translation.y = basePosition.y;
 		sprite.transform.translation.y = basePosition.y;
 		sprite.isActive = true;
-		ImGui::Begin("EXLife On");
-		ImGui::End();
 		return true;
 	}
 
