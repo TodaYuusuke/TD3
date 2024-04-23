@@ -17,6 +17,6 @@ private:
 	const float kHealInterval = 60.0f;
 	lwp::Sprite sprite;
 
-	// ���̈ʒu
+	// 元の位置
 	lwp::Vector3 basePosition{ 20.0f,26.0f,0.0f };
 };
