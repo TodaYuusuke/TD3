@@ -55,6 +55,9 @@ public:
 
 	/// Getter
 
+	// チュートリアルモードになっているかを取得
+	bool GetIsTutorial() { return isTutorial_; }
+
 	/// Setter
 	// 自機のアドレスを設定
 	void SetPlayer(Player* player) { player_ = player; }
@@ -76,6 +79,9 @@ private:
 
 	// ボスも含めたすべての敵
 	std::list<IEnemy*> enemys_;
+	// チュートリアル用の敵
+	NormalEnemy* tutorialEnemy_;
+
 	// 自機
 	Player* player_;
 
@@ -89,6 +95,8 @@ private:
 
 	// ボスのスポーンフラグ
 	bool isBossSpawn_;
+	// チュートリアルフラグ
+	bool isTutorial_;
 
 private: //*** プライベート関数 ***//
 

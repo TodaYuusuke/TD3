@@ -10,6 +10,7 @@ void ArrowEnemy::Init()
 	models_.emplace_back();
 	models_[0].LoadFile("ArrowEnemy/ArrowEnemy.obj");
 	models_[0].name = "ArrowEnemy!!";
+	models_[0].material.enableLighting = true;
 
 	// 最初から描画
 	isActive_ = true;
@@ -18,7 +19,7 @@ void ArrowEnemy::Init()
 	attackWaitTime_ = kAttackWaitTime;
 
 	// HP を設定
-	hp_ = 20;
+	hp_ = 10;
 }
 
 void ArrowEnemy::Update()

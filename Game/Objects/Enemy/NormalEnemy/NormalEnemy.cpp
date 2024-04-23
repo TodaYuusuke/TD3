@@ -8,6 +8,7 @@ void NormalEnemy::Init()
 	models_.emplace_back();
 	models_[Model::Body].LoadFile("NormalEnemy/NormalEnemy.obj");
 	models_[Model::Body].name = "Normal";
+	models_[Model::Body].material.enableLighting = true;
 
 	attackWaitTime_ = kAttackWaitTime;
 
@@ -21,6 +22,7 @@ void NormalEnemy::Update()
 	// 死んだかどうかはすぐに判別
 	if (IsDead_)
 	{
+		isTutorial_ = false;
 		Dying();
 		DyingAnimation();
 		return;
@@ -35,26 +37,30 @@ void NormalEnemy::Update()
 		return;
 	}
 
-	if (CheckAttackRange())
-	{
-		isAttack = true;
-	}
-	if (isAttack)
-	{
-		// 攻撃処理
-		Attack();
-		// 攻撃アニメーション
-		AttackAnimation();
-	}
-	else
-	{
-		Aim();
-		Move();
-	}
+	// チュートリアルモードが起動していない時
+	if (!isTutorial_) {
+		// 攻撃範囲に自機がいるか
+		if (CheckAttackRange())
+		{
+			isAttack = true;
+		}
+		if (isAttack)
+		{
+			// 攻撃処理
+			Attack();
+			// 攻撃アニメーション
+			AttackAnimation();
+		}
+		else
+		{
+			Aim();
+			Move();
+		}
 
-	if (attackWaitTime_ >= 0)
-	{
-		attackWaitTime_--;
+		if (attackWaitTime_ >= 0)
+		{
+			attackWaitTime_--;
+		}
 	}
 }
 

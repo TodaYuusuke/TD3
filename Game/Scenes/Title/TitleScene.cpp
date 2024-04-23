@@ -16,7 +16,7 @@ void TitleScene::Initialize()
 	backSprite_.isUI = true;
 	backSprite_.isActive = true;
 	// 適当にサイズを画面全体に拡げる
-	Vector2 spSize = backSprite_.texture.t->GetTextureSize();
+	Vector2 spSize = backSprite_.texture.t.GetSize();
 	backSprite_.transform.scale.x = 1.0f / spSize.x * 1980.0f;
 	backSprite_.transform.scale.y = 1.0f / spSize.y * 1080.0f;
 

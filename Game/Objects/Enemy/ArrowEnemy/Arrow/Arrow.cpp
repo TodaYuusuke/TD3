@@ -11,6 +11,8 @@ void Arrow::Init(lwp::WorldTransform transform)
 	model_.transform.rotation = transform.rotation;
 	model_.transform.scale = { 0.5f,0.5f,1.0f };
 	model_.name = "Arrow!!";
+	model_.material.enableLighting = true;
+
 	lwp::Vector3 point = { 0.0f,0.0f,1.0f };
 	attackWork.targetpoint = point * lwp::Matrix4x4::CreateRotateXYZMatrix(transform.rotation);
 	attackWork.targetpoint = attackWork.targetpoint.Normalize();
