@@ -285,7 +285,7 @@ void Player::InitDamageData()
 
 void Player::CreateCollisions()
 {
-	CreateJustCollision();
+	//CreateJustCollision();
 	CreatePlayerCollision();
 	CreateWeaponCollision();
 }
@@ -329,21 +329,21 @@ void Player::CreateWeaponCollision()
 
 void Player::CreateJustCollision()
 {
-	// ジャスト居合
-	//colliders_.justSlash_ = new LWP::Object::Collider::Capsule();
-	colliders_.justSlash_.Create(demoModel_.transform.translation, demoModel_.transform.translation);
-	// マスク
-	colliders_.justSlash_.mask.SetBelongFrag(GameMask::Player());
-	colliders_.justSlash_.mask.SetHitFrag(GameMask::EnemyAttack());
-	// ジャスト居合したことを通知
-	// 別個で用意した当たった時の関数
-	colliders_.justSlash_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionJust(data); });
-	// フラグオフ
-	colliders_.justSlash_.isActive = false;
-
-#ifdef DEMO
-	colliders_.justSlash_.name = "Just";
-#endif
+//	// ジャスト居合
+//	//colliders_.justSlash_ = new LWP::Object::Collider::Capsule();
+//	colliders_.justSlash_.Create(demoModel_.transform.translation, demoModel_.transform.translation);
+//	// マスク
+//	colliders_.justSlash_.mask.SetBelongFrag(GameMask::Player());
+//	colliders_.justSlash_.mask.SetHitFrag(GameMask::EnemyAttack());
+//	// ジャスト居合したことを通知
+//	// 別個で用意した当たった時の関数
+//	colliders_.justSlash_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionJust(data); });
+//	// フラグオフ
+//	colliders_.justSlash_.isActive = false;
+//
+//#ifdef DEMO
+//	colliders_.justSlash_.name = "Just";
+//#endif
 }
 
 #pragma region OnCollisionFunc

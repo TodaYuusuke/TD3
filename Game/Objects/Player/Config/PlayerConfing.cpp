@@ -24,7 +24,7 @@ void PlayerConfig::InitTime()
 	Time_.ROOTBASE_ = 0.5f;
 	Time_.MOVEBASE_ = 0.0f;
 	Time_.SLASHBASE_ = 0.3f;
-	Time_.MOMENTBASE_ = 2.0f;
+	Time_.MOMENTBASE_ = 1.0f;
 	Time_.DAMAGEBASE_ = 0.5f;
 
 	Time_.MOMENTINCREMENT_ = 0.25f;

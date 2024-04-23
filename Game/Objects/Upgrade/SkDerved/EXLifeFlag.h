@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #pragma once
 #pragma once
 #include "../ISkill.h"
@@ -6,7 +6,7 @@
 namespace L
 {
 	/// <summary>
-	/// ƒˆ‚ÈˆÚ“®‘¬“xƒAƒbƒvIi’è”j
+	/// ç´”ç²‹ãªç§»å‹•é€Ÿåº¦ã‚¢ãƒƒãƒ—ï¼ï¼ˆå®šæ•°ï¼‰
 	/// </summary>
 	class Skill_EXLifeFlag : public ISkill
 	{
@@ -14,17 +14,17 @@ namespace L
 	public:
 
 		/// <summary>
-		/// ƒˆ‚ÈˆÚ“®‘¬“xƒAƒbƒvIi’è”j
-		/// <para>‚±‚±‚Å’l‚ğ’è‹`‚·‚é</para>
-		/// <para>ó‚¯æ‚Á‚½’l‚É‚æ‚Á‚Ä“Ç‚İ‚Ş‰æ‘œ‚ğ•Ï‚¦‚½‚¢</para>
+		/// ç´”ç²‹ãªç§»å‹•é€Ÿåº¦ã‚¢ãƒƒãƒ—ï¼ï¼ˆå®šæ•°ï¼‰
+		/// <para>ã“ã“ã§å€¤ã‚’å®šç¾©ã™ã‚‹</para>
+		/// <para>å—ã‘å–ã£ãŸå€¤ã«ã‚ˆã£ã¦èª­ã¿è¾¼ã‚€ç”»åƒã‚’å¤‰ãˆãŸã„</para>
 		/// </summary>
-		/// <param name="v">ƒvƒ‰ƒX‚Å‚àƒ}ƒCƒiƒX‚Å‚à‚¢‚¢</param>
+		/// <param name="v">ãƒ—ãƒ©ã‚¹ã§ã‚‚ãƒã‚¤ãƒŠã‚¹ã§ã‚‚ã„ã„</param>
 		Skill_EXLifeFlag() = default;
 
 
 
 		/// <summary>
-		/// ƒAƒbƒvƒOƒŒ[ƒh‚Ì“à—e
+		/// ã‚¢ãƒƒãƒ—ã‚°ãƒ¬ãƒ¼ãƒ‰ã®å†…å®¹
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
