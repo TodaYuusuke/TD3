@@ -26,8 +26,8 @@ void GameOverScene::Initialize()
 	toTitleSprite_.anchorPoint = { 0.5f,0.5f };
 	toTitleSprite_.isUI = true;
 	toTitleSprite_.isActive = true;
-	toTitleSprite_.transform.translation.x = 1980.0f * 0.3f;
-	toTitleSprite_.transform.translation.y = 1080.0f * 0.5f;
+	toTitleSprite_.transform.translation.x = 1980.0f / 2.0f;
+	toTitleSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
 	toTitleSprite_.commonColor = new Color(0x111111FF);
 
 	// ボタン選択
@@ -35,8 +35,8 @@ void GameOverScene::Initialize()
 	toGameSprite_.anchorPoint = { 0.5f,0.5f };
 	toGameSprite_.isUI = true;
 	toGameSprite_.isActive = true;
-	toGameSprite_.transform.translation.x = 1980.0f * 0.7f;
-	toGameSprite_.transform.translation.y = 1080.0f * 0.5f;
+	toGameSprite_.transform.translation.x = 1980.0f / 2.0f;
+	toGameSprite_.transform.translation.y = 1080.0f / 2.0f + spriteWidth + spriteOffset;
 	toGameSprite_.commonColor = new Color(0xAAAAAAFF);
 
 	// ボタン選択
@@ -44,8 +44,8 @@ void GameOverScene::Initialize()
 	cursolSprite_.anchorPoint = { 0.5f,0.5f };
 	cursolSprite_.isUI = true;
 	cursolSprite_.isActive = true;
-	cursolSprite_.transform.translation.x = 1980.0f * 0.3f;
-	cursolSprite_.transform.translation.y = 1080.0f * 0.3f;
+	cursolSprite_.transform.translation.x = 1980.0f / 2.0f - 200;
+	cursolSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
 	cursolSprite_.transform.scale = { 0.5f,0.5f };
 	cursolSprite_.commonColor = new Color(0x101010FF);
 
@@ -67,18 +67,18 @@ void GameOverScene::Update()
 
 	// 選択肢を与える
 	// 左
-	if (Keyboard::GetTrigger(DIK_A) || Keyboard::GetTrigger(DIK_LEFT) ||
-		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_LEFT))
+	if (Keyboard::GetTrigger(DIK_W) || Keyboard::GetTrigger(DIK_UP) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_UP))
 	{
 		choise_ = 0;
-		cursolSprite_.transform.translation.x = 1980.0f * 0.3f;
+		cursolSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
 	}
 	//　右
-	else if (Keyboard::GetTrigger(DIK_D) || Keyboard::GetTrigger(DIK_RIGHT) ||
-		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_RIGHT))
+	else if (Keyboard::GetTrigger(DIK_S) || Keyboard::GetTrigger(DIK_DOWN) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN))
 	{
 		choise_ = 1;
-		cursolSprite_.transform.translation.x = 1980.0f * 0.7f;
+		cursolSprite_.transform.translation.y = 1080.0f / 2.0f + spriteWidth + spriteOffset;
 	}
 
 	if (Keyboard::GetTrigger(DIK_SPACE) ||

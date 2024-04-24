@@ -26,7 +26,18 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 public: //*** 関数群 ***//
 
 private: //*** 変数群 ***//
+	// 画面全体の画像
+	LWP::Primitive::Sprite backSprite_;
 
+	// 選択の画像
+	LWP::Primitive::Sprite toTitleSprite_;
+	LWP::Primitive::Sprite toGameSprite_;
+
+	// わかりやすくカーソルの画像
+	LWP::Primitive::Sprite cursolSprite_;
 	// 選択しているもの
 	int choise_ = 0;
+
+	float spriteWidth = 200;
+	float spriteOffset = 100;
 };

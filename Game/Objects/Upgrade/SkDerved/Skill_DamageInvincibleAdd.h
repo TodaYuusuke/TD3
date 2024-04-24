@@ -42,7 +42,7 @@ namespace L
 
 		std::string GetTexturePass() override
 		{
-			return "powerUp/PowerUp.png";
+			return "powerUp/InvincibleUp.png";
 		}
 
 		std::string GetUpgradeName() override
