@@ -52,6 +52,12 @@ void L::UpgradeManager::Init()
 	// アップグレード回数を初期化
 	upgradedConut_ = 0;
 	kUpgradNum_ = 1;
+
+	sprite_.texture = LWP::Resource::LoadTexture("white.png");
+	sprite_.anchorPoint = { 0.5f,0.5f };
+	sprite_.transform.translation = cursorPos;
+	sprite_.isUI = true;
+	sprite_.isActive = false;
 }
 
 void L::UpgradeManager::Update(Player* player)
@@ -63,6 +69,7 @@ void L::UpgradeManager::Update(Player* player)
 void L::UpgradeManager::LevelUp()
 {
 	GameTimer::GetInstance()->Stop();
+
 	isLevelUpping = true;
 	RandomUpgrade();
 }
@@ -159,6 +166,7 @@ void L::UpgradeManager::RandomUpgrade()
 
 	// 逃走要素を取得
 	candidata_.push_back(ChooseOnce(false));
+
 }
 
 int L::UpgradeManager::ChooseOnce(bool f)
@@ -232,19 +240,20 @@ int L::UpgradeManager::ChooseOnce(bool f)
 void L::UpgradeManager::Selecting(Player* player)
 {
 	// 場所
-	Vector2 pos{ 0.0f,360.0f };
-	//for (size_t i = 0; i < kUpgradNum_; i++)
-	{
-		pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
-		// 抽選されたアップグレードを更新
-		attackUpgrades_[candidata_[0]]->Update();
-		attackUpgrades_[candidata_[0]]->ShowUI(pos);
-		// 
-		pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2) * 2;
-		// 抽選されたアップグレードを更新
-		escapeUpgrades_[candidata_[1]]->Update();
-		escapeUpgrades_[candidata_[1]]->ShowUI(pos);
-	}
+	Vector2 pos{ 0.0f,540.0f };
+	sprite_.isActive = true;
+	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
+	// 抽選されたアップグレードを更新
+	attackUpgrades_[candidata_[0]]->Update();
+	attackUpgrades_[candidata_[0]]->ShowUI(pos);
+	// 
+	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2) * 2;
+	// 抽選されたアップグレードを更新
+	escapeUpgrades_[candidata_[1]]->Update();
+	escapeUpgrades_[candidata_[1]]->ShowUI(pos);
+
+	// カーソルUI
+	sprite_.transform.translation.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2) * (cursorIndex_ + 1);
 
 	// カーソル移動
 	if (0 < cursorIndex_ &&
@@ -290,6 +299,7 @@ void L::UpgradeManager::Selected()
 	else
 		escapeUpgrades_[candidata_[choiceIndex_]]->isApplied = true;
 	upgradedConut_++;
+	sprite_.isActive = false;
 }
 
 void L::UpgradeManager::Apply(Player* player)

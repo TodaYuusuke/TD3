@@ -20,10 +20,10 @@ void SlashPanel::Initialize()
 	{
 		UIData data;
 		data.fileName_ = "katana128.png";
-		data.transform_.y = 800;
+		data.transform_.y = 880;
 		data.anchor_ = { 0.5f,0.5f };
 		// 中心からの位置
-		data.transform_.x = kWINDOW_WIDTH_HALF_ + 640/* * (-1.5f + i)*/;
+		data.transform_.x = kWINDOW_WIDTH_HALF_ + 730/* * (-1.5f + i)*/;
 		// 刀生成
 		katanaPanels_.push_back(new UIPanel(data));
 		// 鞘生成

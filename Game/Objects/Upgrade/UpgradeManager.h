@@ -61,8 +61,10 @@ namespace L {
 		// アップグレードを取得した回数
 		static int upgradedConut_;
 
-		// プレイヤーの HP を監視
-		//UpgradeParameter preParam_;
+		// 選択場所のわかるUI
+		LWP::Primitive::Sprite sprite_;
+
+		lwp::Vector3 cursorPos = { LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2),120.0f };
 
 	private: // プライベート関数
 
