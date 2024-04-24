@@ -40,7 +40,7 @@ void GameOverScene::Initialize()
 	toGameSprite_.commonColor = new Color(0xAAAAAAFF);
 
 	// ボタン選択
-	cursolSprite_.texture = Resource::LoadTexture("white.png");
+	cursolSprite_.texture = Resource::LoadTexture("cursor.png");
 	cursolSprite_.anchorPoint = { 0.5f,0.5f };
 	cursolSprite_.isUI = true;
 	cursolSprite_.isActive = true;

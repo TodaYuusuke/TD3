@@ -6,11 +6,12 @@ void EXLife::Init(Player* Player)
 	EXLife_ = 1;
 	player_ = Player;
 	// スプライト
-	sprite.texture = LWP::Resource::LoadTexture("white.png");
+	sprite.texture = LWP::Resource::LoadTexture("EXLife.png");
 	sprite.anchorPoint = { 0.0f,0.0f };
 	sprite.isUI = true;
 	sprite.isActive = false;
 	sprite.name = "HPMainSprite";
+	sprite.transform.scale = { 0.5f,0.5f };
 }
 
 bool EXLife::Execution()

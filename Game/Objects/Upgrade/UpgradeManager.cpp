@@ -53,7 +53,7 @@ void L::UpgradeManager::Init()
 	upgradedConut_ = 0;
 	kUpgradNum_ = 1;
 
-	sprite_.texture = LWP::Resource::LoadTexture("white.png");
+	sprite_.texture = LWP::Resource::LoadTexture("cursor.png");
 	sprite_.anchorPoint = { 0.5f,0.5f };
 	sprite_.transform.translation = cursorPos;
 	sprite_.isUI = true;
@@ -240,7 +240,7 @@ int L::UpgradeManager::ChooseOnce(bool f)
 void L::UpgradeManager::Selecting(Player* player)
 {
 	// 場所
-	Vector2 pos{ 0.0f,540.0f };
+	Vector2 pos{ 0.0f,600.0f };
 	sprite_.isActive = true;
 	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
 	// 抽選されたアップグレードを更新
