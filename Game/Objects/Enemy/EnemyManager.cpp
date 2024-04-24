@@ -129,9 +129,8 @@ void EnemyManager::BossSpawn() {
 
 	// 1分
 	// ダッシュボスを出現
-	if (gameTimer_->GetCurrentSecond() == 1 && !isBossSpawn_) {
-		//DashBossSpawn(pos);
-		ArrowBossSpawn(pos);
+	if (gameTimer_->GetCurrentSecond() == 60 && !isBossSpawn_) {
+		DashBossSpawn(pos);
 		isBossSpawn_ = true;
 	}
 	// 2分
