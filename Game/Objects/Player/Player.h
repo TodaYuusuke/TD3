@@ -234,6 +234,9 @@ private: //*** Behavior 管理に使う関数 ***//
 
 #pragma endregion
 
+	// ダメージを受けた時のリアクション
+	void DamageEffect();
+
 public: //*** プライベート変数 ***//
 
 #pragma region PrivateVar
