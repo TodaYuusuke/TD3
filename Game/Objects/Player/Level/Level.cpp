@@ -82,7 +82,7 @@ void Level::LevelUp()
 		return;
 	}
 	exp_ = 0.0f;
-	reqEXP_ += 5.0f + (lv_ - 1) * 3;
+	reqEXP_ += 5.0f + (lv_ - 1) * 2;
 	lv_++;
 	// ここでアップデートする関数を呼び出す
 	L::UpgradeManager::LevelUp();

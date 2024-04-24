@@ -86,6 +86,7 @@ private: //*** プライベート変数 ***//
 	// 10
 	GameCounter countM1_;
 
+
 private: //*** プライベート関数 ***//
 
 	/// <summary>

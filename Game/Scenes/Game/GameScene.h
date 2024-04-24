@@ -69,5 +69,9 @@ private: //*** 変数群 ***//
 	// 太陽
 	lwp::PointLight sun_;
 
-	
+	// チュートリアル用Sprite
+	LWP::Primitive::Sprite tutorialSprite1;
+	LWP::Primitive::Sprite tutorialSprite2;
+	// タイマーの後ろのスプライト
+	LWP::Primitive::Sprite backSprite_;
 };

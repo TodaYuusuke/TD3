@@ -22,6 +22,9 @@ void GameTimer::Initialize()
 	// タイマーの場所
 	timerPosition_ = { 1600.0f,100.f,0.0f };
 
+
+
+
 	// タイマーを綺麗に表示する
 	countS0_.Initialize();
 	countS0_.transform_.translation = timerPosition_;
@@ -39,6 +42,8 @@ void GameTimer::Initialize()
 	countM1_.transform_.translation = timerPosition_;
 	countM1_.transform_.translation.x -= kPaddingCenter_ + kPaddingNumber_;
 	countM1_.isActive_ = true;
+
+
 	// 10 分生存
 	countM1_.Reset(1);
 
@@ -80,6 +85,7 @@ void GameTimer::Reset(uint32_t limit)
 
 void GameTimer::Update()
 {
+
 	countS0_.isActive_ =
 		countS1_.isActive_ =
 		countM0_.isActive_ =

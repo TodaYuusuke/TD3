@@ -6,9 +6,8 @@ using namespace LWP::Object::Collider;
 void ShieldEnemy::Init()
 {
 	models_.emplace_back();
-	models_[0].LoadFile("cube/cube.obj");
-	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::CYAN);
-	models_[0].name = "ShieldEnemy!!";
+	models_[0].LoadFile("SheldEnemy/SheldEnemy.obj");
+	models_[0].name = "SheldEnemy!!";
 	models_[0].material.enableLighting = true;
 
 	isActive_ = true;

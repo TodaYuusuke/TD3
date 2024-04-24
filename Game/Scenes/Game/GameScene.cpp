@@ -51,12 +51,26 @@ void GameScene::Initialize()
 
 
 	// アップグレード
-	//scUpgrade_ = std::make_unique<UpgradeScreen>();
-	//scUpgrade_->Initialize();
-
-	//level_->SetUpgradeScreen(scUpgrade_.get());
 	upgradeManager_ = std::make_unique<L::UpgradeManager>();
 	upgradeManager_->Init();
+
+	tutorialSprite1.texture = Resource::LoadTexture("Text/tutorial1.png");
+	tutorialSprite1.isUI = true;
+	tutorialSprite1.isActive = true;
+	tutorialSprite1.transform.translation.y = 120.0f;
+	tutorialSprite2.texture = Resource::LoadTexture("Text/tutorial2.png");
+	tutorialSprite2.isUI = true;
+	tutorialSprite2.isActive = true;
+	tutorialSprite2.transform.translation.y = 200.0f;
+
+	backSprite_.texture = Resource::LoadTexture("white.png");
+	backSprite_.isUI = true;
+	backSprite_.isActive = false;
+	backSprite_.anchorPoint = { 0.5f,0.5f };
+	backSprite_.transform.scale.x = 1.2f;
+	backSprite_.transform.scale.y = 0.5f;
+	backSprite_.transform.translation = { 1600.0f,100.f,0.0f };
+	backSprite_.commonColor = new Color(0xAAAAAAFF);
 
 	// いったん五分
 	gameTimer_->Reset(180);
@@ -68,36 +82,47 @@ void GameScene::Initialize()
 	sun_.intensity = 2.0f;
 	sun_.radius = 100.0f;
 	sun_.decay = 1.5f;
+
 }
 
 // 更新
 void GameScene::Update()
 {
+#ifdef DEMO
 	ImGui::Begin("Scene");
 	ImGui::Text("Game");
 	ImGui::End();
+#endif
 
 	// 時間を計測
 	// チュートリアルの時は計測しない
 	if (!enemyManager_->GetIsTutorial()) {
 		gameTimer_->Update();
+		tutorialSprite1.isActive = false;
+		tutorialSprite2.isActive = false;
+		backSprite_.isActive = true;
 	}
 
 	// タイマーのカウントが終了したとき
 	if (gameTimer_->isEnd_)
 	{
+#ifdef DEMO
 		ImGui::Begin("Scene");
 		ImGui::Text("Space");
 		ImGui::End();
+#endif
+		
 
 		// プレイヤーが生きているとき
 		if (player_->flag_.isAlive_)
 		{
 			// クリアしたときの処理
-
+#ifdef DEMO
 			ImGui::Begin("Scene");
 			ImGui::Text("Clear");
 			ImGui::End();
+#endif
+
 
 			// 何か演出を出す
 			if (player_->ClearAnime())
@@ -114,10 +139,12 @@ void GameScene::Update()
 		else
 		{
 			// ゲームオーバーしたときの処理
-
+#ifdef DEMO
 			ImGui::Begin("Scene");
 			ImGui::Text("GameOver");
 			ImGui::End();
+#endif
+
 
 			// 何か演出を出す
 			if (Keyboard::GetTrigger(DIK_SPACE) ||
