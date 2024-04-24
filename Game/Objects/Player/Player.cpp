@@ -219,6 +219,19 @@ void Player::ApplyUpgrade(const UpgradeParameter& para)
 	parameter_.ApplyUpgrade(para);
 }
 
+bool Player::ClearAnime()
+{
+	ClearMotion.t += ClearMotion.speed;
+	demoModel_.transform.translation.y += (ClearMotion.speed + (ClearMotion.t -1)* 2 ) * LWP::Info::GetDefaultDeltaTimeF();
+
+	if (ClearMotion.t > kClearMotionEnd) {
+		return true;
+	}
+
+
+	return false;
+}
+
 void Player::RegistStatus(IStatus::Behavior request)
 {
 	commands_.push_back(request);

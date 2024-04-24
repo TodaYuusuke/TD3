@@ -137,6 +137,9 @@ public: //*** パブリック関数 ***//
 	/// <param name="para">レベルアップによって変わったパラメーター</param>
 	void ApplyUpgrade(const UpgradeParameter& para);
 
+	// クリアアニメ
+	bool ClearAnime();
+
 public:	//*** セッター,ゲッター ***//
 
 	PlayerParameter* GetPlayerParameter() { return &parameter_; }
@@ -288,6 +291,12 @@ public: //*** プライベート変数 ***//
 	// レベルアップ機能
 	std::unique_ptr<Level> level_;
 
+	MotionWork ClearMotion = {
+		.t = 0.0f,
+		.speed = 1.0f,
+		.flag = false,
+	};
+	const float kClearMotionEnd = 60.0f;
 
 	// 現在の状態
 	IStatus::Behavior behavior_ = IStatus::Behavior::Root;

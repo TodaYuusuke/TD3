@@ -12,22 +12,13 @@ using namespace LWP::Utility;
 void TitleScene::Initialize()
 {
 	// 画面全体
-	backSprite_.texture = Resource::LoadTexture("white.png");
+	backSprite_.texture = Resource::LoadTexture("Title.png");
 	backSprite_.isUI = true;
 	backSprite_.isActive = true;
 	// 適当にサイズを画面全体に拡げる
 	Vector2 spSize = backSprite_.texture.t.GetSize();
 	backSprite_.transform.scale.x = 1.0f / spSize.x * 1980.0f;
 	backSprite_.transform.scale.y = 1.0f / spSize.y * 1080.0f;
-
-	// ボタン選択
-	buttonSprite_.texture = Resource::LoadTexture("white.png");
-	buttonSprite_.anchorPoint = { 0.5f,0.5f };
-	buttonSprite_.isUI = true;
-	buttonSprite_.isActive = true;
-	buttonSprite_.transform.translation.x = 1980.0f * 0.5f;
-	buttonSprite_.transform.translation.y = 1080.0f * 0.5f;
-	buttonSprite_.commonColor = new Color(0x111111FF);
 }
 
 // 更新

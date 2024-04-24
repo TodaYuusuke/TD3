@@ -68,4 +68,6 @@ private: //*** 変数群 ***//
 
 	// 太陽
 	lwp::PointLight sun_;
+
+	
 };

@@ -26,7 +26,4 @@ private: //*** 変数群 ***//
 
 	// 画面全体の画像
 	LWP::Primitive::Sprite backSprite_;
-
-	// ボタン選択の画像
-	LWP::Primitive::Sprite buttonSprite_;
 };
