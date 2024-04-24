@@ -52,7 +52,7 @@ private: //*** プライベート変数 ***//
 	uint32_t lv_ = 1u;
 
 	// 次のレベルアップに必要な経験値量
-	float reqEXP_ = 10.0f;
+	float reqEXP_;
 
 	// 今蓄えている経験値
 	float exp_ = 0.0f;

@@ -51,7 +51,7 @@ void L::UpgradeManager::Init()
 	}
 	// アップグレード回数を初期化
 	upgradedConut_ = 0;
-	kUpgradNum_ = 2;
+	kUpgradNum_ = 1;
 }
 
 void L::UpgradeManager::Update(Player* player)
@@ -159,40 +159,6 @@ void L::UpgradeManager::RandomUpgrade()
 
 	// 逃走要素を取得
 	candidata_.push_back(ChooseOnce(false));
-
-
-	//// 抽選数分だけ抽選候補に入れる
-	//while (candidata_.size() < kUpgradNum_)
-	//{
-	//	// アップグレードの数が足りなくなったら
-	//	if (attackUpgrades_.size() - upgradedConut_ < kUpgradNum_)
-	//	{
-	//		kUpgradNum_ = int(attackUpgrades_.size()) - upgradedConut_;
-	//	}
-	//	// 取得する範囲の添え字を受け取る
-	//	int rand = Utility::GenerateRandamNum(0, (int)attackUpgrades_.size() - 1);
-	//	// 判断
-	//	bool isFind = false;
-	//	// 既に選択しているものは出ない
-	//	isFind = attackUpgrades_[rand]->isApplied;
-
-	//	// 被りが発生しても無理
-	//	for (size_t i = 0; i < candidata_.size(); i++)
-	//	{
-	//		if (candidata_[i] == rand)
-	//		{
-	//			isFind = true;
-	//			break;
-	//		}
-	//	}
-	//	// 重なっていたらもう一度抽選
-	//	if (isFind)
-	//	{
-	//		continue;
-	//	}
-
-	//	candidata_.push_back(rand);
-	//}
 }
 
 int L::UpgradeManager::ChooseOnce(bool f)
@@ -269,12 +235,12 @@ void L::UpgradeManager::Selecting(Player* player)
 	Vector2 pos{ 0.0f,360.0f };
 	//for (size_t i = 0; i < kUpgradNum_; i++)
 	{
-		pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 1);
+		pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
 		// 抽選されたアップグレードを更新
 		attackUpgrades_[candidata_[0]]->Update();
 		attackUpgrades_[candidata_[0]]->ShowUI(pos);
 		// 
-		pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 1) * 2;
+		pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2) * 2;
 		// 抽選されたアップグレードを更新
 		escapeUpgrades_[candidata_[1]]->Update();
 		escapeUpgrades_[candidata_[1]]->ShowUI(pos);
@@ -296,36 +262,22 @@ void L::UpgradeManager::Selecting(Player* player)
 	{
 		cursorIndex_++;
 	}
-	// 下ボタンを押したときは即座に決定ボタンへ
-	if (Input::Keyboard::GetTrigger(DIK_S) ||
-		Input::Keyboard::GetTrigger(DIK_DOWN) ||
-		Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN))
-	{
-		cursorIndex_ = kUpgradNum_;
-	}
-
 
 	// 決定ボタンを押した
 	if (Input::Keyboard::GetTrigger(DIK_SPACE) ||
 		Input::Keyboard::GetTrigger(DIK_RETURN) ||
 		Input::Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
-		// アップグレードを選択完了なら
-		if (cursorIndex_ == kUpgradNum_)
-		{
-			// 選択されたアップグレードを適応する
-			if (kUpgradNum_ != 0)
-			{
-				Selected();
-			}
-			// アップグレードが残ってなかったら適用のみ
-			Apply(player);
-			cursorIndex_ = 0;
-			choiceIndex_ = 0;
-			return;
-		}
-		// アップデートを仮選択
 		choiceIndex_ = cursorIndex_;
+		// 選択されたアップグレードを適応する
+		if (kUpgradNum_ != 0)
+		{
+			Selected();
+		}
+		// アップグレードが残ってなかったら適用のみ
+		Apply(player);
+		cursorIndex_ = 0;
+		choiceIndex_ = 0;
 	}
 
 }
