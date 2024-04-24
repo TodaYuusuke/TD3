@@ -143,10 +143,17 @@ void Player::Update()
 	{
 		// 無敵フレームを満たすか判断
 		invincibleTime_ += (float)lwp::GetDeltaTime();
+
+		// 自機を点滅させる
+		DamageEffect();
+
 		if (maxInvincibleTime_ <= invincibleTime_)
 		{
 			// 無敵を切る
 			flag_.isInvincible_ = false;
+
+			// 自機が消えたままにしないようにする
+			demoModel_.isActive = true;
 		}
 	}
 	// 無敵なのかどうか判断
@@ -757,3 +764,13 @@ void Player::DebugParcentages()
 #endif
 
 #pragma endregion
+
+void Player::DamageEffect() {
+	int invincibleTime = invincibleTime_ * 1000;
+	if ((int)invincibleTime % 3 == 0) {
+		demoModel_.isActive = false;
+	}
+	else {
+		demoModel_.isActive = true;
+	}
+}
