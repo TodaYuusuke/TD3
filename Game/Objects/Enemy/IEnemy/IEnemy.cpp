@@ -16,6 +16,38 @@ void IEnemy::Initialize()
 
 }
 
+void IEnemy::KnockBackUpdate() {
+	// 自機と反対の方向に移動させる
+	// ノックバック判定が出ているかを確認
+	if (player_->GetIsEnemyKnockBack()) {
+		// 自機との距離
+		float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
+		// ノックバックの範囲にいるなら自機と反対の方向に移動させる
+		if (distance <= kKnockBackStartRange) {
+			isKnockBack_ = true;
+			// ノックバックする方向ベクトルを算出
+			knockBackDir_ = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Normalize() * 0.4f;
+			// 上には飛ばないようにする
+			knockBackDir_.y = 0.0f;
+		}
+	}
+
+	// ノックバックの移動処理
+	if (isKnockBack_) {
+		// ノックバック中
+		if (knockBackTime_ <= 10) {
+			// 方向ベクトルを加算
+			models_[0].transform.translation = models_[0].transform.translation + knockBackDir_;
+		}
+		else {
+			isKnockBack_ = false;
+			knockBackTime_ = 0.0f;
+		}
+
+		knockBackTime_++;
+	}
+}
+
 void IEnemy::Death()
 {
 	IsDead_ = true;
@@ -185,7 +217,7 @@ void IEnemy::InitStaticVariable() {
 	damageParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::RED);
 	damageParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
 		Object::ParticleData newData{};
-		newData.wtf.translation = lwp::Vector3{0,1,0} + primitive->transform.GetWorldPosition();
+		newData.wtf.translation = lwp::Vector3{ 0,1,0 } + primitive->transform.GetWorldPosition();
 		newData.wtf.rotation = primitive->transform.rotation;
 		newData.wtf.scale = { 0.25f,0.25f, 0.25f };
 
@@ -214,7 +246,7 @@ void IEnemy::InitStaticVariable() {
 		return data->elapsedFrame > 180 ? true : false;
 	};
 	damageParticle_.isActive = true;
-	damageEffect_ = [&](int i, lwp::Vector3 pos) { 
+	damageEffect_ = [&](int i, lwp::Vector3 pos) {
 		damageParticle_.P()->transform = pos;
 		damageParticle_.Add(i);
 	};

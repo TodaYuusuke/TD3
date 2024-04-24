@@ -16,7 +16,7 @@ SlashPanel::~SlashPanel()
 void SlashPanel::Initialize()
 {
 
-	for (size_t i = 0; i < 4; i++)
+	for (size_t i = 0; i < 2; i++)
 	{
 		UIData data;
 		data.fileName_ = "katana128.png";
@@ -40,6 +40,7 @@ void SlashPanel::Update()
 
 void SlashPanel::Slash()
 {
+	//sayaPanels_[index_ - 1]->SetIsActive(false);
 	sayaPanels_[index_ - 1]->SetIsActive(false);
 	index_--;
 }

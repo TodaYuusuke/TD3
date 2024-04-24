@@ -81,6 +81,9 @@ void ArrowEnemy::Update()
 	{
 		attackWaitTime_--;
 	}
+
+	// ノックバック処理
+	KnockBackUpdate();
 }
 
 void ArrowEnemy::SetPosition(lwp::Vector3 pos)

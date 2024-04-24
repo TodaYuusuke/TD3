@@ -61,6 +61,9 @@ void NormalEnemy::Update()
 		{
 			attackWaitTime_--;
 		}
+
+		// ノックバック処理
+		KnockBackUpdate();
 	}
 }
 
