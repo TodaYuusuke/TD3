@@ -23,7 +23,7 @@ void SlashPanel::Initialize()
 		data.transform_.y = 800;
 		data.anchor_ = { 0.5f,0.5f };
 		// 中心からの位置
-		data.transform_.x = kWINDOW_WIDTH_HALF_ + 256 * (-1.5f + i);
+		data.transform_.x = kWINDOW_WIDTH_HALF_ + 256/* * (-1.5f + i)*/;
 		// 刀生成
 		katanaPanels_.push_back(new UIPanel(data));
 		// 鞘生成
