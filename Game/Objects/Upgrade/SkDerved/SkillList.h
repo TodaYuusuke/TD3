@@ -9,3 +9,4 @@
 #include "Skill_DamageInvincibleAdd.h"
 #include "Skill_HPUp.h"
 #include "EXLifeFlag.h"
+#include "BlowOffFlag.h"

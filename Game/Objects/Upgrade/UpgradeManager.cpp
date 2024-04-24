@@ -34,8 +34,8 @@ void L::UpgradeManager::Init()
 
 	// 逃走
 	escapeUpgrades_.push_back(new Skill_DamageInvincibleAdd);
-	escapeUpgrades_.push_back(new Skill_EXLifeFlag);
-	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
+	//escapeUpgrades_.push_back(new Skill_EXLifeFlag);
+	escapeUpgrades_.push_back(new Skill_BlowOffFlag);
 	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
 
 	// すべてを初期化する

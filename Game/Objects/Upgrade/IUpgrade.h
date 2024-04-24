@@ -76,6 +76,8 @@ struct UpgradeParameter
 	bool pursuitFlag = false;
 	// バリア
 	bool eXLifeFlag = false;
+	// 吹き飛ばし
+	bool BlowOffFlag = false;
 };
 
 namespace L

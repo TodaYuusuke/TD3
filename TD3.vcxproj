@@ -194,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Objects\Upgrade\Function\EXLife\EXLife.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\BlowOffFlag.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\EXLifeFlag.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\PursuitFlag.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_AttackLengthUp.h" />

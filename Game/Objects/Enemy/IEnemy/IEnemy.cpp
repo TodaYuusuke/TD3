@@ -17,18 +17,21 @@ void IEnemy::Initialize()
 }
 
 void IEnemy::KnockBackUpdate() {
-	// 自機と反対の方向に移動させる
-	// ノックバック判定が出ているかを確認
-	if (player_->GetIsEnemyKnockBack()) {
-		// 自機との距離
-		float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
-		// ノックバックの範囲にいるなら自機と反対の方向に移動させる
-		if (distance <= kKnockBackStartRange) {
+	// プレイヤーパラメーターがtrueなら
+	if (player_->parameter_.GetParameter().BlowOffFlag) {
+		// 自機と反対の方向に移動させる
+		// ノックバック判定が出ているかを確認
+		if (player_->GetIsEnemyKnockBack()) {
+			// 自機との距離
+			float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
+			// ノックバックの範囲にいるなら自機と反対の方向に移動させる
+			if (distance <= kKnockBackStartRange) {
 			isKnockBack_ = true;
-			// ノックバックする方向ベクトルを算出
-			knockBackDir_ = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Normalize() * 0.4f;
-			// 上には飛ばないようにする
-			knockBackDir_.y = 0.0f;
+				// ノックバックする方向ベクトルを算出
+				knockBackDir_ = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Normalize() * 0.4f;
+				// 上には飛ばないようにする
+				knockBackDir_.y = 0.0f;
+			}
 		}
 	}
 

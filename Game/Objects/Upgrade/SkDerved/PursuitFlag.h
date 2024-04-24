@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "../ISkill.h"
 
 namespace L
