@@ -110,7 +110,10 @@ public: //*** パブリック関数 ***//
 	// コンストラクタ
 	Player() = default;
 	// デストラクタ
-	~Player() = default;
+	~Player() {
+		delete pursuit_;
+		delete eXLife_;
+	};
 
 	// 初期化
 	void Initialize();
@@ -121,12 +124,12 @@ public: //*** パブリック関数 ***//
 	void StartJust();
 	// ジャスト終了
 	void EndJust();
-	
+
 	// 体力を回復する
 	void IncreaseHP();
 	// 体力が減少する
 	void DecreaseHP();
-	
+
 	/// <summary>
 	/// アップグレードを適応するための関数
 	/// <para>UpgradeManagerがアップグレードの選択確定時に呼び出します</para>
@@ -136,12 +139,17 @@ public: //*** パブリック関数 ***//
 
 public:	//*** セッター,ゲッター ***//
 
-	PlayerParameter* GetPlayerParameter() { return &parameter_;}
-	lwp::WorldTransform* GetWorldTransform() { return &demoModel_.transform;}
+	PlayerParameter* GetPlayerParameter() { return &parameter_; }
+	lwp::WorldTransform* GetWorldTransform() { return &demoModel_.transform; }
 	bool GetIsJustSlashing() { return flag_.isJustSlashing_; }
 	bool GetIsSlash() { return behavior_ == IStatus::Behavior::Slash; }
+	bool GetIsEnemyKnockBack() { return isEnemyKnockBack_; }
+
 	void SetCameraPointer(FollowCamera* p) { pCamera_ = p; }
 	void SetScene(GameScene* p) { pScene_ = p; }
+	// ノックバック判定開始
+	void StartEnemyKnockBack() { isEnemyKnockBack_ = true; }
+
 	// 状態を外部から設定する
 	void RegistStatus(IStatus::Behavior request);
 	// Vector3 をカメラ方向に変える
@@ -279,7 +287,7 @@ public: //*** プライベート変数 ***//
 
 	// レベルアップ機能
 	std::unique_ptr<Level> level_;
-	
+
 
 	// 現在の状態
 	IStatus::Behavior behavior_ = IStatus::Behavior::Root;
@@ -314,6 +322,10 @@ public: //*** プライベート変数 ***//
 
 	// 今の状態クラス
 	IStatus* currStatus_ = nullptr;
+
+
+	// 敵をノックバックするフラグ
+	bool isEnemyKnockBack_;
 
 #pragma endregion
 

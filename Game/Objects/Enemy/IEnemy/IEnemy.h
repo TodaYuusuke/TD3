@@ -36,6 +36,9 @@ public:
 	virtual void Move() = 0;
 	virtual void Attack() = 0;
 
+	// ノックバックの更新処理
+	void KnockBackUpdate();
+
 	/// <summary>
 	/// 死んだ瞬間に呼び出す関数
 	/// </summary>
@@ -124,6 +127,9 @@ protected: //*** 継承クラスで呼び出す共通処理 ***//
 protected:// 定数
 	const LWP::Math::Vector3 kBossSize = { 4,5,4 };
 
+	// ノックバックが起きる範囲
+	const float kKnockBackStartRange = 10.0f;
+
 protected:
 	std::vector<LWP::Primitive::Mesh> models_;
 
@@ -144,6 +150,12 @@ protected:
 	bool isAttack = false;
 	// 死んだときに立つフラグ(アニメーション用)
 	bool IsDead_ = false;
+	// ノックバックフラグ(今は居合終了時のノックバックのみ)
+	bool isKnockBack_;
+
+	// ノックバックする方向ベクトル
+	lwp::Vector3 knockBackDir_;
+
 	// 死んだ時用アニメ
 	MotionWork deadAnime = {
 		// 下に沈んでいく速度
@@ -182,6 +194,9 @@ protected:
 	// 設定とかで固定値?
 	// 0 じゃないと無敵(別でフラグを立てとく)
 	float invincibleTime_ = 0.0f;
+
+	// ノックバックの移動時間
+	float knockBackTime_ = 0.0f;
 
 	// パーティクル
 	static std::function<void(int, lwp::Vector3)> damageEffect_;

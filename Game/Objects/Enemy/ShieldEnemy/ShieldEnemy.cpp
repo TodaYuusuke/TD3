@@ -57,6 +57,9 @@ void ShieldEnemy::Update()
 	if (attackWaitTime_ >= 0) {
 		attackWaitTime_--;
 	}
+
+	// ノックバック処理
+	KnockBackUpdate();
 }
 
 void ShieldEnemy::SetPosition(lwp::Vector3 pos)

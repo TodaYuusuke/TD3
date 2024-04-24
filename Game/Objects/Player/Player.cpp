@@ -91,6 +91,11 @@ void Player::Update()
 		return;
 	}
 
+	// ノックバックフラグをoffにする
+	if (isEnemyKnockBack_) {
+		isEnemyKnockBack_ = false;
+	}
+
 	//*** 入力系 ***//
 
 	// 移動入力を受け付ける
@@ -231,7 +236,6 @@ lwp::Vector3 Player::GetVectorTranspose(const lwp::Vector3& vec)
 
 #pragma region BehaviorData
 
-
 void Player::InitDatas()
 {
 	// 外部からの設定を取得
@@ -336,21 +340,21 @@ void Player::CreateWeaponCollision()
 
 void Player::CreateJustCollision()
 {
-//	// ジャスト居合
-//	//colliders_.justSlash_ = new LWP::Object::Collider::Capsule();
-//	colliders_.justSlash_.Create(demoModel_.transform.translation, demoModel_.transform.translation);
-//	// マスク
-//	colliders_.justSlash_.mask.SetBelongFrag(GameMask::Player());
-//	colliders_.justSlash_.mask.SetHitFrag(GameMask::EnemyAttack());
-//	// ジャスト居合したことを通知
-//	// 別個で用意した当たった時の関数
-//	colliders_.justSlash_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionJust(data); });
-//	// フラグオフ
-//	colliders_.justSlash_.isActive = false;
-//
-//#ifdef DEMO
-//	colliders_.justSlash_.name = "Just";
-//#endif
+	//	// ジャスト居合
+	//	//colliders_.justSlash_ = new LWP::Object::Collider::Capsule();
+	//	colliders_.justSlash_.Create(demoModel_.transform.translation, demoModel_.transform.translation);
+	//	// マスク
+	//	colliders_.justSlash_.mask.SetBelongFrag(GameMask::Player());
+	//	colliders_.justSlash_.mask.SetHitFrag(GameMask::EnemyAttack());
+	//	// ジャスト居合したことを通知
+	//	// 別個で用意した当たった時の関数
+	//	colliders_.justSlash_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionJust(data); });
+	//	// フラグオフ
+	//	colliders_.justSlash_.isActive = false;
+	//
+	//#ifdef DEMO
+	//	colliders_.justSlash_.name = "Just";
+	//#endif
 }
 
 #pragma region OnCollisionFunc
@@ -509,10 +513,15 @@ void Player::CheckBehavior()
 				//	slashData_.relationSlash_ < slashData_.maxRelation_)
 			{
 				reqBehavior_ = Behavior::Slash;
+				slashPanel_->Slash();
 			}
 			break;
 		case Behavior::Moment:
 			reqBehavior_ = Behavior::Moment;
+			// 突進が終わるときに敵をノックバックさせる
+			if (reqBehavior_ != behavior_) {
+				isEnemyKnockBack_ = true;
+			}
 			break;
 		case Behavior::Damage:
 			reqBehavior_ = Behavior::Damage;
