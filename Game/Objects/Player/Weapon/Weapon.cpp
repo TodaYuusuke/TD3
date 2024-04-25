@@ -9,6 +9,7 @@ void Weapon::Initialize()
 
 	demoModel_.transform.translation.z = 1.0f;
 	demoModel_.transform.scale = { 0.5f,0.5f,0.8f };
+	demoModel_.material.enableLighting = true;
 
 	InitDatas();
 
