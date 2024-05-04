@@ -47,18 +47,13 @@ void ArrowBoss::Init()
 
 #pragma region ミサイル起動パーティクル
 	// 形を決定
-	missileContrail_.SetPrimitive<Primitive::Billboard3D>();
-	missileContrail_.P()->texture = lwp::LoadTexture("particle/smoke.png");
+	missileContrail_.SetPrimitive<Primitive::Cube>();
 	// 初期化処理
 	missileContrail_.initFunction =
 		[](Primitive::IPrimitive* primitive) {
 		Object::ParticleData data;
 		data.wtf.translation = primitive->transform.GetWorldPosition();
 		data.wtf.rotation = primitive->transform.rotation;
-		//data.wtf.rotation.x = 0.0f;
-		//data.wtf.rotation.x = 0.0f;
-		//data.wtf.rotation.y = 0.0f;
-		//data.wtf.rotation.z = static_cast<float>(Utility::GenerateRandamNum<int>(0, 628) / 100.0f);
 		data.wtf.scale = primitive->transform.scale;
 
 		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
