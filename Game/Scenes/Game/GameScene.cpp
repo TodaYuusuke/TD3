@@ -88,6 +88,12 @@ void GameScene::Initialize()
 // 更新
 void GameScene::Update()
 {
+
+	if (Keyboard::GetTrigger(DIK_R) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_A))
+	{
+		nextSceneFunction = []() {return new GameScene; };
+	}
 #ifdef DEMO
 	ImGui::Begin("Scene");
 	ImGui::Text("Game");
