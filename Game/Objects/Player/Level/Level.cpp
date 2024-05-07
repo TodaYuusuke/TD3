@@ -23,7 +23,7 @@ void Level::Initialize(Player* p)
 	CreateCollision();
 	// 場所を設定
 	//collider_->Create(position, position);
-	collider_.Create(player_->demoModel_.transform.translation);
+	collider_.Create(player_->demoModel_.transform.translation, collider_.radius);
 }
 
 void Level::Update()
@@ -31,7 +31,7 @@ void Level::Update()
 	// 当たり判定を 1 フレーム毎に更新
 	//collider_->start = collider_->end;
 	//collider_->end = position;
-	collider_.Create(player_->demoModel_.transform.translation);
+	collider_.Create(player_->demoModel_.transform.translation, collider_.radius);
 
 #ifdef DEMO
 
@@ -52,6 +52,7 @@ void Level::CreateCollision()
 	// 当たる
 	collider_.isActive = true;
 	collider_.name = "Level";
+	collider_.radius += 1.0f;
 }
 
 void Level::OnCollision(const lwp::Collider::HitData& data)
