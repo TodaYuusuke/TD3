@@ -130,5 +130,7 @@
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\Arrow\HomingArrow.h" />
     <ClInclude Include="Game\Objects\Enemy\Boss\JumpBoss.h" />
     <ClInclude Include="Game\Objects\Upgrade\Function\EXLife\EXLife.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\BlowOffFlag.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\EXLifeFlag.h" />
   </ItemGroup>
 </Project>

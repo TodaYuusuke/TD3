@@ -57,7 +57,7 @@ void Weapon::Update()
 void Weapon::InitRoot()
 {
 	rootData_.translate_.start_ = demoModel_.transform.translation;
-	rootData_.rotate_.start_ = demoModel_.transform.rotation;
+	//rootData_.rotate_.start_ = demoModel_.transform.rotation;
 }
 
 void Weapon::InitSlash()
@@ -67,7 +67,7 @@ void Weapon::InitSlash()
 void Weapon::InitMoment()
 {
 	momentData_.scale_.start_ = demoModel_.transform.scale;
-	momentData_.rotate_.start_ = demoModel_.transform.rotation;
+	//momentData_.rotate_.start_ = demoModel_.transform.rotation;
 	momentData_.translate_.start_ = demoModel_.transform.translation;
 }
 
