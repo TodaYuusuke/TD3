@@ -61,8 +61,8 @@ public: //*** パブリック関数 ***//
 
 public:	//*** セッター,ゲッター ***//
 
-	lwp::WorldTransform* GetWorldTransform() { return &demoModel_.transform; }
-	void SetParent(lwp::WorldTransform* p) { demoModel_.transform.Parent(p); }
+	lwp::TransformEuler* GetWorldTransform() { return &demoModel_.transform; }
+	void SetParent(lwp::TransformEuler* p) { demoModel_.transform.Parent(p); }
 
 	void SetIsActive(bool flag) { demoModel_.isActive = flag; }
 	void SetTPointer(float* p) { pT_ = p; }

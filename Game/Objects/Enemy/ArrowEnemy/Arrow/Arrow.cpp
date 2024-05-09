@@ -2,7 +2,7 @@
 
 #include "Game/Objects/GameMask.h"
 
-void Arrow::Init(lwp::WorldTransform transform)
+void Arrow::Init(lwp::TransformEuler transform)
 {
 	// モデルの作成
 	model_.LoadFile("cube/cube.obj");

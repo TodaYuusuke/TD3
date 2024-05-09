@@ -12,6 +12,7 @@ using namespace LWP::Utility;
 // 初期化
 void GameScene::Initialize()
 {
+	mainCamera.pp.CreatePSO("postProcess/PostProcess.PS.hlsl");
 	// タイマー
 	gameTimer_ = GameTimer::GetInstance();
 	gameTimer_->Initialize();

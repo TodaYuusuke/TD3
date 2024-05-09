@@ -8,7 +8,7 @@ class Arrow
 {
 public:
 	~Arrow() = default;
-	void Init(lwp::WorldTransform transform);
+	void Init(lwp::TransformEuler transform);
 	void Update();
 	void Attack();
 
