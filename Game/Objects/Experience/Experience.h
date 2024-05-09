@@ -44,4 +44,12 @@ private: //*** プライベート変数 ***//
 	// 生成されてから動かないコライダー
 	lwp::Collider::Sphere collider_;
 
+	// 参照する移動先
+	const lwp::Vector3* lvPosition_ = nullptr;
+
+	// アニメーションする時間
+	const float animationTime_ = 0.5f;
+	// 加算する変数
+	float time_ = 0.0f;
+
 };
