@@ -86,7 +86,7 @@ void NormalEnemy::Attack()
 	{
 #pragma region
 		attackRotWork.flag = true;
-		Rot = models_[Model::Body].transform.rotation;
+		//Rot = models_[Model::Body].transform.rotation;
 		attackRotWork.targetpoint = Rot;
 		EndRot = attackRotWork.targetpoint;
 		// 回転を足す

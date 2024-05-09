@@ -45,6 +45,8 @@ private: //*** プライベート関数 ***//
 
 private: //*** プライベート変数 ***//
 
+	// 前のフレームの位置
+	lwp::Vector3 prePos_;
 	// プレイヤーのポインタ
 	Player* player_ = nullptr;
 
@@ -59,7 +61,7 @@ private: //*** プライベート変数 ***//
 
 	// プレイヤーの経験値取得範囲
 	//lwp::Collider::Capsule* collider_ = nullptr;
-	lwp::Collider::Sphere collider_;
+	lwp::Collider::Capsule collider_;
 
 };
 

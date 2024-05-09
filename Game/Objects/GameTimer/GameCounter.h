@@ -10,7 +10,7 @@ class GameCounter
 public: //*** パブリック関数 ***//
 
 	// わかりやすく wtf とフラグを設定
-	lwp::WorldTransform transform_;
+	lwp::TransformEuler transform_;
 
 	bool isActive_ = false;
 

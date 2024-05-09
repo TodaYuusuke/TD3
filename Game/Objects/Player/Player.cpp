@@ -75,6 +75,8 @@ void Player::Initialize()
 	pursuit_ = new Pursuit();
 	eXLife_ = new EXLife();
 	eXLife_->Init(this);
+
+	demoModel_.material.enableLighting = true;
 }
 
 void Player::Update()

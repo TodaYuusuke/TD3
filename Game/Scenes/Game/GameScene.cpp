@@ -12,6 +12,7 @@ using namespace LWP::Utility;
 // 初期化
 void GameScene::Initialize()
 {
+	mainCamera.pp.CreatePSO("postProcess/PostProcess.PS.hlsl");
 	// タイマー
 	gameTimer_ = GameTimer::GetInstance();
 	gameTimer_->Initialize();
@@ -27,7 +28,7 @@ void GameScene::Initialize()
 	ground.transform.scale = { 10.0f,0.1f, 10.0f };
 	ground.name = "Ground";
 	ground.material.enableLighting = true;
-
+	ground.material.uvTransform.scale = { 20,20,0 };
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->SetCameraAddress(&mainCamera);
@@ -88,6 +89,12 @@ void GameScene::Initialize()
 // 更新
 void GameScene::Update()
 {
+
+	if (Keyboard::GetTrigger(DIK_R) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_A))
+	{
+		nextSceneFunction = []() {return new GameScene; };
+	}
 #ifdef DEMO
 	ImGui::Begin("Scene");
 	ImGui::Text("Game");

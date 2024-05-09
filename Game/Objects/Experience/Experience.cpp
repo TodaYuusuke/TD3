@@ -29,6 +29,24 @@ Experience::~Experience() {}
 
 void Experience::Update()
 {
+	// アニメーションが開始していたら
+	if (!collider_.isActive && lvPosition_)
+	{
+		if (animationTime_ <= time_)
+		{
+			isDead_ = true;
+
+		}
+		// 位置を参照
+		lwp::Vector3 move = *lvPosition_ - model_.transform.translation;
+		float t = time_ / animationTime_;
+		// タメがあるような移動
+		model_.transform.translation += Utility::Easing::InBack(t) * move;
+		// このイージングでないとよく見えなかった
+		model_.transform.scale = lwp::Vector3(1.0f, 1.0f, 1.0f) * (1.0f - LWP::Utility::Easing::InExpo(t));
+		// 時間を加算
+		time_ += lwp::GetDefaultDeltaTimeF();
+	}
 }
 
 void Experience::Initialize(const lwp::Vector3& pos)
@@ -49,6 +67,7 @@ void Experience::Initialize(const lwp::Vector3& pos)
 	// 死んでない
 	isDead_ = false;
 
+
 }
 
 void Experience::CreateCollision()
@@ -60,7 +79,7 @@ void Experience::CreateCollision()
 	collider_.mask.SetHitFrag(GameMask::ExpGetter());
 	// 別個で用意した当たった時の関数
 	// 状態を切り替えたい
-	collider_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollision(data); });
+	collider_.SetOnCollisionLambda([this](HitData data) {OnCollision(data); });
 	collider_.name = "EXP";
 	// 判定を描画しない
 #ifdef DEMO
@@ -73,8 +92,14 @@ void Experience::OnCollision(const lwp::Collider::HitData& data)
 	if (data.state == OnCollisionState::Press &&
 		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 	{
+		// プレイヤーの位置を参照し続ける
+		Capsule* lv = dynamic_cast<Capsule*>(data.hit);
+		assert(lv);
+		lvPosition_ = &lv->end;
+
+		//LWP::Utility::Easing::InOutExpo,LWP::Utility::Easing::InOutExpo);
 		// 本来はアニメーションをさせた後に消す
-		isDead_ = true;
+		//isDead_ = true;
 		collider_.isActive = false;
 	}
 }
