@@ -13,7 +13,7 @@ public:
 	HomingArrow(std::function<void(LWP::Math::Vector3)>);
 
 	~HomingArrow();
-	void Init(lwp::WorldTransform transform);
+	void Init(lwp::TransformEuler transform);
 	void Update();
 	void Attack();
 

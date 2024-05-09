@@ -26,7 +26,7 @@ public:
 
 	/// Setter
 	// 追従する対象を設定
-	void SetTarget(const LWP::Object::WorldTransform* target) {
+	void SetTarget(const LWP::Object::TransformEuler* target) {
 		target_ = target;
 		ResetAngle();
 	}
@@ -138,7 +138,7 @@ private:/// プライベートな変数
 	Player* player_;
 
 	// 追従対象
-	const LWP::Object::WorldTransform* target_ = nullptr;
+	const LWP::Object::TransformEuler* target_ = nullptr;
 	// 追従対象の残像座標
 	LWP::Math::Vector3 interTarget_;
 	// 目標角度

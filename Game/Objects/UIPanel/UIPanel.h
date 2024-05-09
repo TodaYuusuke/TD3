@@ -48,7 +48,7 @@ protected:
 
 	// ワールド座標
 	// 2D での利用
-	lwp::WorldTransform world_;
+	lwp::TransformEuler world_;
 
 	// スプライト
 	lwp::Sprite uiSprite_;

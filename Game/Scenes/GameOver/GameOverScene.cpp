@@ -12,6 +12,7 @@ using namespace LWP::Utility;
 // 初期化
 void GameOverScene::Initialize()
 {
+	mainCamera.pp.CreatePSO("postProcess/PostProcess.PS.hlsl");
 	// 画面全体
 	backSprite_.texture = Resource::LoadTexture("GameOver.png");
 	backSprite_.isUI = true;

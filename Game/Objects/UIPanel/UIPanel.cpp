@@ -12,7 +12,6 @@ void UIPanel::Initialize()
 
 void UIPanel::Initialize(const std::string& fileName)
 {
-	world_.Initialize();
 	// UI
 	uiSprite_ = LWP::Primitive::Sprite();
 	uiSprite_.texture = lwp::LoadTexture(fileName);

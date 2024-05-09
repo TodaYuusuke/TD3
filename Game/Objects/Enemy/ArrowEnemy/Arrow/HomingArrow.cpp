@@ -10,7 +10,7 @@ HomingArrow::~HomingArrow() {
 
 }
 
-void HomingArrow::Init(lwp::WorldTransform transform) {
+void HomingArrow::Init(lwp::TransformEuler transform) {
 	// モデルの作成
 	model_.LoadFile("cube/cube.obj");
 	model_.commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::WHITE);
