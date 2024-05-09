@@ -15,7 +15,7 @@ float32_t4 main(PSInput input) : SV_TARGET
 	// サンプリング
     output = gTexture.Sample(gSampler, uv);
     // グレースケール化
-    output.rgb = GrayScale(output.rgb);
+    //output.rgb = GrayScale(output.rgb);
     
     return output;
 }
