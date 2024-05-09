@@ -92,9 +92,10 @@ void Experience::OnCollision(const lwp::Collider::HitData& data)
 	if (data.state == OnCollisionState::Press &&
 		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 	{
-		Sphere* lv = dynamic_cast<Sphere*>(data.hit);
+		// プレイヤーの位置を参照し続ける
+		Capsule* lv = dynamic_cast<Capsule*>(data.hit);
 		assert(lv);
-		lvPosition_ = &lv->position;
+		lvPosition_ = &lv->end;
 
 		//LWP::Utility::Easing::InOutExpo,LWP::Utility::Easing::InOutExpo);
 		// 本来はアニメーションをさせた後に消す

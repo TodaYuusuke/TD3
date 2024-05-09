@@ -14,24 +14,28 @@ Level::~Level()
 void Level::Initialize(Player* p)
 {
 	player_ = p;
+	prePos_ = player_->demoModel_.transform.translation;
+	prePos_.y += 0.1f;
 	// 経験値初期化
 	exp_ = 0.0f;
 	// とりあえず 10
 	reqEXP_ = 10.0f;
 
 	// 当たり判定生成
-	CreateCollision();
+ 	CreateCollision();
 	// 場所を設定
 	//collider_->Create(position, position);
-	collider_.Create(player_->demoModel_.transform.translation, collider_.radius);
+	collider_.Create(prePos_, player_->demoModel_.transform.translation, collider_.radius);
 }
 
 void Level::Update()
 {
+	prePos_ = player_->demoModel_.transform.translation;
+	prePos_.y += 0.1f;
 	// 当たり判定を 1 フレーム毎に更新
 	//collider_->start = collider_->end;
 	//collider_->end = position;
-	collider_.Create(player_->demoModel_.transform.translation, collider_.radius);
+	collider_.Create(prePos_, player_->demoModel_.transform.translation, collider_.radius);
 
 #ifdef DEMO
 
@@ -42,16 +46,19 @@ void Level::Update()
 
 void Level::CreateCollision()
 {
+	collider_.Create(prePos_, player_->demoModel_.transform.translation, collider_.radius);
 	// マスク
 	collider_.mask.SetBelongFrag(GameMask::ExpGetter());
 	// 経験値
 	collider_.mask.SetHitFrag(GameMask::Exp());
 	// 別個で用意した当たった時の関数
 	// 状態を切り替えたい
-	collider_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollision(data); });
+	collider_.SetOnCollisionLambda([this](HitData data) {OnCollision(data); });
 	// 当たる
 	collider_.isActive = true;
+#ifdef DEMO
 	collider_.name = "Level";
+#endif // DEMO
 	collider_.radius += 1.0f;
 }
 
