@@ -15,7 +15,7 @@ void Level::Initialize(Player* p)
 {
 	player_ = p;
 	prePos_ = player_->demoModel_.transform.translation;
-	prePos_.y += 0.1f;
+	prePos_.y += 0.01f;
 	// 経験値初期化
 	exp_ = 0.0f;
 	// とりあえず 10
@@ -30,12 +30,13 @@ void Level::Initialize(Player* p)
 
 void Level::Update()
 {
-	prePos_ = player_->demoModel_.transform.translation;
-	prePos_.y += 0.1f;
 	// 当たり判定を 1 フレーム毎に更新
 	//collider_->start = collider_->end;
 	//collider_->end = position;
 	collider_.Create(prePos_, player_->demoModel_.transform.translation, collider_.radius);
+
+	prePos_ = player_->demoModel_.transform.translation;
+	prePos_.y += 0.01f;
 
 #ifdef DEMO
 

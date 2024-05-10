@@ -30,12 +30,12 @@ Experience::~Experience() {}
 void Experience::Update()
 {
 	// アニメーションが開始していたら
-	if (!collider_.isActive && lvPosition_)
+	if (lvPosition_ && !collider_.isActive)
 	{
 		if (animationTime_ <= time_)
 		{
 			isDead_ = true;
-
+			return;
 		}
 		// 位置を参照
 		lwp::Vector3 move = *lvPosition_ - model_.transform.translation;
@@ -44,9 +44,20 @@ void Experience::Update()
 		model_.transform.translation += Utility::Easing::InBack(t) * move;
 		// このイージングでないとよく見えなかった
 		model_.transform.scale = lwp::Vector3(1.0f, 1.0f, 1.0f) * (1.0f - LWP::Utility::Easing::InExpo(t));
-		// 時間を加算
-		time_ += lwp::GetDefaultDeltaTimeF();
 	}
+	// 発生してから数秒は判定を付与しない
+	else
+	{
+		if (toEnableTime_ < time_)
+		{
+			time_ = 0.0f;
+			collider_.isActive = true;
+			return;
+		}
+	}
+	// 時間を加算
+	time_ += lwp::GetDefaultDeltaTimeF();
+	//time_ += 0.005f;
 }
 
 void Experience::Initialize(const lwp::Vector3& pos)
@@ -81,6 +92,8 @@ void Experience::CreateCollision()
 	// 状態を切り替えたい
 	collider_.SetOnCollisionLambda([this](HitData data) {OnCollision(data); });
 	collider_.name = "EXP";
+	// 一定時間経つまで取得不可
+	collider_.isActive = false;
 	// 判定を描画しない
 #ifdef DEMO
 	collider_.isShowWireFrame = false;
