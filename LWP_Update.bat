@@ -9,7 +9,7 @@ cd "DirectXGame"
 REM 変更をすべて取り消す
 git reset --hard
 REM Gitで最新のコードを取得
-git pull origin LWP_20240419
+git pull origin master
 if ERRORLEVEL 1 (
     REM ここにエラー発生時の処理を記述します
     echo.
