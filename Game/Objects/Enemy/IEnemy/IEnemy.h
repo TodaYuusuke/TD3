@@ -161,6 +161,7 @@ protected:
 		// 下に沈んでいく速度
 		.speed = 0.5f,
 	};
+	LWP::Resource::Motion deadMotion_;
 	int deadFlame = 0;
 	// 生きているかどうか
 	bool isActive_ = true;
@@ -199,5 +200,8 @@ protected:
 	float knockBackTime_ = 0.0f;
 
 	// パーティクル
+	// ダメージを受けたとき
 	static std::function<void(int, lwp::Vector3)> damageEffect_;
+	// 死ぬとき
+	static std::function<void(int, lwp::Vector3)> deadEffect_;
 };

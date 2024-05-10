@@ -83,18 +83,11 @@ void GameScene::Initialize()
 	sun_.intensity = 2.0f;
 	sun_.radius = 100.0f;
 	sun_.decay = 1.5f;
-
 }
 
 // 更新
 void GameScene::Update()
 {
-
-	if (Keyboard::GetTrigger(DIK_R) ||
-		Pad::GetTrigger(XINPUT_GAMEPAD_A))
-	{
-		nextSceneFunction = []() {return new GameScene; };
-	}
 #ifdef DEMO
 	ImGui::Begin("Scene");
 	ImGui::Text("Game");
