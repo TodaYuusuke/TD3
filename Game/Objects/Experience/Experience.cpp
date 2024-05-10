@@ -29,6 +29,16 @@ Experience::~Experience() {}
 
 void Experience::Update()
 {
+	// モデルの回転
+	model_.transform.rotation.y += rotateSpeed_;
+	if (model_.transform.rotation.y < -3.14f)
+	{
+		model_.transform.rotation.y += 3.14f;
+	}
+	else if (3.14f < model_.transform.rotation.y)
+	{
+		model_.transform.rotation.y -= 3.14f;
+	}
 	// 発生してから数秒は判定を付与しない
 	if (isDisable_)
 	{
@@ -121,5 +131,7 @@ void Experience::OnCollision(const lwp::Collider::HitData& data)
 		// 本来はアニメーションをさせた後に消す
 		//isDead_ = true;
 		collider_.isActive = false;
+		// 取得時に回転スピードを上げる
+		rotateSpeed_ = kRotateGetSpeed_;
 	}
 }

@@ -59,4 +59,8 @@ private: //*** プライベート変数 ***//
 	// 加算する変数
 	float time_ = 0.0f;
 
+	// モデルの回転力
+	float rotateSpeed_ = 0.3f;
+	float kRotateGetSpeed_ = 0.7f;
+
 };
