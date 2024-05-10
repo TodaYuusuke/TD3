@@ -29,35 +29,42 @@ Experience::~Experience() {}
 
 void Experience::Update()
 {
-	// アニメーションが開始していたら
-	if (lvPosition_ && !collider_.isActive)
-	{
-		if (animationTime_ <= time_)
-		{
-			isDead_ = true;
-			return;
-		}
-		// 位置を参照
-		lwp::Vector3 move = *lvPosition_ - model_.transform.translation;
-		float t = time_ / animationTime_;
-		// タメがあるような移動
-		model_.transform.translation += Utility::Easing::InBack(t) * move;
-		// このイージングでないとよく見えなかった
-		model_.transform.scale = lwp::Vector3(1.0f, 1.0f, 1.0f) * (1.0f - LWP::Utility::Easing::InExpo(t));
-	}
 	// 発生してから数秒は判定を付与しない
-	else
+	if (isDisable_)
 	{
 		if (toEnableTime_ < time_)
 		{
 			time_ = 0.0f;
 			collider_.isActive = true;
+			isDisable_ = false;
 			return;
 		}
+		// 時間を加算
+		time_ += lwp::GetDefaultDeltaTimeF();
 	}
-	// 時間を加算
-	time_ += lwp::GetDefaultDeltaTimeF();
-	//time_ += 0.005f;
+	// アニメーションが開始していたら
+	else if (lvPosition_)
+	{
+		if (animationTime_ <= time_)
+		{
+			isDead_ = true;
+			model_.isActive = false;
+			return;
+		}
+		// 位置を参照
+		lwp::Vector3 move = *lvPosition_ - collider_.position;
+		float t = std::clamp(time_ / animationTime_, 0.0f, 1.0f);
+		// タメがあるような移動
+		model_.transform.translation += Utility::Easing::InBack(t) * move;
+		// 1.0f ~ 0.0f に再計算
+		t = (1.0f - LWP::Utility::Easing::InExpo(t));
+		// 一定以下なら 0.0f にする(描画しない)
+		t = 0.5 < t ? t : 0.0f;
+		// このイージングでないとよく見えなかった
+		model_.transform.scale = lwp::Vector3(1.0f, 1.0f, 1.0f) * t;
+		// 時間を加算
+		time_ += lwp::GetDefaultDeltaTimeF();
+	}
 }
 
 void Experience::Initialize(const lwp::Vector3& pos)
@@ -77,7 +84,7 @@ void Experience::Initialize(const lwp::Vector3& pos)
 
 	// 死んでない
 	isDead_ = false;
-
+	isDisable_ = true;
 
 }
 

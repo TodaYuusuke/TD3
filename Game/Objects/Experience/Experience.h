@@ -45,11 +45,13 @@ private: //*** プライベート変数 ***//
 	lwp::Collider::Sphere collider_;
 
 	// 参照する移動先
-	// 中身が入っていることでアニメーションしている判定になる
 	const lwp::Vector3* lvPosition_ = nullptr;
 
+	// いま判定がない時間かを判断
+	bool isDisable_ = true;
+
 	// アニメーションする時間
-	const float animationTime_ = 0.5f;
+	const float animationTime_ = 1.0f;
 	
 	// 判定を付与するまでの時間
 	const float toEnableTime_ = 1.0f;
