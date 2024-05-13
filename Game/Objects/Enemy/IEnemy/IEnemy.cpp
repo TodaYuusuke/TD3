@@ -80,7 +80,7 @@ void IEnemy::DyingAnimation()
 	if (deadFlame == 20)
 	{
 		// エフェクト出す
-		deadEffect_(32, models_[0].transform.translation);
+		deadEffect_(20, models_[0].transform.translation);
 		isActive_ = false;
 	}
 

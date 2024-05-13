@@ -67,7 +67,7 @@ void HomingArrow::Update() {
 		Death();
 	}
 
-	if (static_cast<int>(deadTimer_) % 2 == 0) {
+	if (static_cast<int>(deadTimer_) % 4 == 0) {
 		summonContrail_(model_.transform.GetWorldPosition());
 	}
 

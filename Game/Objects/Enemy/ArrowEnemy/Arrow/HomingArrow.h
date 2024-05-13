@@ -61,7 +61,7 @@ private:// 定数
 	const float kNormal2HomingFrame = 30;
 
 	// ホーミングの精度が変化する距離
-	const float kHomingStrengthRange = 3.5f;
+	const float kHomingStrengthRange = 6.5f;
 	// 自機との距離が遠い時のホーミング精度
 	const float kLongDistHomingAccuracy = 0.15f;
 	// 自機との距離が近い時のホーミング精度

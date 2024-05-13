@@ -10,6 +10,7 @@ private:// 構造体
 	// 振るまい
 	enum class Behavior {
 		kRoot,	 // 通常状態
+		kPreDash,// ダッシュ攻撃前の硬直
 		kDash	 // ダッシュ中
 	};
 
@@ -35,6 +36,11 @@ public:// パブリックなメンバ関数
 	void B_RootInit();
 	// 通常状態の更新処理
 	void B_RootUpdate();
+
+	// ダッシュ攻撃前の硬直の初期化
+	void B_PreDashInit();
+	// ダッシュ攻撃前の硬直の更新処理
+	void B_PreDashUpdate();
 
 	// ダッシュ状態の初期化
 	void B_DashInit();
@@ -67,6 +73,8 @@ private:// 定数
 	const int kAttackWaitTime = 240;
 	// 突進攻撃の全体フレーム
 	const int kDashAttackAllFrame = 30;
+	// 攻撃前の硬直の全体フレーム
+	const int kPreDashAllFrame = 60;
 
 private:// プライベートな変数
 	// ダッシュの方向ベクトル
