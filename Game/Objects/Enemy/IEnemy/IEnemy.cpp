@@ -122,7 +122,7 @@ void IEnemy::OnCollision(const HitData& data)
 		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 	{
 		// 追撃クラスに登録
-		if (player_->parameter_.GetParameter().pursuitFlag && player_->GetPursuitFlag()) {
+		if (player_->parameter_.GetParameter().pursuitFlag && player_->GetPursuitFlag() && player_->parameter_.Attack.slashPower_ + 10 <= hp_) {
 			player_->GetPursuit()->AddEnemy(this);
 		}
 		// 敵の攻撃に当たれる場合か
