@@ -125,7 +125,7 @@ void EnemyManager::BossSpawn() {
 
 	std::uniform_real_distribution<float> distribution2(8.0f, 10.0f);
 	float PtoE = distribution2(randomEngine);
-	lwp::Vector3 pos = { PtoE * divideX , 2.0f , PtoE * divideZ * signY };
+	lwp::Vector3 pos = { PtoE * divideX , 1.5f , PtoE * divideZ * signY };
 
 	// 1分
 	// ダッシュボスを出現

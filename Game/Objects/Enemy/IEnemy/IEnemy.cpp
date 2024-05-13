@@ -14,6 +14,8 @@ void IEnemy::Initialize()
 	//collider_.mask.SetBelongFrag(MaskLayer::Enemy);
 
 	deadMotion_.Add(&models_[BODY].transform.translation, LWP::Math::Vector3{ 0,5,0 }, 0, 0.7f, LWP::Utility::Easing::Type::OutQuint);
+
+	models_[0].material.enableLighting = true;
 }
 
 void IEnemy::KnockBackUpdate() {
@@ -271,7 +273,7 @@ void IEnemy::InitStaticVariable() {
 	deadParticle_.SetPrimitive<Primitive::Cube>();
 	deadParticle_.P()->transform.scale = { 0.01f,0.01f, 0.01f };
 	deadParticle_.P()->material.enableLighting = true;
-	deadParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::BLUE);
+	deadParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::RED);
 	deadParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
 		Object::ParticleData newData{};
 		newData.wtf.translation = lwp::Vector3{ 0,1,0 } + primitive->transform.GetWorldPosition();

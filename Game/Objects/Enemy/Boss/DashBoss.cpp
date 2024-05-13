@@ -21,8 +21,8 @@ void DashBoss::Init()
 
 	// 色
 	//models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLUE);
-	// 大きさ
-	models_[0].transform.scale = kBossSize;
+		// 大きさ
+	models_[0].transform.scale = { 2,3,2 };
 	// 当たり判定を有効化
 	isActive_ = true;
 
