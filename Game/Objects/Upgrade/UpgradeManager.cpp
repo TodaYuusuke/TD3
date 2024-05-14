@@ -303,7 +303,7 @@ void L::UpgradeManager::Selecting(Player* player)
 		else if (cursorIndex_ == 1) {
 			centerPoint.x += 0.8f;
 		}
-		CursorEffect_(16, centerPoint);
+		CursorEffect_(2, centerPoint);
 	}
 	else
 	{
@@ -387,14 +387,14 @@ void L::UpgradeManager::CursorParticleInit()
 	static LWP::Object::Particle CursorParticle_;
 	CursorParticle_.SetPrimitive<Primitive::Cube>();
 	CursorParticle_.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
-	CursorParticle_.P()->material.enableLighting = false;
+	CursorParticle_.P()->material.enableLighting = true;
+	CursorParticle_.P()->material.shininess = 100.0f;
 	CursorParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::GREEN);
 	CursorParticle_.initFunction = [](Primitive::IPrimitive* primitive)
 		{
 			// 円周上に置く
 			lwp::Vector3 pos = randomOnCircle();
-			pos.x *= 2.0f;
-			pos.y *= 2.0f;
+			pos *= 1.5f;
 			float dir1 = Utility::GenerateRandamNum<int>(-50, 50);
 			dir1 = dir1 / 100.0f;
 			float dir2 = Utility::GenerateRandamNum<int>(-50, 50);
