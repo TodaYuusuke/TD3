@@ -60,7 +60,7 @@ void Level::CreateCollision()
 #ifdef DEMO
 	collider_.name = "Level";
 #endif // DEMO
-	collider_.radius += 1.0f;
+	collider_.radius += 3.0f;
 }
 
 void Level::OnCollision(const lwp::Collider::HitData& data)
