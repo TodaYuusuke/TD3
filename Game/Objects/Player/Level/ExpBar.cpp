@@ -48,9 +48,11 @@ void ExpBar::Initialize()
 	mainSprite.transform.scale = size;
 	mainSprite.transform.scale.x = 0.0f;
 
-	subSprite1.transform.translation = basePosition;
-	subSprite2.transform.translation = basePosition;
-	mainSprite.transform.translation = basePosition;
+	lwp::Vector3 pos{ lwp::GetWindowWidthF() * 0.5f,lwp::GetWindowHeightF() - basePosition.y,0.0f };
+
+	subSprite1.transform.translation = pos;
+	subSprite2.transform.translation = pos;
+	mainSprite.transform.translation = pos;
 
 	subSprite1.Update();
 	subSprite2.Update();
@@ -59,22 +61,22 @@ void ExpBar::Initialize()
 
 void ExpBar::Update(uint32_t exp, uint32_t num)
 {
-//#ifdef DEMO
-//
-//	ImGui::Begin("EXPBar");
-//
-//	lwp::Vector4 col = mainSprite.commonColor->GetVector4();
-//	if (ImGui::ColorPicker3("color", &col.x))
-//	{
-//		delete mainSprite.commonColor;
-//		mainSprite.commonColor = new Utility::Color(col);
-//	}
-//
-//	ImGui::End();
-//#endif // DEMO
+	//#ifdef DEMO
+	//
+	//	ImGui::Begin("EXPBar");
+	//
+	//	lwp::Vector4 col = mainSprite.commonColor->GetVector4();
+	//	if (ImGui::ColorPicker3("color", &col.x))
+	//	{
+	//		delete mainSprite.commonColor;
+	//		mainSprite.commonColor = new Utility::Color(col);
+	//	}
+	//
+	//	ImGui::End();
+	//#endif // DEMO
 
 
-	// 場所と大きさ
+		// 場所と大きさ
 	lwp::Vector3 size{ 1.0f,1.0f,1.0f };
 	size.x = kBarSize_.x / preSize_.x;
 
