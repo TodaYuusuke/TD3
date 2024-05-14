@@ -82,7 +82,12 @@ void IEnemy::DyingAnimation()
 	if (deadFlame == 20)
 	{
 		// エフェクト出す
-		deadEffect_(20, models_[0].transform.translation);
+#ifdef DEMO
+		deadEffect_(16, models_[0].transform.translation);
+#else
+		deadEffect_(64, models_[0].transform.translation);
+#endif
+		
 		isActive_ = false;
 	}
 
@@ -162,7 +167,13 @@ bool IEnemy::CheckSlash(uint32_t hitBelong)
 void IEnemy::DecreaseHP(int damage)
 {
 	// エフェクト出す
+#ifdef DEMO
 	damageEffect_(16, models_[0].transform.translation);
+#else
+	damageEffect_(64, models_[0].transform.translation);
+#endif // DEMO
+
+
 	// HP を減らす
 	hp_ -= damage;
 	// 死に至る
@@ -229,7 +240,7 @@ void IEnemy::DebugPrint()
 void IEnemy::InitStaticVariable() {
 	static LWP::Object::Particle damageParticle_;
 	damageParticle_.SetPrimitive<Primitive::Cube>();
-	damageParticle_.P()->transform.scale = { 0.01f,0.01f, 0.01f };
+	damageParticle_.P()->transform.scale = { 0.0001f,0.001f, 0.0001f };
 	damageParticle_.P()->material.enableLighting = true;
 	damageParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::RED);
 	damageParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
@@ -271,7 +282,7 @@ void IEnemy::InitStaticVariable() {
 	// 死ぬとき
 	static LWP::Object::Particle deadParticle_;
 	deadParticle_.SetPrimitive<Primitive::Cube>();
-	deadParticle_.P()->transform.scale = { 0.01f,0.01f, 0.01f };
+	deadParticle_.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
 	deadParticle_.P()->material.enableLighting = true;
 	deadParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::RED);
 	deadParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
@@ -280,7 +291,7 @@ void IEnemy::InitStaticVariable() {
 		newData.wtf.rotation = primitive->transform.rotation;
 		// 大きさをランダムにする
 		int scale = Utility::GenerateRandamNum<int>(25, 50);
-		newData.wtf.scale = { scale / 100.0f, scale / 100.0f, scale / 100.0f };
+		newData.wtf.scale = { scale / 200.0f, scale / 200.0f, scale / 200.0f };
 
 		// 速度ベクトルを生成
 		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
@@ -288,7 +299,9 @@ void IEnemy::InitStaticVariable() {
 		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
 		// 発射のベクトル
 		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
-		newData.velocity = dir.Normalize() * 0.3f;
+		// 係数
+		float multiply = Utility::GenerateRandamNum<int>(20, 50) / 100.0f;
+		newData.velocity = dir.Normalize() * multiply;
 
 		// パーティクル追加
 		return newData;
@@ -300,16 +313,21 @@ void IEnemy::InitStaticVariable() {
 		data->wtf.translation += data->velocity;    // 速度ベクトルを加算
 		data->wtf.rotation += data->velocity;    // ついでに回転させとく
 
+
 		// 20フレーム以降から重力を加算
 		if (data->elapsedFrame > 20) {
 			data->velocity.y += -9.8f / 800.0f;
+			// yが0以下になったとき跳ねる
+			if (data->wtf.translation.y <= 0.0f) {
+				data->velocity.y *= -0.5f;
+			}
 		}
 		else {
 			// 速度ベクトルを弱める
 			data->velocity *= 0.9f;
 		}
 
-		return data->elapsedFrame > 60 ? true : false;
+		return data->elapsedFrame > 100 ? true : false;
 	};
 	deadParticle_.isActive = true;
 	deadEffect_ = [&](int i, lwp::Vector3 pos) {
