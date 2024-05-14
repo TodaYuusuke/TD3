@@ -1,6 +1,7 @@
 #pragma once
 #include "ISkill.h"
 #include <Adapter.h>
+#include <numbers>
 
 // 前方宣言
 class Player;
@@ -109,9 +110,10 @@ namespace L {
 		void CursorParticleInit();
 		// パーティクル
 		static std::function<void(int, lwp::Vector3)> CursorEffect_;
-
+		lwp::Vector3 centerPoint;
 		LWP::Object::Camera* mainCameraptr_;
 		/*LWP::Base::WinApp* winAppPtr_;*/
 	};
 }
 lwp::Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
+lwp::Vector3 randomOnCircle();

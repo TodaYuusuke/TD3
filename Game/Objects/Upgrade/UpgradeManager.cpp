@@ -245,7 +245,7 @@ void L::UpgradeManager::Selecting(Player* player)
 {
 	// 場所
 	Vector2 pos{ 0.0f,625.0f };
-	sprite_.isActive = true;
+	//sprite_.isActive = true;
 	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
 	// 抽選されたアップグレードを更新
 	attackUpgrades_[candidata_[0]]->Update();
@@ -293,10 +293,10 @@ void L::UpgradeManager::Selecting(Player* player)
 
 		posNear = lwp::Matrix4x4::TransformCoord(posNear,matVPV);
 		posFar = lwp::Matrix4x4::TransformCoord(posFar,matVPV);
-		lwp::Vector3 direction = posFar - posNear;
-		direction = direction.Normalize();
-		direction = posNear + direction * 50;
-		CursorEffect_(16, direction);
+		centerPoint = posFar - posNear;
+		centerPoint = centerPoint.Normalize();
+		centerPoint = posNear + centerPoint * 50;
+		CursorEffect_(16, centerPoint);
 	}
 	else
 	{
@@ -379,40 +379,40 @@ void L::UpgradeManager::CursorParticleInit()
 	static LWP::Object::Particle CursorParticle_;
 	CursorParticle_.SetPrimitive<Primitive::Cube>();
 	CursorParticle_.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
-	CursorParticle_.P()->material.enableLighting = false;
+	CursorParticle_.P()->material.enableLighting = true;
 	CursorParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::GREEN);
 	CursorParticle_.initFunction = [](Primitive::IPrimitive* primitive)
 		{
+			// 円周上に置く
+			lwp::Vector3 pos = randomOnCircle();
+			pos.x *= 2.0f;
+			pos.y *= 2.0f;
+			float dir1 = Utility::GenerateRandamNum<int>(-100, 100);
+			dir1 = dir1 / 100.0f;
+			float dir2 = Utility::GenerateRandamNum<int>(-100, 100);
+			dir2 = dir2 / 100.0f;
+			pos.x += dir1;
+			pos.y += dir2;
+
 			Object::ParticleData newData{};
-			newData.wtf.translation = lwp::Vector3{ 0,1,0 } + primitive->transform.GetWorldPosition();
+			newData.wtf.translation = pos + primitive->transform.GetWorldPosition();
 			newData.wtf.rotation = primitive->transform.rotation;
-			newData.wtf.scale = { 0.2f,0.2f, 0.2f };
-			int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
-
-			// 速度ベクトルを生成
-	
-			int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
-			int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
-			// 発射のベクトル
-			Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
-			newData.velocity = dir.Normalize() * 0.3f;
-
+			newData.wtf.scale = { 0.25f,0.25f, 0.25f };
+			//lwp::Vector3 
+			// 中心までのベクトル
+			newData.velocity = newData.wtf.translation;
 			// パーティクル追加
 			return newData;
 		};
-	CursorParticle_.updateFunction = [](Object::ParticleData* data)
+	CursorParticle_.updateFunction = [this](Object::ParticleData* data)
 		{
 			// 経過フレーム追加
 			data->elapsedFrame++;
-
-			data->wtf.translation += data->velocity;    // 速度ベクトルを加算
+			lwp::Vector3 direction = data->velocity - centerPoint;
+			data->wtf.translation -= direction / 10.0f;    // 速度ベクトルを加算
 			data->wtf.rotation += data->velocity;    // ついでに回転させとく
-			data->wtf.translation.y += -9.8f / 80.0f;    // 重力を加算
 
-			// 速度ベクトルを弱める
-			data->velocity *= 0.9f;
-
-			return data->elapsedFrame > 180 ? true : false;
+			return data->elapsedFrame > 10 ? true : false;
 		};
 	CursorParticle_.isActive = true;
 
@@ -433,6 +433,13 @@ lwp::Matrix4x4 MakeViewportMatrix(float left, float top, float width, float heig
 	left + (width / 2),top + (height / 2),minDepth,1
 	};
 	return result;
+}
+
+lwp::Vector3 randomOnCircle() {
+	float ramdom = Utility::GenerateRandamNum<int>(0, 100);
+	ramdom = ramdom / 100.0f;
+	const float theta = 2.0 * std::numbers::pi * ramdom;
+	return lwp::Vector3(std::cos(theta), std::sin(theta), 0.0f);
 }
 
 std::function<void(int, lwp::Vector3)> L::UpgradeManager::CursorEffect_ = nullptr;
