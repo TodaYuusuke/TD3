@@ -42,7 +42,7 @@ void Experience::Update()
 	// 発生してから数秒は判定を付与しない
 	if (isDisable_)
 	{
-		if (toEnableTime_ < time_)
+		if (kToEnableTime_ < time_)
 		{
 			time_ = 0.0f;
 			collider_.isActive = true;
@@ -55,7 +55,7 @@ void Experience::Update()
 	// アニメーションが開始していたら
 	else if (lvPosition_)
 	{
-		if (animationTime_ <= time_)
+		if (kAnimationTime_ <= time_)
 		{
 			isDead_ = true;
 			model_.isActive = false;
@@ -63,15 +63,15 @@ void Experience::Update()
 		}
 		// 位置を参照
 		lwp::Vector3 move = *lvPosition_ - collider_.position;
-		float t = std::clamp(time_ / animationTime_, 0.0f, 1.0f);
+		float t = std::clamp(time_ / kAnimationTime_, 0.0f, 1.0f);
 		// タメがあるような移動
-		model_.transform.translation += Utility::Easing::InBack(t) * move;
+		model_.transform.translation = collider_.position + Utility::Easing::InBack(t) * move;
 		// 1.0f ~ 0.0f に再計算
 		t = (1.0f - LWP::Utility::Easing::InExpo(t));
 		// 一定以下なら 0.0f にする(描画しない)
-		t = 0.5 < t ? t : 0.0f;
+		t = 0.2 < t ? t : 0.0f;
 		// このイージングでないとよく見えなかった
-		model_.transform.scale = lwp::Vector3(1.0f, 1.0f, 1.0f) * t;
+		model_.transform.scale = lwp::Vector3(kSize_,kSize_,kSize_) * t;
 		// 時間を加算
 		time_ += lwp::GetDefaultDeltaTimeF();
 	}
@@ -80,12 +80,17 @@ void Experience::Update()
 void Experience::Initialize(const lwp::Vector3& pos)
 {
 	// モデル読み込み
-	model_.LoadFile("cube/cube.obj");
+	model_.LoadFile("Exp/Exp.obj");
 	// 設定
 	model_.isActive = true;
 	model_.name = "EXP";
 	// 場所を設定
 	model_.transform.translation = pos;
+	model_.transform.scale = lwp::Vector3(kSize_, kSize_, kSize_);
+	// 色
+	model_.commonColor = new Utility::Color(0x7CFC00FF);
+
+	model_.material.enableLighting = true;
 
 	// 場所を設定
 	collider_.Create(pos);
