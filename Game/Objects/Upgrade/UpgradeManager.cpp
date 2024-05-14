@@ -58,6 +58,8 @@ void L::UpgradeManager::Init()
 	sprite_.transform.translation = cursorPos;
 	sprite_.isUI = true;
 	sprite_.isActive = false;
+
+	CursorParticleInit();
 }
 
 void L::UpgradeManager::Update(Player* player)
@@ -241,7 +243,7 @@ void L::UpgradeManager::Selecting(Player* player)
 {
 	// 場所
 	Vector2 pos{ 0.0f,600.0f };
-	sprite_.isActive = true;
+	//sprite_.isActive = true;
 	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
 	// 抽選されたアップグレードを更新
 	attackUpgrades_[candidata_[0]]->Update();
@@ -277,7 +279,13 @@ void L::UpgradeManager::Selecting(Player* player)
 		Input::Keyboard::GetPress(DIK_RETURN) ||
 		Input::Pad::GetPress(XINPUT_GAMEPAD_A))
 	{
-		isPress_ = true;
+		isPress_ = true;	
+		// AL3_02_15
+		// ビューポート行列
+		// サイズ　1920 x 1080
+		Matrix4x4 matViewport = MakeViewportMatrix(0, 0,, WinApp::kWindowHeight, 0, 1);
+		LWP::Object::Camera::GetViewProjection();
+		CursorEffect_(16, {0.0f,0.0f,0.0f});
 	}
 	else
 	{
@@ -287,6 +295,9 @@ void L::UpgradeManager::Selecting(Player* player)
 	if (isPress_)
 	{
 		pressTime_ += lwp::GetDefaultDeltaTimeF();
+
+
+
 		if (kPressTime_ <= pressTime_)
 		{
 			choiceIndex_ = cursorIndex_;
@@ -347,32 +358,58 @@ void L::UpgradeManager::Apply(Player* player)
 	// フラグを戻す
 	isLevelUpping = false;
 
-	//// プレイヤーの最大HPが変更されていたら通知
-	//if (preParam_.HP.hpDelta.base != para.HP.hpDelta.base)
-	//{
-	//	// どの程度変更されているか
-	//	int sub = (int)para.HP.hpDelta.base - (int)preParam_.HP.hpDelta.base;
-	//	// 上昇している分だけ回復させる
-	//	if (0 < sub)
-	//	{
-	//		for (size_t i = 0; i < sub; i++)
-	//		{
-	//			player->IncreaseHP();
-	//		}
-	//	}
-	//	// 下降している分だけ減少する
-	//	// これ死ぬくね?
-	//	else
-	//	{
-	//		for (size_t i = 0; i < -sub; i++)
-	//		{
-	//			player->DecreaseHP();
-	//		}
-	//	}
-	//}
-
-
 	//// 情報を保存
 	//preParam_ = para;
 	GameTimer::GetInstance()->Start();
 }
+
+void L::UpgradeManager::CursorParticleInit()
+{
+	static LWP::Object::Particle CursorParticle_;
+	CursorParticle_.SetPrimitive<Primitive::Cube>();
+	CursorParticle_.P()->transform.scale = { 0.0001f,0.001f, 0.0001f };
+	CursorParticle_.P()->material.enableLighting = true;
+	CursorParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::RED);
+	CursorParticle_.initFunction = [](Primitive::IPrimitive* primitive)
+		{
+			Object::ParticleData newData{};
+			newData.wtf.translation = lwp::Vector3{ 0,1,0 } + primitive->transform.GetWorldPosition();
+			newData.wtf.rotation = primitive->transform.rotation;
+			newData.wtf.scale = { 0.25f,0.25f, 0.25f };
+
+			// 速度ベクトルを生成
+			int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
+			int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
+			int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
+			// 発射のベクトル
+			Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
+			newData.velocity = dir.Normalize() * 0.3f;
+
+			// パーティクル追加
+			return newData;
+		};
+	CursorParticle_.updateFunction = [](Object::ParticleData* data)
+		{
+			// 経過フレーム追加
+			data->elapsedFrame++;
+
+			data->wtf.translation += data->velocity;    // 速度ベクトルを加算
+			data->wtf.rotation += data->velocity;    // ついでに回転させとく
+			data->wtf.translation.y += -9.8f / 80.0f;    // 重力を加算
+
+			// 速度ベクトルを弱める
+			data->velocity *= 0.9f;
+
+			return data->elapsedFrame > 180 ? true : false;
+		};
+	CursorParticle_.isActive = true;
+
+	CursorEffect_ = [&](int i, lwp::Vector3 pos)
+		{
+			
+			CursorParticle_.P()->transform = pos;
+			CursorParticle_.Add(i);
+		};
+}
+
+std::function<void(int, lwp::Vector3)> L::UpgradeManager::CursorEffect_ = nullptr;

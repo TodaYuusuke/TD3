@@ -1,5 +1,6 @@
 #pragma once
 #include "ISkill.h"
+#include <Adapter.h>
 
 // 前方宣言
 class Player;
@@ -104,5 +105,9 @@ namespace L {
 		/// </summary>
 		void Apply(Player* player);
 
+		// カーソルのパーティクル
+		void CursorParticleInit();
+		// パーティクル
+		static std::function<void(int, lwp::Vector3)> CursorEffect_;
 	};
 }
