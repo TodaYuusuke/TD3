@@ -51,10 +51,13 @@ private: //*** プライベート変数 ***//
 	bool isDisable_ = true;
 
 	// アニメーションする時間
-	const float animationTime_ = 1.0f;
+	const float kAnimationTime_ = 0.2f;
 	
 	// 判定を付与するまでの時間
-	const float toEnableTime_ = 1.0f;
+	const float kToEnableTime_ = 1.0f;
+
+	// サイズ
+	const float kSize_ = 0.25f;
 
 	// 加算する変数
 	float time_ = 0.0f;
