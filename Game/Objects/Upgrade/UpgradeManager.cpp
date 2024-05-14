@@ -289,17 +289,17 @@ void L::UpgradeManager::Selecting(Player* player)
 		//ScreenToClient(LWP::Base::WinApp::GetHWND(), lwp::Vector2{ sprite_.transform.translation.x,sprite_.transform.translation.y });
 		lwp::Matrix4x4 matViewport = MakeViewportMatrix(0, 0,1980, 1080, 0, 1);
 		lwp::Matrix4x4 viewProj = mainCameraptr_->GetViewProjection();
-		lwp::Matrix4x4 matVPV = matViewport * viewProj;
+		lwp::Matrix4x4 matVPV = viewProj * matViewport;
 		matVPV = matVPV.Inverse();
 
-		lwp::Vector3 posNear = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y,0.1f);
+		lwp::Vector3 posNear = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y,0);
 		lwp::Vector3 posFar = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y,1);
 
 		posNear = lwp::Matrix4x4::TransformCoord(posNear,matVPV);
 		posFar = lwp::Matrix4x4::TransformCoord(posFar,matVPV);
 		lwp::Vector3 direction = posFar - posNear;
 		direction = direction.Normalize();
-		direction = posNear + direction * 1.0f;
+		direction = posNear + direction * 50;
 		CursorEffect_(16, direction);
 	}
 	else
