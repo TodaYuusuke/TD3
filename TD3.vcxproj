@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\Objects\Player\Level\ExpBar.cpp" />
     <ClCompile Include="Game\Objects\Upgrade\Function\EXLife\EXLife.cpp" />
     <ClCompile Include="Game\Scenes\GameOver\GameOverScene.cpp" />
     <ClCompile Include="Game\Scenes\Clear\ClearScene.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="Game\Objects\Enemy\Boss\JumpBoss.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\Objects\Player\Level\ExpBar.h" />
     <ClInclude Include="Game\Objects\Upgrade\Function\EXLife\EXLife.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\BlowOffFlag.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\EXLifeFlag.h" />

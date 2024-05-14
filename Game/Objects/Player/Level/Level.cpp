@@ -21,6 +21,9 @@ void Level::Initialize(Player* p)
 	// とりあえず 10
 	reqEXP_ = 10.0f;
 
+	bar_.reset(new ExpBar);
+	bar_->Initialize();
+
 	// 当たり判定生成
  	CreateCollision();
 	// 場所を設定
@@ -37,6 +40,8 @@ void Level::Update()
 
 	prePos_ = player_->demoModel_.transform.translation;
 	prePos_.y += 0.01f;
+
+	bar_->Update(reqEXP_, exp_);
 
 #ifdef DEMO
 
@@ -75,6 +80,11 @@ void Level::OnCollision(const lwp::Collider::HitData& data)
 
 void Level::GainEXP()
 {
+	// 既に上限を迎えていたら処理しない
+	if (reqEXP_ <= exp_)
+	{
+		return;
+	}
 	// 経験値補正入れるならここ
 	exp_ += 1.0f;
 	// レベルアップ
@@ -86,6 +96,7 @@ void Level::GainEXP()
 
 void Level::LevelUp()
 {
+	bar_->Update(reqEXP_, exp_);
 	if (5 <= lv_)
 	{
 		return;

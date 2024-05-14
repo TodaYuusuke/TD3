@@ -2,6 +2,8 @@
 
 #include <Adapter.h>
 
+#include "ExpBar.h"
+
 class Player;
 
 class Level
@@ -49,6 +51,8 @@ private: //*** プライベート変数 ***//
 	lwp::Vector3 prePos_;
 	// プレイヤーのポインタ
 	Player* player_ = nullptr;
+
+	std::unique_ptr<ExpBar> bar_;
 
 	// 今のレベル
 	uint32_t lv_ = 1u;
