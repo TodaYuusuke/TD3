@@ -53,7 +53,7 @@ void GameScene::Initialize()
 
 	// アップグレード
 	upgradeManager_ = std::make_unique<L::UpgradeManager>();
-	upgradeManager_->Init();
+	upgradeManager_->Init(GetMainRenderCamera());
 
 	tutorialSprite1.texture = Resource::LoadTexture("Text/tutorial1.png");
 	tutorialSprite1.isUI = true;

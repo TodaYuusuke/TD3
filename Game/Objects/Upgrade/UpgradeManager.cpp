@@ -18,7 +18,7 @@ int L::UpgradeManager::kUpgradNum_;
 std::vector<int> L::UpgradeManager::candidata_;
 int L::UpgradeManager::upgradedConut_;
 
-void L::UpgradeManager::Init()
+void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 {
 	// フラグ初期化
 	isLevelUpping = false;
@@ -58,6 +58,8 @@ void L::UpgradeManager::Init()
 	sprite_.transform.translation = cursorPos;
 	sprite_.isUI = true;
 	sprite_.isActive = false;
+
+	mainCameraptr_ = cameraptr;
 
 	CursorParticleInit();
 }
@@ -283,9 +285,22 @@ void L::UpgradeManager::Selecting(Player* player)
 		// AL3_02_15
 		// ビューポート行列
 		// サイズ　1920 x 1080
-		Matrix4x4 matViewport = MakeViewportMatrix(0, 0,, WinApp::kWindowHeight, 0, 1);
-		LWP::Object::Camera::GetViewProjection();
-		CursorEffect_(16, {0.0f,0.0f,0.0f});
+		//HWND hwnd = GetHWND();
+		//ScreenToClient(LWP::Base::WinApp::GetHWND(), lwp::Vector2{ sprite_.transform.translation.x,sprite_.transform.translation.y });
+		lwp::Matrix4x4 matViewport = MakeViewportMatrix(0, 0,1980, 1080, 0, 1);
+		lwp::Matrix4x4 viewProj = mainCameraptr_->GetViewProjection();
+		lwp::Matrix4x4 matVPV = matViewport * viewProj;
+		matVPV = matVPV.Inverse();
+
+		lwp::Vector3 posNear = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y,0.1f);
+		lwp::Vector3 posFar = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y,1);
+
+		posNear = lwp::Matrix4x4::TransformCoord(posNear,matVPV);
+		posFar = lwp::Matrix4x4::TransformCoord(posFar,matVPV);
+		lwp::Vector3 direction = posFar - posNear;
+		direction = direction.Normalize();
+		direction = posNear + direction * 1.0f;
+		CursorEffect_(16, direction);
 	}
 	else
 	{
@@ -410,6 +425,17 @@ void L::UpgradeManager::CursorParticleInit()
 			CursorParticle_.P()->transform = pos;
 			CursorParticle_.Add(i);
 		};
+}
+
+lwp::Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth)
+{
+	lwp::Matrix4x4 result = {
+	width / 2,0,0,0,
+	0,-(height / 2),0,0,
+	0,0,maxDepth - minDepth,0,
+	left + (width / 2),top + (height / 2),minDepth,1
+	};
+	return result;
 }
 
 std::function<void(int, lwp::Vector3)> L::UpgradeManager::CursorEffect_ = nullptr;
