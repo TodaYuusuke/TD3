@@ -66,6 +66,14 @@ namespace L {
 
 		lwp::Vector3 cursorPos = { LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2),120.0f };
 
+		// 長押し用のフラグ
+		bool isPress_ = false;
+
+		// 長押しした時間
+		float pressTime_ = 0.0f;
+		// 決定に必要な時間
+		const float kPressTime_ = 1.0f;
+
 	private: // プライベート関数
 
 		/// <summary>

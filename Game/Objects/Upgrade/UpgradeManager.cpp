@@ -273,20 +273,33 @@ void L::UpgradeManager::Selecting(Player* player)
 	}
 
 	// 決定ボタンを押した
-	if (Input::Keyboard::GetTrigger(DIK_SPACE) ||
-		Input::Keyboard::GetTrigger(DIK_RETURN) ||
-		Input::Pad::GetTrigger(XINPUT_GAMEPAD_A))
+	if (Input::Keyboard::GetPress(DIK_SPACE) ||
+		Input::Keyboard::GetPress(DIK_RETURN) ||
+		Input::Pad::GetPress(XINPUT_GAMEPAD_A))
 	{
-		choiceIndex_ = cursorIndex_;
-		// 選択されたアップグレードを適応する
-		if (kUpgradNum_ != 0)
+		isPress_ = true;
+	}
+	else
+	{
+		isPress_ = false;
+		pressTime_ = 0.0f;
+	}
+	if (isPress_)
+	{
+		pressTime_ += lwp::GetDefaultDeltaTimeF();
+		if (kPressTime_ <= pressTime_)
 		{
-			Selected();
+			choiceIndex_ = cursorIndex_;
+			// 選択されたアップグレードを適応する
+			if (kUpgradNum_ != 0)
+			{
+				Selected();
+			}
+			// アップグレードが残ってなかったら適用のみ
+			Apply(player);
+			cursorIndex_ = 0;
+			choiceIndex_ = 0;
 		}
-		// アップグレードが残ってなかったら適用のみ
-		Apply(player);
-		cursorIndex_ = 0;
-		choiceIndex_ = 0;
 	}
 
 }
@@ -326,7 +339,7 @@ void L::UpgradeManager::Apply(Player* player)
 		// 選択されているものだけ適応
 		if (escapeUpgrades_[i]->isApplied)
 		{
- 			escapeUpgrades_[i]->Apply(&para);
+			escapeUpgrades_[i]->Apply(&para);
 		}
 	}
 	// プレイヤーに適応
