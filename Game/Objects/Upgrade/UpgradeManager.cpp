@@ -244,8 +244,8 @@ int L::UpgradeManager::ChooseOnce(bool f)
 void L::UpgradeManager::Selecting(Player* player)
 {
 	// 場所
-	Vector2 pos{ 0.0f,600.0f };
-	//sprite_.isActive = true;
+	Vector2 pos{ 0.0f,625.0f };
+	sprite_.isActive = true;
 	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
 	// 抽選されたアップグレードを更新
 	attackUpgrades_[candidata_[0]]->Update();
@@ -282,11 +282,7 @@ void L::UpgradeManager::Selecting(Player* player)
 		Input::Pad::GetPress(XINPUT_GAMEPAD_A))
 	{
 		isPress_ = true;	
-		// AL3_02_15
-		// ビューポート行列
 		// サイズ　1920 x 1080
-		//HWND hwnd = GetHWND();
-		//ScreenToClient(LWP::Base::WinApp::GetHWND(), lwp::Vector2{ sprite_.transform.translation.x,sprite_.transform.translation.y });
 		lwp::Matrix4x4 matViewport = MakeViewportMatrix(0, 0,1980, 1080, 0, 1);
 		lwp::Matrix4x4 viewProj = mainCameraptr_->GetViewProjection();
 		lwp::Matrix4x4 matVPV = viewProj * matViewport;
@@ -382,18 +378,19 @@ void L::UpgradeManager::CursorParticleInit()
 {
 	static LWP::Object::Particle CursorParticle_;
 	CursorParticle_.SetPrimitive<Primitive::Cube>();
-	CursorParticle_.P()->transform.scale = { 0.0001f,0.001f, 0.0001f };
-	CursorParticle_.P()->material.enableLighting = true;
-	CursorParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::RED);
+	CursorParticle_.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
+	CursorParticle_.P()->material.enableLighting = false;
+	CursorParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::GREEN);
 	CursorParticle_.initFunction = [](Primitive::IPrimitive* primitive)
 		{
 			Object::ParticleData newData{};
 			newData.wtf.translation = lwp::Vector3{ 0,1,0 } + primitive->transform.GetWorldPosition();
 			newData.wtf.rotation = primitive->transform.rotation;
-			newData.wtf.scale = { 0.25f,0.25f, 0.25f };
+			newData.wtf.scale = { 0.2f,0.2f, 0.2f };
+			int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
 
 			// 速度ベクトルを生成
-			int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
+	
 			int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
 			int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
 			// 発射のベクトル
