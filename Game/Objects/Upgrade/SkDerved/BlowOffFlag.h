@@ -4,7 +4,7 @@
 namespace L
 {
 	/// <summary>
-	/// �����Ȉړ����x�A�b�v�I�i�萔�j
+	/// 純粋な移動速度アップ！（定数）
 	/// </summary>
 	class Skill_BlowOffFlag : public ISkill
 	{
@@ -12,17 +12,17 @@ namespace L
 	public:
 
 		/// <summary>
-		/// �����Ȉړ����x�A�b�v�I�i�萔�j
-		/// <para>�����Œl���`����</para>
-		/// <para>�󂯎�����l�ɂ���ēǂݍ��މ摜��ς�����</para>
+		/// 純粋な移動速度アップ！（定数）
+		/// <para>ここで値を定義する</para>
+		/// <para>受け取った値によって読み込む画像を変えたい</para>
 		/// </summary>
-		/// <param name="v">�v���X�ł��}�C�i�X�ł�����</param>
+		/// <param name="v">プラスでもマイナスでもいい</param>
 		Skill_BlowOffFlag() = default;
 
 
 
 		/// <summary>
-		/// �A�b�v�O���[�h�̓��e
+		/// アップグレードの内容
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{

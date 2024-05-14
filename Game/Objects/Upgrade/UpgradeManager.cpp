@@ -53,7 +53,7 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	upgradedConut_ = 0;
 	kUpgradNum_ = 1;
 
-	sprite_.texture = LWP::Resource::LoadTexture("cursor.png");
+	sprite_.texture = LWP::Resource::LoadTexture("cursor2.png");
 	sprite_.anchorPoint = { 0.5f,0.5f };
 	sprite_.transform.translation = cursorPos;
 	sprite_.isUI = true;
@@ -243,9 +243,10 @@ int L::UpgradeManager::ChooseOnce(bool f)
 
 void L::UpgradeManager::Selecting(Player* player)
 {
+	LWP::Info::SetDeltaTimeMultiply(0.0f);
 	// 場所
 	Vector2 pos{ 0.0f,625.0f };
-	//sprite_.isActive = true;
+	sprite_.isActive = true;
 	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
 	// 抽選されたアップグレードを更新
 	attackUpgrades_[candidata_[0]]->Update();
@@ -288,14 +289,20 @@ void L::UpgradeManager::Selecting(Player* player)
 		lwp::Matrix4x4 matVPV = viewProj * matViewport;
 		matVPV = matVPV.Inverse();
 
-		lwp::Vector3 posNear = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y,0);
-		lwp::Vector3 posFar = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y,1);
+		lwp::Vector3 posNear = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y, 0);
+		lwp::Vector3 posFar = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y, 1);
 
 		posNear = lwp::Matrix4x4::TransformCoord(posNear,matVPV);
 		posFar = lwp::Matrix4x4::TransformCoord(posFar,matVPV);
 		centerPoint = posFar - posNear;
 		centerPoint = centerPoint.Normalize();
 		centerPoint = posNear + centerPoint * 50;
+		if (cursorIndex_ == 0) {
+			centerPoint.x += 0.5f;
+		}
+		else if (cursorIndex_ == 1) {
+			centerPoint.x += 0.8f;
+		}
 		CursorEffect_(16, centerPoint);
 	}
 	else
@@ -335,6 +342,7 @@ void L::UpgradeManager::Selected()
 		escapeUpgrades_[candidata_[choiceIndex_]]->isApplied = true;
 	upgradedConut_++;
 	sprite_.isActive = false;
+	LWP::Info::SetDeltaTimeMultiply(1.0f);
 }
 
 void L::UpgradeManager::Apply(Player* player)
@@ -379,7 +387,7 @@ void L::UpgradeManager::CursorParticleInit()
 	static LWP::Object::Particle CursorParticle_;
 	CursorParticle_.SetPrimitive<Primitive::Cube>();
 	CursorParticle_.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
-	CursorParticle_.P()->material.enableLighting = true;
+	CursorParticle_.P()->material.enableLighting = false;
 	CursorParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::GREEN);
 	CursorParticle_.initFunction = [](Primitive::IPrimitive* primitive)
 		{
@@ -387,9 +395,9 @@ void L::UpgradeManager::CursorParticleInit()
 			lwp::Vector3 pos = randomOnCircle();
 			pos.x *= 2.0f;
 			pos.y *= 2.0f;
-			float dir1 = Utility::GenerateRandamNum<int>(-100, 100);
+			float dir1 = Utility::GenerateRandamNum<int>(-50, 50);
 			dir1 = dir1 / 100.0f;
-			float dir2 = Utility::GenerateRandamNum<int>(-100, 100);
+			float dir2 = Utility::GenerateRandamNum<int>(-50, 50);
 			dir2 = dir2 / 100.0f;
 			pos.x += dir1;
 			pos.y += dir2;
@@ -409,6 +417,8 @@ void L::UpgradeManager::CursorParticleInit()
 			// 経過フレーム追加
 			data->elapsedFrame++;
 			lwp::Vector3 direction = data->velocity - centerPoint;
+
+
 			data->wtf.translation -= direction / 10.0f;    // 速度ベクトルを加算
 			data->wtf.rotation += data->velocity;    // ついでに回転させとく
 

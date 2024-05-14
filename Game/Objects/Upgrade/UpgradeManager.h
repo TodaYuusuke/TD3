@@ -66,7 +66,7 @@ namespace L {
 		// 選択場所のわかるUI
 		LWP::Primitive::Sprite sprite_;
 
-		lwp::Vector3 cursorPos = { LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2),220.0f };
+		lwp::Vector3 cursorPos = { LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2),240.0f };
 
 		// 長押し用のフラグ
 		bool isPress_ = false;
