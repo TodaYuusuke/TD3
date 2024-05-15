@@ -297,12 +297,7 @@ void L::UpgradeManager::Selecting(Player* player)
 		centerPoint = posFar - posNear;
 		centerPoint = centerPoint.Normalize();
 		centerPoint = posNear + centerPoint * 50;
-		if (cursorIndex_ == 0) {
-			centerPoint.x += 0.5f;
-		}
-		else if (cursorIndex_ == 1) {
-			centerPoint.x += 0.8f;
-		}
+
 		CursorEffect_(2, centerPoint);
 	}
 	else
