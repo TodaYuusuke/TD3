@@ -70,6 +70,8 @@ void NormalEnemy::Update()
 void NormalEnemy::SetPosition(lwp::Vector3 pos)
 {
 	models_[Model::Body].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	// 出現時にパーティクルを出す
+	SetSpawnEffect(models_[0].transform.translation);
 }
 
 void NormalEnemy::Move()

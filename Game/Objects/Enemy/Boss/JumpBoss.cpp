@@ -105,6 +105,8 @@ void JumpBoss::Update()
 void JumpBoss::SetPosition(lwp::Vector3 pos)
 {
 	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	// 出現時にパーティクルを出す
+	SetSpawnEffect(models_[0].transform.translation);
 }
 
 LWP::Math::Vector3 JumpBoss::GetDirectVel() {

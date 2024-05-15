@@ -13,7 +13,19 @@ void IEnemy::Initialize()
 	CreateCollider();
 	//collider_.mask.SetBelongFrag(MaskLayer::Enemy);
 
+	// 死ぬときのアニメーション
+	deadMotion_.Add(&models_[BODY].transform.translation, LWP::Math::Vector3{ 0,5,0 }, 0, 0.7f, LWP::Utility::Easing::Type::OutQuint);
+	// 光の柱
+	lightPillarMotion_.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ 1.5f,0,1.5f }, 0, 0.1f)
+		.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ -1.5f,0,-1.5f }, 0.1f, 0.1f);
 
+	// 出現時の光の柱
+	lightPillar_.texture = LWP::Resource::LoadTexture("particle/lightPillar.png");
+	lightPillar_.name = "LightPillar";
+	lightPillar_.transform.scale = { 1,100,1 };
+
+	// ライティングをする
+	models_[0].material.enableLighting = true;
 }
 
 void IEnemy::KnockBackUpdate() {
@@ -26,7 +38,7 @@ void IEnemy::KnockBackUpdate() {
 			float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
 			// ノックバックの範囲にいるなら自機と反対の方向に移動させる
 			if (distance <= kKnockBackStartRange) {
-			isKnockBack_ = true;
+				isKnockBack_ = true;
 				// ノックバックする方向ベクトルを算出
 				knockBackDir_ = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Normalize() * 0.4f;
 				// 上には飛ばないようにする
@@ -75,14 +87,31 @@ void IEnemy::DyingAnimation()
 	{
 		deadAnime.targetpoint = models_[0].transform.translation;
 		collider_.isActive = false;
+		deadMotion_.Start();
 	}
-	if (deadFlame == 120)
+	if (deadFlame == 20)
 	{
+		// エフェクト出す
+#ifdef DEMO
+		deadEffect_(16, models_[0].transform.translation);
+#else
+		deadEffect_(kNumDeadParticle, models_[0].transform.translation);
+#endif
+
 		isActive_ = false;
 	}
+
+	deadAnime.speed += 0.01f;
+
+	//models_[0].transform.scale.x += 0.01f;
+	//models_[0].transform.scale.y += 0.01f;
+	//models_[0].transform.scale.z += 0.01f;
+
+	models_[0].transform.rotation.y += deadAnime.speed;
+
 	models_[0].transform.translation.x = deadAnime.targetpoint.x + addx * LWP::Info::GetDeltaTime();
 	models_[0].transform.translation.z = deadAnime.targetpoint.z + addz * LWP::Info::GetDeltaTime();
-	models_[0].transform.translation.y -= deadAnime.speed * LWP::Info::GetDeltaTime();
+
 	deadFlame++;
 }
 
@@ -108,7 +137,7 @@ void IEnemy::OnCollision(const HitData& data)
 		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 	{
 		// 追撃クラスに登録
-		if (player_->parameter_.GetParameter().pursuitFlag && player_->GetPursuitFlag()) {
+		if (player_->parameter_.GetParameter().pursuitFlag && player_->GetPursuitFlag() && player_->parameter_.Attack.slashPower_ + 10 <= hp_) {
 			player_->GetPursuit()->AddEnemy(this);
 		}
 		// 敵の攻撃に当たれる場合か
@@ -148,7 +177,13 @@ bool IEnemy::CheckSlash(uint32_t hitBelong)
 void IEnemy::DecreaseHP(int damage)
 {
 	// エフェクト出す
+#ifdef DEMO
 	damageEffect_(16, models_[0].transform.translation);
+#else
+	damageEffect_(kNumDamageParticle, models_[0].transform.translation);
+#endif // DEMO
+
+
 	// HP を減らす
 	hp_ -= damage;
 	// 死に至る
@@ -213,16 +248,17 @@ void IEnemy::DebugPrint()
 }
 
 void IEnemy::InitStaticVariable() {
+#pragma region ダメージを受けた時のエフェクト
 	static LWP::Object::Particle damageParticle_;
 	damageParticle_.SetPrimitive<Primitive::Cube>();
-	damageParticle_.P()->transform.scale = { 0.01f,0.01f, 0.01f };
+	damageParticle_.P()->transform.scale = { 0.0001f,0.001f, 0.0001f };
 	damageParticle_.P()->material.enableLighting = true;
 	damageParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::RED);
 	damageParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
 		Object::ParticleData newData{};
 		newData.wtf.translation = lwp::Vector3{ 0,1,0 } + primitive->transform.GetWorldPosition();
 		newData.wtf.rotation = primitive->transform.rotation;
-		newData.wtf.scale = { 0.25f,0.25f, 0.25f };
+		newData.wtf.scale = { 0.15f,0.15f, 0.15f };
 
 		// 速度ベクトルを生成
 		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
@@ -230,7 +266,8 @@ void IEnemy::InitStaticVariable() {
 		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
 		// 発射のベクトル
 		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
-		newData.velocity = dir.Normalize() * 0.3f;
+		float multiply = Utility::GenerateRandamNum<int>(10, 30) / 100.0f;
+		newData.velocity = dir.Normalize() * multiply;
 
 		// パーティクル追加
 		return newData;
@@ -253,6 +290,158 @@ void IEnemy::InitStaticVariable() {
 		damageParticle_.P()->transform = pos;
 		damageParticle_.Add(i);
 	};
+#pragma endregion
+
+#pragma region 死ぬとき
+	static LWP::Object::Particle deadParticle_;
+	deadParticle_.SetPrimitive<Primitive::Cube>();
+	deadParticle_.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
+	deadParticle_.P()->material.enableLighting = true;
+	deadParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::RED);
+	deadParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
+		Object::ParticleData newData{};
+		newData.wtf.translation = lwp::Vector3{ 0,1,0 } + primitive->transform.GetWorldPosition();
+		newData.wtf.rotation = primitive->transform.rotation;
+		// 大きさをランダムにする
+		int scale = Utility::GenerateRandamNum<int>(25, 50);
+		newData.wtf.scale = { scale / 200.0f, scale / 200.0f, scale / 200.0f };
+
+		// 速度ベクトルを生成
+		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
+		int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
+		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
+		// 発射のベクトル
+		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
+		// 係数
+		float multiply = Utility::GenerateRandamNum<int>(20, 50) / 100.0f;
+		newData.velocity = dir.Normalize() * multiply;
+
+		// パーティクル追加
+		return newData;
+	};
+	deadParticle_.updateFunction = [](Object::ParticleData* data) {
+		// 経過フレーム追加
+		data->elapsedFrame++;
+
+		data->wtf.translation += data->velocity;    // 速度ベクトルを加算
+		data->wtf.rotation += data->velocity;    // ついでに回転させとく
+
+
+		// 20フレーム以降から重力を加算
+		if (data->elapsedFrame > 20) {
+			data->velocity.y += -9.8f / 800.0f;
+			// yが0以下になったとき跳ねる
+			if (data->wtf.translation.y <= 0.1f) {
+				data->velocity.y *= -0.5f;
+			}
+		}
+		else {
+			// 速度ベクトルを弱める
+			data->velocity *= 0.9f;
+		}
+
+		//return data->elapsedFrame > 100 ? true : false;
+
+		// ちょっとしたら検証開始
+
+		// 速度が極端に遅くなったら終了フェーズ
+		if (data->elapsedFrame > 25 &&
+			data->velocity.y <= 0.01f && -0.01f <= data->velocity.y &&
+			data->wtf.translation.y <= 0.15f && data->wtf.translation.y >= -0.15f)
+		{
+			data->velocity = { 0.0f,0.0f,0.0f };
+			data->wtf.scale *= 0.9f;
+			// もし完全に小さくなったなら終了
+			if (data->wtf.scale.x <= 0.001f) { return true; }
+		}
+
+		return false;
+	};
+	deadParticle_.isActive = true;
+	deadEffect_ = [&](int i, lwp::Vector3 pos) {
+		deadParticle_.P()->transform = pos;
+		deadParticle_.Add(i);
+	};
+#pragma endregion
+
+#pragma region 出現時のエフェクト
+	static LWP::Object::Particle spawnParticle_;
+	spawnParticle_.SetPrimitive<Primitive::Cube>();
+	spawnParticle_.P()->transform.scale = { 0.01f,0.01f, 0.01f };
+	spawnParticle_.P()->material.enableLighting = true;
+	spawnParticle_.P()->commonColor = new Utility::Color(0xCD853FFF);
+
+	spawnParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
+		Object::ParticleData newData{};
+		newData.wtf.translation = primitive->transform.GetWorldPosition();
+		newData.wtf.rotation = primitive->transform.rotation;
+		// 大きさをランダムにする
+		int scale = Utility::GenerateRandamNum<int>(25, 40);
+		newData.wtf.scale = { scale / 130.0f, scale / 130.0f, scale / 130.0f };
+
+		// 速度ベクトルを生成
+		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
+		int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
+		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
+		// 発射のベクトル
+		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 150.0f, dir3 / 100.0f };
+		// 係数
+		float multiply = Utility::GenerateRandamNum<int>(20, 50) / 100.0f;
+		newData.velocity = dir.Normalize() * multiply;
+
+		// パーティクル追加
+		return newData;
+	};
+	spawnParticle_.updateFunction = [](Object::ParticleData* data) {
+		// 経過フレーム追加
+		data->elapsedFrame++;
+
+		data->wtf.translation += data->velocity;    // 速度ベクトルを加算
+		data->wtf.rotation += data->velocity;    // ついでに回転させとく
+
+
+		// 20フレーム以降から重力を加算
+		if (data->elapsedFrame > 10) {
+			data->velocity.y += -9.8f / 800.0f;
+			// yが0以下になったとき跳ねる
+			if (data->wtf.translation.y <= 0.1f) {
+				data->velocity.y *= -0.5f;
+			}
+		}
+		else {
+			// 速度ベクトルを弱める
+			data->velocity *= 0.9f;
+		}
+
+		// ちょっとしたら検証開始
+
+		// 速度が極端に遅くなったら終了フェーズ
+		if (data->elapsedFrame > 15 &&
+			data->velocity.y <= 0.01f && -0.01f <= data->velocity.y &&
+			data->wtf.translation.y <= 0.15f && data->wtf.translation.y >= -0.15f)
+		{
+			data->velocity = { 0.0f,0.0f,0.0f };
+			data->wtf.scale *= 0.9f;
+			// もし完全に小さくなったなら終了
+			if (data->wtf.scale.x <= 0.001f) { return true; }
+		}
+
+		return false;
+	};
+	spawnParticle_.isActive = true;
+	spawnEffect_ = [&](int i, lwp::Vector3 pos) {
+		spawnParticle_.P()->transform = pos;
+		spawnParticle_.Add(i);
+	};
+#pragma endregion
+}
+
+void IEnemy::CheckSpawnEffect() {
+	if (lightPillarMotion_.isEnd()) {
+		lightPillar_.isActive = false;
+	}
 }
 
 std::function<void(int, lwp::Vector3)> IEnemy::damageEffect_ = nullptr;
+std::function<void(int, lwp::Vector3)> IEnemy::deadEffect_ = nullptr;
+std::function<void(int, lwp::Vector3)> IEnemy::spawnEffect_ = nullptr;

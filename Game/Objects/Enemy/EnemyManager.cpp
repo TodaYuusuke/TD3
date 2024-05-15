@@ -66,6 +66,8 @@ void EnemyManager::Update()
 		});
 	for (IEnemy* enemy : enemys_) {
 		enemy->Update();
+		// 出現時のエフェクトのアニメーションが終了しているかをチェック
+		enemy->CheckSpawnEffect();
 	}
 }
 
@@ -125,13 +127,12 @@ void EnemyManager::BossSpawn() {
 
 	std::uniform_real_distribution<float> distribution2(8.0f, 10.0f);
 	float PtoE = distribution2(randomEngine);
-	lwp::Vector3 pos = { PtoE * divideX , 0.0f , PtoE * divideZ * signY };
+	lwp::Vector3 pos = { PtoE * divideX , 1.5f , PtoE * divideZ * signY };
 
 	// 1分
 	// ダッシュボスを出現
-	if (gameTimer_->GetCurrentSecond() == 1 && !isBossSpawn_) {
-		//DashBossSpawn(pos);
-		ArrowBossSpawn(pos);
+	if (gameTimer_->GetCurrentSecond() == 60 && !isBossSpawn_) {
+		DashBossSpawn(pos);
 		isBossSpawn_ = true;
 	}
 	// 2分

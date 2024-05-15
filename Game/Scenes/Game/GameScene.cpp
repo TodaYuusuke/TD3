@@ -83,7 +83,6 @@ void GameScene::Initialize()
 	sun_.intensity = 2.0f;
 	sun_.radius = 100.0f;
 	sun_.decay = 1.5f;
-
 }
 
 // 更新

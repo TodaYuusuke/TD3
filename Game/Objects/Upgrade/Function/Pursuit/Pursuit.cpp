@@ -8,7 +8,7 @@ void Pursuit::Init()
 bool Pursuit::Execution()
 {
 
-	if (interval > 10) {
+	if (interval > 0) {
 		interval--;
 		return true;
 	}
@@ -21,6 +21,9 @@ bool Pursuit::Execution()
 		// モデルを作る
 		models_.reserve(enemys_.size());
 		for (int It = 0; It < enemys_.size(); It++) {
+			if (enemys_[It]->GetIsDeath() == true) {
+				continue;
+			}
 			models_.emplace_back();
 			models_[It].LoadFile("cube/cube.obj");
 			models_[It].name = "pursuit";
@@ -30,19 +33,18 @@ bool Pursuit::Execution()
 		interval--;
 		return true;
 	}
-	else if (interval < 0) {
+	else if (interval == 0) {
 		interval = kInterval;
 		// ダメージを与える
 		for (int It = 0; It < enemys_.size(); It++) {
+			if (enemys_[It]->GetIsDeath() == true) {
+				continue;
+			}
 			enemys_[It]->DecreaseHP(damage_);
 		}
 		// 最後にクリアする
 		enemys_.clear();
 		models_.clear();
 		return false;
-	}
-	else {
-		interval--;
-		return true;
 	}
 }

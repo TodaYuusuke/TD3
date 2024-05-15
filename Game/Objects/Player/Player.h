@@ -201,6 +201,12 @@ private: //*** Behavior 管理に使う関数 ***//
 
 #pragma endregion
 
+#pragma region Effect
+	/// <summary>
+	/// 静的変数の初期化
+	/// </summary>
+	void InitStaticVariable();
+#pragma endregion
 
 	//*** 更新系 ***//
 
@@ -335,6 +341,10 @@ public: //*** プライベート変数 ***//
 
 	// 敵をノックバックするフラグ
 	bool isEnemyKnockBack_;
+
+
+	// スラッシュ攻撃の土飛沫
+	std::function<void(int, lwp::Vector3)> soilSplashEffect_;
 
 #pragma endregion
 
