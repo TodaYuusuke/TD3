@@ -40,7 +40,7 @@ private: //*** 変数群 ***//
 	// わかりやすくカーソルの画像
 	LWP::Primitive::Sprite cursolSprite_;
 
-	float spriteWidth = 200;
+	float spriteWidth = 100;
 	float spriteOffset = 100;
 
 };
