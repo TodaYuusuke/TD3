@@ -261,6 +261,9 @@ bool Player::GameOverAnime()
 			weapon_->SetIsActive(false);
 		}
 	}
+	else {
+		demoModel_.isActive = true;
+	}
 
 	if (isGameOver_) {
 		gameOverFrame_++;
