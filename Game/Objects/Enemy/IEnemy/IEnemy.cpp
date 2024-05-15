@@ -273,6 +273,10 @@ void IEnemy::InitStaticVariable() {
 		return newData;
 	};
 	damageParticle_.updateFunction = [](Object::ParticleData* data) {
+		if (Info::GetDeltaTime() == 0.0f) {
+			return false;
+		}
+
 		// 経過フレーム追加
 		data->elapsedFrame++;
 
@@ -320,6 +324,10 @@ void IEnemy::InitStaticVariable() {
 		return newData;
 	};
 	deadParticle_.updateFunction = [](Object::ParticleData* data) {
+		if (Info::GetDeltaTime() == 0.0f) {
+			return false;
+		}
+
 		// 経過フレーム追加
 		data->elapsedFrame++;
 
@@ -393,6 +401,9 @@ void IEnemy::InitStaticVariable() {
 		return newData;
 	};
 	spawnParticle_.updateFunction = [](Object::ParticleData* data) {
+		if (Info::GetDeltaTime() == 0.0f) {
+			return false;
+		}
 		// 経過フレーム追加
 		data->elapsedFrame++;
 
