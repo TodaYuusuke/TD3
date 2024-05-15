@@ -125,10 +125,17 @@ protected: //*** 継承クラスで呼び出す共通処理 ***//
 	void CheckFlags();
 
 protected:// 定数
+	// ボスの大きさ
 	const LWP::Math::Vector3 kBossSize = { 4,5,4 };
 
 	// ノックバックが起きる範囲
 	const float kKnockBackStartRange = 10.0f;
+
+	/// パーティクル
+	// 発生個数
+	const float kNumDeadParticle = 64;
+	const float kNumDamageParticle = 64;
+	const float kNumSpawnParticle = 20;
 
 protected:
 	std::vector<LWP::Primitive::Mesh> models_;
@@ -204,4 +211,6 @@ protected:
 	static std::function<void(int, lwp::Vector3)> damageEffect_;
 	// 死ぬとき
 	static std::function<void(int, lwp::Vector3)> deadEffect_;
+	// 生成されたとき
+	static std::function<void(int, lwp::Vector3)> spawnEffect_;
 };

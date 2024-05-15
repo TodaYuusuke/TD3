@@ -12,6 +12,8 @@
 #include "Status/Derived/Damage.h"
 
 using Behavior = IStatus::Behavior;
+using namespace LWP;
+using namespace LWP::Object::Collider;
 
 
 void Player::Initialize()
@@ -77,6 +79,10 @@ void Player::Initialize()
 	eXLife_->Init(this);
 
 	demoModel_.material.enableLighting = true;
+
+
+	// 土飛沫のパーティクル
+	InitStaticVariable();
 }
 
 void Player::Update()
@@ -165,6 +171,22 @@ void Player::Update()
 	}
 	// 無敵なのかどうか判断
 	colliders_.player_.isActive = !flag_.isInvincible_;
+
+
+	// 移動制限
+	//lwp::Vector3 pos = demoModel_.transform.translation;
+	//pos.y = 0.0f;
+	//float dist = (pos).Length();
+	//if (100.0f <= dist) {
+	//	// 方向ベクトル
+	//	lwp::Vector3 dirVel = pos.Normalize();
+	//	float x = cosf(dirVel.x) * dist;
+	//	float z = sinf(dirVel.z) * dist;
+
+
+	//}
+	demoModel_.transform.translation.x = std::clamp<float>(demoModel_.transform.translation.x, -80.0f, 80.0f);
+	demoModel_.transform.translation.z = std::clamp<float>(demoModel_.transform.translation.z, -80.0f, 80.0f);
 }
 
 void Player::StartJust()
@@ -224,7 +246,7 @@ void Player::ApplyUpgrade(const UpgradeParameter& para)
 bool Player::ClearAnime()
 {
 	ClearMotion.t += ClearMotion.speed;
-	demoModel_.transform.translation.y += (ClearMotion.speed + (ClearMotion.t -1)* 2 ) * LWP::Info::GetDefaultDeltaTimeF();
+	demoModel_.transform.translation.y += (ClearMotion.speed + (ClearMotion.t - 1) * 2) * LWP::Info::GetDefaultDeltaTimeF();
 
 	if (ClearMotion.t > kClearMotionEnd) {
 		return true;
@@ -406,6 +428,81 @@ void Player::OnCollisionJust(lwp::Collider::HitData& data)
 #pragma endregion
 
 
+#pragma endregion
+
+#pragma region Effect
+void Player::InitStaticVariable() {
+	// 土飛沫
+	static LWP::Object::Particle soilSplashParticle_;
+	soilSplashParticle_.SetPrimitive<Primitive::Cube>();
+	soilSplashParticle_.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
+	soilSplashParticle_.P()->material.enableLighting = true;
+	soilSplashParticle_.P()->commonColor = new Utility::Color(0xCD853FFF);
+	soilSplashParticle_.initFunction = [&](Primitive::IPrimitive* primitive) {
+		Object::ParticleData newData{};
+		newData.wtf.translation = lwp::Vector3{ 0,1,0 } + primitive->transform.GetWorldPosition();
+		newData.wtf.rotation = primitive->transform.rotation;
+		// 大きさをランダムにする
+		int scale = Utility::GenerateRandamNum<int>(25, 50);
+		newData.wtf.scale = { scale / 200.0f, scale / 200.0f, scale / 200.0f };
+
+		// 速度ベクトルを生成
+		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
+		int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
+		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
+		// 発射のベクトル
+		Math::Vector3 dir{ dir1 / 100.0f + -destinate_.x,dir2 / 100.0f + -destinate_.y, dir3 / 100.0f + -destinate_.z };
+		// 係数
+		float multiply = Utility::GenerateRandamNum<int>(20, 50) / 100.0f;
+		newData.velocity = dir.Normalize() * multiply;
+
+		// パーティクル追加
+		return newData;
+	};
+	soilSplashParticle_.updateFunction = [](Object::ParticleData* data) {
+		// 経過フレーム追加
+		data->elapsedFrame++;
+
+		data->wtf.translation += data->velocity;    // 速度ベクトルを加算
+		data->wtf.rotation += data->velocity;    // ついでに回転させとく
+
+
+		// 20フレーム以降から重力を加算
+		if (data->elapsedFrame > 20) {
+			data->velocity.y += -9.8f / 800.0f;
+			// yが0以下になったとき跳ねる
+			if (data->wtf.translation.y <= 0.1f) {
+				data->velocity.y *= -0.5f;
+			}
+		}
+		else {
+			// 速度ベクトルを弱める
+			data->velocity *= 0.9f;
+		}
+
+		// ちょっとしたら検証開始
+
+		// 速度が極端に遅くなったら終了フェーズ
+		if (data->elapsedFrame > 25 &&
+			data->velocity.y <= 0.01f && -0.01f <= data->velocity.y &&
+			data->wtf.translation.y <= 0.15f && data->wtf.translation.y >= -0.15f)
+		{
+			data->velocity = { 0.0f,0.0f,0.0f };
+			data->wtf.scale *= 0.9f;
+			// もし完全に小さくなったなら終了
+			if (data->wtf.scale.x <= 0.001f) { return true; }
+		}
+
+		return false;
+	};
+	soilSplashParticle_.isActive = true;
+	soilSplashEffect_ = [&](int i, lwp::Vector3 pos) {
+		soilSplashParticle_.P()->transform = pos;
+		soilSplashParticle_.Add(i);
+	};
+}
+
+//std::function<void(int, lwp::Vector3)> Player::soilSplashEffect_ = nullptr;
 #pragma endregion
 
 void Player::CheckInputMove()

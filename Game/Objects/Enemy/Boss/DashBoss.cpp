@@ -111,6 +111,8 @@ void DashBoss::Update()
 void DashBoss::SetPosition(lwp::Vector3 pos)
 {
 	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	// 出現時にパーティクルを出す
+	spawnEffect_(kNumSpawnParticle, models_[0].transform.translation);
 }
 
 void DashBoss::Move()
