@@ -261,9 +261,9 @@ void IEnemy::InitStaticVariable() {
 		newData.wtf.scale = { 0.15f,0.15f, 0.15f };
 
 		// 速度ベクトルを生成
-		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
-		int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
-		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
+		int dir1 = Utility::GenerateRandamNum<int>(-200, 200);
+		int dir2 = Utility::GenerateRandamNum<int>(-200, 200);
+		int dir3 = Utility::GenerateRandamNum<int>(-200, 200);
 		// 発射のベクトル
 		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
 		float multiply = Utility::GenerateRandamNum<int>(10, 30) / 100.0f;
@@ -273,17 +273,37 @@ void IEnemy::InitStaticVariable() {
 		return newData;
 	};
 	damageParticle_.updateFunction = [](Object::ParticleData* data) {
+		if (Info::GetDeltaTime() == 0.0f) {
+			return false;
+		}
+
 		// 経過フレーム追加
 		data->elapsedFrame++;
 
 		data->wtf.translation += data->velocity;    // 速度ベクトルを加算
-		data->wtf.rotation += data->velocity;    // ついでに回転させとく
 		data->wtf.translation.y += -9.8f / 80.0f;    // 重力を加算
 
 		// 速度ベクトルを弱める
 		data->velocity *= 0.9f;
 
-		return data->elapsedFrame > 180 ? true : false;
+		// 地面についたら薄く広がる
+		if (data->wtf.translation.y <= 0.1f) {
+			float scaleX = Utility::GenerateRandamNum<int>(25, 50) / 10000.0f;
+			float scaleZ = Utility::GenerateRandamNum<int>(25, 50) / 10000.0f;
+			// 座標固定
+			data->wtf.translation.y = 0.1f;
+			// 速度をなくす
+			data->velocity = { 0,0,0 };
+			// x,z方向に伸ばす
+			data->wtf.scale.x += scaleX;
+			data->wtf.scale.z += scaleZ;
+		}
+		else {
+			// 速度ベクトルを弱める
+			data->velocity *= 0.9f;
+		}
+
+		return data->elapsedFrame > 50 ? true : false;
 	};
 	damageParticle_.isActive = true;
 	damageEffect_ = [&](int i, lwp::Vector3 pos) {
@@ -320,6 +340,10 @@ void IEnemy::InitStaticVariable() {
 		return newData;
 	};
 	deadParticle_.updateFunction = [](Object::ParticleData* data) {
+		if (Info::GetDeltaTime() == 0.0f) {
+			return false;
+		}
+
 		// 経過フレーム追加
 		data->elapsedFrame++;
 
@@ -393,6 +417,9 @@ void IEnemy::InitStaticVariable() {
 		return newData;
 	};
 	spawnParticle_.updateFunction = [](Object::ParticleData* data) {
+		if (Info::GetDeltaTime() == 0.0f) {
+			return false;
+		}
 		// 経過フレーム追加
 		data->elapsedFrame++;
 

@@ -140,6 +140,9 @@ public: //*** パブリック関数 ***//
 	// クリアアニメ
 	bool ClearAnime();
 
+	// ゲームオーバアニメ
+	bool GameOverAnime();
+
 public:	//*** セッター,ゲッター ***//
 
 	PlayerParameter* GetPlayerParameter() { return &parameter_; }
@@ -303,6 +306,10 @@ public: //*** プライベート変数 ***//
 		.flag = false,
 	};
 	const float kClearMotionEnd = 60.0f;
+	// ゲームオーバーのアニメーション
+	LWP::Resource::Motion gameOverMotion_;
+	bool isGameOver_;
+	int gameOverFrame_;
 
 	// 現在の状態
 	IStatus::Behavior behavior_ = IStatus::Behavior::Root;
@@ -345,6 +352,8 @@ public: //*** プライベート変数 ***//
 
 	// スラッシュ攻撃の土飛沫
 	std::function<void(int, lwp::Vector3)> soilSplashEffect_;
+	// 死ぬときのエフェクト
+	static std::function<void(int, lwp::Vector3)> deadEffect_;
 
 #pragma endregion
 
