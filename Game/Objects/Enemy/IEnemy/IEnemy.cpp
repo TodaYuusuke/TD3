@@ -16,8 +16,8 @@ void IEnemy::Initialize()
 	// 死ぬときのアニメーション
 	deadMotion_.Add(&models_[BODY].transform.translation, LWP::Math::Vector3{ 0,5,0 }, 0, 0.7f, LWP::Utility::Easing::Type::OutQuint);
 	// 光の柱
-	lightPillarMotion_.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ 1.5f,0,1.5f }, 0, 0.05f)
-		.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ -1.5f,0,-1.5f }, 0.05f, 0.1f);
+	lightPillarMotion_.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ 1.5f,0,1.5f }, 0, 0.1f)
+		.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ -1.5f,0,-1.5f }, 0.1f, 0.1f);
 
 	// 出現時の光の柱
 	lightPillar_.texture = LWP::Resource::LoadTexture("particle/lightPillar.png");
