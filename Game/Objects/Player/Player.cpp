@@ -13,6 +13,7 @@
 
 using Behavior = IStatus::Behavior;
 using namespace LWP;
+using namespace LWP::Utility;
 using namespace LWP::Object::Collider;
 
 
@@ -80,7 +81,9 @@ void Player::Initialize()
 
 	demoModel_.material.enableLighting = true;
 
-
+	// ゲームオーバーアニメーション
+	gameOverMotion_.Add(&demoModel_.transform.translation, lwp::Vector3{ 0, 5, 0 }, 0, 2.0f, LWP::Utility::Easing::Type::InQuart)
+		.Add(&demoModel_.transform.rotation, lwp::Vector3{ 0, 15, 0 }, 0, 2.0f, LWP::Utility::Easing::Type::InQuint);
 	// 土飛沫のパーティクル
 	InitStaticVariable();
 }
@@ -172,19 +175,7 @@ void Player::Update()
 	// 無敵なのかどうか判断
 	colliders_.player_.isActive = !flag_.isInvincible_;
 
-
 	// 移動制限
-	//lwp::Vector3 pos = demoModel_.transform.translation;
-	//pos.y = 0.0f;
-	//float dist = (pos).Length();
-	//if (100.0f <= dist) {
-	//	// 方向ベクトル
-	//	lwp::Vector3 dirVel = pos.Normalize();
-	//	float x = cosf(dirVel.x) * dist;
-	//	float z = sinf(dirVel.z) * dist;
-
-
-	//}
 	demoModel_.transform.translation.x = std::clamp<float>(demoModel_.transform.translation.x, -80.0f, 80.0f);
 	demoModel_.transform.translation.z = std::clamp<float>(demoModel_.transform.translation.z, -80.0f, 80.0f);
 }
@@ -231,6 +222,10 @@ void Player::DecreaseHP()
 {
 	flag_.isAlive_ = !parameter_.DecreaseHP();
 	GameTimer::GetInstance()->isEnd_ = !flag_.isAlive_;
+	if (!flag_.isAlive_) {
+		demoModel_.isActive = true;
+		gameOverMotion_.Start();
+	}
 	/*parameter_.Hp.hp_--;
 	if (parameter_.Hp.hp_ <= 0u)
 	{
@@ -252,6 +247,27 @@ bool Player::ClearAnime()
 		return true;
 	}
 
+
+	return false;
+}
+
+bool Player::GameOverAnime()
+{
+	if (gameOverMotion_.isEnd()) {
+		isGameOver_ = true;
+		if (gameOverFrame_ == 0) {
+			deadEffect_(64, demoModel_.transform.translation);
+			demoModel_.isActive = false;
+			weapon_->SetIsActive(false);
+		}
+	}
+
+	if (isGameOver_) {
+		gameOverFrame_++;
+		if (gameOverFrame_ >= 90) {	
+			return true;
+		}
+	}
 
 	return false;
 }
@@ -373,7 +389,7 @@ void Player::CreateWeaponCollision()
 #ifdef DEMO
 	colliders_.weapon_.name = "Weapon";
 #endif
-}
+	}
 
 void Player::CreateJustCollision()
 {
@@ -499,6 +515,77 @@ void Player::InitStaticVariable() {
 	soilSplashEffect_ = [&](int i, lwp::Vector3 pos) {
 		soilSplashParticle_.P()->transform = pos;
 		soilSplashParticle_.Add(i);
+	};
+
+
+	static LWP::Object::Particle deadParticle_;
+	deadParticle_.SetPrimitive<Primitive::Cube>();
+	deadParticle_.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
+	deadParticle_.P()->material.enableLighting = true;
+	deadParticle_.P()->commonColor = new Utility::Color(0xCD853FFF);
+	deadParticle_.initFunction = [&](Primitive::IPrimitive* primitive) {
+		Object::ParticleData newData{};
+		newData.wtf.translation = lwp::Vector3{ 0,1,0 } + primitive->transform.GetWorldPosition();
+		newData.wtf.rotation = primitive->transform.rotation;
+		// 大きさをランダムにする
+		int scale = Utility::GenerateRandamNum<int>(25, 50);
+		newData.wtf.scale = { scale / 200.0f, scale / 200.0f, scale / 200.0f };
+
+		// 速度ベクトルを生成
+		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
+		int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
+		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
+		// 発射のベクトル
+		Math::Vector3 dir{ dir1 / 100.0f + -destinate_.x,dir2 / 100.0f + -destinate_.y, dir3 / 100.0f + -destinate_.z };
+		// 係数
+		float multiply = Utility::GenerateRandamNum<int>(20, 50) / 100.0f;
+		newData.velocity = dir.Normalize() * multiply;
+
+		// パーティクル追加
+		return newData;
+	};
+	deadParticle_.updateFunction = [](Object::ParticleData* data) {
+		// 経過フレーム追加
+		data->elapsedFrame++;
+
+		data->wtf.translation += data->velocity;    // 速度ベクトルを加算
+		data->wtf.rotation += data->velocity;    // ついでに回転させとく
+
+
+		// 20フレーム以降から重力を加算
+		if (data->elapsedFrame > 20) {
+			data->velocity.y += -9.8f / 800.0f;
+			// yが0以下になったとき跳ねる
+			if (data->wtf.translation.y <= 0.1f) {
+				data->velocity.y *= -0.5f;
+			}
+		}
+		else {
+			// 速度ベクトルを弱める
+			data->velocity *= 0.9f;
+		}
+
+		//return data->elapsedFrame > 100 ? true : false;
+
+		// ちょっとしたら検証開始
+
+		// 速度が極端に遅くなったら終了フェーズ
+		if (data->elapsedFrame > 25 &&
+			data->velocity.y <= 0.01f && -0.01f <= data->velocity.y &&
+			data->wtf.translation.y <= 0.15f && data->wtf.translation.y >= -0.15f)
+		{
+			data->velocity = { 0.0f,0.0f,0.0f };
+			data->wtf.scale *= 0.9f;
+			// もし完全に小さくなったなら終了
+			if (data->wtf.scale.x <= 0.001f) { return true; }
+		}
+
+		return false;
+	};
+	deadParticle_.isActive = true;
+	deadEffect_ = [&](int i, lwp::Vector3 pos) {
+		deadParticle_.P()->transform = pos;
+		deadParticle_.Add(i);
 	};
 }
 
@@ -895,3 +982,5 @@ void Player::DamageEffect() {
 		demoModel_.isActive = true;
 	}
 }
+
+std::function<void(int, lwp::Vector3)> Player::deadEffect_ = nullptr;

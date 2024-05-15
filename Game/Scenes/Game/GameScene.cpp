@@ -111,7 +111,7 @@ void GameScene::Update()
 		ImGui::Text("Space");
 		ImGui::End();
 #endif
-		
+
 
 		// プレイヤーが生きているとき
 		if (player_->flag_.isAlive_)
@@ -145,16 +145,19 @@ void GameScene::Update()
 			ImGui::End();
 #endif
 
-
-			// 何か演出を出す
-			if (Keyboard::GetTrigger(DIK_SPACE) ||
-				Pad::GetTrigger(XINPUT_GAMEPAD_A))
-			{
+			if (player_->GameOverAnime()) {
 				// タイマーを消す
 				gameTimer_->isActive_ = false;
 				// 描画を消す
 				gameTimer_->Update();
 				nextSceneFunction = []() {return new GameOverScene; };
+			}
+
+			// 何か演出を出す
+			if (Keyboard::GetTrigger(DIK_SPACE) ||
+				Pad::GetTrigger(XINPUT_GAMEPAD_A))
+			{
+
 			}
 			return;
 		}
@@ -174,7 +177,7 @@ void GameScene::Update()
 	// デバッグ
 //#ifdef DEMO
 	upgradeManager_->DebugWindow(player_.get());
-//#endif // DEMO
+	//#endif // DEMO
 
 
 	if (!upgradeManager_->GetLevelUpFlag())
