@@ -66,6 +66,8 @@ void EnemyManager::Update()
 		});
 	for (IEnemy* enemy : enemys_) {
 		enemy->Update();
+		// 出現時のエフェクトのアニメーションが終了しているかをチェック
+		enemy->CheckSpawnEffect();
 	}
 }
 

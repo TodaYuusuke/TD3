@@ -64,6 +64,8 @@ void ShieldEnemy::Update()
 void ShieldEnemy::SetPosition(lwp::Vector3 pos)
 {
 	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	// 出現時にパーティクルを出す
+	SetSpawnEffect(models_[0].transform.translation);
 }
 
 void ShieldEnemy::Move()

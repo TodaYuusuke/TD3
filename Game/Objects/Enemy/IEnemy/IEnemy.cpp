@@ -15,7 +15,15 @@ void IEnemy::Initialize()
 
 	// 死ぬときのアニメーション
 	deadMotion_.Add(&models_[BODY].transform.translation, LWP::Math::Vector3{ 0,5,0 }, 0, 0.7f, LWP::Utility::Easing::Type::OutQuint);
-	
+	// 光の柱
+	lightPillarMotion_.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ 1.5f,0,1.5f }, 0, 0.05f)
+		.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ -1.5f,0,-1.5f }, 0.05f, 0.1f);
+
+	// 出現時の光の柱
+	lightPillar_.texture = LWP::Resource::LoadTexture("particle/lightPillar.png");
+	lightPillar_.name = "LightPillar";
+	lightPillar_.transform.scale = { 1,100,1 };
+
 	// ライティングをする
 	models_[0].material.enableLighting = true;
 }
@@ -89,7 +97,7 @@ void IEnemy::DyingAnimation()
 #else
 		deadEffect_(kNumDeadParticle, models_[0].transform.translation);
 #endif
-		
+
 		isActive_ = false;
 	}
 
@@ -358,25 +366,27 @@ void IEnemy::InitStaticVariable() {
 
 #pragma region 出現時のエフェクト
 	static LWP::Object::Particle spawnParticle_;
-	spawnParticle_.SetPrimitive<Primitive::Billboard3D>();
-	spawnParticle_.P()->texture = LWP::Resource::LoadTexture("particle/smoke.png");
-	spawnParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::RED);
-	spawnParticle_.P()->material.enableLighting = false;
+	spawnParticle_.SetPrimitive<Primitive::Cube>();
+	spawnParticle_.P()->transform.scale = { 0.01f,0.01f, 0.01f };
+	spawnParticle_.P()->material.enableLighting = true;
+	spawnParticle_.P()->commonColor = new Utility::Color(0xCD853FFF);
 
-	//spawnParticle_.P()->transform.scale = { 0.001f,0.01f, 0.001f };
 	spawnParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
 		Object::ParticleData newData{};
-		newData.wtf.translation = lwp::Vector3{ 0,1,0 } + primitive->transform.GetWorldPosition();
+		newData.wtf.translation = primitive->transform.GetWorldPosition();
 		newData.wtf.rotation = primitive->transform.rotation;
-		newData.wtf.scale = { 0.8f,0.8f,0.8f };
+		// 大きさをランダムにする
+		int scale = Utility::GenerateRandamNum<int>(25, 40);
+		newData.wtf.scale = { scale / 130.0f, scale / 130.0f, scale / 130.0f };
 
 		// 速度ベクトルを生成
 		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
 		int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
 		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
 		// 発射のベクトル
-		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
-		float multiply = Utility::GenerateRandamNum<int>(10, 30) / 100.0f;
+		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 150.0f, dir3 / 100.0f };
+		// 係数
+		float multiply = Utility::GenerateRandamNum<int>(20, 50) / 100.0f;
 		newData.velocity = dir.Normalize() * multiply;
 
 		// パーティクル追加
@@ -387,18 +397,36 @@ void IEnemy::InitStaticVariable() {
 		data->elapsedFrame++;
 
 		data->wtf.translation += data->velocity;    // 速度ベクトルを加算
-		//data->wtf.rotation += data->velocity;    // ついでに回転させとく
+		data->wtf.rotation += data->velocity;    // ついでに回転させとく
+
 
 		// 20フレーム以降から重力を加算
-		if (data->elapsedFrame > 5) {
-			data->velocity.y -= -9.8f / 800.0f;
+		if (data->elapsedFrame > 10) {
+			data->velocity.y += -9.8f / 800.0f;
+			// yが0以下になったとき跳ねる
+			if (data->wtf.translation.y <= 0.1f) {
+				data->velocity.y *= -0.5f;
+			}
 		}
 		else {
 			// 速度ベクトルを弱める
 			data->velocity *= 0.9f;
 		}
 
-		return data->elapsedFrame > 60 ? true : false;
+		// ちょっとしたら検証開始
+
+		// 速度が極端に遅くなったら終了フェーズ
+		if (data->elapsedFrame > 15 &&
+			data->velocity.y <= 0.01f && -0.01f <= data->velocity.y &&
+			data->wtf.translation.y <= 0.15f && data->wtf.translation.y >= -0.15f)
+		{
+			data->velocity = { 0.0f,0.0f,0.0f };
+			data->wtf.scale *= 0.9f;
+			// もし完全に小さくなったなら終了
+			if (data->wtf.scale.x <= 0.001f) { return true; }
+		}
+
+		return false;
 	};
 	spawnParticle_.isActive = true;
 	spawnEffect_ = [&](int i, lwp::Vector3 pos) {
@@ -406,6 +434,12 @@ void IEnemy::InitStaticVariable() {
 		spawnParticle_.Add(i);
 	};
 #pragma endregion
+}
+
+void IEnemy::CheckSpawnEffect() {
+	if (lightPillarMotion_.isEnd()) {
+		lightPillar_.isActive = false;
+	}
 }
 
 std::function<void(int, lwp::Vector3)> IEnemy::damageEffect_ = nullptr;

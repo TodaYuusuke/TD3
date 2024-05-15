@@ -70,6 +70,11 @@ public:
 	/// </summary>
 	static void InitStaticVariable();
 
+	/// <summary>
+	/// 出現時のエフェクトが終了しているかをチェックしdeleteする
+	/// </summary>
+	void CheckSpawnEffect();
+
 
 public: //*** ゲッターセッター ***//
 
@@ -90,6 +95,18 @@ public: //*** ゲッターセッター ***//
 	// カメラのアドレスを設定
 	virtual void SetCamera(FollowCamera* camera) { followCamera_ = camera; }
 	void SetManager(ExpManager* p) { manager_ = p; }
+	void SetSpawnEffect(lwp::Vector3 pos) {
+		// 出現時にパーティクルを出す
+#ifdef DEMO
+		spawnEffect_(8, models_[0].transform.translation);
+#else
+		spawnEffect_(kNumSpawnParticle, models_[0].transform.translation);
+#endif // !DEMO
+
+
+		lightPillar_.transform.translation = pos;
+		lightPillarMotion_.Start();
+	}
 
 
 protected: //*** 継承クラスで呼び出す共通処理 ***//
@@ -135,7 +152,7 @@ protected:// 定数
 	// 発生個数
 	const float kNumDeadParticle = 64;
 	const float kNumDamageParticle = 64;
-	const float kNumSpawnParticle = 20;
+	const float kNumSpawnParticle = 16;
 
 protected:
 	std::vector<LWP::Primitive::Mesh> models_;
@@ -211,6 +228,9 @@ protected:
 	static std::function<void(int, lwp::Vector3)> damageEffect_;
 	// 死ぬとき
 	static std::function<void(int, lwp::Vector3)> deadEffect_;
-	// 生成されたとき
+	// 出現したときのパーティクル
 	static std::function<void(int, lwp::Vector3)> spawnEffect_;
+	// 出現時の光の柱
+	LWP::Primitive::Billboard3D lightPillar_;
+	LWP::Resource::Motion lightPillarMotion_;
 };
