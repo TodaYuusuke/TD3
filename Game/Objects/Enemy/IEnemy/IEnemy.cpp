@@ -288,15 +288,13 @@ void IEnemy::InitStaticVariable() {
 
 		// 地面についたら薄く広がる
 		if (data->wtf.translation.y <= 0.1f) {
-			float scaleX = Utility::GenerateRandamNum<int>(25, 50) / 10000.0f;
-			float scaleZ = Utility::GenerateRandamNum<int>(25, 50) / 10000.0f;
 			// 座標固定
 			data->wtf.translation.y = 0.1f;
 			// 速度をなくす
 			data->velocity = { 0,0,0 };
 			// x,z方向に伸ばす
-			data->wtf.scale.x += scaleX;
-			data->wtf.scale.z += scaleZ;
+			data->wtf.scale.x += 0.001f;
+			data->wtf.scale.z += 0.001f;
 		}
 		else {
 			// 速度ベクトルを弱める
@@ -363,8 +361,6 @@ void IEnemy::InitStaticVariable() {
 			// 速度ベクトルを弱める
 			data->velocity *= 0.9f;
 		}
-
-		//return data->elapsedFrame > 100 ? true : false;
 
 		// ちょっとしたら検証開始
 

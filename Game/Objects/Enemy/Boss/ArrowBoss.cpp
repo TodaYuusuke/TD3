@@ -48,20 +48,17 @@ void ArrowBoss::Init()
 #pragma region ミサイル起動パーティクル
 	// 形を決定
 	missileContrail_.SetPrimitive<Primitive::Cube>();
+	missileContrail_.P()->material.enableLighting = true;
 	// 初期化処理
 	missileContrail_.initFunction =
 		[](Primitive::IPrimitive* primitive) {
 		Object::ParticleData data;
 		data.wtf.translation = primitive->transform.GetWorldPosition();
 		data.wtf.rotation = primitive->transform.rotation;
-		data.wtf.scale = primitive->transform.scale;
-
-		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
-		int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
-		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
-		// 速度ベクトル
-		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
-		data.velocity = dir.Normalize() * 0.1f;
+		// 大きさをランダムにする
+		float scale = Utility::GenerateRandamNum<int>(45, 50);
+		data.wtf.rotation = { scale, scale, scale };
+		data.wtf.scale = { scale / 100.0f, scale / 100.0f, scale / 100.0f };
 
 		// データを返す
 		return data;
@@ -72,14 +69,16 @@ void ArrowBoss::Init()
 		// 経過フレーム追加
 		data->elapsedFrame++;
 
-		data->wtf.translation += data->velocity;
-		data->wtf.translation.y += 0.001f * data->elapsedFrame;
-		data->wtf.scale += {0.005f, 0.005f, 0.005f};
+		data->wtf.translation.y += 0.0001f * data->elapsedFrame;
+		//data->wtf.scale *= 0.92f;
+		float f = 0.05f;
+		data->wtf.scale -= { f,f,f };
 		
 		// 速度は徐々に落とす
 		data->velocity *= 0.9f;
 
 		// 180フレーム経ったら削除
+		if (data->wtf.scale.x <= 0.001f) { return true; }
 		return data->elapsedFrame > 240 ? true : false;
 	};
 	missileContrail_.isActive = true;

@@ -176,8 +176,8 @@ void Player::Update()
 	colliders_.player_.isActive = !flag_.isInvincible_;
 
 	// 移動制限
-	demoModel_.transform.translation.x = std::clamp<float>(demoModel_.transform.translation.x, -80.0f, 80.0f);
-	demoModel_.transform.translation.z = std::clamp<float>(demoModel_.transform.translation.z, -80.0f, 80.0f);
+	demoModel_.transform.translation.x = std::clamp<float>(demoModel_.transform.translation.x, -70.0f, 70.0f);
+	demoModel_.transform.translation.z = std::clamp<float>(demoModel_.transform.translation.z, -70.0f, 70.0f);
 }
 
 void Player::StartJust()
@@ -488,7 +488,7 @@ void Player::InitStaticVariable() {
 
 		// 20フレーム以降から重力を加算
 		if (data->elapsedFrame > 20) {
-			data->velocity.y += -9.8f / 800.0f;
+			data->velocity.y += -9.8f / 600.0f;
 			// yが0以下になったとき跳ねる
 			if (data->wtf.translation.y <= 0.1f) {
 				data->velocity.y *= -0.5f;
@@ -539,7 +539,7 @@ void Player::InitStaticVariable() {
 		int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
 		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
 		// 発射のベクトル
-		Math::Vector3 dir{ dir1 / 100.0f + -destinate_.x,dir2 / 100.0f + -destinate_.y, dir3 / 100.0f + -destinate_.z };
+		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
 		// 係数
 		float multiply = Utility::GenerateRandamNum<int>(20, 50) / 100.0f;
 		newData.velocity = dir.Normalize() * multiply;
@@ -716,6 +716,7 @@ void Player::CheckBehavior()
 			{
 				reqBehavior_ = Behavior::Slash;
 				slashPanel_->Slash();
+				soilSplashEffect_(16, demoModel_.transform.translation);
 			}
 			break;
 		case Behavior::Moment:
