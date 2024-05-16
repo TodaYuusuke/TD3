@@ -176,8 +176,8 @@ void Player::Update()
 	colliders_.player_.isActive = !flag_.isInvincible_;
 
 	// 移動制限
-	demoModel_.transform.translation.x = std::clamp<float>(demoModel_.transform.translation.x, -80.0f, 80.0f);
-	demoModel_.transform.translation.z = std::clamp<float>(demoModel_.transform.translation.z, -80.0f, 80.0f);
+	demoModel_.transform.translation.x = std::clamp<float>(demoModel_.transform.translation.x, -70.0f, 70.0f);
+	demoModel_.transform.translation.z = std::clamp<float>(demoModel_.transform.translation.z, -70.0f, 70.0f);
 }
 
 void Player::StartJust()
@@ -485,7 +485,7 @@ void Player::InitStaticVariable() {
 
 		// 20フレーム以降から重力を加算
 		if (data->elapsedFrame > 20) {
-			data->velocity.y += -9.8f / 800.0f;
+			data->velocity.y += -9.8f / 600.0f;
 			// yが0以下になったとき跳ねる
 			if (data->wtf.translation.y <= 0.1f) {
 				data->velocity.y *= -0.5f;

@@ -12,7 +12,6 @@ using namespace LWP::Utility;
 // 初期化
 void GameScene::Initialize()
 {
-	mainCamera.pp.CreatePSO("postProcess/PostProcess.PS.hlsl");
 	// タイマー
 	gameTimer_ = GameTimer::GetInstance();
 	gameTimer_->Initialize();
@@ -81,8 +80,8 @@ void GameScene::Initialize()
 	// 点光源
 	sun_.transform.translation.y = 30.0f;
 	sun_.intensity = 2.0f;
-	sun_.radius = 100.0f;
-	sun_.decay = 1.5f;
+	sun_.radius = 105.0f;
+	sun_.decay = 0.58f;
 
 	// フレームレートを表示する関数（後で消すこと！）
 	Info::ChangeShowDebugGUI();
@@ -91,12 +90,6 @@ void GameScene::Initialize()
 // 更新
 void GameScene::Update()
 {
-#ifdef DEMO
-	ImGui::Begin("Scene");
-	ImGui::Text("Game");
-	ImGui::End();
-#endif
-
 	// 時間を計測
 	// チュートリアルの時は計測しない
 	if (!enemyManager_->GetIsTutorial()) {
@@ -109,24 +102,10 @@ void GameScene::Update()
 	// タイマーのカウントが終了したとき
 	if (gameTimer_->isEnd_)
 	{
-#ifdef DEMO
-		ImGui::Begin("Scene");
-		ImGui::Text("Space");
-		ImGui::End();
-#endif
-
-
 		// プレイヤーが生きているとき
 		if (player_->flag_.isAlive_)
 		{
 			// クリアしたときの処理
-#ifdef DEMO
-			ImGui::Begin("Scene");
-			ImGui::Text("Clear");
-			ImGui::End();
-#endif
-
-
 			// 何か演出を出す
 			if (player_->ClearAnime())
 			{
@@ -142,12 +121,6 @@ void GameScene::Update()
 		else
 		{
 			// ゲームオーバーしたときの処理
-#ifdef DEMO
-			ImGui::Begin("Scene");
-			ImGui::Text("GameOver");
-			ImGui::End();
-#endif
-
 			if (player_->GameOverAnime()) {
 				// タイマーを消す
 				gameTimer_->isActive_ = false;
