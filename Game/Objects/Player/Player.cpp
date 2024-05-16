@@ -536,7 +536,7 @@ void Player::InitStaticVariable() {
 		int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
 		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
 		// 発射のベクトル
-		Math::Vector3 dir{ dir1 / 100.0f + -destinate_.x,dir2 / 100.0f + -destinate_.y, dir3 / 100.0f + -destinate_.z };
+		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
 		// 係数
 		float multiply = Utility::GenerateRandamNum<int>(20, 50) / 100.0f;
 		newData.velocity = dir.Normalize() * multiply;
@@ -713,6 +713,7 @@ void Player::CheckBehavior()
 			{
 				reqBehavior_ = Behavior::Slash;
 				slashPanel_->Slash();
+				soilSplashEffect_(16, demoModel_.transform.translation);
 			}
 			break;
 		case Behavior::Moment:
