@@ -83,6 +83,9 @@ void GameScene::Initialize()
 	sun_.intensity = 2.0f;
 	sun_.radius = 100.0f;
 	sun_.decay = 1.5f;
+
+	// フレームレートを表示する関数（後で消すこと！）
+	Info::ChangeShowDebugGUI();
 }
 
 // 更新
