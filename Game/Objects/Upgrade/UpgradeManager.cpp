@@ -260,21 +260,25 @@ void L::UpgradeManager::Selecting(Player* player)
 	// カーソルUI
 	sprite_.transform.translation.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2) * (cursorIndex_ + 1);
 
-	// カーソル移動
-	if (0 < cursorIndex_ &&
-		(Input::Keyboard::GetTrigger(DIK_A) ||
-			Input::Keyboard::GetTrigger(DIK_LEFT) ||
-			Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_LEFT)))
+	// 選択中は移動不可
+	if (!isPress_)
 	{
-		cursorIndex_--;
-	}
-	// 最後の添え字は決定
-	if (cursorIndex_ < kUpgradNum_ &&
-		(Input::Keyboard::GetTrigger(DIK_D) ||
-			Input::Keyboard::GetTrigger(DIK_RIGHT) ||
-			Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_RIGHT)))
-	{
-		cursorIndex_++;
+		// カーソル移動
+		if (0 < cursorIndex_ &&
+			(Input::Keyboard::GetTrigger(DIK_A) ||
+				Input::Keyboard::GetTrigger(DIK_LEFT) ||
+				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_LEFT)))
+		{
+			cursorIndex_--;
+		}
+		// 最後の添え字は決定
+		if (cursorIndex_ < kUpgradNum_ &&
+			(Input::Keyboard::GetTrigger(DIK_D) ||
+				Input::Keyboard::GetTrigger(DIK_RIGHT) ||
+				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_RIGHT)))
+		{
+			cursorIndex_++;
+		}
 	}
 
 	// 決定ボタンを押した
@@ -323,6 +327,7 @@ void L::UpgradeManager::Selecting(Player* player)
 			Apply(player);
 			cursorIndex_ = 0;
 			choiceIndex_ = 0;
+			pressTime_ = 0.0f;
 		}
 	}
 
