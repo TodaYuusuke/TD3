@@ -224,7 +224,6 @@ void Player::DecreaseHP()
 		demoModel_.isActive = true;
 		gameOverMotion_.Start();
 	}
-	StartEnemyKnockBack();
 	/*parameter_.Hp.hp_--;
 	if (parameter_.Hp.hp_ <= 0u)
 	{
@@ -291,67 +290,6 @@ lwp::Vector3 Player::GetVectorTranspose(const lwp::Vector3& vec)
 	vector.y = 0.0f;
 	return vector.Normalize();
 }
-
-
-#pragma region BehaviorFunc
-
-#pragma region BehaviorData
-
-void Player::InitDatas()
-{
-	// 外部からの設定を取得
-	//InitConfigs();
-
-	// 状態を初期状態に設定
-	behavior_ = Behavior::Root;
-
-	// 状態を設定
-	InitRootData();
-	InitMoveData();
-	InitSlashData();
-	InitMomentData();
-	InitDamageData();
-}
-
-void Player::InitRootData()
-{
-	//rootData_.cBASETIME = 0.5f;
-	rootData_.maxTime_ = 0.0f;
-}
-
-void Player::InitMoveData()
-{
-	//moveData_.cBASETIME = 0.1f;
-	moveData_.maxTime_ = 0.0f;
-}
-
-void Player::InitSlashData()
-{
-	//slashData_.cBASETIME = 0.1f;
-	slashData_.vector_ = { 0.0f,0.0f,1.0f };
-	slashData_.maxTime_ = 0.0f;
-	slashData_.relationSlash_ = 0u;
-	//slashData_.cMAXRELATION_ = 3u;
-	slashData_.maxRelation_ = 0u;
-}
-
-void Player::InitMomentData()
-{
-	//momentData_.cBASETIME = 0.5f;
-	momentData_.maxTime_ = 0.0f;
-	momentData_.relationSlash_ = 0u;
-}
-
-void Player::InitDamageData()
-{
-	//damageData_.cBASETIME = 0.5f;
-	damageData_.maxTime_ = 0.0f;
-}
-// BeheviorData
-#pragma endregion
-
-// BehaviorFunc
-#pragma endregion
 
 #pragma region CollisionFunc
 
@@ -629,30 +567,6 @@ void Player::CheckInputMove()
 	direct += LWP::Input::Controller::GetLStick();
 	direct = direct.Normalize();
 
-	//// キーボード入力として区別させる
-	//player_->destinate_ = direct.Normalize() * 0.75f;
-
-	//// コントローラーの入力を合わせる
-	//float x = LWP::Input::Controller::GetLStick().x;
-	//float y = LWP::Input::Controller::GetLStick().y;
-	//if ((player_->destinate_.x < 0 ? -player_->destinate_.x : player_->destinate_.x)
-	//	< (x < 0 ? -x : x))
-	//{
-	//	player_->destinate_.x = x;
-	//}
-	//if ((player_->destinate_.z < 0 ? -player_->destinate_.z : player_->destinate_.z)
-	//	< (y < 0 ? -y : y))
-	//{
-	//	player_->destinate_.z = y;
-	//}
-	//player_->destinate_ = player_->destinate_.Normalize();
-
-	//// 方向がゼロだった場合は元に戻す
-	//if (player_->destinate_.x == 0 && player_->destinate_.z == 0)
-	//{
-	//	player_->destinate_ = direct.Normalize();
-	//}
-
 	// そもそも移動入力が無かったらフラグを立てない
 	flag_.isInputMove_ = !(direct.x == 0 && direct.y == 0);
 
@@ -736,11 +650,15 @@ void Player::CheckBehavior()
 			// 突進が終わるときに敵をノックバックさせる
 			if (reqBehavior_ != behavior_)
 			{
-				isEnemyKnockBack_ = true;
+				if (parameter_.GetParameter().BlowOffFlag)
+				{
+					isEnemyKnockBack_ = true;
+				}
 			}
 			break;
 		case Behavior::Damage:
 			reqBehavior_ = Behavior::Damage;
+			StartEnemyKnockBack();
 			break;
 		}
 	}
