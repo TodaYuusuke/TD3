@@ -221,6 +221,7 @@ void Player::DecreaseHP()
 		demoModel_.isActive = true;
 		gameOverMotion_.Start();
 	}
+	StartEnemyKnockBack();
 	/*parameter_.Hp.hp_--;
 	if (parameter_.Hp.hp_ <= 0u)
 	{
