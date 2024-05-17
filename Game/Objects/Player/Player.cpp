@@ -103,7 +103,8 @@ void Player::Update()
 	}
 
 	// ノックバックフラグをoffにする
-	if (isEnemyKnockBack_) {
+	if (isEnemyKnockBack_)
+	{
 		isEnemyKnockBack_ = false;
 	}
 
@@ -141,7 +142,8 @@ void Player::Update()
 	{
 		pursuitFlag = pursuit_->Execution();
 	}
-	if (parameter_.GetParameter().eXLifeFlag) {
+	if (parameter_.GetParameter().eXLifeFlag)
+	{
 		eXLifeFlag = eXLife_->Update();
 	}
 
@@ -215,9 +217,10 @@ void Player::IncreaseHP()
 
 void Player::DecreaseHP()
 {
-	flag_.isAlive_ = !parameter_.DecreaseHP();
-	GameTimer::GetInstance()->isEnd_ = !flag_.isAlive_;
-	if (!flag_.isAlive_) {
+	if (parameter_.DecreaseHP())
+	{
+		flag_.isAlive_ = false;
+		GameTimer::GetInstance()->isEnd_ = true;;
 		demoModel_.isActive = true;
 		gameOverMotion_.Start();
 	}
@@ -239,7 +242,8 @@ bool Player::ClearAnime()
 	ClearMotion.t += ClearMotion.speed;
 	demoModel_.transform.translation.y += (ClearMotion.speed + (ClearMotion.t - 1) * 2) * LWP::Info::GetDefaultDeltaTimeF();
 
-	if (ClearMotion.t > kClearMotionEnd) {
+	if (ClearMotion.t > kClearMotionEnd)
+	{
 		return true;
 	}
 
@@ -249,21 +253,26 @@ bool Player::ClearAnime()
 
 bool Player::GameOverAnime()
 {
-	if (gameOverMotion_.isEnd()) {
+	if (gameOverMotion_.isEnd())
+	{
 		isGameOver_ = true;
-		if (gameOverFrame_ == 0) {
+		if (gameOverFrame_ == 0)
+		{
 			deadEffect_(64, demoModel_.transform.translation);
 			demoModel_.isActive = false;
 			weapon_->SetIsActive(false);
 		}
 	}
-	else {
+	else
+	{
 		demoModel_.isActive = true;
 	}
 
-	if (isGameOver_) {
+	if (isGameOver_)
+	{
 		gameOverFrame_++;
-		if (gameOverFrame_ >= 90) {	
+		if (gameOverFrame_ >= 90)
+		{
 			return true;
 		}
 	}
@@ -388,7 +397,7 @@ void Player::CreateWeaponCollision()
 #ifdef DEMO
 	colliders_.weapon_.name = "Weapon";
 #endif
-	}
+}
 
 void Player::CreateJustCollision()
 {
@@ -446,7 +455,8 @@ void Player::OnCollisionJust(lwp::Collider::HitData& data)
 #pragma endregion
 
 #pragma region Effect
-void Player::InitStaticVariable() {
+void Player::InitStaticVariable()
+{
 	// 土飛沫
 	static LWP::Object::Particle soilSplashParticle_;
 	soilSplashParticle_.SetPrimitive<Primitive::Cube>();
@@ -473,7 +483,7 @@ void Player::InitStaticVariable() {
 
 		// パーティクル追加
 		return newData;
-	};
+		};
 	soilSplashParticle_.updateFunction = [](Object::ParticleData* data) {
 		// 経過フレーム追加
 		data->elapsedFrame++;
@@ -483,14 +493,17 @@ void Player::InitStaticVariable() {
 
 
 		// 20フレーム以降から重力を加算
-		if (data->elapsedFrame > 20) {
+		if (data->elapsedFrame > 20)
+		{
 			data->velocity.y += -9.8f / 600.0f;
 			// yが0以下になったとき跳ねる
-			if (data->wtf.translation.y <= 0.1f) {
+			if (data->wtf.translation.y <= 0.1f)
+			{
 				data->velocity.y *= -0.5f;
 			}
 		}
-		else {
+		else
+		{
 			// 速度ベクトルを弱める
 			data->velocity *= 0.9f;
 		}
@@ -509,12 +522,12 @@ void Player::InitStaticVariable() {
 		}
 
 		return false;
-	};
+		};
 	soilSplashParticle_.isActive = true;
 	soilSplashEffect_ = [&](int i, lwp::Vector3 pos) {
 		soilSplashParticle_.P()->transform = pos;
 		soilSplashParticle_.Add(i);
-	};
+		};
 
 
 	static LWP::Object::Particle deadParticle_;
@@ -542,7 +555,7 @@ void Player::InitStaticVariable() {
 
 		// パーティクル追加
 		return newData;
-	};
+		};
 	deadParticle_.updateFunction = [](Object::ParticleData* data) {
 		// 経過フレーム追加
 		data->elapsedFrame++;
@@ -552,14 +565,17 @@ void Player::InitStaticVariable() {
 
 
 		// 20フレーム以降から重力を加算
-		if (data->elapsedFrame > 20) {
+		if (data->elapsedFrame > 20)
+		{
 			data->velocity.y += -9.8f / 800.0f;
 			// yが0以下になったとき跳ねる
-			if (data->wtf.translation.y <= 0.1f) {
+			if (data->wtf.translation.y <= 0.1f)
+			{
 				data->velocity.y *= -0.5f;
 			}
 		}
-		else {
+		else
+		{
 			// 速度ベクトルを弱める
 			data->velocity *= 0.9f;
 		}
@@ -580,12 +596,12 @@ void Player::InitStaticVariable() {
 		}
 
 		return false;
-	};
+		};
 	deadParticle_.isActive = true;
 	deadEffect_ = [&](int i, lwp::Vector3 pos) {
 		deadParticle_.P()->transform = pos;
 		deadParticle_.Add(i);
-	};
+		};
 }
 
 //std::function<void(int, lwp::Vector3)> Player::soilSplashEffect_ = nullptr;
@@ -718,7 +734,8 @@ void Player::CheckBehavior()
 		case Behavior::Moment:
 			reqBehavior_ = Behavior::Moment;
 			// 突進が終わるときに敵をノックバックさせる
-			if (reqBehavior_ != behavior_) {
+			if (reqBehavior_ != behavior_)
+			{
 				isEnemyKnockBack_ = true;
 			}
 			break;
@@ -973,12 +990,15 @@ void Player::DebugParcentages()
 
 #pragma endregion
 
-void Player::DamageEffect() {
+void Player::DamageEffect()
+{
 	int invincibleTime = invincibleTime_ * 1000;
-	if ((int)invincibleTime % 3 == 0) {
+	if ((int)invincibleTime % 3 == 0)
+	{
 		demoModel_.isActive = false;
 	}
-	else {
+	else
+	{
 		demoModel_.isActive = true;
 	}
 }
