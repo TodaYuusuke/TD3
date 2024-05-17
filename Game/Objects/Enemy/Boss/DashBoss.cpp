@@ -4,25 +4,25 @@
 void DashBoss::Init()
 {
 	// 当たり判定のインスタンス生成
-	models_.reserve(3);
+//	models_.reserve(3);
 	models_.emplace_back();
-	models_[0].LoadFile("cube/cube.obj");
-	models_.emplace_back();
-	models_[1].LoadFile("L_arm/L_arm.obj");
-	models_.emplace_back();
-	models_[2].LoadFile("R_arm/R_arm.obj");
+	models_[0].LoadFile("NormalEnemy/NormalEnemy.obj");
+	//models_.emplace_back();
+	//models_[1].LoadFile("L_arm/L_arm.obj");
+	//models_.emplace_back();
+	//models_[2].LoadFile("R_arm/R_arm.obj");
 
-	// 手のモデルをペアレント
-	models_[1].transform.Parent(&models_[0].transform);
-	models_[2].transform.Parent(&models_[0].transform);
-	// 手のモデルの位置を設定
-	models_[1].transform.translation = { -1.0f, 0.25f, 0.5f };
-	models_[2].transform.translation = { 1.0f, 0.25f, 0.5f };
+	//// 手のモデルをペアレント
+	//models_[1].transform.Parent(&models_[0].transform);
+	//models_[2].transform.Parent(&models_[0].transform);
+	//// 手のモデルの位置を設定
+	//models_[1].transform.translation = { -1.0f, 0.25f, 0.5f };
+	//models_[2].transform.translation = { 1.0f, 0.25f, 0.5f };
 
 	// 色
-	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLUE);
-	// 大きさ
-	models_[0].transform.scale = kBossSize;
+	//models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLUE);
+		// 大きさ
+	models_[0].transform.scale = { 2,3,2 };
 	// 当たり判定を有効化
 	isActive_ = true;
 
@@ -111,6 +111,8 @@ void DashBoss::Update()
 void DashBoss::SetPosition(lwp::Vector3 pos)
 {
 	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	// 出現時にパーティクルを出す
+	SetSpawnEffect(models_[0].transform.translation);
 }
 
 void DashBoss::Move()
@@ -168,6 +170,14 @@ void DashBoss::B_RootUpdate() {
 			behaviorRequest_ = Behavior::kDash;
 		}
 	}
+}
+
+void DashBoss::B_PreDashInit()
+{
+}
+
+void DashBoss::B_PreDashUpdate()
+{
 }
 
 void DashBoss::B_DashInit() {

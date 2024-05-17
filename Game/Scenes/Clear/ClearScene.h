@@ -38,6 +38,6 @@ private: //*** 変数群 ***//
 	// 選択しているもの
 	int choise_ = 0;
 
-	float spriteWidth = 200;
+	float spriteWidth = 100;
 	float spriteOffset = 100;
 };

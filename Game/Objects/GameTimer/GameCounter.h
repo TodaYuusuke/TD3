@@ -14,6 +14,10 @@ public: //*** パブリック関数 ***//
 
 	bool isActive_ = false;
 
+	~GameCounter() {
+		delete sprite_;
+	}
+
 	/// <summary>
 	/// 初期化
 	/// <para>表示する数字の画像ファイルを指定する</para>
@@ -63,7 +67,7 @@ private: //*** プライベート変数 ***//
 	// 今のカウント
 	int count_ = 0;
 	// スプライト
-	LWP::Primitive::Sprite sprite_;
+	LWP::Primitive::Sprite* sprite_;
 
 	// フォントとかを指定出来たらいいな
 	std::string textureName_;

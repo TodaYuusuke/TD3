@@ -21,23 +21,23 @@ ArrowBoss::~ArrowBoss() {
 void ArrowBoss::Init()
 {
 	// 当たり判定のインスタンス生成
-	models_.reserve(3);
+	//models_.reserve(3);
 	models_.emplace_back();
-	models_[0].LoadFile("cube/cube.obj");
-	models_.emplace_back();
-	models_[1].LoadFile("L_arm/L_arm.obj");
-	models_.emplace_back();
-	models_[2].LoadFile("R_arm/R_arm.obj");
+	models_[0].LoadFile("ArrowEnemy/ArrowEnemy.obj");
+	//models_.emplace_back();
+	//models_[1].LoadFile("L_arm/L_arm.obj");
+	//models_.emplace_back();
+	//models_[2].LoadFile("R_arm/R_arm.obj");
 
-	// 手のモデルをペアレント
-	models_[1].transform.Parent(&models_[0].transform);
-	models_[2].transform.Parent(&models_[0].transform);
-	// 手のモデルの位置を設定
-	models_[1].transform.translation = { -1.0f, 0.25f, 0.5f };
-	models_[2].transform.translation = { 1.0f, 0.25f, 0.5f };
+	//// 手のモデルをペアレント
+	//models_[1].transform.Parent(&models_[0].transform);
+	//models_[2].transform.Parent(&models_[0].transform);
+	//// 手のモデルの位置を設定
+	//models_[1].transform.translation = { -1.0f, 0.25f, 0.5f };
+	//models_[2].transform.translation = { 1.0f, 0.25f, 0.5f };
 
 	// 色
-	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::YELLOW);
+	//models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::YELLOW);
 	// 大きさ
 	models_[0].transform.scale = {2,3,2};
 	// 当たり判定を有効化
@@ -48,20 +48,17 @@ void ArrowBoss::Init()
 #pragma region ミサイル起動パーティクル
 	// 形を決定
 	missileContrail_.SetPrimitive<Primitive::Cube>();
+	missileContrail_.P()->material.enableLighting = true;
 	// 初期化処理
 	missileContrail_.initFunction =
 		[](Primitive::IPrimitive* primitive) {
 		Object::ParticleData data;
 		data.wtf.translation = primitive->transform.GetWorldPosition();
 		data.wtf.rotation = primitive->transform.rotation;
-		data.wtf.scale = primitive->transform.scale;
-
-		int dir1 = Utility::GenerateRandamNum<int>(-100, 100);
-		int dir2 = Utility::GenerateRandamNum<int>(-100, 100);
-		int dir3 = Utility::GenerateRandamNum<int>(-100, 100);
-		// 速度ベクトル
-		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 100.0f, dir3 / 100.0f };
-		data.velocity = dir.Normalize() * 0.1f;
+		// 大きさをランダムにする
+		float scale = Utility::GenerateRandamNum<int>(45, 50);
+		data.wtf.rotation = { scale, scale, scale };
+		data.wtf.scale = { scale / 100.0f, scale / 100.0f, scale / 100.0f };
 
 		// データを返す
 		return data;
@@ -72,14 +69,16 @@ void ArrowBoss::Init()
 		// 経過フレーム追加
 		data->elapsedFrame++;
 
-		data->wtf.translation += data->velocity;
-		data->wtf.translation.y += 0.001f * data->elapsedFrame;
-		data->wtf.scale += {0.005f, 0.005f, 0.005f};
+		data->wtf.translation.y += 0.0001f * data->elapsedFrame;
+		//data->wtf.scale *= 0.92f;
+		float f = 0.05f;
+		data->wtf.scale -= { f,f,f };
 		
 		// 速度は徐々に落とす
 		data->velocity *= 0.9f;
 
 		// 180フレーム経ったら削除
+		if (data->wtf.scale.x <= 0.001f) { return true; }
 		return data->elapsedFrame > 240 ? true : false;
 	};
 	missileContrail_.isActive = true;
@@ -158,6 +157,8 @@ void ArrowBoss::Update()
 void ArrowBoss::SetPosition(lwp::Vector3 pos)
 {
 	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	// 出現時にパーティクルを出す
+	SetSpawnEffect(models_[0].transform.translation);
 }
 
 LWP::Math::Vector3 ArrowBoss::GetDirectVel() {

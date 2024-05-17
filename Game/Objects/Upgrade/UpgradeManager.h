@@ -1,5 +1,7 @@
 #pragma once
 #include "ISkill.h"
+#include <Adapter.h>
+#include <numbers>
 
 // 前方宣言
 class Player;
@@ -15,7 +17,7 @@ namespace L {
 		/// 初期化（シーンの最初のみで問題なし）
 		/// <para>upgrades_に継承したクラスのインスタンスをpush_backしてね</para>
 		/// </summary>
-		void Init();
+		void Init(LWP::Object::Camera* cameraptr);
 		
 		/// <summary>
 		/// 更新
@@ -64,7 +66,7 @@ namespace L {
 		// 選択場所のわかるUI
 		LWP::Primitive::Sprite sprite_;
 
-		lwp::Vector3 cursorPos = { LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2),120.0f };
+		lwp::Vector3 cursorPos = { LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2),240.0f };
 
 		// 長押し用のフラグ
 		bool isPress_ = false;
@@ -104,5 +106,14 @@ namespace L {
 		/// </summary>
 		void Apply(Player* player);
 
+		// カーソルのパーティクル
+		void CursorParticleInit();
+		// パーティクル
+		static std::function<void(int, lwp::Vector3)> CursorEffect_;
+		lwp::Vector3 centerPoint;
+		LWP::Object::Camera* mainCameraptr_;
+		/*LWP::Base::WinApp* winAppPtr_;*/
 	};
 }
+lwp::Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
+lwp::Vector3 randomOnCircle();
