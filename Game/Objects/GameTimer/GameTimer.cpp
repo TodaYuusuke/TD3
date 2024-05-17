@@ -138,6 +138,7 @@ void GameTimer::DebugWindow()
 	{
 		Reset();
 	}
+	ImGui::Checkbox("Active", &isActive_);
 	ImGui::Checkbox("Watch", &isWatch_);
 	ImGui::Checkbox("End", &isEnd_);
 	ImGui::Text("Time   : %d", currentSec_);

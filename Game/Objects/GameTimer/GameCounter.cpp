@@ -7,13 +7,15 @@ using namespace LWP::Resource;
 
 void GameCounter::Initialize(const std::string& textureName)
 {
+	sprite_ = new Sprite;
+
 	textureName_ = textureName;
 	// 画像を設定
-	sprite_.texture = LoadTexture(GetTextruePass());
-	sprite_.anchorPoint = { 0.5f,0.5f };
-	sprite_.isUI = true;
-	sprite_.isActive = false;
-	sprite_.name = "Counter";
+	sprite_->texture = LoadTexture(GetTextruePass());
+	sprite_->anchorPoint = { 0.5f,0.5f };
+	sprite_->isUI = true;
+	sprite_->isActive = false;
+	sprite_->name = "Counter";
 	transform_.translation = { 0.0f,0.0f };
 	isActive_ = false;
 	Reset();
@@ -21,8 +23,8 @@ void GameCounter::Initialize(const std::string& textureName)
 
 void GameCounter::Update()
 {
-	sprite_.transform = transform_;
-	sprite_.isActive = isActive_;
+	sprite_->transform = transform_;
+	sprite_->isActive = isActive_;
 	if (count_ != preCount_)
 	{
 		ChangeTexture();
@@ -90,7 +92,7 @@ std::string GameCounter::GetTextruePass()
 
 void GameCounter::ChangeTexture()
 {
-	sprite_.texture = LoadTexture(GetTextruePass());
-	sprite_.Update();
+	sprite_->texture = LoadTexture(GetTextruePass());
+	sprite_->Update();
 }
 
