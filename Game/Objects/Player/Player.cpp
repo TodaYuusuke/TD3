@@ -142,7 +142,7 @@ void Player::Update()
 		pursuitFlag = pursuit_->Execution();
 	}
 	if (parameter_.GetParameter().eXLifeFlag) {
-		eXLifeFlag = eXLife_->Execution();
+		eXLifeFlag = eXLife_->Update();
 	}
 
 
@@ -211,11 +211,6 @@ void Player::EndJust()
 void Player::IncreaseHP()
 {
 	parameter_.IncreaseHP();
-	/*
-	if (parameter_.Hp.hp_ < parameter_.Hp.maxHP_)
-	{
-		parameter_.Hp.hp_++;
-	}*/
 }
 
 void Player::DecreaseHP()

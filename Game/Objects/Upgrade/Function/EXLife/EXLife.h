@@ -5,7 +5,7 @@ class EXLife
 {
 public:
 	void Init(Player* Player);
-	bool Execution();
+	bool Update();
 
 	void DecreaseHP();
 
@@ -14,7 +14,7 @@ private:
 	float time_ = 0;
 	uint32_t EXLife_ = 1;
 	
-	const float kHealInterval = 60.0f;
+	const float kHealInterval = 10.0f;
 	lwp::Sprite sprite;
 
 	// 元の位置
