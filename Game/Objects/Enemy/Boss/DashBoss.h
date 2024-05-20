@@ -91,6 +91,11 @@ private:// プライベートな変数
 	// 次の振るまいリクエスト
 	std::optional<Behavior> behaviorRequest_ = std::nullopt;
 
+	// 攻撃前アニメーション
+	LWP::Resource::Motion preAttackMotion_;
 	// 攻撃アニメーション
 	LWP::Resource::Motion attackMotion_[3];
+
+	// 突進攻撃前のエフェクト
+	static std::function<void(int, lwp::Vector3)> accumulateEffect_;
 };

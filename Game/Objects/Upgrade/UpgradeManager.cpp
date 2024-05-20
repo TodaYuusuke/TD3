@@ -61,6 +61,12 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 
 	mainCameraptr_ = cameraptr;
 
+	// 選択中のカーソルのモーション
+	selectMotion_.Add(&sprite_.transform.scale, lwp::Vector3{ 0,0.5f,0 }, 0, 0.25f, LWP::Utility::Easing::Type::InQuart)
+		.Add(&sprite_.transform.scale, lwp::Vector3{ 0.2f,0.0f,0 }, 0.1f, 0.15f, LWP::Utility::Easing::Type::InQuart)
+		.Add(&sprite_.transform.scale, lwp::Vector3{ -0.2f,-0.5f,0 }, 0.25f, 0.15f, LWP::Utility::Easing::Type::OutQuart);
+
+	// 選択中のパーティクル
 	CursorParticleInit();
 }
 
@@ -81,7 +87,6 @@ void L::UpgradeManager::LevelUp()
 void L::UpgradeManager::DebugWindow(Player* player)
 {
 #ifdef DEMO
-
 	ImGui::Begin("UpgradeManager");
 
 
@@ -303,17 +308,24 @@ void L::UpgradeManager::Selecting(Player* player)
 		centerPoint = posNear + centerPoint * 50;
 
 		CursorEffect_(2, centerPoint);
+
+		sprite_.transform.scale.y -= (sinf(pressTime_ * 60 * M_PI / 10) * 0.05f);
+		sprite_.transform.scale.x += (sinf(pressTime_ * 60 * M_PI / 10) * 0.05f);
 	}
 	else
 	{
 		isPress_ = false;
 		pressTime_ = 0.0f;
+		sprite_.transform.scale = { 1,1,1 };
 	}
 	if (isPress_)
 	{
 		pressTime_ += lwp::GetDefaultDeltaTimeF();
 
-
+		// 押している間はカーソルにモーションをつける
+		if (selectMotion_.isEnd()) {
+			
+		}
 
 		if (kPressTime_ <= pressTime_)
 		{
@@ -330,7 +342,9 @@ void L::UpgradeManager::Selecting(Player* player)
 			pressTime_ = 0.0f;
 		}
 	}
-
+	// カーソルのスプライトを上下に揺らす
+	cursorAnimFrame_ += lwp::GetDefaultDeltaTimeF() * 60;
+	sprite_.transform.translation.y += sinf(cursorAnimFrame_ * M_PI / 20) * 0.4f;
 }
 
 void L::UpgradeManager::Selected()
@@ -387,7 +401,6 @@ void L::UpgradeManager::CursorParticleInit()
 	static LWP::Object::Particle CursorParticle_;
 	CursorParticle_.SetPrimitive<Primitive::Cube>();
 	CursorParticle_.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
-	CursorParticle_.P()->material.enableLighting = true;
 	CursorParticle_.P()->material.shininess = 100.0f;
 	CursorParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::GREEN);
 	CursorParticle_.initFunction = [](Primitive::IPrimitive* primitive)

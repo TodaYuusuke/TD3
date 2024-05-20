@@ -19,6 +19,9 @@ void TitleScene::Initialize()
 	Vector2 spSize = backSprite_.texture.t.GetSize();
 	backSprite_.transform.scale.x = 1.0f / spSize.x * 1980.0f;
 	backSprite_.transform.scale.y = 1.0f / spSize.y * 1080.0f;
+
+	sceneTransition_ = std::make_unique<SceneTransition>();
+	sceneTransition_->Initialize();
 }
 
 // 更新
@@ -27,6 +30,12 @@ void TitleScene::Update()
 	if (Keyboard::GetTrigger(DIK_SPACE) ||
 		Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
+		sceneTransition_->Start();
+	}
+
+	sceneTransition_->Update();
+
+	if (sceneTransition_->GetIsSceneChange()) {
 		nextSceneFunction = []() {return new GameScene; };
 	}
 }

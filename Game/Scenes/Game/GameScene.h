@@ -10,6 +10,8 @@
 #include "Game/Objects/Upgrade/UpgradeManager.h"
 #pragma endregion
 
+#include "../../SceneTransition/SceneTransition.h"
+
 class GameScene final
 	: public IScene
 {
@@ -74,4 +76,7 @@ private: //*** 変数群 ***//
 	LWP::Primitive::Sprite tutorialSprite2;
 	// タイマーの後ろのスプライト
 	LWP::Primitive::Sprite backSprite_;
+
+	// シーン遷移
+	std::unique_ptr<SceneTransition> sceneTransition_;
 };

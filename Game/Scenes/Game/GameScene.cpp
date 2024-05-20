@@ -83,11 +83,19 @@ void GameScene::Initialize()
 	sun_.radius = 105.0f;
 	sun_.decay = 0.58f;
 
+	// フレームレートを表示する関数（後で消すこと！）
+	Info::ChangeShowDebugGUI();
+
+
+	sceneTransition_ = std::make_unique<SceneTransition>();
+	sceneTransition_->Initialize();
 }
 
 // 更新
 void GameScene::Update()
 {
+	sceneTransition_->Update();
+
 	// 時間を計測
 	// チュートリアルの時は計測しない
 	if (!enemyManager_->GetIsTutorial()) {
