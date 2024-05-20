@@ -87,7 +87,6 @@ void L::UpgradeManager::LevelUp()
 void L::UpgradeManager::DebugWindow(Player* player)
 {
 #ifdef DEMO
-#else
 	ImGui::Begin("UpgradeManager");
 
 
