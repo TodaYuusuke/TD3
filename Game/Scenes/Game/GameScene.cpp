@@ -20,7 +20,10 @@ void GameScene::Initialize()
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
 	player_->SetScene(this);
-
+	// 天球
+	skydome.LoadFile("skydome/skydome.obj");
+	skydome.transform.scale = { 1.0f,1.0f, 1.0f };
+	skydome.isActive = true;
 	// 地面
 	ground.LoadFile("ground/ground.obj");
 	ground.transform.translation.y = -0.5f;
@@ -28,6 +31,7 @@ void GameScene::Initialize()
 	ground.name = "Ground";
 	ground.material.enableLighting = true;
 	ground.material.uvTransform.scale = { 20,20,0 };
+
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->SetCameraAddress(&mainCamera);
@@ -88,6 +92,13 @@ void GameScene::Initialize()
 // 更新
 void GameScene::Update()
 {
+	ImGui::Begin("gfd");
+
+	ImGui::DragFloat3("pos",&pos.x);
+	ImGui::DragFloat3("scale",&scale.x);
+	skydome.transform.translation = pos;
+	skydome.transform.scale = scale;
+	ImGui::End();
 	// 時間を計測
 	// チュートリアルの時は計測しない
 	if (!enemyManager_->GetIsTutorial()) {

@@ -65,7 +65,10 @@ private: //*** 変数群 ***//
 	std::unique_ptr<L::UpgradeManager> upgradeManager_;
 	// 地面
 	lwp::Mesh ground;
-
+	// 天球
+	lwp::Mesh skydome;
+	lwp::Vector3 pos;
+	lwp::Vector3 scale;
 	// 太陽
 	lwp::PointLight sun_;
 
