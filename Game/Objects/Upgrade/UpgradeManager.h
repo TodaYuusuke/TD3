@@ -113,6 +113,10 @@ namespace L {
 		lwp::Vector3 centerPoint;
 		LWP::Object::Camera* mainCameraptr_;
 		/*LWP::Base::WinApp* winAppPtr_;*/
+
+		// アップグレードを選択するときのアニメーション
+		LWP::Resource::Motion selectMotion_;
+		float cursorAnimFrame_;
 	};
 }
 lwp::Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);

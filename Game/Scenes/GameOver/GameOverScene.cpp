@@ -50,6 +50,8 @@ void GameOverScene::Initialize()
 	cursolSprite_.transform.scale = { 0.5f,0.5f };
 	cursolSprite_.commonColor = new Color(0xAAAAAAFF);
 
+	sceneTransition_ = std::make_unique<SceneTransition>();
+	sceneTransition_->Initialize();
 }
 
 // 更新
@@ -85,11 +87,14 @@ void GameOverScene::Update()
 	if (Keyboard::GetTrigger(DIK_SPACE) ||
 		Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
+		sceneTransition_->Start();
+	}
+	sceneTransition_->Update();
+
+	if (sceneTransition_->GetIsSceneChange()) {
 		if (choise_ == 0)
 			nextSceneFunction = []() {return new TitleScene; };
 		else
 			nextSceneFunction = []() {return new GameScene; };
 	}
-
-
 }

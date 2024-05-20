@@ -1,5 +1,6 @@
 #pragma once
 #include <scene/IScene.h>
+#include "../../SceneTransition/SceneTransition.h"
 
 /// <summary>
 /// クリアしたときのシーン
@@ -40,4 +41,7 @@ private: //*** 変数群 ***//
 
 	float spriteWidth = 100;
 	float spriteOffset = 100;
+
+	// シーン遷移
+	std::unique_ptr<SceneTransition> sceneTransition_;
 };

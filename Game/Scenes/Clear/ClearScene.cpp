@@ -48,6 +48,9 @@ void ClearScene::Initialize()
 	cursolSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
 	cursolSprite_.transform.scale = { 0.5f,0.5f };
 	cursolSprite_.commonColor = new Color(0xAAAAAAFF);
+
+	sceneTransition_ = std::make_unique<SceneTransition>();
+	sceneTransition_->Initialize();
 }
 
 // 更新
@@ -80,9 +83,15 @@ void ClearScene::Update()
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f + spriteWidth + spriteOffset;
 	}
 
+
 	if (Keyboard::GetTrigger(DIK_SPACE) ||
 		Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
+		sceneTransition_->Start();
+	}
+	sceneTransition_->Update();
+
+	if (sceneTransition_->GetIsSceneChange()) {
 		if (choise_ == 0)
 			nextSceneFunction = []() {return new TitleScene; };
 		else
