@@ -1,36 +1,140 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Class">
-      <UniqueIdentifier>{934f1268-e08d-4d3a-bf3f-6dc1989cb865}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Class\Scene">
-      <UniqueIdentifier>{d2ae4609-af0f-4b98-9e82-7c678957b528}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\Arrow\Arrow.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\NormalEnemy\NormalEnemy.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.cpp" />
+    <ClCompile Include="Game\Objects\FollowCamera\FollowCamera.cpp" />
+    <ClCompile Include="Game\Scenes\Title\TitleScene.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Game\Objects\Player\Player.cpp" />
+    <ClCompile Include="Game\Objects\Player\Weapon\Weapon.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\Arrow\Arrow.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\NormalEnemy\NormalEnemy.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.cpp" />
+    <ClCompile Include="Game\Objects\FollowCamera\FollowCamera.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Game\Objects\Player\Player.cpp" />
+    <ClCompile Include="Game\Objects\Player\Weapon\Weapon.cpp" />
+    <ClCompile Include="Game\Objects\UIPanel\UIPanel.cpp" />
+    <ClCompile Include="Game\Objects\Player\SlashPanel.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\IEnemy\IEnemy.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\Boss\DashBoss.cpp" />
+    <ClCompile Include="Game\Objects\Experience\Experience.cpp" />
+    <ClCompile Include="Game\Objects\Experience\ExpManager.cpp" />
+    <ClCompile Include="Game\Objects\Upgrade\UpgradeManager.cpp" />
+    <ClCompile Include="Game\Objects\Player\Status\IStatus.cpp" />
+    <ClCompile Include="Game\Objects\Player\Status\Derived\Idol.cpp" />
+    <ClCompile Include="Game\Objects\Player\Status\Derived\Move.cpp" />
+    <ClCompile Include="Game\Objects\Player\Status\Derived\Slash.cpp" />
+    <ClCompile Include="Game\Objects\Player\Status\Derived\Damage.cpp" />
+    <ClCompile Include="Game\Objects\Player\Status\Derived\Moment.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\Boss\DashBoss.cpp" />
+    <ClCompile Include="Game\Objects\Player\Parameter\PlayerParametaer.cpp" />
+    <ClCompile Include="Game\Objects\Player\Config\PlayerConfing.cpp" />
+    <ClCompile Include="Game\Objects\Upgrade\ISkill.cpp" />
+    <ClCompile Include="Game\Objects\GameTimer\GameCounter.cpp" />
+    <ClCompile Include="Game\Objects\GameTimer\GameTimer.cpp" />
+    <ClCompile Include="Game\Objects\Upgrade\Function\Pursuit\Pursuit.cpp" />
+    <ClCompile Include="Game\Objects\Player\Level\Level.cpp" />
+    <ClCompile Include="Game\Objects\Player\HP\PlayerHP.cpp" />
+    <ClCompile Include="Game\Scenes\Game\GameScene.cpp" />
+    <ClCompile Include="Game\Scenes\Clear\ClearScene.cpp" />
+    <ClCompile Include="Game\Scenes\GameOver\GameOverScene.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\Boss\ArrowBoss.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\ArrowEnemy\Arrow\HomingArrow.cpp" />
+    <ClCompile Include="Game\Objects\Enemy\Boss\JumpBoss.cpp" />
+    <ClCompile Include="Game\Objects\Player\HP\HPSprite.cpp" />
+    <ClCompile Include="Game\Objects\Upgrade\Function\EXLife\EXLife.cpp" />
+    <ClCompile Include="Game\Objects\Player\Level\ExpBar.cpp" />
+    <ClCompile Include="Game\SceneTransition\SceneTransition.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Class\Scene\Sample.cpp">
-      <Filter>Class\Scene</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Class\Scene\Sample.h">
-      <Filter>Class\Scene</Filter>
-    </ClInclude>
+    <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.h" />
+    <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\Arrow\Arrow.h" />
+    <ClInclude Include="Game\Objects\Enemy\NormalEnemy\NormalEnemy.h" />
+    <ClInclude Include="Game\Objects\Enemy\IEnemy\IEnemy.h" />
+    <ClInclude Include="Game\Objects\Enemy\EnemyManager.h" />
+    <ClInclude Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.h" />
+    <ClInclude Include="Game\Objects\FollowCamera\FollowCamera.h" />
+    <ClInclude Include="Game\Scenes\Title\TitleScene.h" />
+    <ClInclude Include="Game\Objects\Player\Player.h" />
+    <ClInclude Include="Game\Objects\Player\Weapon\Weapon.h" />
+    <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.h" />
+    <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\Arrow\Arrow.h" />
+    <ClInclude Include="Game\Objects\Enemy\NormalEnemy\NormalEnemy.h" />
+    <ClInclude Include="Game\Objects\Enemy\IEnemy\IEnemy.h" />
+    <ClInclude Include="Game\Objects\Enemy\EnemyManager.h" />
+    <ClInclude Include="Game\Objects\Enemy\ShieldEnemy\ShieldEnemy.h" />
+    <ClInclude Include="Game\Objects\FollowCamera\FollowCamera.h" />
+    <ClInclude Include="Game\Objects\Player\Player.h" />
+    <ClInclude Include="Game\Objects\Player\Weapon\Weapon.h" />
+    <ClInclude Include="Game\Objects\UIPanel\UIPanel.h" />
+    <ClInclude Include="Game\Objects\Player\SlashPanel.h" />
+    <ClInclude Include="Game\Objects\Enemy\Boss\DashBoss.h" />
+    <ClInclude Include="Game\Objects\Experience\Experience.h" />
+    <ClInclude Include="Game\Objects\Experience\ExpManager.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp10.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp30.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerUp.h" />
+    <ClInclude Include="Game\Objects\Player\Motion\IStatus.h" />
+    <ClInclude Include="Game\Objects\Upgrade\IUpgrade.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpgradeManager.h" />
+    <ClInclude Include="Game\Objects\Player\Status\IStatus.h" />
+    <ClInclude Include="Game\Objects\Player\Status\Derived\Idol.h" />
+    <ClInclude Include="Game\Objects\Player\Status\Derived\Move.h" />
+    <ClInclude Include="Game\Objects\Player\Status\Derived\Slash.h" />
+    <ClInclude Include="Game\Objects\Player\Status\Derived\Damage.h" />
+    <ClInclude Include="Game\Objects\Player\Status\Derived\Moment.h" />
+    <ClInclude Include="Game\Objects\Enemy\Boss\DashBoss.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp10.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerPerUp30.h" />
+    <ClInclude Include="Game\Objects\Player\Upgrade\Derved\PowerUp.h" />
+    <ClInclude Include="Game\Objects\Player\Motion\IStatus.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\AllSpeedDelta.h" />
+    <ClInclude Include="Game\Objects\Player\Parameter\PlayerParametaer.h" />
+    <ClInclude Include="Game\Objects\Player\Config\PlayerConfing.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\PowerPerDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\PowerDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\AttackRangeDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\AttackTotalDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\LifeMaxDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\AllSpeedPerDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\ISkill.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\UpgradeList.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\SkillList.h" />
+    <ClInclude Include="Game\Objects\GameTimer\GameCounter.h" />
+    <ClInclude Include="Game\Objects\GameMask.h" />
+    <ClInclude Include="Game\Objects\GameTimer\GameTimer.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp3.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp2.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp1.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Derved\PursuitFlag.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Function\Pursuit\Pursuit.h" />
+    <ClInclude Include="Game\Objects\Player\Level\Level.h" />
+    <ClInclude Include="Game\Objects\Player\HP\PlayerHP.h" />
+    <ClInclude Include="Game\Scenes\Game\GameScene.h" />
+    <ClInclude Include="Game\Scenes\Clear\ClearScene.h" />
+    <ClInclude Include="Game\Scenes\GameOver\GameOverScene.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\PursuitFlag.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_AttackLengthUp.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_AttackRangeUp.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_DamageInvincibleAdd.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_HPUp.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\AttackLengthDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\InvincibleDamageDelta.h" />
+    <ClInclude Include="Game\Objects\Enemy\Boss\ArrowBoss.h" />
+    <ClInclude Include="Game\Objects\Player\HP\HPSprite.h" />
+    <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\Arrow\HomingArrow.h" />
+    <ClInclude Include="Game\Objects\Enemy\Boss\JumpBoss.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Function\EXLife\EXLife.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\BlowOffFlag.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\EXLifeFlag.h" />
+    <ClInclude Include="Game\Objects\Player\Level\ExpBar.h" />
+    <ClInclude Include="Game\SceneTransition\SceneTransition.h" />
   </ItemGroup>
 </Project>

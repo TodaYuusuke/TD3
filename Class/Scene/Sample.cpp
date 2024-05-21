@@ -63,11 +63,11 @@ void Sample::Initialize() {
 	surface->texture = uvTexture;
 	surface->isActive = false;
 
-	// 球
-	sphere = LWP::Primitive::CreateInstance<Sphere>();
-	sphere->Radius(0.3f);
-	sphere->transform.translation.x = -1.0f;
-	sphere->transform.translation.z = -1.0f;
+	//// 球
+	//sphere = LWP::Primitive::CreateInstance<Sphere>();
+	//sphere->Radius(0.3f);
+	//sphere->transform.translation.x = -1.0f;
+	//sphere->transform.translation.z = -1.0f;
 	//sphere->material.enableLighting = true;
 	sphere->material.shininess = 40.0f;
 	sphere->texture = uvTexture;
@@ -148,10 +148,17 @@ void Sample::Initialize() {
 		return data->elapsedFrame > 180 ? true : false;
 	};
 	particle->isActive = true;
+
+	// 追従カメラ
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->SetTarget(&sphere->transform);
 }
 
 // 更新
 void Sample::Update() {
+	// 追従カメラ
+	followCamera_->Update();
+
 	// ポストプロセスの切り替え
 	if (Keyboard::GetTrigger(DIK_SPACE)) {
 		mainCamera->isUsePostProcess = !mainCamera->isUsePostProcess;
