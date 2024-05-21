@@ -3,6 +3,7 @@
 #include "AllSpeedDelta.h"
 #include "AllSpeedPerDelta.h"
 #include "AttackRangeDelta.h"
+#include "MomentTimeDelta.h"
 #include "AttackLengthDelta.h"
 #include "AttackTotalDelta.h"
 #include "LifeMaxDelta.h"

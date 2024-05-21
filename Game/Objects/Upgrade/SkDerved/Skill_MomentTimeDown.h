@@ -4,20 +4,31 @@
 namespace L
 {
 	/// <summary>
-	/// 攻撃力を 40% 上昇させる
+	/// 後隙を 50% 減少させる
 	/// </summary>
-	class Skill_PowerUp3 : public ISkill
+	class Skill_MomentTimeDown : public ISkill
 	{
 	public:
 		/// <summary>
-		/// 攻撃力を 40% 上昇させる
+		/// 後隙を 50% 減少させる
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
-		Skill_PowerUp3()
+		Skill_MomentTimeDown()
 		{
 			attackUpgrades_.clear();
-			attackUpgrades_.push_back(new PowerPerDelta(40.0f));
+			attackUpgrades_.push_back(new MomentTimeDelta(-50.0f));
 		}
+
+		///// <summary>
+		///// アップグレード数を返す
+		///// <para>オーバーロードする</para>
+		///// </summary>
+		///// <returns>配列数</returns>
+		//size_t GetUpgradeNum() override
+		//{
+		//	return 2;
+		//}
+
 
 		/// <summary>
 		/// アップグレードの内容
@@ -37,7 +48,7 @@ namespace L
 
 		std::string GetUpgradeName() override
 		{
-			return "Skill_PowerUP3";
+			return "Skill_MomentTimeDown";
 		}
 
 	};

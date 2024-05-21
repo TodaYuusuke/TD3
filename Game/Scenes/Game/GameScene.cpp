@@ -171,6 +171,9 @@ void GameScene::Update()
 
 		//mainCamera->transform = followCamera_->camera_.transform;
 
+		// アップグレード関係は敵の前に更新させる
+		upgradeManager_->Update(player_.get());
+
 		enemyManager_->Update();
 
 		// 敵が死んだときに出てくるので敵の更新の後
@@ -180,7 +183,8 @@ void GameScene::Update()
 	}
 	else
 	{
-		upgradeManager_->Update(player_.get());
+		// アップグレード選択中
+		upgradeManager_->Selecting(player_.get());
 	}
 }
 

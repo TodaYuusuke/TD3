@@ -25,7 +25,7 @@ void Level::Initialize(Player* p)
 	bar_->Initialize();
 
 	// 当たり判定生成
- 	CreateCollision();
+	CreateCollision();
 	// 場所を設定
 	//collider_->Create(position, position);
 	collider_.Create(prePos_, player_->demoModel_.transform.translation, collider_.radius);
@@ -101,7 +101,7 @@ void Level::LevelUp()
 	bar_->Update(reqEXP_, exp_);
 	// 敵を弾く
 	player_->StartEnemyKnockBack();
-	if (5 <= lv_)
+	if (L::UpgradeManager::GetMaxLevel() <= lv_)
 	{
 		return;
 	}

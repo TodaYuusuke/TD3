@@ -4,12 +4,13 @@
 namespace L
 {
 	/// <summary>
-	/// 小さな力
+	/// 攻撃の長さをアップさせる
 	/// </summary>
 	class Skill_AttackLengthUp : public ISkill
 	{
 	public:
 		/// <summary>
+		/// 攻撃の長さをアップさせる
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
 		Skill_AttackLengthUp()
@@ -42,7 +43,7 @@ namespace L
 
 		std::string GetTexturePass() override
 		{
-			return "PowerUp/AttackLengthUp.png";
+			return "Skill/AttackLengthUp.png";
 		}
 
 		std::string GetUpgradeName() override

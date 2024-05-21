@@ -4,12 +4,13 @@
 namespace L
 {
 	/// <summary>
-	/// 小さな力
+	/// 被弾時の無敵時間を 2 秒追加する
 	/// </summary>
 	class Skill_DamageInvincibleAdd : public ISkill
 	{
 	public:
 		/// <summary>
+		/// 被弾時の無敵時間を 2 秒追加する
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
 		Skill_DamageInvincibleAdd()
@@ -42,7 +43,7 @@ namespace L
 
 		std::string GetTexturePass() override
 		{
-			return "powerUp/InvincibleUp.png";
+			return "Skill/InvincibleUp.png";
 		}
 
 		std::string GetUpgradeName() override

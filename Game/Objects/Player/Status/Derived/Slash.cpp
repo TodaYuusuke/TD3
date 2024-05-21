@@ -31,7 +31,7 @@ void Slash::Reset()
 	// デルタタイム変更
 	player_->EndJust();
 	//slashData_.maxTime_ = slashData_.cBASETIME;
-	player_->slashData_.maxTime_ = player_->config_.Time_.SLASHBASE_;
+	//player_->slashData_.maxTime_ = player_->config_.Time_.SLASHBASE_;
 	player_->weapon_->SetBehavior(Weapon::Behavior::Slash);
 	// 居合回数加算
 	player_->slashData_.relationSlash_++;

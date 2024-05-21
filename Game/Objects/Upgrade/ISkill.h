@@ -61,7 +61,8 @@ namespace L
 		/// <para>必ずSpriteのisActiveをfalseに！</para>
 		/// <para>特殊なアニメーションとかしたいなら継承</para>
 		/// </summary>
-		virtual void Update();
+		void BaseUpdate();
+		virtual void Update() {}
 
 		/// <summary>
 		/// スプライト表示

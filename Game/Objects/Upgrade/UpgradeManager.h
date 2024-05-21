@@ -21,9 +21,14 @@ namespace L {
 		
 		/// <summary>
 		/// 更新
-		/// <para>この更新はレベルアップ中（選択待ち）のみ呼び出すこと</para>
 		/// </summary>
 		void Update(Player* player);
+
+		/// <summary>
+		/// アップグレードを選択中に呼び出す関数
+		/// <para>この更新はレベルアップ中（選択待ち）のみ呼び出すこと</para>
+		/// </summary>
+		void Selecting(Player* player);
 
 		/// <summary>
 		/// レベルアップしたらこの関数を呼ぶこと！
@@ -33,6 +38,11 @@ namespace L {
 		/// レベルアップ中フラグを返す（シーンを止めるため）
 		/// </summary>
 		static bool GetLevelUpFlag() { return isLevelUpping; }
+
+		/// <summary>
+		/// 最大レベルを返す
+		/// </summary>
+		static size_t GetMaxLevel() { return attackUpgrades_.size() + 1; }
 
 //#ifdef DEMO
 		void DebugWindow(Player* player);
@@ -90,11 +100,6 @@ namespace L {
 		/// <param name="f">true : 攻撃, false : 逃走</param>
 		/// <returns></returns>
 		static int ChooseOnce(bool f);
-
-		/// <summary>
-		/// アップグレードを選択中に呼び出す関数
-		/// </summary>
-		void Selecting(Player* player);
 
 		/// <summary>
 		/// アップグレードを選択完了した時に呼び出す関数

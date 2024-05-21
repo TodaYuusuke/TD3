@@ -24,6 +24,23 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	isLevelUpping = false;
 
 	attackUpgrades_.clear();
+	escapeUpgrades_.clear();
+#ifdef DEMO
+	// アップグレードをすべて取得
+	// 最大 4 つ
+	// 攻撃
+	attackUpgrades_.push_back(new Skill_PursuitFlag);
+	attackUpgrades_.push_back(new Skill_PowerUp1);
+	attackUpgrades_.push_back(new Skill_PowerUp1);
+	attackUpgrades_.push_back(new Skill_AttackRangeUp);
+
+	// 逃走
+	escapeUpgrades_.push_back(new Skill_MomentTimeDown);
+	escapeUpgrades_.push_back(new Skill_MomentTimeDown);
+	escapeUpgrades_.push_back(new Skill_MomentTimeDown);
+	escapeUpgrades_.push_back(new Skill_MomentTimeDown);
+#else
+	// 製品版
 	// アップグレードをすべて取得
 	// 最大 4 つ
 	// 攻撃
@@ -37,6 +54,7 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	escapeUpgrades_.push_back(new Skill_EXLifeFlag);
 	escapeUpgrades_.push_back(new Skill_BlowOffFlag);
 	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
+#endif // DEMO
 
 	// すべてを初期化する
 	for (size_t i = 0; i < attackUpgrades_.size(); i++)
@@ -72,8 +90,33 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 
 void L::UpgradeManager::Update(Player* player)
 {
+
+	// すべて更新
+	for (size_t i = 0; i < attackUpgrades_.size(); i++)
+	{
+		// 描画を消す
+		attackUpgrades_[i]->BaseUpdate();
+		// 選択されているものだけ適応
+		if (attackUpgrades_[i]->isApplied)
+		{
+			attackUpgrades_[i]->BaseUpdate();
+		}
+	}
+	// すべて更新
+	for (size_t i = 0; i < escapeUpgrades_.size(); i++)
+	{
+		// 描画を消す
+		escapeUpgrades_[i]->BaseUpdate();
+		// 選択されているものだけ適応
+		if (escapeUpgrades_[i]->isApplied)
+		{
+			escapeUpgrades_[i]->BaseUpdate();
+		}
+	}
+
+	// シーン側で呼ばせる
 	// 新規で取得するアップグレードを選択する
-	Selecting(player);
+	//Selecting(player);
 }
 
 void L::UpgradeManager::LevelUp()
@@ -254,12 +297,12 @@ void L::UpgradeManager::Selecting(Player* player)
 	sprite_.isActive = true;
 	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
 	// 抽選されたアップグレードを更新
-	attackUpgrades_[candidata_[0]]->Update();
+	attackUpgrades_[candidata_[0]]->BaseUpdate();
 	attackUpgrades_[candidata_[0]]->ShowUI(pos);
 	// 
 	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2) * 2;
 	// 抽選されたアップグレードを更新
-	escapeUpgrades_[candidata_[1]]->Update();
+	escapeUpgrades_[candidata_[1]]->BaseUpdate();
 	escapeUpgrades_[candidata_[1]]->ShowUI(pos);
 
 	// カーソルUI
@@ -364,11 +407,11 @@ void L::UpgradeManager::Apply(Player* player)
 	// アップグレード内容を作る
 	UpgradeParameter para;
 
-	// すべて更新
+	// すべて適応
 	for (size_t i = 0; i < attackUpgrades_.size(); i++)
 	{
 		// 描画を消す
-		attackUpgrades_[i]->Update();
+		attackUpgrades_[i]->BaseUpdate();
 		// 選択されているものだけ適応
 		if (attackUpgrades_[i]->isApplied)
 		{
@@ -379,7 +422,7 @@ void L::UpgradeManager::Apply(Player* player)
 	for (size_t i = 0; i < escapeUpgrades_.size(); i++)
 	{
 		// 描画を消す
-		escapeUpgrades_[i]->Update();
+		escapeUpgrades_[i]->BaseUpdate();
 		// 選択されているものだけ適応
 		if (escapeUpgrades_[i]->isApplied)
 		{

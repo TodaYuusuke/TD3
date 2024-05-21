@@ -4,12 +4,13 @@
 namespace L
 {
 	/// <summary>
-	/// HP 増加
+	/// HPを 2 増加させる
 	/// </summary>
 	class Skill_HPUp : public ISkill
 	{
 	public:
 		/// <summary>
+		/// HPを 2 増加させる
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
 		Skill_HPUp()
@@ -42,7 +43,7 @@ namespace L
 
 		std::string GetTexturePass() override
 		{
-			return "PowerUp/HPUp.png";
+			return "Skill/HPUp.png";
 		}
 
 		std::string GetUpgradeName() override
