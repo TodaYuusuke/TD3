@@ -451,6 +451,68 @@ void IEnemy::InitStaticVariable() {
 		spawnParticle_.Add(i);
 	};
 #pragma endregion
+
+	// 攻撃前
+	static LWP::Object::Particle accumulateParticle_;
+	accumulateParticle_.SetPrimitive<Primitive::Cube>();
+	accumulateParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::YELLOW);
+	accumulateParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
+		Object::ParticleData newData{};
+		newData.wtf.translation = lwp::Vector3{ 0,-0.5f,0 } + primitive->transform.GetWorldPosition();
+		newData.wtf.rotation = primitive->transform.rotation;
+		newData.wtf.scale = { 0.5f,0.5f, 0.5f };
+
+		// 速度ベクトルを生成
+		int dir1 = Utility::GenerateRandamNum<int>(-10, 10);
+		int dir2 = Utility::GenerateRandamNum<int>(-1, 5);
+		int dir3 = Utility::GenerateRandamNum<int>(-10, 10);
+		// 発射のベクトル
+		Math::Vector3 dir{ dir1 / 100.0f,dir2 / 200.0f, dir3 / 100.0f };
+		float multiply = Utility::GenerateRandamNum<int>(10, 50) / 100.0f;
+		newData.velocity = dir.Normalize() * multiply;
+
+		// パーティクル追加
+		return newData;
+	};
+	accumulateParticle_.updateFunction = [&](Object::ParticleData* data) {
+		if (Info::GetDeltaTime() == 0.0f) {
+			return false;
+		}
+
+		// 経過フレーム追加
+		data->elapsedFrame++;
+
+		//// 方向ベクトル
+		//lwp::Vector3 dirVel{};
+		//// 方向ベクトルを算出(ただしy成分は除外)
+		//dirVel = (data->wtf.translation - models_[0].transform.translation).Normalize() * 0.1f;
+		//dirVel.y = data->velocity.y;
+		// 速度ベクトルを弱める
+		data->velocity.x *= 0.9f;
+		data->velocity.z *= 0.9f;
+
+		//// パーティクルを外側へ飛ばす
+		//if (isOutBlowOff_) {
+		//	data->velocity = dirVel;
+		//	// だんだん上昇速度を上げる
+		//	data->velocity.x *= 1.5f;
+		//	data->velocity.z *= 1.5f;
+		//}
+
+		// 重力を加算
+		data->velocity.y += 9.8f / 2000.0f;
+
+		// 速度ベクトルを加算
+		data->wtf.translation += data->velocity;
+		data->wtf.rotation += data->velocity;
+
+		return data->elapsedFrame > 120 ? true : false;
+	};
+	accumulateParticle_.isActive = true;
+	accumulateEffect_ = [&](int i, lwp::Vector3 pos) {
+		accumulateParticle_.P()->transform = pos;
+		accumulateParticle_.Add(i);
+	};
 }
 
 void IEnemy::CheckSpawnEffect() {
@@ -462,3 +524,4 @@ void IEnemy::CheckSpawnEffect() {
 std::function<void(int, lwp::Vector3)> IEnemy::damageEffect_ = nullptr;
 std::function<void(int, lwp::Vector3)> IEnemy::deadEffect_ = nullptr;
 std::function<void(int, lwp::Vector3)> IEnemy::spawnEffect_ = nullptr;
+std::function<void(int, lwp::Vector3)> IEnemy::accumulateEffect_ = nullptr;

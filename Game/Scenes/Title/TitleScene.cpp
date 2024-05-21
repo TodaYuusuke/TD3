@@ -22,6 +22,7 @@ void TitleScene::Initialize()
 
 	sceneTransition_ = std::make_unique<SceneTransition>();
 	sceneTransition_->Initialize();
+
 }
 
 // 更新

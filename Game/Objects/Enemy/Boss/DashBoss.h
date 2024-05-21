@@ -95,7 +95,7 @@ private:// プライベートな変数
 	LWP::Resource::Motion preAttackMotion_;
 
 	// 突進攻撃前のエフェクト
-	static std::function<void(int, lwp::Vector3)> accumulateEffect_;
+	//std::function<void(int, lwp::Vector3)> accumulateEffect_;
 
 	// パーティクルを外側に飛ばす
 	bool isOutBlowOff_;
