@@ -44,7 +44,7 @@ namespace L
 		/// <summary>
 		/// 最大レベルを返す
 		/// </summary>
-		static size_t GetMaxLevel() { return 1 + attackUpgrades_.size() < escapeUpgrades_.size() ? attackUpgrades_.size() : escapeUpgrades_.size(); }
+		static size_t GetMaxLevel() { return 1 + (attackUpgrades_.size() < escapeUpgrades_.size() ? attackUpgrades_.size() : escapeUpgrades_.size()); }
 
 		//#ifdef DEMO
 		void DebugWindow(Player* player);

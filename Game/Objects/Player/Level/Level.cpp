@@ -101,11 +101,11 @@ void Level::LevelUp()
 	bar_->Update(reqEXP_, exp_);
 	// 敵を弾く
 	player_->StartEnemyKnockBack();
+	exp_ = 0.0f;
 	if (L::UpgradeManager::GetMaxLevel() <= lv_)
 	{
 		return;
 	}
-	exp_ = 0.0f;
 	reqEXP_ += 5.0f + (lv_ - 1) * 2;
 	lv_++;
 	// ここでアップデートする関数を呼び出す
