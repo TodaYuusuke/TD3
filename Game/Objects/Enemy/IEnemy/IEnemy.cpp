@@ -11,7 +11,6 @@ void IEnemy::Initialize()
 	Init();
 
 	CreateCollider();
-	//collider_.mask.SetBelongFrag(MaskLayer::Enemy);
 
 	// 死ぬときのアニメーション
 	deadMotion_.Add(&models_[BODY].transform.translation, LWP::Math::Vector3{ 0,5,0 }, 0, 0.7f, LWP::Utility::Easing::Type::OutQuint);
@@ -102,10 +101,6 @@ void IEnemy::DyingAnimation()
 	}
 
 	deadAnime.speed += 0.01f;
-
-	//models_[0].transform.scale.x += 0.01f;
-	//models_[0].transform.scale.y += 0.01f;
-	//models_[0].transform.scale.z += 0.01f;
 
 	models_[0].transform.rotation.y += deadAnime.speed;
 
@@ -313,7 +308,6 @@ void IEnemy::InitStaticVariable() {
 #pragma region 死ぬとき
 	static LWP::Object::Particle deadParticle_;
 	deadParticle_.SetPrimitive<Primitive::Cube>();
-	deadParticle_.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
 	deadParticle_.P()->material.enableLighting = true;
 	deadParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::RED);
 	deadParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
