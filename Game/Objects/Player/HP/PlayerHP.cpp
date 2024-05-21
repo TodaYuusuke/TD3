@@ -77,8 +77,8 @@ void PlayerHP::Update()
 
 void PlayerHP::Increase()
 {
-	hpSprites_[hp_ - 1]->mainSprite.isActive = true;
 	hp_ += hp_ < maxHp_ ? 1 : 0;
+	hpSprites_[hp_ - 1]->mainSprite.isActive = true;
 }
 
 bool PlayerHP::Decrease()

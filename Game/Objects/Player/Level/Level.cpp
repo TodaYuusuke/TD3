@@ -96,7 +96,11 @@ void Level::GainEXP()
 
 void Level::LevelUp()
 {
+	// プレイヤーの HP を回復させたい
+	player_->IncreaseHP();
 	bar_->Update(reqEXP_, exp_);
+	// 敵を弾く
+	player_->StartEnemyKnockBack();
 	if (5 <= lv_)
 	{
 		return;

@@ -177,20 +177,6 @@ private: //*** Behavior 管理に使う関数 ***//
 
 	//*** 初期化系 ***//
 
-#pragma region DataFunc
-
-	// データの情報を取得する
-	void InitDatas();
-
-	// 状態の値を取得
-	void InitRootData();
-	void InitMoveData();
-	void InitSlashData();
-	void InitMomentData();
-	void InitDamageData();
-
-#pragma endregion
-
 #pragma region CreateCollision
 
 	// 当たり判定の作成
