@@ -13,6 +13,8 @@ namespace L
 	{
 	public:	// ** パブリックなメンバ変数 ** //
 
+		virtual ~ISkill() = default;
+
 		// 適応ずみかフラグ
 		bool isApplied = false;
 		// リストにまとめて複数対応

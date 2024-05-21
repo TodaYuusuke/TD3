@@ -6,11 +6,13 @@
 // 前方宣言
 class Player;
 
-namespace L {
+namespace L
+{
 	/// <summary>
 	/// アップグレードを管理するクラス
 	/// </summary>
-	class UpgradeManager {
+	class UpgradeManager
+	{
 	public: // ** メンバ関数 ** //
 
 		/// <summary>
@@ -18,7 +20,7 @@ namespace L {
 		/// <para>upgrades_に継承したクラスのインスタンスをpush_backしてね</para>
 		/// </summary>
 		void Init(LWP::Object::Camera* cameraptr);
-		
+
 		/// <summary>
 		/// 更新
 		/// </summary>
@@ -42,11 +44,11 @@ namespace L {
 		/// <summary>
 		/// 最大レベルを返す
 		/// </summary>
-		static size_t GetMaxLevel() { return attackUpgrades_.size() + 1; }
+		static size_t GetMaxLevel() { return 1 + attackUpgrades_.size() < escapeUpgrades_.size() ? attackUpgrades_.size() : escapeUpgrades_.size(); }
 
-//#ifdef DEMO
+		//#ifdef DEMO
 		void DebugWindow(Player* player);
-//#endif // DEMO
+		//#endif // DEMO
 
 	private: // ** メンバ変数 ** //
 

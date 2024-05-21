@@ -23,6 +23,18 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	// フラグ初期化
 	isLevelUpping = false;
 
+
+	// すべて削除
+	for (size_t i = 0; i < attackUpgrades_.size(); i++)
+	{
+		delete attackUpgrades_[i];
+	}
+
+	// すべて削除
+	for (size_t i = 0; i < escapeUpgrades_.size(); i++)
+	{
+		delete escapeUpgrades_[i];
+	}
 	attackUpgrades_.clear();
 	escapeUpgrades_.clear();
 #ifdef DEMO
@@ -132,14 +144,6 @@ void L::UpgradeManager::DebugWindow(Player* player)
 #ifdef DEMO
 	ImGui::Begin("UpgradeManager");
 
-
-	if (ImGui::Button("isLevelUpFlag") &&
-		isLevelUpping == false)
-	{
-		isLevelUpping = true;
-		// 押された瞬間
-		LevelUp();
-	}
 	if (ImGui::Button("ReApply"))
 	{
 		Apply(player);
@@ -366,8 +370,9 @@ void L::UpgradeManager::Selecting(Player* player)
 		pressTime_ += lwp::GetDefaultDeltaTimeF();
 
 		// 押している間はカーソルにモーションをつける
-		if (selectMotion_.isEnd()) {
-			
+		if (selectMotion_.isEnd())
+		{
+
 		}
 
 		if (kPressTime_ <= pressTime_)
