@@ -26,7 +26,7 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->pursuitFlag = true;
+			para->Flag.pursuitFlag = true;
 		}
 
 		std::string GetTexturePass() override

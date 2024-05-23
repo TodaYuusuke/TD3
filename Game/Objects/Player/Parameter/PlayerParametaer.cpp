@@ -21,6 +21,7 @@ void PlayerParameter::ApplyUpgrade()
 	ApplyAttack();
 	ApplySpeed();
 	ApplyTime();
+	ApplyFlag();
 }
 
 void PlayerParameter::ApplyUpgrade(const UpgradeParameter& para)
@@ -205,4 +206,11 @@ void PlayerParameter::ApplyTime()
 	multi.invincibleDamage_ = (0.01f * param.Time.damageInvincibleTimeDelta.percent);
 
 	this->Time = base * multi;
+}
+
+void PlayerParameter::ApplyFlag()
+{
+	Flag.eXLifeFlag = param.Flag.eXLifeFlag;
+	Flag.pursuitFlag = param.Flag.pursuitFlag;
+	Flag.BlowOffFlag = param.Flag.BlowOffFlag;
 }

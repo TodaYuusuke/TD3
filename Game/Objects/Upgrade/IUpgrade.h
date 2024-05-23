@@ -57,7 +57,18 @@ struct UpgradeTime
 
 };
 
-
+/// <summary>
+/// 新機能のフラグを作る
+/// </summary>
+struct UpgradeFlag
+{
+	// 攻撃後追撃
+	bool pursuitFlag = false;
+	// バリア
+	bool eXLifeFlag = false;
+	// 吹き飛ばし
+	bool BlowOffFlag = false;
+};
 
 /// <summary>
 /// アップグレードによって変化する値と倍率を司る
@@ -72,12 +83,8 @@ struct UpgradeParameter
 	UpgradeSpeed Speed;
 	// 時間のみ
 	UpgradeTime Time;
-	// 攻撃後追撃
-	bool pursuitFlag = false;
-	// バリア
-	bool eXLifeFlag = false;
-	// 吹き飛ばし
-	bool BlowOffFlag = false;
+	// 新機能のフラグ
+	UpgradeFlag Flag;
 };
 
 namespace L

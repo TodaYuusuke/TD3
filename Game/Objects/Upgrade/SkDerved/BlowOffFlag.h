@@ -26,7 +26,7 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->BlowOffFlag = true;
+			para->Flag.BlowOffFlag = true;
 		}
 
 		std::string GetTexturePass() override

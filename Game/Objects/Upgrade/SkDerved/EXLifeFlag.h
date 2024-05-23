@@ -28,7 +28,7 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->eXLifeFlag = true;
+			para->Flag.eXLifeFlag = true;
 		}
 
 		std::string GetTexturePass() override

@@ -142,7 +142,7 @@ void Player::Update()
 	{
 		pursuitFlag = pursuit_->Execution();
 	}
-	if (parameter_.GetParameter().eXLifeFlag)
+	if (parameter_.Flag.eXLifeFlag)
 	{
 		eXLifeFlag = eXLife_->Update();
 	}
@@ -650,7 +650,7 @@ void Player::CheckBehavior()
 			// 突進が終わるときに敵をノックバックさせる
 			if (reqBehavior_ != behavior_)
 			{
-				if (parameter_.GetParameter().BlowOffFlag)
+				if (parameter_.Flag.BlowOffFlag)
 				{
 					isEnemyKnockBack_ = true;
 				}
@@ -910,8 +910,8 @@ void Player::DebugParcentages()
 
 void Player::DamageEffect()
 {
-	int invincibleTime = invincibleTime_ * 1000;
-	if ((int)invincibleTime % 3 == 0)
+	int invincibleTime = int(invincibleTime_ * 1000);
+	if (invincibleTime % 3 == 0)
 	{
 		demoModel_.isActive = false;
 	}

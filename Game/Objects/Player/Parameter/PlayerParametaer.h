@@ -40,9 +40,9 @@ public:	//*** パブリック関数 ***//
 	/// <summary>
 	/// パラメーターを取得
 	/// </summary>
-	UpgradeParameter GetParameter() {
+	/*UpgradeParameter GetParameter() {
 		return param;
-	};
+	};*/
 
 	/// <summary>
 	/// HP を増やす
@@ -140,6 +140,16 @@ public:	//*** サブクラス ***//
 		}
 	};
 
+	struct FlagParam
+	{
+		// 攻撃後追撃
+		bool pursuitFlag = false;
+		// バリア
+		bool eXLifeFlag = false;
+		// 吹き飛ばし
+		bool BlowOffFlag = false;
+	};
+
 public:	//*** パブリック変数 ***//
 
 	// HP のみ
@@ -155,6 +165,9 @@ public:	//*** パブリック変数 ***//
 	// 時間のみ
 	TimeParam Time;
 
+	// フラグ
+	FlagParam Flag;
+
 private: //*** プライベート変数 ***//
 
 	PlayerConfig* config_ = nullptr;
@@ -167,4 +180,5 @@ private: //*** プライベート関数 ***//
 	void ApplyAttack();
 	void ApplySpeed();
 	void ApplyTime();
+	void ApplyFlag();
 };
