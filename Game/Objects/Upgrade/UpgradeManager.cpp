@@ -376,6 +376,8 @@ void L::UpgradeManager::CursorParticleInit()
 {
 	static LWP::Object::Particle CursorParticle_;
 	CursorParticle_.SetPrimitive<Primitive::Sprite>();
+	Primitive::Sprite particleTex;
+	CursorParticle_.P()->texture = LWP::Resource::LoadTexture("CursorParticle.png");
 	CursorParticle_.P()->isActive = true;
 	CursorParticle_.P()->isUI = true;
 	CursorParticle_.P()->material.shininess = 100.0f;
