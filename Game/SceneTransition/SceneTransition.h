@@ -41,7 +41,7 @@ public:
 	/// <summary>
 	/// シーン遷移開始
 	/// </summary>
-	void Start();
+	void Start() { isStart_ = true; }
 
 	/// <summary>
 	/// 
@@ -55,6 +55,9 @@ public:
 
 	// シーン遷移開始の信号
 	static bool isStart_;
+
+	static int delayFrame_;
+	static bool isDelayStart;
 public:
 	// 使用するスプライト
 	LWP::Primitive::Sprite preSceneTransition_[3];

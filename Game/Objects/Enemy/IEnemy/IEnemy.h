@@ -230,6 +230,10 @@ protected:
 	static std::function<void(int, lwp::Vector3)> deadEffect_;
 	// 出現したときのパーティクル
 	static std::function<void(int, lwp::Vector3)> spawnEffect_;
+
+	// 突進攻撃前のエフェクト
+	static std::function<void(int, lwp::Vector3)> accumulateEffect_;
+
 	// 出現時の光の柱
 	LWP::Primitive::Billboard3D lightPillar_;
 	LWP::Resource::Motion lightPillarMotion_;

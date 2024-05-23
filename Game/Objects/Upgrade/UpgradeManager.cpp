@@ -298,8 +298,8 @@ void L::UpgradeManager::Selecting(Player* player)
 		lwp::Matrix4x4 matVPV = viewProj * matViewport;
 		matVPV = matVPV.Inverse();
 
-		lwp::Vector3 posNear = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y, 0);
-		lwp::Vector3 posFar = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y, 1);
+		lwp::Vector3 posNear = Vector3(sprite_.transform.translation.x + sprite_.anchorPoint.t.x, sprite_.transform.translation.y + sprite_.anchorPoint.t.y, 0);
+		lwp::Vector3 posFar = Vector3(sprite_.transform.translation.x + sprite_.anchorPoint.t.x, sprite_.transform.translation.y + sprite_.anchorPoint.t.y, 1);
 
 		posNear = lwp::Matrix4x4::TransformCoord(posNear, matVPV);
 		posFar = lwp::Matrix4x4::TransformCoord(posFar, matVPV);
@@ -309,6 +309,7 @@ void L::UpgradeManager::Selecting(Player* player)
 
 		CursorEffect_(2, centerPoint);
 
+		// カーソルをつぶしたり伸ばしたりする
 		sprite_.transform.scale.y -= (sinf(pressTime_ * 60 * M_PI / 10) * 0.05f);
 		sprite_.transform.scale.x += (sinf(pressTime_ * 60 * M_PI / 10) * 0.05f);
 	}
@@ -321,11 +322,6 @@ void L::UpgradeManager::Selecting(Player* player)
 	if (isPress_)
 	{
 		pressTime_ += lwp::GetDefaultDeltaTimeF();
-
-		// 押している間はカーソルにモーションをつける
-		if (selectMotion_.isEnd()) {
-			
-		}
 
 		if (kPressTime_ <= pressTime_)
 		{
@@ -416,15 +412,15 @@ void L::UpgradeManager::CursorParticleInit()
 		pos.x += dir1;
 		pos.y += dir2;
 
-		Object::ParticleData newData{};
-		newData.wtf.translation = pos + primitive->transform.GetWorldPosition();
-		newData.wtf.rotation = primitive->transform.rotation;
-		newData.wtf.scale = { 0.25f,0.25f, 0.25f };
-		//lwp::Vector3 
-		// 中心までのベクトル
-		newData.velocity = newData.wtf.translation;
-		// パーティクル追加
-		return newData;
+			Object::ParticleData newData{};
+			newData.wtf.translation = pos + primitive->transform.GetWorldPosition();
+			newData.wtf.rotation = primitive->transform.rotation;
+			newData.wtf.scale = { 0.25f,0.25f, 0.25f };
+
+			// 中心までのベクトル
+			newData.velocity = newData.wtf.translation;
+			// パーティクル追加
+			return newData;
 		};
 	CursorParticle_.updateFunction = [this](Object::ParticleData* data) {
 		// 経過フレーム追加
