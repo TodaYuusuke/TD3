@@ -54,7 +54,6 @@ void GameScene::Initialize()
 	enemyManager_->SetExpManager(expManager_.get());
 	enemyManager_->Init();
 
-
 	// アップグレード
 	upgradeManager_ = std::make_unique<L::UpgradeManager>();
 	upgradeManager_->Init(GetMainRenderCamera());
@@ -87,9 +86,6 @@ void GameScene::Initialize()
 	sun_.intensity = 2.0f;
 	sun_.radius = 105.0f;
 	sun_.decay = 0.58f;
-
-
-
 
 	sceneTransition_ = std::make_unique<SceneTransition>();
 	sceneTransition_->Initialize();
@@ -173,7 +169,6 @@ void GameScene::Update()
 //#ifdef DEMO
 	upgradeManager_->DebugWindow(player_.get());
 	//#endif // DEMO
-
 
 	if (!upgradeManager_->GetLevelUpFlag())
 	{
