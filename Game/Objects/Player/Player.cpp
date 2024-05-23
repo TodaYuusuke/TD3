@@ -224,6 +224,7 @@ void Player::DecreaseHP()
 	GameTimer::GetInstance()->isEnd_ = !flag_.isAlive_;
 	if (!flag_.isAlive_) {
 		demoModel_.isActive = true;
+		flag_.isInvincible_ = false;
 		gameOverMotion_.Start();
 	}
 	/*parameter_.Hp.hp_--;
