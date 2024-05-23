@@ -15,7 +15,8 @@ void GameScene::Initialize()
 	// タイマー
 	gameTimer_ = GameTimer::GetInstance();
 	gameTimer_->Initialize();
-
+	audio = std::make_unique<LWP::Resource::Audio>();
+	audio->Load("fanfare.wav");
 	// プレイヤー
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
@@ -94,6 +95,14 @@ void GameScene::Initialize()
 // 更新
 void GameScene::Update()
 {
+	/*audio = std::make_unique<LWP::Resource::Audio>();
+	audio->Load("fanfare.wav");*/
+	//TODO : 一度だけ再生しないと重なる
+	if (aaa == 0) {
+	audio->Play();
+	aaa = 1;
+	}
+
 	sceneTransition_->Update();
 
 	ImGui::Begin("gfd");
