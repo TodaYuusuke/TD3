@@ -10,6 +10,12 @@ struct Paramete
 	float base = 0.0f;
 	// 補正(％)
 	float percent = 100.0f;
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="b">実数</param>
+	/// <param name="per">%</param>
+	Paramete(float b = 0.0f, float per = 100.0f) : base(b), percent(per) {}
 };
 
 struct UpgradeHP
@@ -72,6 +78,12 @@ struct UpgradeFlag
 	bool penetrationFlag = false;
 };
 
+
+struct UpgradeOther
+{
+	Paramete radiusLevel;
+};
+
 /// <summary>
 /// アップグレードによって変化する値と倍率を司る
 /// </summary>
@@ -87,6 +99,8 @@ struct UpgradeParameter
 	UpgradeTime Time;
 	// 新機能のフラグ
 	UpgradeFlag Flag;
+	// その他
+	UpgradeOther Other;
 };
 
 namespace L

@@ -10,6 +10,7 @@ void PlayerConfig::Initialize()
 	InitCount();
 	InitParcentage();
 	InitPower();
+	InitOther();
 }
 
 void PlayerConfig::InitSpeed()
@@ -57,4 +58,9 @@ void PlayerConfig::InitParcentage()
 void PlayerConfig::InitPower()
 {
 	Power_.BASEPOWER_ = 10.0f;
+}
+
+void PlayerConfig::InitOther()
+{
+	Other_.RADIUSLEVEL_ = 4.0f;
 }

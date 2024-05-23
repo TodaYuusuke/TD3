@@ -31,6 +31,7 @@ void PlayerParameter::ApplyUpgrade()
 	ApplySpeed();
 	ApplyTime();
 	ApplyFlag();
+	ApplyOther();
 }
 
 void PlayerParameter::ApplyUpgrade(const UpgradeParameter& para)
@@ -55,6 +56,8 @@ void PlayerParameter::ResetParameter()
 	Time.invincibleDamage_ = config_->Time_.DAMAGEINVINCIBLE_;
 	Time.justTake_ = config_->Time_.JUSTTAKETIME_;
 	Time.momentTime_ = config_->Time_.MOMENTBASE_;
+
+	Other.radiusLevel = config_->Other_.RADIUSLEVEL_;
 }
 
 void PlayerParameter::IncreaseHP()
@@ -102,7 +105,7 @@ void PlayerParameter::ApplyHP()
 	if (0 < tempSub)
 	{
 		for (size_t i = 0; i < tempSub; i++)
-		{	    
+		{
 			IncreaseHPMAX();
 		}
 	}
@@ -223,4 +226,10 @@ void PlayerParameter::ApplyFlag()
 	Flag.pursuitFlag = param.Flag.pursuitFlag;
 	Flag.BlowOffFlag = param.Flag.BlowOffFlag;
 	Flag.penetrationFlag = param.Flag.penetrationFlag;
+}
+
+void PlayerParameter::ApplyOther()
+{
+	Other.radiusLevel = config_->Other_.RADIUSLEVEL_ + param.Other.radiusLevel.base;
+	Other.radiusLevel *= (0.01f * param.Other.radiusLevel.percent);
 }

@@ -141,5 +141,7 @@
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\MomentTimeDelta.h" />
     <ClInclude Include="Game\Objects\Upgrade\HitCheck\HitCheck.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PenetrationFlag.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\RadiusLevelDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_RadiusLevelUp.h" />
   </ItemGroup>
 </Project>

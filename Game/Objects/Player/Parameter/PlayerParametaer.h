@@ -140,6 +140,7 @@ public:	//*** サブクラス ***//
 		}
 	};
 
+	// アップグレード関係のフラグ
 	struct FlagParam
 	{
 		// 攻撃後追撃
@@ -153,6 +154,13 @@ public:	//*** サブクラス ***//
 		// そして HP を回復させるかのフラグ
 		bool isActiveIncreaseHP = false;
 	};
+
+	struct OtherParam
+	{
+		// 経験値取得範囲
+		float radiusLevel = 2.0f;
+	};
+
 
 public:	//*** パブリック変数 ***//
 
@@ -172,6 +180,9 @@ public:	//*** パブリック変数 ***//
 	// フラグ
 	FlagParam Flag;
 
+	// その他
+	OtherParam Other;
+
 private: //*** プライベート変数 ***//
 
 	PlayerConfig* config_ = nullptr;
@@ -185,4 +196,5 @@ private: //*** プライベート関数 ***//
 	void ApplySpeed();
 	void ApplyTime();
 	void ApplyFlag();
+	void ApplyOther();
 };

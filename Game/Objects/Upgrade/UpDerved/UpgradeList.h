@@ -10,3 +10,4 @@
 #include "PowerDelta.h"
 #include "PowerPerDelta.h"
 #include "InvincibleDamageDelta.h"
+#include "RadiusLevelDelta.h"

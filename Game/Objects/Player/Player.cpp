@@ -27,6 +27,13 @@ void Player::Initialize()
 
 	demoModel_.transform.translation.z = -4.0f;
 
+	// 設定の初期化
+	config_.Initialize();
+	// パラメータの初期化
+	parameter_.Initialize(&config_);
+	// パラメータを反映させる
+	parameter_.ResetParameter();
+
 	// 武器を作成
 	weapon_.reset(new Weapon);
 	weapon_->Initialize();
@@ -65,12 +72,6 @@ void Player::Initialize()
 		statuses_[i]->Init(this);
 	}
 
-	// 設定の初期化
-	config_.Initialize();
-	// パラメータの初期化
-	parameter_.Initialize(&config_);
-	// パラメータを反映させる
-	parameter_.ResetParameter();
 
 	// 今の状態を設定
 	currStatus_ = statuses_[static_cast<size_t>(behavior_)];

@@ -47,10 +47,10 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	attackUpgrades_.push_back(new Skill_AttackRangeUp);
 
 	// 逃走
-	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
-	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
-	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
-	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
+	escapeUpgrades_.push_back(new Skill_RadiusLevelUp);
+	escapeUpgrades_.push_back(new Skill_RadiusLevelUp);
+	escapeUpgrades_.push_back(new Skill_RadiusLevelUp);
+	escapeUpgrades_.push_back(new Skill_RadiusLevelUp);
 #else
 	// 製品版
 	// アップグレードをすべて取得

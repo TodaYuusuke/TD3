@@ -86,6 +86,12 @@ public: //*** サブクラス ***//
 		float BASEPOWER_ = 10.0f;
 	};
 
+	struct Other
+	{
+		// 経験値取得範囲
+		float RADIUSLEVEL_;
+	};
+
 	struct Configs
 	{
 		Speeds Speed_;
@@ -105,6 +111,7 @@ public: //*** パブリック変数 ***//
 	Counts Count_;
 	Parcentages Parcent_;
 	Power Power_;
+	Other Other_;
 
 private: //*** プライベート関数 ***//
 
@@ -114,5 +121,5 @@ private: //*** プライベート関数 ***//
 	void InitCount();
 	void InitParcentage();
 	void InitPower();
-
+	void InitOther();
 };

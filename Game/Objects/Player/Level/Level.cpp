@@ -36,7 +36,9 @@ void Level::Update()
 	// 当たり判定を 1 フレーム毎に更新
 	//collider_->start = collider_->end;
 	//collider_->end = position;
-	collider_.Create(prePos_, player_->demoModel_.transform.translation, collider_.radius);
+	collider_.Create(prePos_,
+		player_->demoModel_.transform.translation,
+		player_->parameter_.Other.radiusLevel);
 
 	prePos_ = player_->demoModel_.transform.translation;
 	prePos_.y += 0.01f;
@@ -65,7 +67,7 @@ void Level::CreateCollision()
 #ifdef DEMO
 	collider_.name = "Level";
 #endif // DEMO
-	collider_.radius += 3.0f;
+	collider_.radius = player_->config_.Other_.RADIUSLEVEL_;
 }
 
 void Level::OnCollision(const lwp::Collider::HitData& data)
@@ -81,10 +83,10 @@ void Level::OnCollision(const lwp::Collider::HitData& data)
 void Level::GainEXP()
 {
 	// 既に上限を迎えていたら処理しない
-	if (reqEXP_ <= exp_)
+	/*if (reqEXP_ <= exp_)
 	{
 		return;
-	}
+	}*/
 	// 経験値補正入れるならここ
 	exp_ += 1.0f;
 	// レベルアップ
