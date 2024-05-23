@@ -751,7 +751,7 @@ void Player::DebugBehavior()
 		case Behavior::Root:
 			ImGui::Text("ROOT");
 			ImGui::Text("BaseFrame : %.3f", config_.Time_.ROOTBASE_);
-			ImGui::Text("MaxFrame  : %.3f", rootData_.maxTime_);
+			//ImGui::Text("MaxFrame  : %.3f", rootData_.maxTime_);
 			break;
 			/*case Behavior::Move:
 				ImGui::Text("MOVE");
@@ -761,17 +761,17 @@ void Player::DebugBehavior()
 		case Behavior::Slash:
 			ImGui::Text("SLASH");
 			ImGui::Text("BaseFrame : %.3f", config_.Time_.SLASHBASE_);
-			ImGui::Text("MaxFrame  : %.3f", slashData_.maxTime_);
+			//ImGui::Text("MaxFrame  : %.3f", slashData_.maxTime_);
 			break;
 		case Behavior::Moment:
 			ImGui::Text("MOMENT");
 			ImGui::Text("BaseFrame : %.3f", config_.Time_.MOMENTBASE_);
-			ImGui::Text("MaxFrame  : %.3f", momentData_.maxTime_);
+			//ImGui::Text("MaxFrame  : %.3f", momentData_.maxTime_);
 			break;
 		case Behavior::Damage:
 			ImGui::Text("DAMAGE");
 			ImGui::Text("BaseFrame : %.3f", config_.Time_.DAMAGEBASE_);
-			ImGui::Text("MaxFrame  : %.3f", damageData_.maxTime_);
+			//ImGui::Text("MaxFrame  : %.3f", damageData_.maxTime_);
 			break;
 		default:
 			break;
