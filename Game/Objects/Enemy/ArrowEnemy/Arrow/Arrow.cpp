@@ -5,11 +5,11 @@
 void Arrow::Init(lwp::TransformEuler transform)
 {
 	// モデルの作成
-	model_.LoadFile("cube/cube.obj");
+	model_.LoadFile("Arrow/Arrow.obj");
 	model_.commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::WHITE);
 	model_.transform.translation = transform.translation;
 	model_.transform.rotation = transform.rotation;
-	model_.transform.scale = { 0.5f,0.5f,1.0f };
+	model_.transform.scale = { 5.0f,5.0f,2.0f };
 	model_.name = "Arrow!!";
 	model_.material.enableLighting = true;
 

@@ -87,11 +87,18 @@ void GameScene::Initialize()
 	sun_.radius = 105.0f;
 	sun_.decay = 0.58f;
 
+
+
+
+	sceneTransition_ = std::make_unique<SceneTransition>();
+	sceneTransition_->Initialize();
 }
 
 // 更新
 void GameScene::Update()
 {
+	sceneTransition_->Update();
+
 	ImGui::Begin("gfd");
 
 	ImGui::DragFloat3("pos",&pos.x);
@@ -112,17 +119,20 @@ void GameScene::Update()
 	if (gameTimer_->isEnd_)
 	{
 		// プレイヤーが生きているとき
-		if (player_->flag_.isAlive_)
-		{
+		if (player_->flag_.isAlive_) {
 			// クリアしたときの処理
 			// 何か演出を出す
-			if (player_->ClearAnime())
-			{
+			if (player_->ClearAnime()) {
 				// タイマーを消す
 				gameTimer_->isActive_ = false;
 				// 描画を消す
 				gameTimer_->Update();
-				nextSceneFunction = []() {return new ClearScene; };
+
+				// シーン遷移演出開始
+				sceneTransition_->Start();
+				if (sceneTransition_->GetIsSceneChange()) {
+					nextSceneFunction = []() {return new ClearScene; };
+				}
 			}
 			return;
 		}
@@ -133,16 +143,15 @@ void GameScene::Update()
 			if (player_->GameOverAnime()) {
 				// タイマーを消す
 				gameTimer_->isActive_ = false;
+
 				// 描画を消す
 				gameTimer_->Update();
-				nextSceneFunction = []() {return new GameOverScene; };
-			}
 
-			// 何か演出を出す
-			if (Keyboard::GetTrigger(DIK_SPACE) ||
-				Pad::GetTrigger(XINPUT_GAMEPAD_A))
-			{
-
+				// シーン遷移演出開始
+				sceneTransition_->Start();
+				if (sceneTransition_->GetIsSceneChange()) {
+					nextSceneFunction = []() {return new GameOverScene; };
+				}
 			}
 			return;
 		}

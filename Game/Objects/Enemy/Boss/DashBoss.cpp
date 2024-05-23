@@ -1,27 +1,15 @@
 #include "DashBoss.h"
 #include "Game/Objects/Player/Player.h"
 
+using namespace LWP;
+
 void DashBoss::Init()
 {
 	// 当たり判定のインスタンス生成
-//	models_.reserve(3);
 	models_.emplace_back();
 	models_[0].LoadFile("NormalEnemy/NormalEnemy.obj");
-	//models_.emplace_back();
-	//models_[1].LoadFile("L_arm/L_arm.obj");
-	//models_.emplace_back();
-	//models_[2].LoadFile("R_arm/R_arm.obj");
 
-	//// 手のモデルをペアレント
-	//models_[1].transform.Parent(&models_[0].transform);
-	//models_[2].transform.Parent(&models_[0].transform);
-	//// 手のモデルの位置を設定
-	//models_[1].transform.translation = { -1.0f, 0.25f, 0.5f };
-	//models_[2].transform.translation = { 1.0f, 0.25f, 0.5f };
-
-	// 色
-	//models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLUE);
-		// 大きさ
+	// 大きさ
 	models_[0].transform.scale = { 2,3,2 };
 	// 当たり判定を有効化
 	isActive_ = true;
@@ -34,19 +22,76 @@ void DashBoss::Init()
 	// 現在の時間
 	currentFrame_ = 0;
 
-	//// 攻撃モーションを追加
-	//attackMotion_[BODY]
-	//	.Add(&models_[BODY].transform.scale, , 0, 0.05f)
-	//	.Add(&models_[BODY].transform.scale, , 0.05f, 0.1f);
-	//attackMotion_[L_ARM]
-	//	.Add(&models_[L_ARM].transform.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
-	//	.Add(&models_[L_ARM].transform.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
-	//attackMotion_[R_ARM]
-	//	.Add(&models_[R_ARM].transform.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
-	//	.Add(&models_[R_ARM].transform.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
+	// 攻撃前のモーション
+	preAttackMotion_.Add(&models_[0].transform.scale, lwp::Vector3{ -1,-1,-1 }, 0, 0.3f, LWP::Utility::Easing::Type::OutQuart)
+		.Add(&models_[0].transform.scale, lwp::Vector3{ 1,1,1 }, 1.4f, 0.2f, LWP::Utility::Easing::Type::OutQuart);
 
 	// HP を設定
 	hp_ = 60;
+
+#pragma region パーティクル
+	//// 攻撃前
+	//static LWP::Object::Particle accumulateParticle_;
+	//accumulateParticle_.SetPrimitive<Primitive::Cube>();
+	//accumulateParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::YELLOW);
+	//accumulateParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
+	//	Object::ParticleData newData{};
+	//	newData.wtf.translation = lwp::Vector3{ 0,-0.5f,0 } + primitive->transform.GetWorldPosition();
+	//	newData.wtf.rotation = primitive->transform.rotation;
+	//	newData.wtf.scale = { 0.5f,0.5f, 0.5f };
+
+	//	// 速度ベクトルを生成
+	//	int dir1 = Utility::GenerateRandamNum<int>(-10, 10);
+	//	int dir2 = Utility::GenerateRandamNum<int>(-1, 5);
+	//	int dir3 = Utility::GenerateRandamNum<int>(-10, 10);
+	//	// 発射のベクトル
+	//	Math::Vector3 dir{ dir1 / 100.0f,dir2 / 200.0f, dir3 / 100.0f };
+	//	float multiply = Utility::GenerateRandamNum<int>(10, 50) / 100.0f;
+	//	newData.velocity = dir.Normalize() * multiply;
+
+	//	// パーティクル追加
+	//	return newData;
+	//};
+	//accumulateParticle_.updateFunction = [&](Object::ParticleData* data) {
+	//	if (Info::GetDeltaTime() == 0.0f) {
+	//		return false;
+	//	}
+
+	//	// 経過フレーム追加
+	//	data->elapsedFrame++;
+
+	//	//// 方向ベクトル
+	//	//lwp::Vector3 dirVel{};
+	//	//// 方向ベクトルを算出(ただしy成分は除外)
+	//	//dirVel = (data->wtf.translation - models_[0].transform.translation).Normalize() * 0.1f;
+	//	//dirVel.y = data->velocity.y;
+	//	// 速度ベクトルを弱める
+	//	data->velocity.x *= 0.9f;
+	//	data->velocity.z *= 0.9f;
+	//
+	//	//// パーティクルを外側へ飛ばす
+	//	//if (isOutBlowOff_) {
+	//	//	data->velocity = dirVel;
+	//	//	// だんだん上昇速度を上げる
+	//	//	data->velocity.x *= 1.5f;
+	//	//	data->velocity.z *= 1.5f;
+	//	//}
+
+	//	// 重力を加算
+	//	data->velocity.y += 9.8f / 2000.0f;
+
+	//	// 速度ベクトルを加算
+	//	data->wtf.translation += data->velocity;
+	//	data->wtf.rotation += data->velocity;
+
+	//	return data->elapsedFrame > 120 ? true : false;
+	//};
+	//accumulateParticle_.isActive = true;
+	//accumulateEffect_ = [&](int i, lwp::Vector3 pos) {
+	//	accumulateParticle_.P()->transform = pos;
+	//	accumulateParticle_.Add(i);
+	//};
+#pragma endregion
 }
 
 void DashBoss::Update()
@@ -82,6 +127,10 @@ void DashBoss::Update()
 		default:
 			B_RootInit();
 			break;
+			// ダッシュ攻撃前の硬直
+		case Behavior::kPreDash:
+			B_PreDashInit();
+			break;
 			// ダッシュ
 		case Behavior::kDash:
 			B_DashInit();
@@ -98,10 +147,23 @@ void DashBoss::Update()
 		// 体を自機に向ける
 		Aim();
 		break;
+		// ダッシュ攻撃前の硬直
+	case Behavior::kPreDash:
+		B_PreDashUpdate();
+		// 体を自機に向ける
+		Aim();
+		break;
 		// ダッシュ
 	case Behavior::kDash:
 		B_DashUpdate();
 		break;
+	}
+
+	if (preAttackMotion_.isEnd()) {
+		isOutBlowOff_ = true;
+	}
+	else {
+		isOutBlowOff_ = false;
 	}
 
 	// 移動処理
@@ -147,6 +209,7 @@ void DashBoss::Aim()
 
 void DashBoss::B_RootInit() {
 	attackWaitTime_ = kAttackWaitTime;
+	models_[0].transform.scale = { 2,3,2 };
 	currentFrame_ = 0;
 }
 
@@ -161,30 +224,45 @@ void DashBoss::B_RootUpdate() {
 
 	// 攻撃範囲内にいるか
 	if (CheckAttackRange()) {
-		// 自機との方向ベクトルを取得(ただしy方向のベクトルは取得しない)
-		dashVel_ = GetDirectVel();
-		dashVel_.y = 0;
-
 		// 攻撃可能状態か
 		if (isAttack) {
-			behaviorRequest_ = Behavior::kDash;
+			behaviorRequest_ = Behavior::kPreDash;
 		}
 	}
 }
 
-void DashBoss::B_PreDashInit()
-{
+void DashBoss::B_PreDashInit() {
+	currentFrame_ = 0;
+	preAttackMotion_.Start();
 }
 
-void DashBoss::B_PreDashUpdate()
-{
+void DashBoss::B_PreDashUpdate() {
+	// パーティクルを出す時間
+	if (currentFrame_ <= 60 && isActive_) {
+		if (currentFrame_ % 2 == 0) {
+			accumulateEffect_(16, models_[0].transform.translation);
+		}
+
+	}
+	else if (currentFrame_ >= 60) {
+		isOutBlowOff_ = true;
+	}
+
+	if (currentFrame_ >= 110) {
+		// 自機との方向ベクトルを取得(ただしy方向のベクトルは取得しない)
+		dashVel_ = GetDirectVel();
+		dashVel_.y = 0;
+	}
+
+	if (currentFrame_ >= 120) {
+		behaviorRequest_ = Behavior::kDash;
+	}
+	currentFrame_++;
 }
 
 void DashBoss::B_DashInit() {
+	currentFrame_ = 0;
 	isAttack = false;
-	for (int i = 0; i < BODYPARTSCOUNT; i++) {
-		attackMotion_[i].Start();
-	}
 }
 
 void DashBoss::B_DashUpdate() {
@@ -202,3 +280,5 @@ void DashBoss::B_DashUpdate() {
 LWP::Math::Vector3 DashBoss::GetDirectVel() {
 	return (player_->GetWorldTransform()->translation - models_[0].transform.translation).Normalize();
 }
+
+//std::function<void(int, lwp::Vector3)> DashBoss::accumulateEffect_ = nullptr;

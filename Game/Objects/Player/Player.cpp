@@ -103,7 +103,8 @@ void Player::Update()
 	}
 
 	// ノックバックフラグをoffにする
-	if (isEnemyKnockBack_) {
+	if (isEnemyKnockBack_)
+	{
 		isEnemyKnockBack_ = false;
 	}
 
@@ -141,8 +142,9 @@ void Player::Update()
 	{
 		pursuitFlag = pursuit_->Execution();
 	}
-	if (parameter_.GetParameter().eXLifeFlag) {
-		eXLifeFlag = eXLife_->Execution();
+	if (parameter_.GetParameter().eXLifeFlag)
+	{
+		eXLifeFlag = eXLife_->Update();
 	}
 
 
@@ -211,19 +213,16 @@ void Player::EndJust()
 void Player::IncreaseHP()
 {
 	parameter_.IncreaseHP();
-	/*
-	if (parameter_.Hp.hp_ < parameter_.Hp.maxHP_)
-	{
-		parameter_.Hp.hp_++;
-	}*/
 }
 
 void Player::DecreaseHP()
 {
-	flag_.isAlive_ = !parameter_.DecreaseHP();
-	GameTimer::GetInstance()->isEnd_ = !flag_.isAlive_;
-	if (!flag_.isAlive_) {
+	if (parameter_.DecreaseHP())
+	{
+		flag_.isAlive_ = false;
+		GameTimer::GetInstance()->isEnd_ = true;;
 		demoModel_.isActive = true;
+		flag_.isInvincible_ = false;
 		gameOverMotion_.Start();
 	}
 	/*parameter_.Hp.hp_--;
@@ -243,7 +242,8 @@ bool Player::ClearAnime()
 	ClearMotion.t += ClearMotion.speed;
 	demoModel_.transform.translation.y += (ClearMotion.speed + (ClearMotion.t - 1) * 2) * LWP::Info::GetDefaultDeltaTimeF();
 
-	if (ClearMotion.t > kClearMotionEnd) {
+	if (ClearMotion.t > kClearMotionEnd)
+	{
 		return true;
 	}
 
@@ -253,21 +253,26 @@ bool Player::ClearAnime()
 
 bool Player::GameOverAnime()
 {
-	if (gameOverMotion_.isEnd()) {
+	if (gameOverMotion_.isEnd())
+	{
 		isGameOver_ = true;
-		if (gameOverFrame_ == 0) {
+		if (gameOverFrame_ == 0)
+		{
 			deadEffect_(64, demoModel_.transform.translation);
 			demoModel_.isActive = false;
 			weapon_->SetIsActive(false);
 		}
 	}
-	else {
+	else
+	{
 		demoModel_.isActive = true;
 	}
 
-	if (isGameOver_) {
+	if (isGameOver_)
+	{
 		gameOverFrame_++;
-		if (gameOverFrame_ >= 90) {	
+		if (gameOverFrame_ >= 90)
+		{
 			return true;
 		}
 	}
@@ -286,67 +291,6 @@ lwp::Vector3 Player::GetVectorTranspose(const lwp::Vector3& vec)
 	vector.y = 0.0f;
 	return vector.Normalize();
 }
-
-
-#pragma region BehaviorFunc
-
-#pragma region BehaviorData
-
-void Player::InitDatas()
-{
-	// 外部からの設定を取得
-	//InitConfigs();
-
-	// 状態を初期状態に設定
-	behavior_ = Behavior::Root;
-
-	// 状態を設定
-	InitRootData();
-	InitMoveData();
-	InitSlashData();
-	InitMomentData();
-	InitDamageData();
-}
-
-void Player::InitRootData()
-{
-	//rootData_.cBASETIME = 0.5f;
-	rootData_.maxTime_ = 0.0f;
-}
-
-void Player::InitMoveData()
-{
-	//moveData_.cBASETIME = 0.1f;
-	moveData_.maxTime_ = 0.0f;
-}
-
-void Player::InitSlashData()
-{
-	//slashData_.cBASETIME = 0.1f;
-	slashData_.vector_ = { 0.0f,0.0f,1.0f };
-	slashData_.maxTime_ = 0.0f;
-	slashData_.relationSlash_ = 0u;
-	//slashData_.cMAXRELATION_ = 3u;
-	slashData_.maxRelation_ = 0u;
-}
-
-void Player::InitMomentData()
-{
-	//momentData_.cBASETIME = 0.5f;
-	momentData_.maxTime_ = 0.0f;
-	momentData_.relationSlash_ = 0u;
-}
-
-void Player::InitDamageData()
-{
-	//damageData_.cBASETIME = 0.5f;
-	damageData_.maxTime_ = 0.0f;
-}
-// BeheviorData
-#pragma endregion
-
-// BehaviorFunc
-#pragma endregion
 
 #pragma region CollisionFunc
 
@@ -392,7 +336,7 @@ void Player::CreateWeaponCollision()
 #ifdef DEMO
 	colliders_.weapon_.name = "Weapon";
 #endif
-	}
+}
 
 void Player::CreateJustCollision()
 {
@@ -450,7 +394,8 @@ void Player::OnCollisionJust(lwp::Collider::HitData& data)
 #pragma endregion
 
 #pragma region Effect
-void Player::InitStaticVariable() {
+void Player::InitStaticVariable()
+{
 	// 土飛沫
 	static LWP::Object::Particle soilSplashParticle_;
 	soilSplashParticle_.SetPrimitive<Primitive::Cube>();
@@ -477,7 +422,7 @@ void Player::InitStaticVariable() {
 
 		// パーティクル追加
 		return newData;
-	};
+		};
 	soilSplashParticle_.updateFunction = [](Object::ParticleData* data) {
 		// 経過フレーム追加
 		data->elapsedFrame++;
@@ -487,14 +432,17 @@ void Player::InitStaticVariable() {
 
 
 		// 20フレーム以降から重力を加算
-		if (data->elapsedFrame > 20) {
+		if (data->elapsedFrame > 20)
+		{
 			data->velocity.y += -9.8f / 600.0f;
 			// yが0以下になったとき跳ねる
-			if (data->wtf.translation.y <= 0.1f) {
+			if (data->wtf.translation.y <= 0.1f)
+			{
 				data->velocity.y *= -0.5f;
 			}
 		}
-		else {
+		else
+		{
 			// 速度ベクトルを弱める
 			data->velocity *= 0.9f;
 		}
@@ -513,12 +461,12 @@ void Player::InitStaticVariable() {
 		}
 
 		return false;
-	};
+		};
 	soilSplashParticle_.isActive = true;
 	soilSplashEffect_ = [&](int i, lwp::Vector3 pos) {
 		soilSplashParticle_.P()->transform = pos;
 		soilSplashParticle_.Add(i);
-	};
+		};
 
 
 	static LWP::Object::Particle deadParticle_;
@@ -546,7 +494,7 @@ void Player::InitStaticVariable() {
 
 		// パーティクル追加
 		return newData;
-	};
+		};
 	deadParticle_.updateFunction = [](Object::ParticleData* data) {
 		// 経過フレーム追加
 		data->elapsedFrame++;
@@ -556,14 +504,17 @@ void Player::InitStaticVariable() {
 
 
 		// 20フレーム以降から重力を加算
-		if (data->elapsedFrame > 20) {
+		if (data->elapsedFrame > 20)
+		{
 			data->velocity.y += -9.8f / 800.0f;
 			// yが0以下になったとき跳ねる
-			if (data->wtf.translation.y <= 0.1f) {
+			if (data->wtf.translation.y <= 0.1f)
+			{
 				data->velocity.y *= -0.5f;
 			}
 		}
-		else {
+		else
+		{
 			// 速度ベクトルを弱める
 			data->velocity *= 0.9f;
 		}
@@ -584,12 +535,12 @@ void Player::InitStaticVariable() {
 		}
 
 		return false;
-	};
+		};
 	deadParticle_.isActive = true;
 	deadEffect_ = [&](int i, lwp::Vector3 pos) {
 		deadParticle_.P()->transform = pos;
 		deadParticle_.Add(i);
-	};
+		};
 }
 
 //std::function<void(int, lwp::Vector3)> Player::soilSplashEffect_ = nullptr;
@@ -616,30 +567,6 @@ void Player::CheckInputMove()
 	}
 	direct += LWP::Input::Controller::GetLStick();
 	direct = direct.Normalize();
-
-	//// キーボード入力として区別させる
-	//player_->destinate_ = direct.Normalize() * 0.75f;
-
-	//// コントローラーの入力を合わせる
-	//float x = LWP::Input::Controller::GetLStick().x;
-	//float y = LWP::Input::Controller::GetLStick().y;
-	//if ((player_->destinate_.x < 0 ? -player_->destinate_.x : player_->destinate_.x)
-	//	< (x < 0 ? -x : x))
-	//{
-	//	player_->destinate_.x = x;
-	//}
-	//if ((player_->destinate_.z < 0 ? -player_->destinate_.z : player_->destinate_.z)
-	//	< (y < 0 ? -y : y))
-	//{
-	//	player_->destinate_.z = y;
-	//}
-	//player_->destinate_ = player_->destinate_.Normalize();
-
-	//// 方向がゼロだった場合は元に戻す
-	//if (player_->destinate_.x == 0 && player_->destinate_.z == 0)
-	//{
-	//	player_->destinate_ = direct.Normalize();
-	//}
 
 	// そもそも移動入力が無かったらフラグを立てない
 	flag_.isInputMove_ = !(direct.x == 0 && direct.y == 0);
@@ -722,12 +649,17 @@ void Player::CheckBehavior()
 		case Behavior::Moment:
 			reqBehavior_ = Behavior::Moment;
 			// 突進が終わるときに敵をノックバックさせる
-			if (reqBehavior_ != behavior_) {
-				isEnemyKnockBack_ = true;
+			if (reqBehavior_ != behavior_)
+			{
+				if (parameter_.GetParameter().BlowOffFlag)
+				{
+					isEnemyKnockBack_ = true;
+				}
 			}
 			break;
 		case Behavior::Damage:
 			reqBehavior_ = Behavior::Damage;
+			StartEnemyKnockBack();
 			break;
 		}
 	}
@@ -977,12 +909,15 @@ void Player::DebugParcentages()
 
 #pragma endregion
 
-void Player::DamageEffect() {
+void Player::DamageEffect()
+{
 	int invincibleTime = invincibleTime_ * 1000;
-	if ((int)invincibleTime % 3 == 0) {
+	if ((int)invincibleTime % 3 == 0)
+	{
 		demoModel_.isActive = false;
 	}
-	else {
+	else
+	{
 		demoModel_.isActive = true;
 	}
 }

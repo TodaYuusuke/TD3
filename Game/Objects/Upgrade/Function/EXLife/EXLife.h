@@ -5,7 +5,7 @@ class EXLife
 {
 public:
 	void Init(Player* Player);
-	bool Execution();
+	bool Update();
 
 	void DecreaseHP();
 

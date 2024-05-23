@@ -9,7 +9,6 @@
 using namespace LWP;
 using namespace LWP::Math;
 
-
 // 実体宣言
 std::vector<L::ISkill*> L::UpgradeManager::attackUpgrades_;
 std::vector<L::ISkill*> L::UpgradeManager::escapeUpgrades_;
@@ -61,6 +60,12 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 
 	mainCameraptr_ = cameraptr;
 
+	// 選択中のカーソルのモーション
+	selectMotion_.Add(&sprite_.transform.scale, lwp::Vector3{ 0,0.5f,0 }, 0, 0.25f, LWP::Utility::Easing::Type::InQuart)
+		.Add(&sprite_.transform.scale, lwp::Vector3{ 0.2f,0.0f,0 }, 0.1f, 0.15f, LWP::Utility::Easing::Type::InQuart)
+		.Add(&sprite_.transform.scale, lwp::Vector3{ -0.2f,-0.5f,0 }, 0.25f, 0.15f, LWP::Utility::Easing::Type::OutQuart);
+
+	// 選択中のパーティクル
 	CursorParticleInit();
 }
 
@@ -81,7 +86,6 @@ void L::UpgradeManager::LevelUp()
 void L::UpgradeManager::DebugWindow(Player* player)
 {
 #ifdef DEMO
-
 	ImGui::Begin("UpgradeManager");
 
 
@@ -246,7 +250,7 @@ void L::UpgradeManager::Selecting(Player* player)
 	LWP::Info::SetDeltaTimeMultiply(0.0f);
 	// 場所
 	Vector2 pos{ 0.0f,625.0f };
-	sprite_.isActive = true;
+	sprite_.isActive = false;
 	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
 	// 抽選されたアップグレードを更新
 	attackUpgrades_[candidata_[0]]->Update();
@@ -286,34 +290,23 @@ void L::UpgradeManager::Selecting(Player* player)
 		Input::Keyboard::GetPress(DIK_RETURN) ||
 		Input::Pad::GetPress(XINPUT_GAMEPAD_A))
 	{
-		isPress_ = true;	
-		// サイズ　1920 x 1080
-		lwp::Matrix4x4 matViewport = MakeViewportMatrix(0, 0,1980, 1080, 0, 1);
-		lwp::Matrix4x4 viewProj = mainCameraptr_->GetViewProjection();
-		lwp::Matrix4x4 matVPV = viewProj * matViewport;
-		matVPV = matVPV.Inverse();
+		isPress_ = true;
+		
+		CursorEffect_(10, sprite_.transform.translation);
 
-		lwp::Vector3 posNear = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y, 0);
-		lwp::Vector3 posFar = Vector3(sprite_.transform.translation.x, sprite_.transform.translation.y, 1);
-
-		posNear = lwp::Matrix4x4::TransformCoord(posNear,matVPV);
-		posFar = lwp::Matrix4x4::TransformCoord(posFar,matVPV);
-		centerPoint = posFar - posNear;
-		centerPoint = centerPoint.Normalize();
-		centerPoint = posNear + centerPoint * 50;
-
-		CursorEffect_(2, centerPoint);
+		// カーソルをつぶしたり伸ばしたりする
+		sprite_.transform.scale.y -= (sinf(pressTime_ * 60 * M_PI / 10) * 0.05f);
+		sprite_.transform.scale.x += (sinf(pressTime_ * 60 * M_PI / 10) * 0.05f);
 	}
 	else
 	{
 		isPress_ = false;
 		pressTime_ = 0.0f;
+		sprite_.transform.scale = { 1,1,1 };
 	}
 	if (isPress_)
 	{
 		pressTime_ += lwp::GetDefaultDeltaTimeF();
-
-
 
 		if (kPressTime_ <= pressTime_)
 		{
@@ -330,7 +323,9 @@ void L::UpgradeManager::Selecting(Player* player)
 			pressTime_ = 0.0f;
 		}
 	}
-
+	// カーソルのスプライトを上下に揺らす
+	cursorAnimFrame_ += lwp::GetDefaultDeltaTimeF() * 60;
+	sprite_.transform.translation.y += sinf(cursorAnimFrame_ * M_PI / 20) * 0.4f;
 }
 
 void L::UpgradeManager::Selected()
@@ -380,55 +375,54 @@ void L::UpgradeManager::Apply(Player* player)
 	//// 情報を保存
 	//preParam_ = para;
 	GameTimer::GetInstance()->Start();
+	// 敵を弾く
+	player->StartEnemyKnockBack();
 }
 
 void L::UpgradeManager::CursorParticleInit()
 {
 	static LWP::Object::Particle CursorParticle_;
-	CursorParticle_.SetPrimitive<Primitive::Cube>();
-	CursorParticle_.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
-	CursorParticle_.P()->material.enableLighting = true;
+	CursorParticle_.SetPrimitive<Primitive::Sprite>();
+	Primitive::Sprite particleTex;
+	CursorParticle_.P()->texture = LWP::Resource::LoadTexture("CursorParticle.png");
+	CursorParticle_.P()->isActive = true;
+	CursorParticle_.P()->isUI = true;
 	CursorParticle_.P()->material.shininess = 100.0f;
 	CursorParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::GREEN);
 	CursorParticle_.initFunction = [](Primitive::IPrimitive* primitive)
-		{
-			// 円周上に置く
-			lwp::Vector3 pos = randomOnCircle();
-			pos *= 1.5f;
-			float dir1 = Utility::GenerateRandamNum<int>(-50, 50);
-			dir1 = dir1 / 100.0f;
-			float dir2 = Utility::GenerateRandamNum<int>(-50, 50);
-			dir2 = dir2 / 100.0f;
-			pos.x += dir1;
-			pos.y += dir2;
+	{
+		// 円周上に置く
+		lwp::Vector3 pos = randomOnCircle();
+		
+		float dir1 = Utility::GenerateRandamNum<int>(-100, 100);
+		float dir2 = Utility::GenerateRandamNum<int>(-100, 100);
+		pos.x += dir1;
+		pos.y += dir2;
 
-			Object::ParticleData newData{};
-			newData.wtf.translation = pos + primitive->transform.GetWorldPosition();
-			newData.wtf.rotation = primitive->transform.rotation;
-			newData.wtf.scale = { 0.25f,0.25f, 0.25f };
-			//lwp::Vector3 
-			// 中心までのベクトル
-			newData.velocity = newData.wtf.translation;
-			// パーティクル追加
-			return newData;
-		};
+		Object::ParticleData newData{};
+		newData.wtf.translation = pos + primitive->transform.GetWorldPosition();
+		newData.wtf.scale = { 0.1f,0.1f, 1.0f };
+
+		// 中心までのベクトル
+		newData.velocity = newData.wtf.translation;
+		// パーティクル追加
+		return newData;
+	};
 	CursorParticle_.updateFunction = [this](Object::ParticleData* data)
 		{
 			// 経過フレーム追加
 			data->elapsedFrame++;
-			lwp::Vector3 direction = data->velocity - centerPoint;
+			lwp::Vector3 direction = sprite_.transform.translation - data->velocity;
 
 
-			data->wtf.translation -= direction / 10.0f;    // 速度ベクトルを加算
-			data->wtf.rotation += data->velocity;    // ついでに回転させとく
+			data->wtf.translation += direction / 10.0f;    // 速度ベクトルを加算
 
-			return data->elapsedFrame > 10 ? true : false;
+		return data->elapsedFrame > 10 ? true : false;
 		};
 	CursorParticle_.isActive = true;
 
 	CursorEffect_ = [&](int i, lwp::Vector3 pos)
 		{
-			
 			CursorParticle_.P()->transform = pos;
 			CursorParticle_.Add(i);
 		};
@@ -445,7 +439,8 @@ lwp::Matrix4x4 MakeViewportMatrix(float left, float top, float width, float heig
 	return result;
 }
 
-lwp::Vector3 randomOnCircle() {
+lwp::Vector3 randomOnCircle()
+{
 	float ramdom = Utility::GenerateRandamNum<int>(0, 100);
 	ramdom = ramdom / 100.0f;
 	const float theta = 2.0 * std::numbers::pi * ramdom;

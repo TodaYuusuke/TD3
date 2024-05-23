@@ -50,6 +50,8 @@
     <ClCompile Include="Game\Objects\Enemy\Boss\JumpBoss.cpp" />
     <ClCompile Include="Game\Objects\Player\HP\HPSprite.cpp" />
     <ClCompile Include="Game\Objects\Upgrade\Function\EXLife\EXLife.cpp" />
+    <ClCompile Include="Game\Objects\Player\Level\ExpBar.cpp" />
+    <ClCompile Include="Game\SceneTransition\SceneTransition.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.h" />
@@ -132,5 +134,7 @@
     <ClInclude Include="Game\Objects\Upgrade\Function\EXLife\EXLife.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\BlowOffFlag.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\EXLifeFlag.h" />
+    <ClInclude Include="Game\Objects\Player\Level\ExpBar.h" />
+    <ClInclude Include="Game\SceneTransition\SceneTransition.h" />
   </ItemGroup>
 </Project>
