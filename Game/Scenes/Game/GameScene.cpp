@@ -23,7 +23,8 @@ void GameScene::Initialize()
 	// 天球
 	skydome.LoadFile("skydome/skydome.obj");
 	skydome.transform.scale = { 1.0f,1.0f, 1.0f };
-	skydome.material.enableLighting = true;
+	skydome.material.enableLighting = false;
+	skydome.isActive = false;
 	// 地面
 	ground.LoadFile("ground/ground.obj");
 	ground.transform.translation.y = -0.5f;
@@ -104,7 +105,7 @@ void GameScene::Update()
 	ImGui::DragFloat3("pos",&pos.x);
 	ImGui::DragFloat3("scale",&scale.x);
 	skydome.transform.translation = pos;
-	//skydome.transform.scale = scale;
+	skydome.transform.scale = scale;
 	ImGui::End();
 	// 時間を計測
 	// チュートリアルの時は計測しない

@@ -70,7 +70,7 @@ private: //*** 変数群 ***//
 	// 天球
 	lwp::Mesh skydome;
 	lwp::Vector3 pos;
-	lwp::Vector3 scale;
+	lwp::Vector3 scale = { 1.0f,1.0f,1.0f };
 	// 太陽
 	lwp::PointLight sun_;
 
