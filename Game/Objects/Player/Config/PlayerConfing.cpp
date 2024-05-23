@@ -46,6 +46,7 @@ void PlayerConfig::InitCount()
 	Count_.SLASHRELATIONBASE_ = 1u;
 	Count_.BASEHP_ = 5u;
 	Count_.MAXHP_ = 5u;
+	Count_.UPGRADEPENETORATIONNUM_ = 5u;
 }
 
 void PlayerConfig::InitParcentage()

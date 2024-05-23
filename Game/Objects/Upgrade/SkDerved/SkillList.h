@@ -11,3 +11,4 @@
 #include "EXLifeFlag.h"
 #include "BlowOffFlag.h"
 #include "Skill_MomentTimeDown.h"
+#include "Skill_PenetrationFlag.h"

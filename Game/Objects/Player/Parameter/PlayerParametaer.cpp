@@ -12,6 +12,15 @@ void PlayerParameter::Initialize(PlayerConfig* p)
 
 void PlayerParameter::Update()
 {
+	// 機能として追加されたものが動いたか確認する
+	// 左のフラグは使わなくても良い...
+	if (Flag.isActiveIncreaseHP)
+	{
+		// HP 回復
+		Hp.Increase();
+		Flag.isActiveIncreaseHP = false;
+	}
+
 	Hp.Update();
 }
 
@@ -213,4 +222,5 @@ void PlayerParameter::ApplyFlag()
 	Flag.eXLifeFlag = param.Flag.eXLifeFlag;
 	Flag.pursuitFlag = param.Flag.pursuitFlag;
 	Flag.BlowOffFlag = param.Flag.BlowOffFlag;
+	Flag.penetrationFlag = param.Flag.penetrationFlag;
 }

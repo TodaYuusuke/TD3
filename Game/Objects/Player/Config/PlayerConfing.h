@@ -68,6 +68,8 @@ public: //*** サブクラス ***//
 		uint32_t BASEHP_ = 5u;
 		// 最大体力
 		uint32_t MAXHP_ = 5u;
+		// 敵を何体倒すと HP 回復するか
+		uint32_t UPGRADEPENETORATIONNUM_;
 	};
 
 	// 割合系

@@ -47,10 +47,10 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	attackUpgrades_.push_back(new Skill_AttackRangeUp);
 
 	// 逃走
-	escapeUpgrades_.push_back(new Skill_MomentTimeDown);
-	escapeUpgrades_.push_back(new Skill_MomentTimeDown);
-	escapeUpgrades_.push_back(new Skill_MomentTimeDown);
-	escapeUpgrades_.push_back(new Skill_MomentTimeDown);
+	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
+	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
+	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
+	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
 #else
 	// 製品版
 	// アップグレードをすべて取得
@@ -125,17 +125,6 @@ void L::UpgradeManager::Update(Player* player)
 			escapeUpgrades_[i]->BaseUpdate();
 		}
 	}
-
-	// 個別で機能するものを更新する
-	// もう全部フラグ追加すればいいと思う
-	// プレイヤーにマネージャーを渡して敵を登録する
-	// 攻撃がヒットしたという情報のみを格納するマネージャー
-	// フラグに応じてどういった操作をするか決定する
-	// 新規クラス？
-	// このクラスが持つ必要ない？
-	// アップグレード内容参照する必要
-	// プレイヤーから参照？
-	// 個別で参照できるようにする？
 }
 
 void L::UpgradeManager::LevelUp()

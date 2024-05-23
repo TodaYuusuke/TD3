@@ -20,6 +20,7 @@
 
 #include "Game/Objects/Upgrade/Function/Pursuit/Pursuit.h"
 #include "Game/Objects/Upgrade/Function/EXLife/EXLife.h"
+#include <Game/Objects/Upgrade/HitCheck/HitCheck.h>
 
 #pragma endregion アップグレード
 
@@ -110,7 +111,8 @@ public: //*** パブリック関数 ***//
 	// コンストラクタ
 	Player() = default;
 	// デストラクタ
-	~Player() {
+	~Player()
+	{
 		delete pursuit_;
 		delete eXLife_;
 	};
@@ -168,6 +170,9 @@ public:	//*** セッター,ゲッター ***//
 	bool GeteXLifeFlag()const { return eXLifeFlag; }
 	// 
 	EXLife* GeteXLife()const { return eXLife_; }
+
+	// 敵側が自分を登録できる用のゲッター
+	L::HitCheck* const GetHitCheckPtr() { return &hitCheck_; }
 
 private: //*** プライベート関数 ***//
 
@@ -352,4 +357,8 @@ private: //*** アップデート関連クラス ***//
 	EXLife* eXLife_;
 	// Pursuitを管理するフラグ
 	bool eXLifeFlag = false;
+
+	// 攻撃した後の敵を登録して、そのあとの追加効果を発生させる
+	L::HitCheck hitCheck_;
+
 };

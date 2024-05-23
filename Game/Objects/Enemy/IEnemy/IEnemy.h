@@ -18,7 +18,8 @@ class IEnemy
 {
 protected:
 	// 体のパーツ
-	enum BodyParts {
+	enum BodyParts
+	{
 		BODY,
 		L_ARM,
 		R_ARM,
@@ -88,6 +89,9 @@ public: //*** ゲッターセッター ***//
 
 	lwp::Vector3 GetPosition()const { return models_[0].transform.translation; }
 
+	// 敵の添え字
+	uint32_t GetIndex() const { return index_; }
+
 	// 狙う対象をセット(今回は自機をセットする)
 	virtual void SetTarget(Player* player) { player_ = player; }
 	virtual void SetPosition(lwp::Vector3 pos) { models_[0].transform.translation = pos; }
@@ -95,7 +99,8 @@ public: //*** ゲッターセッター ***//
 	// カメラのアドレスを設定
 	virtual void SetCamera(FollowCamera* camera) { followCamera_ = camera; }
 	void SetManager(ExpManager* p) { manager_ = p; }
-	void SetSpawnEffect(lwp::Vector3 pos) {
+	void SetSpawnEffect(lwp::Vector3 pos)
+	{
 		// 出現時にパーティクルを出す
 #ifdef DEMO
 		spawnEffect_(8, models_[0].transform.translation);
@@ -233,4 +238,9 @@ protected:
 	// 出現時の光の柱
 	LWP::Primitive::Billboard3D lightPillar_;
 	LWP::Resource::Motion lightPillarMotion_;
+
+	// 敵が何番目かを取得できるようにする
+	static uint32_t staticIndex_;
+	uint32_t index_ = 0u;
+
 };

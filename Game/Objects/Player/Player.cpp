@@ -79,6 +79,10 @@ void Player::Initialize()
 	eXLife_ = new EXLife();
 	eXLife_->Init(this);
 
+	// 攻撃後確認
+	hitCheck_.Initialize();
+
+
 	demoModel_.material.enableLighting = true;
 
 	// ゲームオーバーアニメーション
@@ -134,6 +138,9 @@ void Player::Update()
 	t += (float)lwp::GetDeltaTime();
 	weapon_->Update();
 	slashPanel_->Update();
+
+	// パラメータに関係してくるのでパラメータの前
+	hitCheck_.Update(this);
 
 	// ダメージ処理が終わった後なら？
 	parameter_.Update();

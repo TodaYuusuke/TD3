@@ -68,6 +68,8 @@ struct UpgradeFlag
 	bool eXLifeFlag = false;
 	// 吹き飛ばし
 	bool BlowOffFlag = false;
+	// 敵を複数倒すと HP 回復
+	bool penetrationFlag = false;
 };
 
 /// <summary>
