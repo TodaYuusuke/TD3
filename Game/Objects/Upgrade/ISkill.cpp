@@ -39,7 +39,8 @@ void L::ISkill::DebugTree()
 	{
 		for (IUpgrade* up : attackUpgrades_)
 		{
-			ImGui::Text(up->GetUpgradeName().c_str());
+			//ImGui::Text(up->GetUpgradeName().c_str());
+			up->GetUpgradeName();
 		}
 		ImGui::TreePop();
 		ImGui::Separator();

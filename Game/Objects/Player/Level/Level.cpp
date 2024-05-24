@@ -19,7 +19,7 @@ void Level::Initialize(Player* p)
 	// 経験値初期化
 	exp_ = 0.0f;
 	// とりあえず 10
-	reqEXP_ = 10.0f;
+	reqEXP_ = GetRequestEXP();
 
 	bar_.reset(new ExpBar);
 	bar_->Initialize();
@@ -108,11 +108,12 @@ void Level::LevelUp()
 	{
 		return;
 	}
-	reqEXP_ += 5.0f + (lv_ - 1) * 2;
+	reqEXP_ = GetRequestEXP();
 	lv_++;
 	// ここでアップデートする関数を呼び出す
 	L::UpgradeManager::LevelUp();
 }
+
 #ifdef DEMO
 void Level::DebugWindow()
 {

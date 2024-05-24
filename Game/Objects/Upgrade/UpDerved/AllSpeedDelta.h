@@ -10,7 +10,7 @@ namespace L
 	{
 	private:
 		// 変化させる値
-		float var = 0.0f;
+		Paramete var = 0.0f;
 	public:
 		/// <summary>
 		/// 純粋な移動速度アップ！（定数）
@@ -18,7 +18,8 @@ namespace L
 		/// <para>受け取った値によって読み込む画像を変えたい</para>
 		/// </summary>
 		/// <param name="v">プラスでもマイナスでもいい</param>
-		AllSpeedDelta(float v = 10.0f) : var(v) {};
+		AllSpeedDelta(float b = 0.0f, float per = 0.0f) : var(b, per) {};
+		AllSpeedDelta(Paramete v) : var(v) {};
 
 
 
@@ -27,12 +28,12 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->Speed.allSpeedDelta.base += var;
+			para->Speed.allSpeedDelta += var;
 		}
 
-		std::string GetUpgradeName() override
+		void GetUpgradeName() override
 		{
-			return "AllSpeedDelta : " + std::to_string(var);
+			ImGui::Text("AllSpeed : %.2f, %.2f", var.base, var.percent);
 		}
 	};
 }

@@ -36,7 +36,7 @@ namespace L
 
 		std::string GetUpgradeName() override
 		{
-			return "Skill_RadiusLevelUp";
+			return "RadiusLevelUp";
 		}
 
 	};

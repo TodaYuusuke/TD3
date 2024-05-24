@@ -4,7 +4,8 @@
 namespace L
 {
 	/// <summary>
-	/// 攻撃力を 40% 上昇させる
+	/// 攻撃力を 5 と 20% 上昇させる
+	/// 後隙を 10% 増やす
 	/// </summary>
 	class Skill_PowerUp3 : public ISkill
 	{
@@ -16,7 +17,8 @@ namespace L
 		Skill_PowerUp3()
 		{
 			attackUpgrades_.clear();
-			attackUpgrades_.push_back(new PowerPerDelta(40.0f));
+			attackUpgrades_.push_back(new PowerDelta(5.0f, 20.0f));
+			attackUpgrades_.push_back(new MomentTimeDelta(0.0f, 10.0f));
 		}
 
 		/// <summary>
@@ -37,7 +39,7 @@ namespace L
 
 		std::string GetUpgradeName() override
 		{
-			return "Skill_PowerUP3";
+			return "PowerUp3";
 		}
 
 	};

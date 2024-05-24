@@ -11,12 +11,13 @@ namespace L
 	public:
 		/// <summary>
 		/// 攻撃の横幅をアップさせる
+		/// 1.0f 上昇 10% 上昇
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
 		Skill_AttackRangeUp()
 		{
 			attackUpgrades_.clear();
-			attackUpgrades_.push_back(new  AttackRangeDelta);
+			attackUpgrades_.push_back(new AttackRangeDelta(1.0f, 10.0f));
 		}
 
 		/// <summary>
@@ -37,7 +38,7 @@ namespace L
 
 		std::string GetUpgradeName() override
 		{
-			return "Skill_AttackRangeUp";
+			return "AttackRangeUp";
 		}
 
 	};

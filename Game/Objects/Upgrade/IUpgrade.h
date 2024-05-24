@@ -16,6 +16,14 @@ struct Paramete
 	/// <param name="b">実数</param>
 	/// <param name="per">%</param>
 	Paramete(float b = 0.0f, float per = 100.0f) : base(b), percent(per) {}
+
+	const Paramete& operator+=(const Paramete& obj)
+	{
+		this->base += obj.base;
+		this->percent += obj.percent;
+		return *this;
+	}
+
 };
 
 struct UpgradeHP
@@ -121,7 +129,7 @@ namespace L
 		/// <summary>
 		/// デバッグ表示関数
 		/// </summary>
-		virtual std::string GetUpgradeName() { return "Upgrade"; }
+		virtual void GetUpgradeName() { ImGui::Text("Upgrade"); }
 
 	protected: // ** 派生先用のメンバ変数 ** //
 

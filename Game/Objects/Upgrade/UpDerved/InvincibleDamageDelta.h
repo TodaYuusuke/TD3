@@ -10,7 +10,7 @@ namespace L
 	{
 	private:
 		// 変化させる値
-		float var = 0.0f;
+		Paramete var = 0.0f;
 	public:
 		/// <summary>
 		/// 無敵時間アップ（定数）
@@ -18,7 +18,8 @@ namespace L
 		/// <para>受け取った値によって読み込む画像を変えたい</para>
 		/// </summary>
 		/// <param name="v">プラスでもマイナスでもいい</param>
-		InvincibleDamageDelta(float v = 1.0f) : var(v) {};
+		InvincibleDamageDelta(float b = 0.0f, float per = 0.0f) : var(b, per) {};
+		InvincibleDamageDelta(Paramete v) : var(v) {};
 
 
 
@@ -27,12 +28,12 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->Time.damageInvincibleTimeDelta.base += var;
+			para->Time.damageInvincibleTimeDelta += var;
 		}
 
-		std::string GetUpgradeName() override
+		void GetUpgradeName() override
 		{
-			return "PowerDelta : " + std::to_string(var);
+			ImGui::Text("InvincibleDamage : %.2f, %.2f", var.base, var.percent);
 		}
 	};
 }

@@ -4,19 +4,19 @@
 namespace L
 {
 	/// <summary>
-	/// 被弾時の無敵時間を 2 秒追加する
+	/// 後隙を 20% 減少させる
 	/// </summary>
-	class Skill_DamageInvincibleAdd : public ISkill
+	class Skill_MomentTimeDown1 : public ISkill
 	{
 	public:
 		/// <summary>
-		/// 被弾時の無敵時間を 2 秒追加する
+		/// 後隙を 20% 減少させる
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
-		Skill_DamageInvincibleAdd()
+		Skill_MomentTimeDown1()
 		{
 			attackUpgrades_.clear();
-			attackUpgrades_.push_back(new InvincibleDamageDelta(2.0f, 0.0f));
+			attackUpgrades_.push_back(new MomentTimeDelta(0.0f, -20.0f));
 		}
 
 		///// <summary>
@@ -43,12 +43,12 @@ namespace L
 
 		std::string GetTexturePass() override
 		{
-			return "Skill/InvincibleUp.png";
+			return "Skill/white.png";
 		}
 
 		std::string GetUpgradeName() override
 		{
-			return "DamageInvincibleAdd";
+			return "MomentTimeDown1";
 		}
 
 	};

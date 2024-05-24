@@ -20,7 +20,7 @@
 
 #include "Game/Objects/Upgrade/Function/Pursuit/Pursuit.h"
 #include "Game/Objects/Upgrade/Function/EXLife/EXLife.h"
-#include <Game/Objects/Upgrade/HitCheck/HitCheck.h>
+#include <Game/Objects/Player/HitCheck/HitCheck.h>
 
 #pragma endregion アップグレード
 

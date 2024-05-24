@@ -34,7 +34,7 @@ namespace L
 
 		std::string GetUpgradeName() override
 		{
-			return "Penetrate";
+			return "PenetrationFlag";
 		}
 	};
 }

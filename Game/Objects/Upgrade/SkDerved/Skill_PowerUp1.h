@@ -48,7 +48,7 @@ namespace L
 
 		std::string GetUpgradeName() override
 		{
-			return "Skill_PowerUp1";
+			return "PowerUp1";
 		}
 
 	};

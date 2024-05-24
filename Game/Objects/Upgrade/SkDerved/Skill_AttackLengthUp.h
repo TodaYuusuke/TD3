@@ -11,12 +11,13 @@ namespace L
 	public:
 		/// <summary>
 		/// 攻撃の長さをアップさせる
+		/// 20% アップ
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
 		Skill_AttackLengthUp()
 		{
 			attackUpgrades_.clear();
-			attackUpgrades_.push_back(new AttackLengthDelta(20));
+			attackUpgrades_.push_back(new AttackLengthDelta(0.0f, 20.0f));
 		}
 
 		///// <summary>

@@ -15,7 +15,7 @@ namespace L
 		/// <summary>
 		/// 半径を増減させる
 		/// </summary>
-		RadiusLevelDelta(float b = 0.0f, float per = 100.0f) : var(b, per) {};
+		RadiusLevelDelta(float b = 0.0f, float per = 0.0f) : var(b, per) {};
 		RadiusLevelDelta(Paramete v) : var(v) {};
 
 
@@ -25,9 +25,12 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->Other.radiusLevel.base += var.base;
-			para->Other.radiusLevel.percent += var.percent;
+			para->Other.radiusLevel += var;
 		}
 
+		void GetUpgradeName() override
+		{
+			ImGui::Text("RadiusLevel : %.2f, %.2f", var.base, var.percent);
+		}
 	};
 }

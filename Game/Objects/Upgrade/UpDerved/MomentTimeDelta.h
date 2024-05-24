@@ -10,14 +10,15 @@ namespace L
 	{
 	private:
 		// 変化させる値
-		float var = 0.0f;
+		Paramete var = 0.0f;
 	public:
 		/// <summary>
 		/// 後隙時間変更
 		/// <para>ここで値を定義する</para>
 		/// </summary>
 		/// <param name="v">100.0f ~ 0.0f の ％</param>
-		MomentTimeDelta(float v = 100.0f) : var(v) {};
+		MomentTimeDelta(float b = 0.0f, float per = 0.0f) : var(b, per) {};
+		MomentTimeDelta(Paramete v) : var(v) {};
 
 
 
@@ -26,12 +27,12 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->Time.momentTimeDelta.percent += var;
+			para->Time.momentTimeDelta += var;
 		}
 
-		std::string GetUpgradeName() override
+		void GetUpgradeName() override
 		{
-			return "MomentTime : " + std::to_string(var);
+			ImGui::Text("MomentTime : %.2f, %.2f", var.base, var.percent);
 		}
 	};
 }

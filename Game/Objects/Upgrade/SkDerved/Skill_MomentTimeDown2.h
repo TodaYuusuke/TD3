@@ -4,19 +4,19 @@
 namespace L
 {
 	/// <summary>
-	/// 後隙を 50% 減少させる
+	/// 後隙を 30% 減少させる
 	/// </summary>
-	class Skill_MomentTimeDown : public ISkill
+	class Skill_MomentTimeDown2 : public ISkill
 	{
 	public:
 		/// <summary>
-		/// 後隙を 50% 減少させる
+		/// 後隙を 30% 減少させる
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
-		Skill_MomentTimeDown()
+		Skill_MomentTimeDown2()
 		{
 			attackUpgrades_.clear();
-			attackUpgrades_.push_back(new MomentTimeDelta(-50.0f));
+			attackUpgrades_.push_back(new MomentTimeDelta(0.0f, -30.0f));
 		}
 
 		///// <summary>
@@ -48,7 +48,7 @@ namespace L
 
 		std::string GetUpgradeName() override
 		{
-			return "Skill_MomentTimeDown";
+			return "MomentTimeDown2";
 		}
 
 	};

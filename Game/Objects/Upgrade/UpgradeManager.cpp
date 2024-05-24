@@ -43,14 +43,18 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	// 攻撃
 	attackUpgrades_.push_back(new Skill_PursuitFlag);
 	attackUpgrades_.push_back(new Skill_PowerUp1);
-	attackUpgrades_.push_back(new Skill_PowerUp1);
+	attackUpgrades_.push_back(new Skill_PowerUp2);
+	attackUpgrades_.push_back(new Skill_PowerUp3);
 	attackUpgrades_.push_back(new Skill_AttackRangeUp);
+	attackUpgrades_.push_back(new Skill_BlowOffFlag);
 
 	// 逃走
+	escapeUpgrades_.push_back(new Skill_DamageInvincibleAdd);
 	escapeUpgrades_.push_back(new Skill_RadiusLevelUp);
-	escapeUpgrades_.push_back(new Skill_RadiusLevelUp);
-	escapeUpgrades_.push_back(new Skill_RadiusLevelUp);
-	escapeUpgrades_.push_back(new Skill_RadiusLevelUp);
+	escapeUpgrades_.push_back(new Skill_MomentTimeDown1);
+	escapeUpgrades_.push_back(new Skill_MomentTimeDown2);
+	escapeUpgrades_.push_back(new Skill_EXLifeFlag);
+	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
 #else
 	// 製品版
 	// アップグレードをすべて取得
@@ -149,6 +153,8 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	ImGui::Text("upgrade: %d", kUpgradNum_);
 	ImGui::Text("cursor : %d", cursorIndex_);
 	ImGui::Text("choice : %d", choiceIndex_);
+	ImGui::Text("Attack : %d", attackUpgrades_.size());
+	ImGui::Text("Escape : %d", escapeUpgrades_.size());
 	ImGui::Separator();
 
 	ImGui::Text("ChoseUpgrade : %d", candidata_.size());
@@ -160,10 +166,9 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	}
 
 	ImGui::Separator();
-	ImGui::Text("Nums : %d", attackUpgrades_.size());
-	if (ImGui::TreeNode("All"))
+	ImGui::Text("AttackUpgrade : %d", attackUpgrades_.size());
+	if (ImGui::TreeNode("Attack"))
 	{
-
 		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
 
 		for (size_t i = 0; i < attackUpgrades_.size(); i++)
@@ -175,7 +180,23 @@ void L::UpgradeManager::DebugWindow(Player* player)
 		ImGui::TreePop();
 		ImGui::Separator();
 	}
-	ImGui::Text("Nums : %d", upgradedConut_);
+	ImGui::Separator();
+	ImGui::Text("EscapeUpgrade : %d", attackUpgrades_.size());
+	if (ImGui::TreeNode("Escape"))
+	{
+		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
+
+		for (size_t i = 0; i < escapeUpgrades_.size(); i++)
+		{
+			escapeUpgrades_[i]->DebugTree();
+		}
+
+		ImGui::EndChild();
+		ImGui::TreePop();
+		ImGui::Separator();
+	}
+	ImGui::Separator();
+	ImGui::Text("NowUpgrade : %d", upgradedConut_);
 	if (ImGui::TreeNode("Selected"))
 	{
 		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 70));
