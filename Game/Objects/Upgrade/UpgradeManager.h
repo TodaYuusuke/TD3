@@ -117,6 +117,12 @@ namespace L {
 		// アップグレードを選択するときのアニメーション
 		LWP::Resource::Motion selectMotion_;
 		float cursorAnimFrame_;
+
+		// 選択されたときのアニメーション
+		// 0がattackUpgrade,1がescapeUpgrade
+		LWP::Resource::Motion selectedMotion_;
+		lwp::Vector3 selectedAnimPos_;
+		bool isSelected_;
 	};
 }
 lwp::Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
