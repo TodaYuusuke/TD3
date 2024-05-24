@@ -99,7 +99,7 @@ void GameScene::Update()
 	audio->Load("fanfare.wav");*/
 	//TODO : 一度だけ再生しないと重なる
 	if (aaa == 0) {
-	audio->Play();
+	audio->Play(0.2f);
 	aaa = 1;
 	}
 

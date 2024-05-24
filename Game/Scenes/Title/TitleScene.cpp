@@ -22,20 +22,32 @@ void TitleScene::Initialize()
 
 	sceneTransition_ = std::make_unique<SceneTransition>();
 	sceneTransition_->Initialize();
+
+	audio = std::make_unique<LWP::Resource::Audio>();
+	audio->Load("fanfare.wav");
 }
 
 // 更新
 void TitleScene::Update()
 {
+	/*audio = std::make_unique<LWP::Resource::Audio>();
+	audio->Load("fanfare.wav");*/
+	//TODO : 一度だけ再生しないと重なる
+
 	if (Keyboard::GetTrigger(DIK_SPACE) ||
 		Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
 		sceneTransition_->Start();
+		if (aaa == 0) {
+			audio->Play(0.2f);
+			aaa = 1;
+		}
 	}
 
 	sceneTransition_->Update();
 
 	if (sceneTransition_->GetIsSceneChange()) {
 		nextSceneFunction = []() {return new GameScene; };
+		audio->Stop();
 	}
 }
