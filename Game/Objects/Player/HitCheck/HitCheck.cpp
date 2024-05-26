@@ -2,15 +2,23 @@
 #include <Game/Objects/Enemy/IEnemy/IEnemy.h>
 #include <Game/Objects/Player/Player.h>
 
-void L::HitCheck::Initialize()
+#include <Game/Objects/Upgrade/Function/FuncList.h>
+
+void L::HitCheck::Initialize(Player* const player)
 {
+	player_ = player;
 	hitList_.clear();
 	hitEnemys_.clear();
 	destroyEnemyNum_ = 0u;
 	postDestroyEnemyNum_ = 0u;
+	functions_.clear();
+
+	// 機能を登録する
+	functions_.push_back(new Penetration(&destroyEnemyNum_, &postDestroyEnemyNum_));
+	functions_.push_back(new Burning);
 }
 
-void L::HitCheck::Update(Player* const player)
+void L::HitCheck::Update()
 {
 	postDestroyEnemyNum_ = destroyEnemyNum_;
 	// 消しながら更新
@@ -21,17 +29,28 @@ void L::HitCheck::Update(Player* const player)
 		// 一定時間経っていたら
 		if (CheckDeleteTarget((*itr)))
 		{
+			// 倒した瞬間で判断させれば良い
+			//CheckPenetrate(player_);
+			// 機能ごとに更新
+			for (IFunction* func : functions_)
+			{
+				func->SlayEnemy(*itr, player_);
+			}
 			// 削除
 			itr = hitList_.erase(itr);
-			// 倒した瞬間で判断させれば良い
-			CheckPenetrate(player);
 			continue;
 		}
+		// 機能ごとに更新
+		for (IFunction* func : functions_)
+		{
+			func->Update(*itr, player_);
+		}
+
 		// いろんなフラグを見て更新
-		CheckFlags((*itr), player);
+		//CheckFlags((*itr), player_);
+
 		// 時間プラス
 		(*itr)->hitTime += lwp::GetDeltaTimeF();
-
 		// 次へ
 		itr++;
 	}
@@ -90,32 +109,32 @@ bool L::HitCheck::CheckDeleteTarget(HitEnemyTime* het)
 	}
 	return false;
 }
-
-void L::HitCheck::CheckFlags(HitEnemyTime* het, Player* const player)
-{
-	// ここは常に判定できる
-	
-	// 倒した敵が出てきたときに判定しているが、一応ここでも判定している
-	// どうやったって回復できるのは 1 フレームのみ
-	CheckPenetrate(player);
-}
-
-void L::HitCheck::CheckPenetrate(Player* const player)
-{
-	// ここでアップグレードのフラグを使いたい
-	// HP 回復出来ますか？
-	if (player->parameter_.Flag.penetrationFlag)
-	{
-		// 一定以上かつ前のフレームと一緒ではない
-		// 一定値以上になった瞬間をコールバックさせたい
-		if (destroyEnemyNum_ != postDestroyEnemyNum_ &&
-			destroyEnemyNum_ % player->config_.Count_.UPGRADEPENETORATIONNUM_ == 0)
-		{
-			// HP 回復を実行できる状態にする
-			player->parameter_.Flag.isActiveIncreaseHP = true;
-		}
-	}
-}
+//
+//void L::HitCheck::CheckFlags(HitEnemyTime* het, Player* const player)
+//{
+//	// ここは常に判定できる
+//	het;
+//	// 倒した敵が出てきたときに判定しているが、一応ここでも判定している
+//	// どうやったって回復できるのは 1 フレームのみ
+//	CheckPenetrate(player);
+//}
+//
+//void L::HitCheck::CheckPenetrate(Player* const player)
+//{
+//	// ここでアップグレードのフラグを使いたい
+//	// HP 回復出来ますか？
+//	if (player->parameter_.Flag.penetrationFlag)
+//	{
+//		// 一定以上かつ前のフレームと一緒ではない
+//		// 一定値以上になった瞬間をコールバックさせたい
+//		if (destroyEnemyNum_ != postDestroyEnemyNum_ &&
+//			destroyEnemyNum_ % player->config_.Count_.UPGRADEPENETORATIONNUM_ == 0)
+//		{
+//			// HP 回復を実行できる状態にする
+//			player->parameter_.Flag.isActiveIncreaseHP = true;
+//		}
+//	}
+//}
 
 // このクラスを作るに至ったメモ書き
 

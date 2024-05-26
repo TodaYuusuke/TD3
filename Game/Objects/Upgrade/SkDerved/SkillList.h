@@ -14,3 +14,4 @@
 #include "Skill_MomentTimeDown2.h"
 #include "Skill_PenetrationFlag.h"
 #include "Skill_RadiusLevelUp.h"
+#include "Skill_BurningFlag.h"

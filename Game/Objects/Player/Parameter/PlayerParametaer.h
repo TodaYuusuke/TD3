@@ -153,6 +153,8 @@ public:	//*** サブクラス ***//
 		bool penetrationFlag = false;
 		// そして HP を回復させるかのフラグ
 		bool isActiveIncreaseHP = false;
+		// 敵に継続ダメージを与える
+		bool burningFlag = false;
 	};
 
 	struct OtherParam

@@ -226,6 +226,7 @@ void PlayerParameter::ApplyFlag()
 	Flag.pursuitFlag = param.Flag.pursuitFlag;
 	Flag.BlowOffFlag = param.Flag.BlowOffFlag;
 	Flag.penetrationFlag = param.Flag.penetrationFlag;
+	Flag.burningFlag = param.Flag.burningFlag;
 }
 
 void PlayerParameter::ApplyOther()

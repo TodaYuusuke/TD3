@@ -53,6 +53,8 @@
     <ClCompile Include="Game\Objects\Player\Level\ExpBar.cpp" />
     <ClCompile Include="Game\SceneTransition\SceneTransition.cpp" />
     <ClCompile Include="Game\Objects\Player\HitCheck\HitCheck.cpp" />
+    <ClCompile Include="Game\Objects\Upgrade\Function\Burning\Burning.cpp" />
+    <ClCompile Include="Game\Objects\Upgrade\Function\Penetration\Penetration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\ArrowEnemy.h" />
@@ -142,5 +144,10 @@
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp2.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp3.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_MomentTimeDown2.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Function\IFunction.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Function\Burning\Burning.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Function\FuncList.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Function\Penetration\Penetration.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_BurningFlag.h" />
   </ItemGroup>
 </Project>

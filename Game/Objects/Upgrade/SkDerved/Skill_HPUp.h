@@ -43,7 +43,7 @@ namespace L
 
 		std::string GetTexturePass() override
 		{
-			return "Skill/HPUp.png";
+			return "Skill/white.png";
 		}
 
 		std::string GetUpgradeName() override

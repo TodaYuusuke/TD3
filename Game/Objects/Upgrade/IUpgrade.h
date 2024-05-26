@@ -84,6 +84,8 @@ struct UpgradeFlag
 	bool BlowOffFlag = false;
 	// 敵を複数倒すと HP 回復
 	bool penetrationFlag = false;
+	// 敵に継続ダメージを与える
+	bool burningFlag = false;
 };
 
 

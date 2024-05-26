@@ -47,6 +47,7 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	attackUpgrades_.push_back(new Skill_PowerUp3);
 	attackUpgrades_.push_back(new Skill_AttackRangeUp);
 	attackUpgrades_.push_back(new Skill_BlowOffFlag);
+	attackUpgrades_.push_back(new Skill_BurningFlag);
 
 	// 逃走
 	escapeUpgrades_.push_back(new Skill_DamageInvincibleAdd);
@@ -55,6 +56,7 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	escapeUpgrades_.push_back(new Skill_MomentTimeDown2);
 	escapeUpgrades_.push_back(new Skill_EXLifeFlag);
 	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
+	escapeUpgrades_.push_back(new Skill_HPUp);
 #else
 	// 製品版
 	// アップグレードをすべて取得

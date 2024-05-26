@@ -81,7 +81,7 @@ void Player::Initialize()
 	eXLife_->Init(this);
 
 	// 攻撃後確認
-	hitCheck_.Initialize();
+	hitCheck_.Initialize(this);
 
 
 	demoModel_.material.enableLighting = true;
@@ -141,7 +141,7 @@ void Player::Update()
 	slashPanel_->Update();
 
 	// パラメータに関係してくるのでパラメータの前
-	hitCheck_.Update(this);
+	hitCheck_.Update();
 
 	// ダメージ処理が終わった後なら？
 	parameter_.Update();

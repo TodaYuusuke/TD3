@@ -11,6 +11,10 @@ class Player;
 
 namespace L
 {
+	// 前方宣言
+	class IFunction;
+
+
 	// 攻撃がヒットしてどの程度経ったかまでの情報
 	struct HitEnemyTime
 	{
@@ -43,17 +47,21 @@ namespace L
 		uint32_t destroyEnemyNum_ = 0u;
 		uint32_t postDestroyEnemyNum_ = 0u;
 
+		// 処理する内容
+		std::list<IFunction*> functions_;
+		// プレイヤーのポインタ
+		Player* player_ = nullptr;;
 	public:
 
 		/// <summary>
 		/// 初期化
 		/// </summary>
-		void Initialize();
+		void Initialize(Player* const player);
 
 		/// <summary>
 		/// 更新
 		/// </summary>
-		void Update(Player* const player);
+		void Update();
 
 		/// <summary>
 		/// 攻撃に当たった敵を登録
@@ -67,15 +75,15 @@ namespace L
 		/// </summary>
 		bool CheckDeleteTarget(HitEnemyTime* het);
 
-		/// <summary>
-		/// フラグを参照して更新する
-		/// </summary>
-		void CheckFlags(HitEnemyTime* het, Player* const player);
+		///// <summary>
+		///// フラグを参照して更新する
+		///// </summary>
+		//void CheckFlags(HitEnemyTime* het, Player* const player);
 
-		/// <summary>
-		/// HP 回復できるか判断
-		/// </summary>
-		void CheckPenetrate(Player* const player);
+		///// <summary>
+		///// HP 回復できるか判断
+		///// </summary>
+		//void CheckPenetrate(Player* const player);
 
 	};
 }
