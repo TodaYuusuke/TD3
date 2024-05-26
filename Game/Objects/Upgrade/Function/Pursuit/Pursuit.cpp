@@ -1,5 +1,12 @@
 #include "Pursuit.h"
 
+#include <Game/Objects/Player/Player.h>
+
+Pursuit::Pursuit(Player* const player)
+{
+	damage_ = &player->parameter_.Attack.pursuitPower;
+}
+
 void Pursuit::Init()
 {
 	interval = kInterval;
@@ -40,7 +47,8 @@ bool Pursuit::Execution()
 			if (enemys_[It]->GetIsDeath() == true) {
 				continue;
 			}
-			enemys_[It]->DecreaseHP(damage_);
+			// 別にここで当たり判定を生成しても良いと思う
+			enemys_[It]->DecreaseHP(*damage_);
 		}
 		// 最後にクリアする
 		enemys_.clear();

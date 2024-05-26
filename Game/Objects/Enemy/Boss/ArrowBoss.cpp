@@ -84,7 +84,7 @@ void ArrowBoss::Init()
 	missileContrail_.isActive = true;
 #pragma endregion
 
-	hp_ = 50;
+	hp_ = 200;
 }
 
 void ArrowBoss::Update()

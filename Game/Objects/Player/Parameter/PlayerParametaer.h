@@ -88,6 +88,13 @@ public:	//*** サブクラス ***//
 		float slashRange_ = 0.0f;	// カプセル範囲
 		float slashLength_ = 0.0f;	// スラッシュ距離補正
 
+		// 攻撃系のアップグレードの値
+		// 追撃
+		int pursuitPower = 0;
+		// 継続ダメージ
+		int burningPower = 0;
+
+
 		AttackParam operator*(const AttackParam& obj)
 		{
 			AttackParam temp;
@@ -95,6 +102,8 @@ public:	//*** サブクラス ***//
 			temp.slashPower_ = this->slashPower_ * obj.slashPower_;
 			temp.slashRange_ = this->slashRange_ * obj.slashRange_;
 			temp.slashLength_ = this->slashLength_ * obj.slashLength_;
+			temp.pursuitPower = this->pursuitPower * obj.pursuitPower;
+			temp.burningPower = this->burningPower * obj.burningPower;
 			return temp;
 		}
 	};

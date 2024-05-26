@@ -149,5 +149,7 @@
     <ClInclude Include="Game\Objects\Upgrade\Function\FuncList.h" />
     <ClInclude Include="Game\Objects\Upgrade\Function\Penetration\Penetration.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_BurningFlag.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\PursuitPowerDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\BurningPowerDelta.h" />
   </ItemGroup>
 </Project>

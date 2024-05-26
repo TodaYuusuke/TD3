@@ -18,7 +18,9 @@ namespace L
 		{
 			attackUpgrades_.clear();
 			attackUpgrades_.push_back(new PowerDelta(5.0f, 20.0f));
-			attackUpgrades_.push_back(new MomentTimeDelta(0.0f, 10.0f));
+			attackUpgrades_.push_back(new BurningPowerDelta(2.0f, 20.0f));
+			attackUpgrades_.push_back(new PursuitPowerDelta(5.0f, 10.0f));
+			attackUpgrades_.push_back(new MomentTimeDelta(0.0f, 20.0f));
 		}
 
 		/// <summary>

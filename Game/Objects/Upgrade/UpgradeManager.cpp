@@ -171,14 +171,14 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	ImGui::Text("AttackUpgrade : %d", attackUpgrades_.size());
 	if (ImGui::TreeNode("Attack"))
 	{
-		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
+		//ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
 
 		for (size_t i = 0; i < attackUpgrades_.size(); i++)
 		{
 			attackUpgrades_[i]->DebugTree();
 		}
 
-		ImGui::EndChild();
+		//ImGui::EndChild();
 		ImGui::TreePop();
 		ImGui::Separator();
 	}
@@ -186,14 +186,14 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	ImGui::Text("EscapeUpgrade : %d", attackUpgrades_.size());
 	if (ImGui::TreeNode("Escape"))
 	{
-		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
+		//ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
 
 		for (size_t i = 0; i < escapeUpgrades_.size(); i++)
 		{
 			escapeUpgrades_[i]->DebugTree();
 		}
 
-		ImGui::EndChild();
+		//ImGui::EndChild();
 		ImGui::TreePop();
 		ImGui::Separator();
 	}
@@ -201,7 +201,7 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	ImGui::Text("NowUpgrade : %d", upgradedConut_);
 	if (ImGui::TreeNode("Selected"))
 	{
-		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 70));
+		//ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 70));
 
 		for (size_t i = 0; i < attackUpgrades_.size(); i++)
 		{
@@ -210,9 +210,9 @@ void L::UpgradeManager::DebugWindow(Player* player)
 				attackUpgrades_[i]->DebugTree();
 			}
 		}
-		ImGui::EndChild();
+		//ImGui::EndChild();
 		ImGui::Separator();
-		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 70));
+		//ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 70));
 
 		for (size_t i = 0; i < escapeUpgrades_.size(); i++)
 		{
@@ -222,7 +222,7 @@ void L::UpgradeManager::DebugWindow(Player* player)
 			}
 		}
 
-		ImGui::EndChild();
+		//ImGui::EndChild();
 		ImGui::TreePop();
 		ImGui::Separator();
 	}

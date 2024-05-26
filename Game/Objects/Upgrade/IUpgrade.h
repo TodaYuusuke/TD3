@@ -44,7 +44,11 @@ struct UpgradeAttack
 	Paramete slashLengthDelta;
 	// 攻撃回数 : 倍率は使わない
 	Paramete slashNumDelta;
-
+	// アップグレード
+	// 追撃
+	Paramete pursuitDelta;
+	// 継続ダメージ
+	Paramete burningDelta;
 };
 
 struct UpgradeSpeed

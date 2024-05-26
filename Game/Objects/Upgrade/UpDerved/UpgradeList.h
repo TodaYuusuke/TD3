@@ -9,3 +9,5 @@
 #include "PowerDelta.h"
 #include "InvincibleDamageDelta.h"
 #include "RadiusLevelDelta.h"
+#include "BurningPowerDelta.h"
+#include "PursuitPowerDelta.h"

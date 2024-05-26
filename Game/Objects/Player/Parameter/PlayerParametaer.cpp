@@ -162,6 +162,11 @@ void PlayerParameter::ApplyAttack()
 	// 攻撃回数
 	base.slashNum_ = config_->Count_.SLASHRELATIONBASE_ + (int)param.Attack.slashNumDelta.base;
 
+	// 追撃
+	base.pursuitPower = config_->Power_.BASEPURSUIT + (int)param.Attack.pursuitDelta.base;
+	// 継続ダメージ
+	base.burningPower = config_->Power_.BASEBURNING + (int)param.Attack.burningDelta.base;
+
 	// 掛け算部分の計算
 	AttackParam multi;
 
@@ -173,6 +178,10 @@ void PlayerParameter::ApplyAttack()
 	multi.slashLength_ = (0.01f * param.Attack.slashLengthDelta.percent);
 	// 攻撃回数(最低値)
 	multi.slashNum_ = 1;
+	// 追撃
+	multi.pursuitPower = (0.01f * param.Attack.pursuitDelta.percent);
+	// 継続ダメージ
+	multi.burningPower = (0.01f * param.Attack.burningDelta.percent);
 
 	this->Attack = base * multi;
 }

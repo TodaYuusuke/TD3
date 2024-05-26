@@ -57,7 +57,7 @@ void PlayerConfig::InitParcentage()
 
 void PlayerConfig::InitPower()
 {
-	Power_.BASEPOWER_ = 10.0f;
+	Power_.BASEPOWER_ = 20.0f;
 }
 
 void PlayerConfig::InitOther()

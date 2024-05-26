@@ -76,7 +76,7 @@ void Player::Initialize()
 	// 今の状態を設定
 	currStatus_ = statuses_[static_cast<size_t>(behavior_)];
 
-	pursuit_ = new Pursuit();
+	pursuit_ = new Pursuit(this);
 	eXLife_ = new EXLife();
 	eXLife_->Init(this);
 

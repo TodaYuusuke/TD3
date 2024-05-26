@@ -16,7 +16,8 @@ namespace L
 		Skill_PowerUp1()
 		{
 			attackUpgrades_.clear();
-			attackUpgrades_.push_back(new PowerDelta(10.0f));
+			attackUpgrades_.push_back(new PowerDelta(10.0f, 0.0f));
+			attackUpgrades_.push_back(new BurningPowerDelta(0.0f, 10.0f));
 		}
 
 		///// <summary>

@@ -19,7 +19,7 @@ void L::Burning::Update(HitEnemyTime* const het, Player* const player)
 	if (int(het->hitTime * CALC_SCALAR) % kBurningInterval_ * CALC_SCALAR == 0)
 	{
 		// パラメータで % で上昇させてもいい
-		het->target->DecreaseHP(kBurningDamage_);
+		het->target->DecreaseHP(player->parameter_.Attack.burningPower);
 	}
 }
 

@@ -83,7 +83,12 @@ public: //*** サブクラス ***//
 	struct Power
 	{
 		// 初期攻撃力
-		float BASEPOWER_ = 10.0f;
+		float BASEPOWER_ = 20.0f;
+		// アップグレード系
+		// 追撃
+		float BASEPURSUIT = 20.0f;
+		// 継続ダメージ
+		float BASEBURNING = 3.0f;
 	};
 
 	struct Other
