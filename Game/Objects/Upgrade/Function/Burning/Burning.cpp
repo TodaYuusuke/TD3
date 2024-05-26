@@ -11,7 +11,7 @@ void L::Burning::Init()
 
 void L::Burning::Update(HitEnemyTime* const het, Player* const player)
 {
-	if (!GetIsActive(player))
+	if (!GetIsActive(player) || het->wasBurning)
 	{
 		return;
 	}
@@ -20,6 +20,7 @@ void L::Burning::Update(HitEnemyTime* const het, Player* const player)
 	{
 		// パラメータで % で上昇させてもいい
 		het->target->DecreaseHP(player->parameter_.Attack.burningPower);
+		het->wasBurning = true;
 	}
 }
 

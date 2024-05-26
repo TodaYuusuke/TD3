@@ -55,7 +55,13 @@ void L::HitCheck::Update()
 		itr++;
 	}
 
-
+	// 前か後ろどっちがいいかはわからない
+	// フラグを元に戻す
+	for (std::list<HitEnemyTime*>::iterator itr = hitList_.begin();
+		itr != hitList_.end(); ++itr)
+	{
+		(*itr)->wasBurning = false;
+	}
 #ifdef DEMO
 
 	ImGui::Begin("HitCheck");
@@ -71,14 +77,13 @@ void L::HitCheck::Update()
 
 void L::HitCheck::AddHitEnemy(IEnemy* enemy)
 {
-	hitList_.push_back(new HitEnemyTime(enemy));
 	// 登録されていないのなら
 	if (!hitEnemys_.contains(enemy->GetIndex()))
 	{
 		// 生きていることを登録して添え字加算
 		hitEnemys_[enemy->GetIndex()] = true;
 		// ここでトリガーとして設定できる
-
+		hitList_.push_back(new HitEnemyTime(enemy));
 	}
 }
 

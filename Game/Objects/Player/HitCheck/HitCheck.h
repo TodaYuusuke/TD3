@@ -23,6 +23,10 @@ namespace L
 		// 当たってからの時間
 		float hitTime = 0.0f;
 
+		// 継続ダメージを一度のみ更新させるフラグ
+		// 既に喰らったか
+		bool wasBurning = false;
+
 		HitEnemyTime(IEnemy* e) : target(e), hitTime(0.0f) {}
 	};
 
