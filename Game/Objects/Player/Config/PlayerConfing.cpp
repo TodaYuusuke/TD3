@@ -58,6 +58,8 @@ void PlayerConfig::InitParcentage()
 void PlayerConfig::InitPower()
 {
 	Power_.BASEPOWER_ = 20.0f;
+	Power_.BASEBURNING = 2.0f;
+	Power_.BASEPURSUIT = 20.0f;
 }
 
 void PlayerConfig::InitOther()
