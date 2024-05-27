@@ -1,4 +1,6 @@
 #pragma once
+#include <algorithm>
+
 #include <scene/IScene.h>
 
 #pragma region GameInclude
@@ -83,6 +85,17 @@ private: //*** 変数群 ***//
 	// シーン遷移
 	std::unique_ptr<SceneTransition> sceneTransition_;
 	//BGM
-	std::unique_ptr<LWP::Resource::Audio> audio;
-	int aaa = 0;
+public:
+	float Lerp(const float& v1, const float& v2, float t) {
+		float result = v1 + (v2 - v1) * t;
+		return result;
+	}
+private:
+
+	//SE
+	std::unique_ptr<LWP::Resource::Audio> BGM;
+	float BGMvolume = 0.2f;
+	float BGMt = 0.0f;
+	std::unique_ptr<LWP::Resource::Audio> atack;
+	std::unique_ptr<LWP::Resource::Audio> EnemyDamege;
 };

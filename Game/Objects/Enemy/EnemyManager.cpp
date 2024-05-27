@@ -22,6 +22,7 @@ void EnemyManager::Init()
 	tutorialEnemy_->SetIsTutorial(true);
 	tutorialEnemy_->SetHP(10);
 	tutorialEnemy_->SetManager(exp_);
+	tutorialEnemy_->SetSE(damege);
 	enemys_.push_back(tutorialEnemy_);
 }
 
@@ -152,6 +153,7 @@ void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos)
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
+	enemy->SetSE(damege);
 	enemys_.push_back(enemy);
 }
 void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos)
@@ -162,6 +164,7 @@ void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos)
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
+	enemy->SetSE(damege);
 	enemys_.push_back(enemy);
 }
 void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos)
@@ -172,6 +175,7 @@ void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos)
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
+	enemy->SetSE(damege);
 	enemys_.push_back(enemy);
 }
 
@@ -182,6 +186,7 @@ void EnemyManager::DashBossSpawn(lwp::Vector3 pos) {
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
+	boss->SetSE(damege);
 	enemys_.push_back(boss);
 }
 
@@ -192,6 +197,7 @@ void EnemyManager::ArrowBossSpawn(lwp::Vector3 pos) {
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
+	boss->SetSE(damege);
 	enemys_.push_back(boss);
 }
 
@@ -202,6 +208,7 @@ void EnemyManager::JumpBossSpawn(lwp::Vector3 pos) {
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
+	boss->SetSE(damege);
 	enemys_.push_back(boss);
 }
 

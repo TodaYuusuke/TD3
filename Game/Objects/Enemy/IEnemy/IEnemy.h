@@ -237,4 +237,11 @@ protected:
 	// 出現時の光の柱
 	LWP::Primitive::Billboard3D lightPillar_;
 	LWP::Resource::Motion lightPillarMotion_;
+
+	//音
+	public:
+		void SetSE(LWP::Resource::Audio* input) { damege = input; };
+private:
+	LWP::Resource::Audio* damege;
+	float soundVolume = 0.2f;
 };

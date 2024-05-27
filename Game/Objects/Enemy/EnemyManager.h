@@ -102,4 +102,9 @@ private: //*** プライベート関数 ***//
 
 	void DebugWindow();
 
+public:
+	void SetSE(LWP::Resource::Audio* input) { damege = input; };
+private:
+	LWP::Resource::Audio* damege;
+	
 };

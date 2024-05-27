@@ -29,13 +29,14 @@ void Level::Initialize(Player* p)
 	// 場所を設定
 	//collider_->Create(position, position);
 	collider_.Create(prePos_, player_->demoModel_.transform.translation, collider_.radius);
+
+	getEXP = std::make_unique<LWP::Resource::Audio>();
+	getEXP->Load("GetEXP/patternA.mp3");
 }
 
 void Level::Update()
 {
 	// 当たり判定を 1 フレーム毎に更新
-	//collider_->start = collider_->end;
-	//collider_->end = position;
 	collider_.Create(prePos_, player_->demoModel_.transform.translation, collider_.radius);
 
 	prePos_ = player_->demoModel_.transform.translation;
@@ -75,6 +76,8 @@ void Level::OnCollision(const lwp::Collider::HitData& data)
 	{
 		// 経験値取得
 		GainEXP();
+
+		getEXP->Play(soundVolume);
 	}
 }
 

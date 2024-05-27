@@ -185,8 +185,6 @@ private: //*** Behavior 管理に使う関数 ***//
 	void CreatePlayerCollision();
 	// 武器
 	void CreateWeaponCollision();
-	// ジャスト居合の生成
-	void CreateJustCollision();
 
 #pragma endregion
 
@@ -352,4 +350,13 @@ private: //*** アップデート関連クラス ***//
 	EXLife* eXLife_;
 	// Pursuitを管理するフラグ
 	bool eXLifeFlag = false;
+
+
+public: //*** 音 ***//
+	void SetAudio(lwp::Audio* input) {
+		attack = input;
+	};
+private:
+	lwp::Audio* attack;
+	float soundVolume = 0.2f;
 };

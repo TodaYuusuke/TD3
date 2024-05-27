@@ -151,6 +151,7 @@ void IEnemy::OnCollision(const HitData& data)
 		// 当たったのがプレイヤーの居合攻撃なら
 		if (CheckSlash(data.hit->mask.GetBelongFrag()))
 		{
+			damege->Play(soundVolume);
 			return;
 		}
 	}

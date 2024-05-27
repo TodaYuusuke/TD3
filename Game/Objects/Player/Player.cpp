@@ -129,7 +129,6 @@ void Player::Update()
 		reqBehavior_ = std::nullopt;
 	}
 	// 状態の更新
-	//statuses_[static_cast<size_t>(behavior_)]->Update();
 	currStatus_->Update();
 	t += (float)lwp::GetDeltaTime();
 	weapon_->Update();
@@ -225,11 +224,6 @@ void Player::DecreaseHP()
 		flag_.isInvincible_ = false;
 		gameOverMotion_.Start();
 	}
-	/*parameter_.Hp.hp_--;
-	if (parameter_.Hp.hp_ <= 0u)
-	{
-		flag_.isAlive_ = false;
-	}*/
 }
 
 void Player::ApplyUpgrade(const UpgradeParameter& para)
@@ -296,7 +290,6 @@ lwp::Vector3 Player::GetVectorTranspose(const lwp::Vector3& vec)
 
 void Player::CreateCollisions()
 {
-	//CreateJustCollision();
 	CreatePlayerCollision();
 	CreateWeaponCollision();
 }
@@ -338,25 +331,6 @@ void Player::CreateWeaponCollision()
 #endif
 }
 
-void Player::CreateJustCollision()
-{
-	//	// ジャスト居合
-	//	//colliders_.justSlash_ = new LWP::Object::Collider::Capsule();
-	//	colliders_.justSlash_.Create(demoModel_.transform.translation, demoModel_.transform.translation);
-	//	// マスク
-	//	colliders_.justSlash_.mask.SetBelongFrag(GameMask::Player());
-	//	colliders_.justSlash_.mask.SetHitFrag(GameMask::EnemyAttack());
-	//	// ジャスト居合したことを通知
-	//	// 別個で用意した当たった時の関数
-	//	colliders_.justSlash_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionJust(data); });
-	//	// フラグオフ
-	//	colliders_.justSlash_.isActive = false;
-	//
-	//#ifdef DEMO
-	//	colliders_.justSlash_.name = "Just";
-	//#endif
-}
-
 #pragma region OnCollisionFunc
 
 void Player::OnCollisionPlayer(lwp::Collider::HitData& data)
@@ -389,7 +363,6 @@ void Player::OnCollisionJust(lwp::Collider::HitData& data)
 }
 
 #pragma endregion
-
 
 #pragma endregion
 
@@ -592,7 +565,6 @@ void Player::CheckInputSlash()
 		flag_.isInputSlash_ = false;
 }
 
-
 void Player::CheckBehavior()
 {
 	std::optional<Behavior> command = std::nullopt;
@@ -626,24 +598,14 @@ void Player::CheckBehavior()
 		case Behavior::Root:
 			reqBehavior_ = Behavior::Root;
 			break;
-			//case Behavior::Move:
-			//	// 移動は待機状態からの派生とか
-			//	if (behavior_ == Behavior::Root ||
-			//		behavior_ == Behavior::Move)
-			//	{
-			//		reqBehavior_ = Behavior::Move;
-			//	}
-			//	break;
 		case Behavior::Slash:
 			// 居合に入る条件を記述
 			// 最大回数に達していないか
-			if (slashData_.relationSlash_ < slashData_.maxRelation_)
-				// if ((behavior_ != Behavior::Slash || flag_.isJustSlashing_) &&
-				//	slashData_.relationSlash_ < slashData_.maxRelation_)
-			{
+			if (slashData_.relationSlash_ < slashData_.maxRelation_){
 				reqBehavior_ = Behavior::Slash;
 				slashPanel_->Slash();
 				soilSplashEffect_(16, demoModel_.transform.translation);
+				attack->Play(soundVolume);
 			}
 			break;
 		case Behavior::Moment:

@@ -30,6 +30,5 @@ private: //*** 変数群 ***//
 	// シーン遷移
 	std::unique_ptr<SceneTransition> sceneTransition_;
 	//BGM
-	std::unique_ptr<LWP::Resource::Audio> audio;
-	int aaa = 0;
+	std::unique_ptr<LWP::Resource::Audio> BGM;
 };

@@ -15,12 +15,14 @@ void GameScene::Initialize()
 	// タイマー
 	gameTimer_ = GameTimer::GetInstance();
 	gameTimer_->Initialize();
-	audio = std::make_unique<LWP::Resource::Audio>();
-	audio->Load("fanfare.wav");
+
 	// プレイヤー
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
 	player_->SetScene(this);
+	atack = std::make_unique<LWP::Resource::Audio>();
+	atack->Load("Attack/patternA.mp3");
+	player_->SetAudio(atack.get());
 	// 天球
 	skydome.LoadFile("skydome/skydome.obj");
 	skydome.transform.scale = { 1.0f,1.0f, 1.0f };
@@ -51,8 +53,11 @@ void GameScene::Initialize()
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->SetPlayer(player_.get());
 	enemyManager_->SetCamera(followCamera_.get());
+	EnemyDamege = std::make_unique<LWP::Resource::Audio>();
+	EnemyDamege->Load("Slash/patternA.mp3");
 	// 経験値マネージャーをエネミーマネージャーに設定
 	enemyManager_->SetExpManager(expManager_.get());
+	enemyManager_->SetSE(EnemyDamege.get());
 	enemyManager_->Init();
 
 	// アップグレード
@@ -90,18 +95,17 @@ void GameScene::Initialize()
 
 	sceneTransition_ = std::make_unique<SceneTransition>();
 	sceneTransition_->Initialize();
+
+	BGM = std::make_unique<LWP::Resource::Audio>();
+	BGM->Load("fanfare.wav");
+	BGMvolume = 0.2f;
+	BGM->Play(BGMvolume,255);
+	BGMt = 0.0f;
 }
 
 // 更新
 void GameScene::Update()
 {
-	/*audio = std::make_unique<LWP::Resource::Audio>();
-	audio->Load("fanfare.wav");*/
-	//TODO : 一度だけ再生しないと重なる
-	if (aaa == 0) {
-	audio->Play(0.2f);
-	aaa = 1;
-	}
 
 	sceneTransition_->Update();
 
@@ -124,19 +128,25 @@ void GameScene::Update()
 	// タイマーのカウントが終了したとき
 	if (gameTimer_->isEnd_)
 	{
+		BGMt = (std::min)(BGMt + 0.01f,1.0f);
+		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
+
 		// プレイヤーが生きているとき
 		if (player_->flag_.isAlive_) {
 			// クリアしたときの処理
 			// 何か演出を出す
+			BGM->SetVolume(BGMvolume);
 			if (player_->ClearAnime()) {
 				// タイマーを消す
 				gameTimer_->isActive_ = false;
 				// 描画を消す
 				gameTimer_->Update();
 
+
 				// シーン遷移演出開始
 				sceneTransition_->Start();
 				if (sceneTransition_->GetIsSceneChange()) {
+					BGM->Stop();
 					nextSceneFunction = []() {return new ClearScene; };
 				}
 			}
@@ -145,6 +155,7 @@ void GameScene::Update()
 		// プレイヤーが死んでいた時
 		else
 		{
+			BGM->SetVolume(BGMvolume);
 			// ゲームオーバーしたときの処理
 			if (player_->GameOverAnime()) {
 				// タイマーを消す
@@ -155,7 +166,9 @@ void GameScene::Update()
 
 				// シーン遷移演出開始
 				sceneTransition_->Start();
+
 				if (sceneTransition_->GetIsSceneChange()) {
+					BGM->Stop();
 					nextSceneFunction = []() {return new GameOverScene; };
 				}
 			}
