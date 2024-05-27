@@ -25,7 +25,10 @@ void TitleScene::Initialize()
 
 	BGM = std::make_unique<LWP::Resource::Audio>();
 	BGM->Load("fanfare.wav");
-	BGM->Play(0.2f,255);
+	BGMvolume = 0.2f;
+	BGM->Play(BGMvolume, 255);
+	BGMt = 0.0f;
+	IsSceneChangeing = false;
 }
 
 // 更新
@@ -36,7 +39,15 @@ void TitleScene::Update()
 		Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
 		sceneTransition_->Start();
+		IsSceneChangeing = true;
 	}
+
+	if (IsSceneChangeing == true) {
+		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
+	}
+
+	BGM->SetVolume(BGMvolume);
 
 	sceneTransition_->Update();
 
