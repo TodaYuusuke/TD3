@@ -97,7 +97,7 @@ void NormalEnemy::Attack()
 		lwp::Vector3 point{ 0.0f,0.0f,-1.0f };
 		attackMoveWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0].transform.rotation))/*ベクトルを反転*/;
 		attackMoveWork.targetpoint = attackMoveWork.targetpoint.Normalize();
-		attackMoveEndWork.targetpoint = attackMoveWork.targetpoint * -1/*ベクトルを反転*/;
+		attackMoveEndWork.targetpoint = attackMoveWork.targetpoint * -2/*ベクトルを反転*/;
 #pragma endregion Body
 
 		attackWaitTime_ = kAttackWaitTime;

@@ -18,10 +18,13 @@ private:
 	void Aim();
 
 	// 攻撃する範囲
-	const float kAttackRange = 2.0f;
+	const float kAttackRange = 3.0f;
 
 	// 攻撃のクールタイム
 	const int kAttackWaitTime = 120;
+
+	// 移動の定数
+	const float kMove = 0.8f;
 
 private:
 	MotionWork attackWork = {
