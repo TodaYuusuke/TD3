@@ -24,15 +24,16 @@ void TitleScene::Initialize()
 	sceneTransition_->Initialize();
 	//BGM
 	BGM = std::make_unique<LWP::Resource::Audio>();
-	BGM->Load("fanfare.wav");
-	BGMvolume = 0.2f;
+	BGM->Load("BGM/Pop_Step.mp3");
 	BGM->Play(BGMvolume, 255);
+	BGMvolume = 0.2f;
+
 	BGMt = 0.0f;
 	IsSceneChangeBegin = false;
 	IsSceneChangeEnd = true;
 
 	chooseSE = std::make_unique<LWP::Resource::Audio>();
-	chooseSE->Load("fanfare.wav");
+	chooseSE->Load("Attack/patternA.mp3");
 }
 
 // 更新
@@ -45,19 +46,23 @@ void TitleScene::Update()
 	}
 	else {
 	IsSceneChangeEnd = false;
+	BGMt = 0.0f;
 	}
 
 	if (Keyboard::GetTrigger(DIK_SPACE) ||
 		Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
 		sceneTransition_->Start();
+		if (IsSceneChangeBegin == false) {
+			chooseSE->Play();
+		}
 		IsSceneChangeBegin = true;
 	}
 
 	if (IsSceneChangeBegin == true) {
 		//だんだん音が下がる
 		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
-		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
+		BGMvolume = Lerp(BGMvolume, 0.1f, BGMt);
 	}
 
 	BGM->SetVolume(BGMvolume);
@@ -65,8 +70,9 @@ void TitleScene::Update()
 	sceneTransition_->Update();
 
 	if (sceneTransition_->GetIsSceneChange()) {
-		chooseSE->Play();
 		BGM->Stop();
+		chooseSE->Stop();
+
 		nextSceneFunction = []() {return new GameScene; };
 	}
 }

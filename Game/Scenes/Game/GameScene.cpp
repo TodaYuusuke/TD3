@@ -90,7 +90,7 @@ void GameScene::Initialize()
 	// 点光源
 	sun_.transform.translation.y = 30.0f;
 	sun_.intensity = 2.0f;
-	sun_.radius = 105.0f;
+	sun_.radius = 120.0f;
 	sun_.decay = 0.58f;
 
 	sceneTransition_ = std::make_unique<SceneTransition>();
@@ -99,7 +99,7 @@ void GameScene::Initialize()
 	BGM = std::make_unique<LWP::Resource::Audio>();
 	BGM->Load("fanfare.wav");
 	BGMvolume = 0.2f;
-	//BGM->Play(BGMvolume,255);
+	BGM->Play(BGMvolume,255);
 	BGMt = 0.0f;
 	IsSceneChangeEnd = true;
 }
@@ -114,15 +114,12 @@ void GameScene::Update()
 	}
 	else {
 		IsSceneChangeEnd = false;
+		BGMt = 0.0f;
 	}
+	BGM->SetVolume(BGMvolume);
 
 	sceneTransition_->Update();
 
-	//だんだん音が上がる
-	if (BGMt != 1.0f) {
-		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
-		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
-	}
 
 	// 時間を計測
 	// チュートリアルの時は計測しない
@@ -137,13 +134,13 @@ void GameScene::Update()
 	if (gameTimer_->isEnd_){
 		//だんだん音が下がる
 		BGMt = (std::min)(BGMt + 0.01f,1.0f);
-		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
+		BGMvolume = Lerp(BGMvolume, 0.1f, BGMt);
 
 		// プレイヤーが生きているとき
 		if (player_->flag_.isAlive_) {
 			// クリアしたときの処理
 			// 何か演出を出す
-			BGM->SetVolume(BGMvolume);
+			
 			if (player_->ClearAnime()) {
 				// タイマーを消す
 				gameTimer_->isActive_ = false;
@@ -163,7 +160,7 @@ void GameScene::Update()
 		// プレイヤーが死んでいた時
 		else
 		{
-			BGM->SetVolume(BGMvolume);
+			
 			// ゲームオーバーしたときの処理
 			if (player_->GameOverAnime()) {
 				// タイマーを消す
