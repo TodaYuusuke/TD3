@@ -46,4 +46,18 @@ private: //*** 変数群 ***//
 
 	// シーン遷移
 	std::unique_ptr<SceneTransition> sceneTransition_;
+
+	float Lerp(const float& v1, const float& v2, float t) {
+		float result = v1 + (v2 - v1) * t;
+		return result;
+	}
+	//BGM
+	bool IsSceneChangeBegin = false;
+	bool IsSceneChangeEnd = true;
+	std::unique_ptr<LWP::Resource::Audio> BGM;
+	float BGMvolume = 0.2f;
+	float BGMt = 0.0f;
+
+	std::unique_ptr<LWP::Resource::Audio> serectSE;
+	std::unique_ptr<LWP::Resource::Audio> chooseSE;
 };

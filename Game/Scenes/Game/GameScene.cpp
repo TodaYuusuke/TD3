@@ -101,21 +101,29 @@ void GameScene::Initialize()
 	BGMvolume = 0.2f;
 	BGM->Play(BGMvolume,255);
 	BGMt = 0.0f;
+	IsSceneChangeEnd = true;
 }
 
 // 更新
 void GameScene::Update()
 {
+	//だんだん音が上がる
+	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
+		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
+	}
+	else {
+		IsSceneChangeEnd = false;
+	}
 
 	sceneTransition_->Update();
 
-	ImGui::Begin("gfd");
+	//だんだん音が上がる
+	if (BGMt != 1.0f) {
+		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
+	}
 
-	ImGui::DragFloat3("pos",&pos.x);
-	ImGui::DragFloat3("scale",&scale.x);
-	skydome.transform.translation = pos;
-	skydome.transform.scale = scale;
-	ImGui::End();
 	// 時間を計測
 	// チュートリアルの時は計測しない
 	if (!enemyManager_->GetIsTutorial()) {
@@ -126,8 +134,8 @@ void GameScene::Update()
 	}
 
 	// タイマーのカウントが終了したとき
-	if (gameTimer_->isEnd_)
-	{
+	if (gameTimer_->isEnd_){
+		//だんだん音が下がる
 		BGMt = (std::min)(BGMt + 0.01f,1.0f);
 		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
 

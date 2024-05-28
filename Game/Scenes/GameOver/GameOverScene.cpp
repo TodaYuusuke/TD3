@@ -52,6 +52,20 @@ void GameOverScene::Initialize()
 
 	sceneTransition_ = std::make_unique<SceneTransition>();
 	sceneTransition_->Initialize();
+
+	//BGM
+	BGM = std::make_unique<LWP::Resource::Audio>();
+	BGM->Load("fanfare.wav");
+	BGMvolume = 0.2f;
+	BGM->Play(BGMvolume, 255);
+	BGMt = 0.0f;
+	IsSceneChangeBegin = false;
+	IsSceneChangeEnd = true;
+
+	serectSE = std::make_unique<LWP::Resource::Audio>();
+	serectSE->Load("fanfare.wav");
+	chooseSE = std::make_unique<LWP::Resource::Audio>();
+	chooseSE->Load("fanfare.wav");
 }
 
 // 更新
@@ -68,6 +82,15 @@ void GameOverScene::Update()
 
 #endif // DEMO
 
+	//だんだん音が上がる
+	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
+		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
+	}
+	else {
+		IsSceneChangeEnd = false;
+	}
+	
 	// 選択肢を与える
 	// 左
 	if (Keyboard::GetTrigger(DIK_W) || Keyboard::GetTrigger(DIK_UP) ||
@@ -75,6 +98,7 @@ void GameOverScene::Update()
 	{
 		choise_ = 0;
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
+		serectSE->Play();
 	}
 	//　右
 	else if (Keyboard::GetTrigger(DIK_S) || Keyboard::GetTrigger(DIK_DOWN) ||
@@ -82,19 +106,36 @@ void GameOverScene::Update()
 	{
 		choise_ = 1;
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f + spriteWidth + spriteOffset;
+		serectSE->Play();
 	}
 
 	if (Keyboard::GetTrigger(DIK_SPACE) ||
 		Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
+		IsSceneChangeBegin = true;
 		sceneTransition_->Start();
 	}
+
+	if (IsSceneChangeBegin == true) {
+		//だんだん音が下がる
+		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
+	}
+
+	BGM->SetVolume(BGMvolume);
+
 	sceneTransition_->Update();
 
 	if (sceneTransition_->GetIsSceneChange()) {
-		if (choise_ == 0)
+		if (choise_ == 0){
+			BGM->Stop();
+			chooseSE->Play();
 			nextSceneFunction = []() {return new TitleScene; };
-		else
+		}
+		else {
+			BGM->Stop();
+			chooseSE->Play();
 			nextSceneFunction = []() {return new GameScene; };
+		}
 	}
 }

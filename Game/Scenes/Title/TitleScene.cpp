@@ -22,27 +22,40 @@ void TitleScene::Initialize()
 
 	sceneTransition_ = std::make_unique<SceneTransition>();
 	sceneTransition_->Initialize();
-
+	//BGM
 	BGM = std::make_unique<LWP::Resource::Audio>();
 	BGM->Load("fanfare.wav");
 	BGMvolume = 0.2f;
 	BGM->Play(BGMvolume, 255);
 	BGMt = 0.0f;
-	IsSceneChangeing = false;
+	IsSceneChangeBegin = false;
+	IsSceneChangeEnd = true;
+
+	chooseSE = std::make_unique<LWP::Resource::Audio>();
+	chooseSE->Load("fanfare.wav");
 }
 
 // 更新
 void TitleScene::Update()
 {
+	//だんだん音が上がる
+	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
+		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
+	}
+	else {
+	IsSceneChangeEnd = false;
+	}
 
 	if (Keyboard::GetTrigger(DIK_SPACE) ||
 		Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
 		sceneTransition_->Start();
-		IsSceneChangeing = true;
+		IsSceneChangeBegin = true;
 	}
 
-	if (IsSceneChangeing == true) {
+	if (IsSceneChangeBegin == true) {
+		//だんだん音が下がる
 		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
 		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
 	}
@@ -52,6 +65,7 @@ void TitleScene::Update()
 	sceneTransition_->Update();
 
 	if (sceneTransition_->GetIsSceneChange()) {
+		chooseSE->Play();
 		BGM->Stop();
 		nextSceneFunction = []() {return new GameScene; };
 	}

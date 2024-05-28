@@ -93,6 +93,7 @@ public:
 private:
 
 	//SE
+	bool IsSceneChangeEnd = false;
 	std::unique_ptr<LWP::Resource::Audio> BGM;
 	float BGMvolume = 0.2f;
 	float BGMt = 0.0f;
