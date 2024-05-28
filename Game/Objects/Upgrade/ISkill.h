@@ -13,6 +13,8 @@ namespace L
 	{
 	public:	// ** パブリックなメンバ変数 ** //
 
+		virtual ~ISkill() = default;
+
 		// 適応ずみかフラグ
 		bool isApplied = false;
 		// リストにまとめて複数対応
@@ -61,7 +63,8 @@ namespace L
 		/// <para>必ずSpriteのisActiveをfalseに！</para>
 		/// <para>特殊なアニメーションとかしたいなら継承</para>
 		/// </summary>
-		virtual void Update();
+		void BaseUpdate();
+		virtual void Update() {}
 
 		/// <summary>
 		/// スプライト表示

@@ -4,18 +4,20 @@
 namespace L
 {
 	/// <summary>
-	/// 小さな力
+	/// 攻撃力を 10 追加
 	/// </summary>
 	class Skill_PowerUp1 : public ISkill
 	{
 	public:
 		/// <summary>
+		/// 攻撃力を 10 追加
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
 		Skill_PowerUp1()
 		{
 			attackUpgrades_.clear();
-			attackUpgrades_.push_back(new PowerDelta(10.0f));
+			attackUpgrades_.push_back(new PowerDelta(10.0f, 0.0f));
+			attackUpgrades_.push_back(new BurningPowerDelta(0.0f, 10.0f));
 		}
 
 		///// <summary>
@@ -42,12 +44,12 @@ namespace L
 
 		std::string GetTexturePass() override
 		{
-			return "powerUp/PowerUp.png";
+			return "Skill/PowerUp.png";
 		}
 
 		std::string GetUpgradeName() override
 		{
-			return "Skill_PowerUp1";
+			return "PowerUp1";
 		}
 
 	};

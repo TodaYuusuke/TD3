@@ -10,7 +10,7 @@ namespace L
 	{
 	private:
 		// 変化させる値
-		float var = 0.0f;
+		int var = 0;
 	public:
 		/// <summary>
 		/// 純粋な最大HPアップ！（定数）
@@ -18,7 +18,7 @@ namespace L
 		/// <para>受け取った値によって読み込む画像を変えたい</para>
 		/// </summary>
 		/// <param name="v">プラスでもマイナスでもいい</param>
-		LifeMaxDelta(float v = 1.0f) : var(v) {};
+		LifeMaxDelta(int v = 1) : var(v) {};
 
 
 
@@ -30,9 +30,9 @@ namespace L
 			para->HP.hpDelta.base += var;
 		}
 
-		std::string GetUpgradeName() override
+		void GetUpgradeName() override
 		{
-			return "LifeMaxDelta : " + std::to_string(var);
+			ImGui::Text("LifeMax : %d", var);
 		}
 	};
 }

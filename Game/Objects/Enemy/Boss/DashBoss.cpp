@@ -27,7 +27,7 @@ void DashBoss::Init()
 		.Add(&models_[0].transform.scale, lwp::Vector3{ 1,1,1 }, 1.4f, 0.2f, LWP::Utility::Easing::Type::OutQuart);
 
 	// HP を設定
-	hp_ = 60;
+	hp_ = 200;
 
 #pragma region パーティクル
 	//// 攻撃前

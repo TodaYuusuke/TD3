@@ -68,6 +68,8 @@ public: //*** サブクラス ***//
 		uint32_t BASEHP_ = 5u;
 		// 最大体力
 		uint32_t MAXHP_ = 5u;
+		// 敵を何体倒すと HP 回復するか
+		uint32_t UPGRADEPENETORATIONNUM_;
 	};
 
 	// 割合系
@@ -81,7 +83,18 @@ public: //*** サブクラス ***//
 	struct Power
 	{
 		// 初期攻撃力
-		float BASEPOWER_ = 10.0f;
+		float BASEPOWER_ = 20.0f;
+		// アップグレード系
+		// 追撃
+		float BASEPURSUIT = 20.0f;
+		// 継続ダメージ
+		float BASEBURNING = 3.0f;
+	};
+
+	struct Other
+	{
+		// 経験値取得範囲
+		float RADIUSLEVEL_;
 	};
 
 	struct Configs
@@ -103,6 +116,7 @@ public: //*** パブリック変数 ***//
 	Counts Count_;
 	Parcentages Parcent_;
 	Power Power_;
+	Other Other_;
 
 private: //*** プライベート関数 ***//
 
@@ -112,5 +126,5 @@ private: //*** プライベート関数 ***//
 	void InitCount();
 	void InitParcentage();
 	void InitPower();
-
+	void InitOther();
 };

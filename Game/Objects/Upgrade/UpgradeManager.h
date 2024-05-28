@@ -6,11 +6,13 @@
 // 前方宣言
 class Player;
 
-namespace L {
+namespace L
+{
 	/// <summary>
 	/// アップグレードを管理するクラス
 	/// </summary>
-	class UpgradeManager {
+	class UpgradeManager
+	{
 	public: // ** メンバ関数 ** //
 
 		/// <summary>
@@ -18,12 +20,17 @@ namespace L {
 		/// <para>upgrades_に継承したクラスのインスタンスをpush_backしてね</para>
 		/// </summary>
 		void Init(LWP::Object::Camera* cameraptr);
-		
+
 		/// <summary>
 		/// 更新
-		/// <para>この更新はレベルアップ中（選択待ち）のみ呼び出すこと</para>
 		/// </summary>
 		void Update(Player* player);
+
+		/// <summary>
+		/// アップグレードを選択中に呼び出す関数
+		/// <para>この更新はレベルアップ中（選択待ち）のみ呼び出すこと</para>
+		/// </summary>
+		void Selecting(Player* player);
 
 		/// <summary>
 		/// レベルアップしたらこの関数を呼ぶこと！
@@ -34,9 +41,18 @@ namespace L {
 		/// </summary>
 		static bool GetLevelUpFlag() { return isLevelUpping; }
 
-//#ifdef DEMO
+		/// <summary>
+		/// 最大レベルを返す
+		/// </summary>
+		static size_t GetMaxLevel()
+		{
+			return 1 + (attackUpgrades_.size() < escapeUpgrades_.size()
+				? attackUpgrades_.size() : escapeUpgrades_.size());
+		}
+
+		//#ifdef DEMO
 		void DebugWindow(Player* player);
-//#endif // DEMO
+		//#endif // DEMO
 
 	private: // ** メンバ変数 ** //
 
@@ -90,11 +106,6 @@ namespace L {
 		/// <param name="f">true : 攻撃, false : 逃走</param>
 		/// <returns></returns>
 		static int ChooseOnce(bool f);
-
-		/// <summary>
-		/// アップグレードを選択中に呼び出す関数
-		/// </summary>
-		void Selecting(Player* player);
 
 		/// <summary>
 		/// アップグレードを選択完了した時に呼び出す関数

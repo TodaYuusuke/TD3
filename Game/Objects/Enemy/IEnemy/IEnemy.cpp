@@ -25,6 +25,9 @@ void IEnemy::Initialize()
 
 	// ライティングをする
 	models_[0].material.enableLighting = true;
+	// 添え字を取得
+	index_ = staticIndex_++;
+
 }
 
 void IEnemy::KnockBackUpdate()
@@ -138,7 +141,7 @@ void IEnemy::OnCollision(const HitData& data)
 		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
 	{
 		// 追撃クラスに登録
-		if (player_->parameter_.GetParameter().pursuitFlag && player_->GetPursuitFlag() && player_->parameter_.Attack.slashPower_ + 10 <= hp_)
+		if (player_->parameter_.Flag.pursuitFlag && player_->GetPursuitFlag() && player_->parameter_.Attack.slashPower_ + 10 <= hp_)
 		{
 			player_->GetPursuit()->AddEnemy(this);
 		}
@@ -147,10 +150,11 @@ void IEnemy::OnCollision(const HitData& data)
 		//wasHitCollision_ = true;
 		// 居合攻撃のほかにも特別な奴とかありそうだから関数で分ける
 
-
 		// 当たったのがプレイヤーの居合攻撃なら
 		if (CheckSlash(data.hit->mask.GetBelongFrag()))
 		{
+			// 攻撃に当たっているので当たったことを通知
+			player_->GetHitCheckPtr()->AddHitEnemy(this);
 			return;
 		}
 	}
@@ -547,3 +551,5 @@ std::function<void(int, lwp::Vector3)> IEnemy::damageEffect_ = nullptr;
 std::function<void(int, lwp::Vector3)> IEnemy::deadEffect_ = nullptr;
 std::function<void(int, lwp::Vector3)> IEnemy::spawnEffect_ = nullptr;
 std::function<void(int, lwp::Vector3)> IEnemy::accumulateEffect_ = nullptr;
+
+uint32_t IEnemy::staticIndex_ = 0u;

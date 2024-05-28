@@ -19,12 +19,12 @@ void Moment::Reset()
 {
 	elapsedTime_ = 0.0f;
 	//EndTime_ = player_->config_.Time_.MOMENTBASE_ + (player_->momentData_.relationSlash_ * player_->config_.Time_.MOMENTINCREMENT_);
-	EndTime_ = player_->config_.Time_.MOMENTBASE_;
+	EndTime_ = player_->parameter_.Time.momentTime_;
 	// デルタタイム変更
 	player_->EndJust();
-	player_->momentData_.relationSlash_ = player_->slashData_.relationSlash_;
+	//player_->momentData_.relationSlash_ = player_->slashData_.relationSlash_;
 	// 回数分フレームを加算
-	player_->momentData_.maxTime_ = player_->config_.Time_.MOMENTBASE_ + (player_->momentData_.relationSlash_ * player_->config_.Time_.MOMENTINCREMENT_);
+	//player_->momentData_.maxTime_ = player_->config_.Time_.MOMENTBASE_ + (player_->momentData_.relationSlash_ * player_->config_.Time_.MOMENTINCREMENT_);
 	player_->weapon_->SetBehavior(Weapon::Behavior::Moment);
 	// 武器の判定を消す
 	player_->colliders_.weapon_.isActive = false;

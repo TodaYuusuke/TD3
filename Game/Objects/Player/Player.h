@@ -20,6 +20,7 @@
 
 #include "Game/Objects/Upgrade/Function/Pursuit/Pursuit.h"
 #include "Game/Objects/Upgrade/Function/EXLife/EXLife.h"
+#include <Game/Objects/Player/HitCheck/HitCheck.h>
 
 #pragma endregion アップグレード
 
@@ -39,22 +40,22 @@ private: //*** サブクラス ***//
 	// 共通データ
 	// まったくもって参照できないからつかわん
 	// 絶対に継承した先のインスタンスを使う
-	struct BaseData
-	{
-		//float cBASETIME = 0.0f;	// 状態の基本時間 : 基本となる秒数
-		float maxTime_ = 0.0f;	// 状態の最大時間 : 条件で抜けるときもあるかもしれない
-	};
+	//struct BaseData
+	//{
+	//	//float cBASETIME = 0.0f;	// 状態の基本時間 : 基本となる秒数
+	//	//float maxTime_ = 0.0f;	// 状態の最大時間 : 条件で抜けるときもあるかもしれない
+	//};
 
-	struct RootData : public BaseData
-	{
-	};
+	//struct RootData : public BaseData
+	//{
+	//};
 
-	struct MoveData : public BaseData
-	{
-	};
+	//struct MoveData : public BaseData
+	//{
+	//};
 
 	// 居合攻撃で使うデータ
-	struct SlashData : public BaseData
+	struct SlashData //: public BaseData
 	{
 		lwp::Vector3 vector_ = { 0.0f,0.0f,1.0f };		// 向かう方向
 		uint32_t relationSlash_;	// 連続居合回数
@@ -62,17 +63,17 @@ private: //*** サブクラス ***//
 	};
 
 
-	// 後隙で使うデータ
-	struct MomentData : public BaseData
-	{
-		uint32_t relationSlash_;	// 連続居合回数 : 二回以降+1
-	};
+	//// 後隙で使うデータ
+	//struct MomentData : public BaseData
+	//{
+	//	uint32_t relationSlash_;	// 連続居合回数 : 二回以降+1
+	//};
 
-	// 被弾
-	struct DamageData : public BaseData
-	{
+	//// 被弾
+	//struct DamageData : public BaseData
+	//{
 
-	};
+	//};
 
 #pragma endregion
 
@@ -110,7 +111,8 @@ public: //*** パブリック関数 ***//
 	// コンストラクタ
 	Player() = default;
 	// デストラクタ
-	~Player() {
+	~Player()
+	{
 		delete pursuit_;
 		delete eXLife_;
 	};
@@ -168,6 +170,9 @@ public:	//*** セッター,ゲッター ***//
 	bool GeteXLifeFlag()const { return eXLifeFlag; }
 	// 
 	EXLife* GeteXLife()const { return eXLife_; }
+
+	// 敵側が自分を登録できる用のゲッター
+	L::HitCheck* const GetHitCheckPtr() { return &hitCheck_; }
 
 private: //*** プライベート関数 ***//
 
@@ -255,11 +260,11 @@ public: //*** プライベート変数 ***//
 	//*** 各状態毎のデータ ***//
 
 	// 固定されているデータを外部から取得
-	RootData rootData_;
-	MoveData moveData_;
+	//RootData rootData_;
+	//MoveData moveData_;
 	SlashData slashData_;
-	MomentData momentData_;
-	DamageData damageData_;
+	//MomentData momentData_;
+	//DamageData damageData_;
 
 
 	//*** プログラム内だけど外部のやつ ***//
@@ -352,4 +357,8 @@ private: //*** アップデート関連クラス ***//
 	EXLife* eXLife_;
 	// Pursuitを管理するフラグ
 	bool eXLifeFlag = false;
+
+	// 攻撃した後の敵を登録して、そのあとの追加効果を発生させる
+	L::HitCheck hitCheck_;
+
 };

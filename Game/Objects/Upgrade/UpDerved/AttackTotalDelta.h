@@ -10,7 +10,7 @@ namespace L
 	{
 	private:
 		// 変化させる値
-		float var = 0.0f;
+		int var = 0;
 	public:
 		/// <summary>
 		/// 純粋な攻撃回数アップ！（定数）
@@ -18,7 +18,7 @@ namespace L
 		/// <para>受け取った値によって読み込む画像を変えたい</para>
 		/// </summary>
 		/// <param name="v">プラスでもマイナスでもいい</param>
-		AttackTotalDelta(float v = 1.0f) : var(v) {};
+		AttackTotalDelta(int v = 1) : var(v) {};
 
 
 
@@ -30,9 +30,9 @@ namespace L
 			para->Attack.slashNumDelta.base += var;
 		}
 
-		std::string GetUpgradeName() override
+		void GetUpgradeName() override
 		{
-			return "AttackTotalDelta : " + std::to_string(var);
+			ImGui::Text("AttackTotal : %d", var);
 		}
 	};
 }

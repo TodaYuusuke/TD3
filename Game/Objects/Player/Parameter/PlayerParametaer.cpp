@@ -12,6 +12,15 @@ void PlayerParameter::Initialize(PlayerConfig* p)
 
 void PlayerParameter::Update()
 {
+	// 機能として追加されたものが動いたか確認する
+	// 左のフラグは使わなくても良い...
+	if (Flag.isActiveIncreaseHP)
+	{
+		// HP 回復
+		Hp.Increase();
+		Flag.isActiveIncreaseHP = false;
+	}
+
 	Hp.Update();
 }
 
@@ -21,6 +30,8 @@ void PlayerParameter::ApplyUpgrade()
 	ApplyAttack();
 	ApplySpeed();
 	ApplyTime();
+	ApplyFlag();
+	ApplyOther();
 }
 
 void PlayerParameter::ApplyUpgrade(const UpgradeParameter& para)
@@ -45,6 +56,8 @@ void PlayerParameter::ResetParameter()
 	Time.invincibleDamage_ = config_->Time_.DAMAGEINVINCIBLE_;
 	Time.justTake_ = config_->Time_.JUSTTAKETIME_;
 	Time.momentTime_ = config_->Time_.MOMENTBASE_;
+
+	Other.radiusLevel = config_->Other_.RADIUSLEVEL_;
 }
 
 void PlayerParameter::IncreaseHP()
@@ -86,13 +99,13 @@ void PlayerParameter::ApplyHP()
 	// 別で用意したクラスに反映
 	// ここで回復とかもすればいい
 	// 今の最大 HP の差異を保存
-	int tempSub = Hp.maxHp_ - config_->Count_.MAXHP_ + (int)param.HP.hpDelta.base;
+	int tempSub = config_->Count_.MAXHP_ + (int)param.HP.hpDelta.base - Hp.maxHp_;
 	// その差異分ループ
 	// プラス分
 	if (0 < tempSub)
 	{
 		for (size_t i = 0; i < tempSub; i++)
-		{	    
+		{
 			IncreaseHPMAX();
 		}
 	}
@@ -149,6 +162,11 @@ void PlayerParameter::ApplyAttack()
 	// 攻撃回数
 	base.slashNum_ = config_->Count_.SLASHRELATIONBASE_ + (int)param.Attack.slashNumDelta.base;
 
+	// 追撃
+	base.pursuitPower = config_->Power_.BASEPURSUIT + (int)param.Attack.pursuitDelta.base;
+	// 継続ダメージ
+	base.burningPower = config_->Power_.BASEBURNING + (int)param.Attack.burningDelta.base;
+
 	// 掛け算部分の計算
 	AttackParam multi;
 
@@ -160,6 +178,10 @@ void PlayerParameter::ApplyAttack()
 	multi.slashLength_ = (0.01f * param.Attack.slashLengthDelta.percent);
 	// 攻撃回数(最低値)
 	multi.slashNum_ = 1;
+	// 追撃
+	multi.pursuitPower = (0.01f * param.Attack.pursuitDelta.percent);
+	// 継続ダメージ
+	multi.burningPower = (0.01f * param.Attack.burningDelta.percent);
 
 	this->Attack = base * multi;
 }
@@ -205,4 +227,19 @@ void PlayerParameter::ApplyTime()
 	multi.invincibleDamage_ = (0.01f * param.Time.damageInvincibleTimeDelta.percent);
 
 	this->Time = base * multi;
+}
+
+void PlayerParameter::ApplyFlag()
+{
+	Flag.eXLifeFlag = param.Flag.eXLifeFlag;
+	Flag.pursuitFlag = param.Flag.pursuitFlag;
+	Flag.BlowOffFlag = param.Flag.BlowOffFlag;
+	Flag.penetrationFlag = param.Flag.penetrationFlag;
+	Flag.burningFlag = param.Flag.burningFlag;
+}
+
+void PlayerParameter::ApplyOther()
+{
+	Other.radiusLevel = config_->Other_.RADIUSLEVEL_ + param.Other.radiusLevel.base;
+	Other.radiusLevel *= (0.01f * param.Other.radiusLevel.percent);
 }

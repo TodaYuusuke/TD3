@@ -4,30 +4,21 @@
 namespace L
 {
 	/// <summary>
-	/// 小さな力
+	/// 攻撃の横幅をアップさせる
 	/// </summary>
 	class Skill_AttackRangeUp : public ISkill
 	{
 	public:
 		/// <summary>
+		/// 攻撃の横幅をアップさせる
+		/// 1.0f 上昇 10% 上昇
 		/// <para>ここでアップグレードを定義する</para>
 		/// </summary>
 		Skill_AttackRangeUp()
 		{
 			attackUpgrades_.clear();
-			attackUpgrades_.push_back(new  AttackRangeDelta);
+			attackUpgrades_.push_back(new AttackRangeDelta(1.0f, 10.0f));
 		}
-
-		///// <summary>
-		///// アップグレード数を返す
-		///// <para>オーバーロードする</para>
-		///// </summary>
-		///// <returns>配列数</returns>
-		//size_t GetUpgradeNum() override
-		//{
-		//	return 2;
-		//}
-
 
 		/// <summary>
 		/// アップグレードの内容
@@ -42,12 +33,12 @@ namespace L
 
 		std::string GetTexturePass() override
 		{
-			return "PowerUp/AttackRangeUp.png";
+			return "Skill/AttackRangeUp.png";
 		}
 
 		std::string GetUpgradeName() override
 		{
-			return "Skill_AttackRangeUp";
+			return "AttackRangeUp";
 		}
 
 	};

@@ -27,6 +27,13 @@ void Player::Initialize()
 
 	demoModel_.transform.translation.z = -4.0f;
 
+	// 設定の初期化
+	config_.Initialize();
+	// パラメータの初期化
+	parameter_.Initialize(&config_);
+	// パラメータを反映させる
+	parameter_.ResetParameter();
+
 	// 武器を作成
 	weapon_.reset(new Weapon);
 	weapon_->Initialize();
@@ -65,19 +72,17 @@ void Player::Initialize()
 		statuses_[i]->Init(this);
 	}
 
-	// 設定の初期化
-	config_.Initialize();
-	// パラメータの初期化
-	parameter_.Initialize(&config_);
-	// パラメータを反映させる
-	parameter_.ResetParameter();
 
 	// 今の状態を設定
 	currStatus_ = statuses_[static_cast<size_t>(behavior_)];
 
-	pursuit_ = new Pursuit();
+	pursuit_ = new Pursuit(this);
 	eXLife_ = new EXLife();
 	eXLife_->Init(this);
+
+	// 攻撃後確認
+	hitCheck_.Initialize(this);
+
 
 	demoModel_.material.enableLighting = true;
 
@@ -135,6 +140,9 @@ void Player::Update()
 	weapon_->Update();
 	slashPanel_->Update();
 
+	// パラメータに関係してくるのでパラメータの前
+	hitCheck_.Update();
+
 	// ダメージ処理が終わった後なら？
 	parameter_.Update();
 
@@ -142,7 +150,7 @@ void Player::Update()
 	{
 		pursuitFlag = pursuit_->Execution();
 	}
-	if (parameter_.GetParameter().eXLifeFlag)
+	if (parameter_.Flag.eXLifeFlag)
 	{
 		eXLifeFlag = eXLife_->Update();
 	}
@@ -651,7 +659,7 @@ void Player::CheckBehavior()
 			// 突進が終わるときに敵をノックバックさせる
 			if (reqBehavior_ != behavior_)
 			{
-				if (parameter_.GetParameter().BlowOffFlag)
+				if (parameter_.Flag.BlowOffFlag)
 				{
 					isEnemyKnockBack_ = true;
 				}
@@ -752,7 +760,7 @@ void Player::DebugBehavior()
 		case Behavior::Root:
 			ImGui::Text("ROOT");
 			ImGui::Text("BaseFrame : %.3f", config_.Time_.ROOTBASE_);
-			ImGui::Text("MaxFrame  : %.3f", rootData_.maxTime_);
+			//ImGui::Text("MaxFrame  : %.3f", rootData_.maxTime_);
 			break;
 			/*case Behavior::Move:
 				ImGui::Text("MOVE");
@@ -762,17 +770,17 @@ void Player::DebugBehavior()
 		case Behavior::Slash:
 			ImGui::Text("SLASH");
 			ImGui::Text("BaseFrame : %.3f", config_.Time_.SLASHBASE_);
-			ImGui::Text("MaxFrame  : %.3f", slashData_.maxTime_);
+			//ImGui::Text("MaxFrame  : %.3f", slashData_.maxTime_);
 			break;
 		case Behavior::Moment:
 			ImGui::Text("MOMENT");
 			ImGui::Text("BaseFrame : %.3f", config_.Time_.MOMENTBASE_);
-			ImGui::Text("MaxFrame  : %.3f", momentData_.maxTime_);
+			//ImGui::Text("MaxFrame  : %.3f", momentData_.maxTime_);
 			break;
 		case Behavior::Damage:
 			ImGui::Text("DAMAGE");
 			ImGui::Text("BaseFrame : %.3f", config_.Time_.DAMAGEBASE_);
-			ImGui::Text("MaxFrame  : %.3f", damageData_.maxTime_);
+			//ImGui::Text("MaxFrame  : %.3f", damageData_.maxTime_);
 			break;
 		default:
 			break;
@@ -911,8 +919,8 @@ void Player::DebugParcentages()
 
 void Player::DamageEffect()
 {
-	int invincibleTime = invincibleTime_ * 1000;
-	if ((int)invincibleTime % 3 == 0)
+	int invincibleTime = int(invincibleTime_ * 1000);
+	if (invincibleTime % 3 == 0)
 	{
 		demoModel_.isActive = false;
 	}

@@ -28,12 +28,12 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->eXLifeFlag = true;
+			para->Flag.eXLifeFlag = true;
 		}
 
 		std::string GetTexturePass() override
 		{
-			return "powerUp/EXLife.png";
+			return "Skill/EXLife.png";
 		}
 
 		std::string GetUpgradeName() override

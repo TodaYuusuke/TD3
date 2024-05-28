@@ -10,6 +10,20 @@ struct Paramete
 	float base = 0.0f;
 	// 補正(％)
 	float percent = 100.0f;
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="b">実数</param>
+	/// <param name="per">%</param>
+	Paramete(float b = 0.0f, float per = 100.0f) : base(b), percent(per) {}
+
+	const Paramete& operator+=(const Paramete& obj)
+	{
+		this->base += obj.base;
+		this->percent += obj.percent;
+		return *this;
+	}
+
 };
 
 struct UpgradeHP
@@ -30,7 +44,11 @@ struct UpgradeAttack
 	Paramete slashLengthDelta;
 	// 攻撃回数 : 倍率は使わない
 	Paramete slashNumDelta;
-
+	// アップグレード
+	// 追撃
+	Paramete pursuitDelta;
+	// 継続ダメージ
+	Paramete burningDelta;
 };
 
 struct UpgradeSpeed
@@ -57,7 +75,28 @@ struct UpgradeTime
 
 };
 
+/// <summary>
+/// 新機能のフラグを作る
+/// </summary>
+struct UpgradeFlag
+{
+	// 攻撃後追撃
+	bool pursuitFlag = false;
+	// バリア
+	bool eXLifeFlag = false;
+	// 吹き飛ばし
+	bool BlowOffFlag = false;
+	// 敵を複数倒すと HP 回復
+	bool penetrationFlag = false;
+	// 敵に継続ダメージを与える
+	bool burningFlag = false;
+};
 
+
+struct UpgradeOther
+{
+	Paramete radiusLevel;
+};
 
 /// <summary>
 /// アップグレードによって変化する値と倍率を司る
@@ -72,12 +111,10 @@ struct UpgradeParameter
 	UpgradeSpeed Speed;
 	// 時間のみ
 	UpgradeTime Time;
-	// 攻撃後追撃
-	bool pursuitFlag = false;
-	// バリア
-	bool eXLifeFlag = false;
-	// 吹き飛ばし
-	bool BlowOffFlag = false;
+	// 新機能のフラグ
+	UpgradeFlag Flag;
+	// その他
+	UpgradeOther Other;
 };
 
 namespace L
@@ -89,51 +126,18 @@ namespace L
 	{
 	public:	// ** パブリックなメンバ変数 ** //
 
-		// 適応ずみかフラグ
-		//bool isApplied = false;
-
-
 		/// <summary>
 		/// アップグレードを適応する関数
-		/// <para>最後にisAppliedを変更すること！</para>
 		/// </summary>
 		/// <param name="p"></param>
 		virtual void Apply(UpgradeParameter* para) = 0;
 
 		/// <summary>
-		/// UI用のテクスチャのパスを返す関数
-		/// </summary>
-		/// <returns>resources/texture/以降のパス</returns>
-		//virtual std::string GetTexturePass() = 0;
-
-		/// <summary>
 		/// デバッグ表示関数
 		/// </summary>
-		virtual std::string GetUpgradeName() = 0;
-
-		/// <summary>
-		/// 初期化（sprite用テクスチャ読み込み）
-		/// </summary>
-		//void Init();
-
-		/// <summary>
-		/// 更新（アニメーションとかあるかもなので用意）
-		/// <para>必ずSpriteのisActiveをfalseに！</para>
-		/// <para>特殊なアニメーションとかしたいなら継承</para>
-		/// </summary>
-		//virtual void Update();
-
-		/// <summary>
-		/// スプライト表示
-		/// <para>この関数を呼び出さないとそのフレームは表示されない（SpriteのisActiveをtrueにしてね）</para>
-		/// </summary>
-		/// <param name="pos"></param>
-		//void ShowUI(const LWP::Math::Vector2& pos);
-
+		virtual void GetUpgradeName() { ImGui::Text("Upgrade"); }
 
 	protected: // ** 派生先用のメンバ変数 ** //
 
-		// スプライト
-		//LWP::Primitive::Sprite sprite_;
 	};
 }

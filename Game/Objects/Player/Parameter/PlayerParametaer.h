@@ -40,9 +40,9 @@ public:	//*** パブリック関数 ***//
 	/// <summary>
 	/// パラメーターを取得
 	/// </summary>
-	UpgradeParameter GetParameter() {
+	/*UpgradeParameter GetParameter() {
 		return param;
-	};
+	};*/
 
 	/// <summary>
 	/// HP を増やす
@@ -88,6 +88,13 @@ public:	//*** サブクラス ***//
 		float slashRange_ = 0.0f;	// カプセル範囲
 		float slashLength_ = 0.0f;	// スラッシュ距離補正
 
+		// 攻撃系のアップグレードの値
+		// 追撃
+		int pursuitPower = 0;
+		// 継続ダメージ
+		int burningPower = 0;
+
+
 		AttackParam operator*(const AttackParam& obj)
 		{
 			AttackParam temp;
@@ -95,6 +102,8 @@ public:	//*** サブクラス ***//
 			temp.slashPower_ = this->slashPower_ * obj.slashPower_;
 			temp.slashRange_ = this->slashRange_ * obj.slashRange_;
 			temp.slashLength_ = this->slashLength_ * obj.slashLength_;
+			temp.pursuitPower = this->pursuitPower * obj.pursuitPower;
+			temp.burningPower = this->burningPower * obj.burningPower;
 			return temp;
 		}
 	};
@@ -140,6 +149,30 @@ public:	//*** サブクラス ***//
 		}
 	};
 
+	// アップグレード関係のフラグ
+	struct FlagParam
+	{
+		// 攻撃後追撃
+		bool pursuitFlag = false;
+		// バリア
+		bool eXLifeFlag = false;
+		// 吹き飛ばし
+		bool BlowOffFlag = false;
+		// 敵を複数倒すと HP 回復
+		bool penetrationFlag = false;
+		// そして HP を回復させるかのフラグ
+		bool isActiveIncreaseHP = false;
+		// 敵に継続ダメージを与える
+		bool burningFlag = false;
+	};
+
+	struct OtherParam
+	{
+		// 経験値取得範囲
+		float radiusLevel = 2.0f;
+	};
+
+
 public:	//*** パブリック変数 ***//
 
 	// HP のみ
@@ -155,6 +188,12 @@ public:	//*** パブリック変数 ***//
 	// 時間のみ
 	TimeParam Time;
 
+	// フラグ
+	FlagParam Flag;
+
+	// その他
+	OtherParam Other;
+
 private: //*** プライベート変数 ***//
 
 	PlayerConfig* config_ = nullptr;
@@ -167,4 +206,6 @@ private: //*** プライベート関数 ***//
 	void ApplyAttack();
 	void ApplySpeed();
 	void ApplyTime();
+	void ApplyFlag();
+	void ApplyOther();
 };
