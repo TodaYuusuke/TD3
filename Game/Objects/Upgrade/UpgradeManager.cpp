@@ -322,7 +322,7 @@ void L::UpgradeManager::Selecting(Player* player)
 	LWP::Info::SetDeltaTimeMultiply(0.0f);
 	// 場所
 	Vector2 pos{ 0.0f,625.0f };
-	sprite_.isActive = false;
+	sprite_.isActive = true;
 	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
 	// 抽選されたアップグレードを更新
 	attackUpgrades_[candidata_[0]]->BaseUpdate();
