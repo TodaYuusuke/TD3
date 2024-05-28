@@ -93,6 +93,11 @@ void ArrowEnemy::SetPosition(lwp::Vector3 pos)
 	SetSpawnEffect(models_[0].transform.translation);
 }
 
+void ArrowEnemy::SetEnemyHP(int stage)
+{
+	hp_ = 20 * (1 + (stage * 0.5f));
+}
+
 void ArrowEnemy::Move()
 {
 	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;

@@ -102,4 +102,9 @@ private: //*** プライベート関数 ***//
 
 	void DebugWindow();
 
+	/// <summary>
+	/// 経過時点でのステージを取得する
+	/// </summary>
+	int GetCurrentStage();
+
 };

@@ -27,17 +27,20 @@ void EnemyManager::Init()
 
 void EnemyManager::Update()
 {
-	if (!isTutorial_) {
+	if (!isTutorial_)
+	{
 		currentFrame_++;
 
 		// 通常敵の出現
-		if (currentFrame_ >= kSpawnFrequency) {
+		if (currentFrame_ >= kSpawnFrequency)
+		{
 			//ランダム生成用
 			std::random_device seedGenerator;
 			std::mt19937 randomEngine(seedGenerator());
 			std::uniform_int_distribution<int> distribution(1, 3);
 			int spawn = distribution(randomEngine);
-			for (int It = 0; It < spawn; It++) {
+			for (int It = 0; It < spawn; It++)
+			{
 				EnemySpawn();
 			}
 			currentFrame_ = 0;
@@ -45,9 +48,11 @@ void EnemyManager::Update()
 		// ボスキャラの出現
 		BossSpawn();
 	}
-	else {
+	else
+	{
 		// チュートリアルの敵を倒したらゲームスタート
-		if (!tutorialEnemy_->GetIsTutorial()) {
+		if (!tutorialEnemy_->GetIsTutorial())
+		{
 			isTutorial_ = false;
 		}
 	}
@@ -64,7 +69,8 @@ void EnemyManager::Update()
 		}
 		return false;
 		});
-	for (IEnemy* enemy : enemys_) {
+	for (IEnemy* enemy : enemys_)
+	{
 		enemy->Update();
 		// 出現時のエフェクトのアニメーションが終了しているかをチェック
 		enemy->CheckSpawnEffect();
@@ -83,16 +89,20 @@ void EnemyManager::EnemySpawn()
 	float divideZ = 1.0f - divideX;
 	float signX = distribution(randomEngine);
 	float signY = distribution(randomEngine);
-	if (signX <= 0.5f) {
+	if (signX <= 0.5f)
+	{
 		signX = 1;
 	}
-	else {
+	else
+	{
 		signX = -1;
 	}
-	if (signY <= 0.5f) {
+	if (signY <= 0.5f)
+	{
 		signY = 1;
 	}
-	else {
+	else
+	{
 		signY = -1;
 	}
 
@@ -100,21 +110,25 @@ void EnemyManager::EnemySpawn()
 	float PtoE = distribution2(randomEngine);
 
 	lwp::Vector3 pos = { PtoE * divideX * signX * 5 , 0.5f , PtoE * divideZ * signY * 5 };
-	if (number <= 0.5f) {
+	if (number <= 0.5f)
+	{
 		NormalEnemySpawn(pos);
 		//ArrowEnemySpawn(pos);
 	}
-	else if (number <= 0.8f) {
+	else if (number <= 0.8f)
+	{
 		ArrowEnemySpawn(pos);
 	}
-	else {
+	else
+	{
 		ShieldEnemySpawn(pos);
 		//NormalEnemySpawn(pos);
 	}
 
 }
 
-void EnemyManager::BossSpawn() {
+void EnemyManager::BossSpawn()
+{
 	//ランダム生成用
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
@@ -131,14 +145,16 @@ void EnemyManager::BossSpawn() {
 
 	// 1分
 	// ダッシュボスを出現
-	if (gameTimer_->GetCurrentSecond() == 01 && !isBossSpawn_) {
+	if (gameTimer_->GetCurrentSecond() == 01 && !isBossSpawn_)
+	{
 		DashBossSpawn(pos);
 		//ArrowBossSpawn(pos);
 		isBossSpawn_ = true;
 	}
 	// 2分
 	// ホーミング弾を撃つボスを出現
-	else if (gameTimer_->GetCurrentSecond() == 120 && isBossSpawn_) {
+	else if (gameTimer_->GetCurrentSecond() == 120 && isBossSpawn_)
+	{
 		ArrowBossSpawn(pos);
 		isBossSpawn_ = false;
 	}
@@ -152,6 +168,7 @@ void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos)
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
+	enemy->SetEnemyHP(GetCurrentStage());
 	enemys_.push_back(enemy);
 }
 void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos)
@@ -162,6 +179,7 @@ void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos)
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
+	enemy->SetEnemyHP(GetCurrentStage());
 	enemys_.push_back(enemy);
 }
 void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos)
@@ -172,30 +190,36 @@ void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos)
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
+	enemy->SetEnemyHP(GetCurrentStage());
 	enemys_.push_back(enemy);
 }
 
-void EnemyManager::DashBossSpawn(lwp::Vector3 pos) {
+void EnemyManager::DashBossSpawn(lwp::Vector3 pos)
+{
 	DashBoss* boss = new DashBoss();
 	boss->Initialize();
 	boss->SetCamera(followCamera_);
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
+	boss->SetEnemyHP(GetCurrentStage());
 	enemys_.push_back(boss);
 }
 
-void EnemyManager::ArrowBossSpawn(lwp::Vector3 pos) {
+void EnemyManager::ArrowBossSpawn(lwp::Vector3 pos)
+{
 	ArrowBoss* boss = new ArrowBoss();
 	boss->Initialize();
 	boss->SetCamera(followCamera_);
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
+	boss->SetEnemyHP(GetCurrentStage());
 	enemys_.push_back(boss);
 }
 
-void EnemyManager::JumpBossSpawn(lwp::Vector3 pos) {
+void EnemyManager::JumpBossSpawn(lwp::Vector3 pos)
+{
 	JumpBoss* boss = new JumpBoss();
 	boss->Initialize();
 	boss->SetCamera(followCamera_);
@@ -225,9 +249,9 @@ void EnemyManager::DebugWindow()
 	{
 		if (ImGui::TreeNode(("Enemy" + std::to_string(index)).c_str()))
 		{
-		#ifdef DEMO
+#ifdef DEMO
 			(*itr)->DebugPrint();
-		#endif
+#endif
 
 			ImGui::TreePop();
 			ImGui::Separator();
@@ -238,4 +262,9 @@ void EnemyManager::DebugWindow()
 	ImGui::EndChild();
 
 	ImGui::End();
+}
+
+int EnemyManager::GetCurrentStage()
+{
+	return gameTimer_->GetCurrentSecond() / 60;
 }

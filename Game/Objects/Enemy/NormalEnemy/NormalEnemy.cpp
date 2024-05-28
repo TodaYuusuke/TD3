@@ -74,6 +74,11 @@ void NormalEnemy::SetPosition(lwp::Vector3 pos)
 	SetSpawnEffect(models_[0].transform.translation);
 }
 
+void NormalEnemy::SetEnemyHP(int stage)
+{
+	hp_ = 40 * (1 + (stage * 0.5f));
+}
+
 void NormalEnemy::Move()
 {
 	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[Model::Body].transform.translation;

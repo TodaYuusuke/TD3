@@ -20,6 +20,7 @@ public:
 	bool GetIsTutorial() { return isTutorial_; }
 
 	/// Setter
+	void SetEnemyHP(int stage) override;
 
 	// チュートリアルモードを起動するかを設定
 	void SetIsTutorial(bool isActive) { isTutorial_ = isActive; }

@@ -165,6 +165,11 @@ LWP::Math::Vector3 ArrowBoss::GetDirectVel() {
 	return (player_->GetWorldTransform()->translation - models_[0].transform.translation).Normalize();
 }
 
+void ArrowBoss::SetEnemyHP(int stage)
+{
+	hp_ = 200 * (1 + (stage * 0.1f));
+}
+
 void ArrowBoss::Move()
 {
 	lwp::Vector3 MoveVec = GetDirectVel();

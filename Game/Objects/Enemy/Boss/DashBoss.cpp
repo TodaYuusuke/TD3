@@ -177,6 +177,11 @@ void DashBoss::SetPosition(lwp::Vector3 pos)
 	SetSpawnEffect(models_[0].transform.translation);
 }
 
+void DashBoss::SetEnemyHP(int stage)
+{
+	hp_ = 200 * (1 + (stage * 0.1f));
+}
+
 void DashBoss::Move()
 {
 	lwp::Vector3 MoveVec = GetDirectVel();

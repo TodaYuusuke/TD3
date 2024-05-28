@@ -20,6 +20,7 @@ public:// パブリックなメンバ関数
 	void Update()override;
 	void SetPosition(lwp::Vector3 pos)override;
 
+	void SetEnemyHP(int stage) override;
 	///
 	/// User Method
 	/// 

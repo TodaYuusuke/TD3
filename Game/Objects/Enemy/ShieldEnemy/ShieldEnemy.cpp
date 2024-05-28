@@ -68,6 +68,11 @@ void ShieldEnemy::SetPosition(lwp::Vector3 pos)
 	SetSpawnEffect(models_[0].transform.translation);
 }
 
+void ShieldEnemy::SetEnemyHP(int stage)
+{
+	hp_ = 60 * (1 + (stage * 0.5f));
+}
+
 void ShieldEnemy::Move()
 {
 	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;
