@@ -67,6 +67,12 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 
 	// 選択中のパーティクル
 	CursorParticleInit();
+
+	//SE
+	serectSE = std::make_unique<LWP::Resource::Audio>();
+	serectSE->Load("fanfare.wav");
+	chooseSE = std::make_unique<LWP::Resource::Audio>();
+	chooseSE->Load("fanfare.wav");
 }
 
 void L::UpgradeManager::Update(Player* player)
@@ -273,6 +279,7 @@ void L::UpgradeManager::Selecting(Player* player)
 				Input::Keyboard::GetTrigger(DIK_LEFT) ||
 				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_LEFT)))
 		{
+			serectSE->Play();
 			cursorIndex_--;
 		}
 		// 最後の添え字は決定
@@ -281,6 +288,7 @@ void L::UpgradeManager::Selecting(Player* player)
 				Input::Keyboard::GetTrigger(DIK_RIGHT) ||
 				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_RIGHT)))
 		{
+			serectSE->Play();
 			cursorIndex_++;
 		}
 	}
@@ -290,6 +298,10 @@ void L::UpgradeManager::Selecting(Player* player)
 		Input::Keyboard::GetPress(DIK_RETURN) ||
 		Input::Pad::GetPress(XINPUT_GAMEPAD_A))
 	{
+		if (isPress_ == false) {
+			SEvolume = 1.0f;
+			chooseSE->Play(SEvolume);
+		}
 		isPress_ = true;
 		
 		CursorEffect_(10, sprite_.transform.translation);
@@ -300,6 +312,10 @@ void L::UpgradeManager::Selecting(Player* player)
 	}
 	else
 	{
+		//だんだん音が下がる
+		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		SEvolume = Lerp(SEvolume, 0.0f, BGMt);
+
 		isPress_ = false;
 		pressTime_ = 0.0f;
 		sprite_.transform.scale = { 1,1,1 };
