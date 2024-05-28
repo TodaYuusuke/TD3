@@ -133,7 +133,7 @@ void GameScene::Update()
 	if (gameTimer_->isEnd_){
 		//だんだん音が下がる
 		BGMt = (std::min)(BGMt + 0.01f,1.0f);
-		BGMvolume = Lerp(BGMvolume, 0.1f, BGMt);
+		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
 
 		// プレイヤーが生きているとき
 		if (player_->flag_.isAlive_) {
