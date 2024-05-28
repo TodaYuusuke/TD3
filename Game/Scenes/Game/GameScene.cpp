@@ -25,9 +25,9 @@ void GameScene::Initialize()
 	player_->SetAudio(atack.get());
 	// 天球
 	skydome.LoadFile("skydome/skydome.obj");
-	skydome.transform.scale = { 1.0f,1.0f, 1.0f };
+	skydome.transform.scale = { 0.5f,0.5f, 0.5f };
 	skydome.material.enableLighting = false;
-	skydome.isActive = false;
+
 	// 地面
 	ground.LoadFile("ground/ground.obj");
 	ground.transform.translation.y = -0.5f;
@@ -99,7 +99,7 @@ void GameScene::Initialize()
 	BGM = std::make_unique<LWP::Resource::Audio>();
 	BGM->Load("fanfare.wav");
 	BGMvolume = 0.2f;
-	BGM->Play(BGMvolume,255);
+	//BGM->Play(BGMvolume,255);
 	BGMt = 0.0f;
 	IsSceneChangeEnd = true;
 }

@@ -315,7 +315,7 @@ void L::UpgradeManager::Selecting(Player* player)
 		//だんだん音が下がる
 		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
 		SEvolume = Lerp(SEvolume, 0.0f, BGMt);
-
+		chooseSE->SetVolume(SEvolume);
 		isPress_ = false;
 		pressTime_ = 0.0f;
 		sprite_.transform.scale = { 1,1,1 };
