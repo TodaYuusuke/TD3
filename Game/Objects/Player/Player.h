@@ -358,5 +358,5 @@ public: //*** 音 ***//
 	};
 private:
 	lwp::Audio* attack;
-	float soundVolume = 0.2f;
+	float soundVolume = 1.0f;
 };

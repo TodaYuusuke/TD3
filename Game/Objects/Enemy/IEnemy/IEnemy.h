@@ -243,5 +243,5 @@ protected:
 		void SetSE(LWP::Resource::Audio* input) { damege = input; };
 private:
 	LWP::Resource::Audio* damege;
-	float soundVolume = 0.2f;
+	float soundVolume = 1.0f;
 };

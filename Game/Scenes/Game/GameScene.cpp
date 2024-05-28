@@ -110,7 +110,7 @@ void GameScene::Update()
 	//だんだん音が上がる
 	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
 		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
-		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
+		BGMvolume = Lerp(BGMvolume, 0.5f, BGMt);
 	}
 	else {
 		IsSceneChangeEnd = false;
@@ -119,7 +119,6 @@ void GameScene::Update()
 	BGM->SetVolume(BGMvolume);
 
 	sceneTransition_->Update();
-
 
 	// 時間を計測
 	// チュートリアルの時は計測しない

@@ -27,7 +27,6 @@ private: //*** 変数群 ***//
 	// 画面全体の画像
 	LWP::Primitive::Sprite backSprite_;
 
-
 	// シーン遷移
 	std::unique_ptr<SceneTransition> sceneTransition_;
 
