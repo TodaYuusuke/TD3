@@ -424,6 +424,10 @@ void Player::InitStaticVariable()
 		return newData;
 		};
 	soilSplashParticle_.updateFunction = [](Object::ParticleData* data) {
+		if (Info::GetDeltaTime() == 0.0f) {
+			return false;
+		}
+
 		// 経過フレーム追加
 		data->elapsedFrame++;
 

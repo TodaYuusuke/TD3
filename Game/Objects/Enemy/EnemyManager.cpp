@@ -129,13 +129,14 @@ void EnemyManager::BossSpawn() {
 	float PtoE = distribution2(randomEngine);
 	lwp::Vector3 pos = { PtoE * divideX , 1.5f , PtoE * divideZ * signY };
 
-	// 1分
+	// 30秒
 	// ダッシュボスを出現
 	if (gameTimer_->GetCurrentSecond() == 30 && !isBossSpawn_) {
 		DashBossSpawn(pos);
 		//ArrowBossSpawn(pos);
 		isBossSpawn_ = true;
 	}
+	// 1分
 	else if (gameTimer_->GetCurrentSecond() == 60 && isBossSpawn_) {
 		DashBossSpawn(pos);
 		//ArrowBossSpawn(pos);

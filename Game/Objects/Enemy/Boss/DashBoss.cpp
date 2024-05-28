@@ -161,6 +161,7 @@ void DashBoss::Update()
 
 	if (preAttackMotion_.isEnd()) {
 		isOutBlowOff_ = true;
+		models_[0].transform.scale = { 2,3,2 };
 	}
 	else {
 		isOutBlowOff_ = false;
@@ -168,6 +169,11 @@ void DashBoss::Update()
 
 	// 移動処理
 	Move();
+
+	// スケールが極端な数値にならないように上限下限を設ける
+	models_[0].transform.scale.x = std::clamp<float>(models_[0].transform.scale.x, 1, 2);
+	models_[0].transform.scale.y = std::clamp<float>(models_[0].transform.scale.y, 1, 3);
+	models_[0].transform.scale.z = std::clamp<float>(models_[0].transform.scale.z, 1, 2);
 }
 
 void DashBoss::SetPosition(lwp::Vector3 pos)
@@ -179,9 +185,9 @@ void DashBoss::SetPosition(lwp::Vector3 pos)
 
 void DashBoss::Move()
 {
-	lwp::Vector3 MoveVec = GetDirectVel();
-	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTimeF();
+	dirVel_ = GetDirectVel();
+	dirVel_.y = 0.0f;
+	models_[0].transform.translation += dirVel_ * 2.0f * LWP::Info::GetDeltaTimeF();
 }
 
 void DashBoss::Attack()

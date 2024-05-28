@@ -15,8 +15,8 @@ void IEnemy::Initialize()
 	// 死ぬときのアニメーション
 	deadMotion_.Add(&models_[BODY].transform.translation, LWP::Math::Vector3{ 0,5,0 }, 0, 0.7f, LWP::Utility::Easing::Type::OutQuint);
 	// 光の柱
-	lightPillarMotion_.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ 1.5f,0,1.5f }, 0, 0.1f)
-		.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ -1.5f,0,-1.5f }, 0.1f, 0.1f);
+	lightPillarMotion_.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ 1.5f,1.5f,1.5f }, 0, 0.1f)
+		.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ -1.5f,-1.5f,-1.5f }, 0.1f, 0.1f);
 
 	// 出現時の光の柱
 	lightPillar_.texture = LWP::Resource::LoadTexture("particle/lightPillar.png");
@@ -30,9 +30,9 @@ void IEnemy::Initialize()
 void IEnemy::KnockBackUpdate()
 {
 	// プレイヤーパラメーターがtrueなら
-	//if (player_->parameter_.GetParameter().BlowOffFlag) {
-		// 自機と反対の方向に移動させる
-		// ノックバック判定が出ているかを確認
+
+	// 自機と反対の方向に移動させる
+	// ノックバック判定が出ているかを確認
 	if (player_->GetIsEnemyKnockBack())
 	{
 		// 自機との距離
@@ -47,7 +47,6 @@ void IEnemy::KnockBackUpdate()
 			knockBackDir_.y = 0.0f;
 		}
 	}
-	//}
 
 	// ノックバックの移動処理
 	if (isKnockBack_)
@@ -275,7 +274,7 @@ void IEnemy::InitStaticVariable()
 
 		// パーティクル追加
 		return newData;
-		};
+	};
 	damageParticle_.updateFunction = [](Object::ParticleData* data) {
 		if (Info::GetDeltaTime() == 0.0f)
 		{
@@ -309,12 +308,12 @@ void IEnemy::InitStaticVariable()
 		}
 
 		return data->elapsedFrame > 50 ? true : false;
-		};
+	};
 	damageParticle_.isActive = true;
 	damageEffect_ = [&](int i, lwp::Vector3 pos) {
 		damageParticle_.P()->transform = pos;
 		damageParticle_.Add(i);
-		};
+	};
 #pragma endregion
 
 #pragma region 死ぬとき
@@ -342,7 +341,7 @@ void IEnemy::InitStaticVariable()
 
 		// パーティクル追加
 		return newData;
-		};
+	};
 	deadParticle_.updateFunction = [](Object::ParticleData* data) {
 		if (Info::GetDeltaTime() == 0.0f)
 		{
@@ -386,12 +385,12 @@ void IEnemy::InitStaticVariable()
 		}
 
 		return false;
-		};
+	};
 	deadParticle_.isActive = true;
 	deadEffect_ = [&](int i, lwp::Vector3 pos) {
 		deadParticle_.P()->transform = pos;
 		deadParticle_.Add(i);
-		};
+	};
 #pragma endregion
 
 #pragma region 出現時のエフェクト
@@ -421,7 +420,7 @@ void IEnemy::InitStaticVariable()
 
 		// パーティクル追加
 		return newData;
-		};
+	};
 	spawnParticle_.updateFunction = [](Object::ParticleData* data) {
 		if (Info::GetDeltaTime() == 0.0f)
 		{
@@ -464,12 +463,12 @@ void IEnemy::InitStaticVariable()
 		}
 
 		return false;
-		};
+	};
 	spawnParticle_.isActive = true;
 	spawnEffect_ = [&](int i, lwp::Vector3 pos) {
 		spawnParticle_.P()->transform = pos;
 		spawnParticle_.Add(i);
-		};
+	};
 #pragma endregion
 
 	// 攻撃前
@@ -502,22 +501,9 @@ void IEnemy::InitStaticVariable()
 		// 経過フレーム追加
 		data->elapsedFrame++;
 
-		//// 方向ベクトル
-		//lwp::Vector3 dirVel{};
-		//// 方向ベクトルを算出(ただしy成分は除外)
-		//dirVel = (data->wtf.translation - models_[0].transform.translation).Normalize() * 0.1f;
-		//dirVel.y = data->velocity.y;
 		// 速度ベクトルを弱める
 		data->velocity.x *= 0.9f;
 		data->velocity.z *= 0.9f;
-
-		//// パーティクルを外側へ飛ばす
-		//if (isOutBlowOff_) {
-		//	data->velocity = dirVel;
-		//	// だんだん上昇速度を上げる
-		//	data->velocity.x *= 1.5f;
-		//	data->velocity.z *= 1.5f;
-		//}
 
 		// 重力を加算
 		data->velocity.y += 9.8f / 2000.0f;

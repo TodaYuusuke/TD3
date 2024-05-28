@@ -98,7 +98,7 @@ void L::UpgradeManager::LevelUp()
 //#ifdef  DEMO
 void L::UpgradeManager::DebugWindow(Player* player)
 {
-	//#ifdef DEMO
+#ifdef DEMO
 
 	ImGui::Begin("UpgradeManager");
 
@@ -175,7 +175,7 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	}
 
 	ImGui::End();
-	//#endif // DEMO
+#endif // DEMO
 }
 //#endif //  DEMO
 
@@ -359,13 +359,13 @@ void L::UpgradeManager::Selecting(Player* player)
 	if (isSelected_) {
 		Vector2 attackUpgradeAnimPos = { LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2), 625.0f };
 		Vector2 escapeUpgradeAnimPos = { LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2) * 2, 625.0f };
-		if (attackUpgrades_[candidata_[choiceIndex_]]->isApplied) {
+		if (choiceIndex_ == 0) {
 			attackUpgrades_[candidata_[0]]->ShowUI(attackUpgradeAnimPos + lwp::Vector2{ selectedAnimPos_.x, selectedAnimPos_.y });
 			escapeUpgrades_[candidata_[1]]->ShowUI(lwp::Vector2{ -1000,0 });
 		}
-		else if (escapeUpgrades_[candidata_[choiceIndex_]]->isApplied) {
+		else{ 
 			escapeUpgrades_[candidata_[1]]->ShowUI(escapeUpgradeAnimPos + lwp::Vector2{ -selectedAnimPos_.x, selectedAnimPos_.y });
-			attackUpgrades_[candidata_[0]]->ShowUI(lwp::Vector2{ -1000,0 });
+ 			attackUpgrades_[candidata_[0]]->ShowUI(lwp::Vector2{ -1000,0 });
 		}
 		// アップグレード選択時のアニメーション終了
 		if (selectedMotion_.isEnd()) {
