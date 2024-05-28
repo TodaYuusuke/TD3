@@ -99,7 +99,7 @@ void PlayerParameter::ApplyHP()
 	// 別で用意したクラスに反映
 	// ここで回復とかもすればいい
 	// 今の最大 HP の差異を保存
-	int tempSub = Hp.maxHp_ - config_->Count_.MAXHP_ + (int)param.HP.hpDelta.base;
+	int tempSub = config_->Count_.MAXHP_ + (int)param.HP.hpDelta.base - Hp.maxHp_;
 	// その差異分ループ
 	// プラス分
 	if (0 < tempSub)

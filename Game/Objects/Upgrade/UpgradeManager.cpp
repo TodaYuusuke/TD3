@@ -151,6 +151,10 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	{
 		Apply(player);
 	}
+	if (ImGui::Button("Random"))
+	{
+		RandomUpgrade();
+	}
 	ImGui::Separator();
 
 	ImGui::Text("upgrade: %d", kUpgradNum_);
