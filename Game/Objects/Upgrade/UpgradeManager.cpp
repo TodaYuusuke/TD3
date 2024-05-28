@@ -57,7 +57,8 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	escapeUpgrades_.push_back(new Skill_EXLifeFlag);
 	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
 	//取得していると他のアップグレードを取得したときにも適応される
-	//escapeUpgrades_.push_back(new Skill_HPUp);
+	escapeUpgrades_.push_back(new Skill_HPUp);
+
 #else
 	// 製品版
 	// アップグレードをすべて取得
