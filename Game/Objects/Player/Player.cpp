@@ -38,7 +38,7 @@ void Player::Initialize()
 	weapon_.reset(new Weapon);
 	weapon_->Initialize();
 	weapon_->SetParent(&demoModel_.transform);
-	weapon_->SetTPointer(&easeT_);
+	//weapon_->SetTPointer(&easeT_);
 
 	// 状態の情報を設定
 	//InitDatas();

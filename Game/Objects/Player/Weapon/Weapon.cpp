@@ -11,8 +11,6 @@ void Weapon::Initialize()
 	demoModel_.transform.scale = { 0.5f,0.5f,0.8f };
 	demoModel_.material.enableLighting = true;
 
-	InitDatas();
-
 	behavior_ = Behavior::Root;
 }
 
@@ -21,6 +19,8 @@ void Weapon::Update()
 	if (reqBehavior_)
 	{
 		behavior_ = reqBehavior_.value();
+		t_ = 0.0f;
+		prePos_ = demoModel_.transform.translation;
 		switch (behavior_)
 		{
 		case Weapon::Behavior::Root:
@@ -52,12 +52,13 @@ void Weapon::Update()
 	default:
 		break;
 	}
+	t_ += lwp::GetDeltaTimeF();
+	t_ = std::clamp<float>(t_, 0.0f, 1.0f);
 }
 
 void Weapon::InitRoot()
 {
-	rootData_.translate_.start_ = demoModel_.transform.translation;
-	//rootData_.rotate_.start_ = demoModel_.transform.rotation;
+	demoModel_.transform.translation = { 0.0f,0.0f,1.0f };
 }
 
 void Weapon::InitSlash()
@@ -66,65 +67,20 @@ void Weapon::InitSlash()
 
 void Weapon::InitMoment()
 {
-	momentData_.scale_.start_ = demoModel_.transform.scale;
-	//momentData_.rotate_.start_ = demoModel_.transform.rotation;
-	momentData_.translate_.start_ = demoModel_.transform.translation;
 }
 
 void Weapon::UpdateRoot()
 {
-	demoModel_.transform.scale = lwp::Vector3::Slerp(rootData_.scale_.start_, rootData_.scale_.end_, *pT_);
-	demoModel_.transform.rotation = lwp::Vector3::Slerp(rootData_.rotate_.start_, rootData_.rotate_.end_, *pT_);
-	demoModel_.transform.translation = lwp::Vector3::Slerp(rootData_.translate_.start_, rootData_.translate_.end_, *pT_);
 }
 
 void Weapon::UpdateSlash()
 {
-	demoModel_.transform.scale = lwp::Vector3::Slerp(slashData_.scale_.start_, slashData_.scale_.end_, *pT_);
-	demoModel_.transform.rotation = lwp::Vector3::Slerp(slashData_.rotate_.start_, slashData_.rotate_.end_, *pT_);
-	demoModel_.transform.translation = lwp::Vector3::Slerp(slashData_.translate_.start_, slashData_.translate_.end_, *pT_);
+	float easeT = LWP::Utility::Easing::OutExpo(t_);
+	demoModel_.transform.translation.z = (10.0f * (easeT)) + (prePos_.z * (1.0f - easeT));
 }
 
 void Weapon::UpdateMoment()
 {
-	demoModel_.transform.scale = lwp::Vector3::Slerp(momentData_.scale_.start_, momentData_.scale_.end_, *pT_);
-	demoModel_.transform.rotation = lwp::Vector3::Slerp(momentData_.rotate_.start_, momentData_.rotate_.end_, *pT_);
-	demoModel_.transform.translation = lwp::Vector3::Slerp(momentData_.translate_.start_, momentData_.translate_.end_, *pT_);
-}
-
-void Weapon::InitDatas()
-{
-	InitRootData();
-	InitSlashData();
-	InitMomentData();
-}
-
-void Weapon::InitRootData()
-{
-	rootData_.scale_.start_ = { 0.5f,0.5f,0.8f };
-	rootData_.scale_.end_ = { 0.5f,0.5f,0.8f };
-	rootData_.rotate_.start_ = { 0.0f,0.0f,0.0f };
-	rootData_.rotate_.end_ = { 0.0f,0.0f,0.0f };
-	rootData_.translate_.start_ = { 0.5f,0.0f,0.0f };
-	rootData_.translate_.end_ = { -0.5f,0.0f,0.0f };
-}
-
-void Weapon::InitSlashData()
-{
-	slashData_.scale_.start_ = { 0.5f,0.5f,0.8f };
-	slashData_.scale_.end_ = { 0.5f,0.5f,1.0f };
-	slashData_.rotate_.start_ = { 0.0f,0.0f,0.0f };
-	slashData_.rotate_.end_ = { 0.0f,0.0f,0.0f };
-	slashData_.translate_.start_ = { -1.0f,0.5f,3.0f };
-	slashData_.translate_.end_ = { 1.0f,0.5f,1.0f };
-}
-
-void Weapon::InitMomentData()
-{
-	momentData_.scale_.start_ = { 0.5f,0.5f,1.0f };
-	momentData_.scale_.end_ = { 0.5f,0.5f,0.8f };
-	momentData_.rotate_.start_ = { 0.0f,0.0f,0.0f };
-	momentData_.rotate_.end_ = { 0.0f,0.0f,0.0f };
-	momentData_.translate_.start_ = { 0.0f,0.0f,0.0f };
-	momentData_.translate_.end_ = { -0.5f,0.0f,0.0f };
+	float easeT = LWP::Utility::Easing::InOutQuart(t_);
+	demoModel_.transform.translation = (lwp::Vector3(0.0f, 0.0f, 1.0f) * (easeT)) + (prePos_ * (1.0f - easeT));
 }
