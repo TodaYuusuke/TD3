@@ -473,13 +473,13 @@ void IEnemy::InitStaticVariable()
 
 	// 攻撃前
 	static LWP::Object::Particle accumulateParticle_;
-	accumulateParticle_.SetPrimitive<Primitive::Cube>();
-	accumulateParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::YELLOW);
+	accumulateParticle_.SetPrimitive<Primitive::Billboard2D>();
+	accumulateParticle_.P()->texture = LWP::Resource::LoadTexture("particle/particle.png");
 	accumulateParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
 		Object::ParticleData newData{};
 		newData.wtf.translation = lwp::Vector3{ 0,-0.5f,0 } + primitive->transform.GetWorldPosition();
 		newData.wtf.rotation = primitive->transform.rotation;
-		newData.wtf.scale = { 0.5f,0.5f, 0.5f };
+		newData.wtf.scale = { 0.5f,0.5f, 0.0f };
 
 		// 速度ベクトルを生成
 		int dir1 = Utility::GenerateRandamNum<int>(-10, 10);

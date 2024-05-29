@@ -185,8 +185,12 @@ void DashBoss::SetPosition(lwp::Vector3 pos)
 
 void DashBoss::Move()
 {
-	dirVel_ = GetDirectVel();
+	dirVel_ += GetDirectVel() * 0.5f;
 	dirVel_.y = 0.0f;
+	dirVel_.x = std::clamp<float>(dirVel_.x, -2, 2);
+	dirVel_.z = std::clamp<float>(dirVel_.z, -2, 2);
+	dirVel_.x /= 1.01f;
+	dirVel_.z /= 1.01f;
 	models_[0].transform.translation += dirVel_ * 2.0f * LWP::Info::GetDeltaTimeF();
 }
 
