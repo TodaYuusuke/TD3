@@ -35,13 +35,13 @@ private:
 
 private:// 定数
 	// 攻撃する範囲
-	const float kAttackRange = 2.0f;
+	const float kAttackRange = 5.0f;
 
 	// 攻撃のクールタイム
-	const int kAttackWaitTime = 120;
+	const int kAttackWaitTime = 180;
 
 	// 移動の定数
-	const float kMove = 2.0f;
+	const float kMove = 4.0f;
 
 private:
 	lwp::Vector3 Rot;

@@ -235,7 +235,7 @@ protected:
 	static std::function<void(int, lwp::Vector3)> accumulateEffect_;
 
 	// 出現時の光の柱
-	LWP::Primitive::Billboard3D lightPillar_;
+	LWP::Primitive::Billboard2D lightPillar_;
 	LWP::Resource::Motion lightPillarMotion_;
 
 	//音
