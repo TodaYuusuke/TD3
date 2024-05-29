@@ -115,7 +115,7 @@ void ClearScene::Update()
 	}
 	if (IsSceneChangeBegin == true) {
 		//だんだん音が下がる
-		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		BGMt = (std::min)(BGMt + 0.05f, 1.0f);
 		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
 	}
 

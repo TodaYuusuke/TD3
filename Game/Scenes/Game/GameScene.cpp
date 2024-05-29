@@ -110,12 +110,17 @@ void GameScene::Initialize()
 // 更新
 void GameScene::Update()
 {
+	ImGui::Begin("Skydome");
+	ImGui::DragFloat3("Scale",&scale.x);
+	skydome.transform.scale = scale;
+	ImGui::End();
+
 	//だんだん音が上がる
 	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
 		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
 		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
 	}
-	else {
+	else if(IsSceneChangeEnd == true) {
 		IsSceneChangeEnd = false;
 		BGMt = 0.0f;
 	}
@@ -135,7 +140,7 @@ void GameScene::Update()
 	// タイマーのカウントが終了したとき
 	if (gameTimer_->isEnd_){
 		//だんだん音が下がる
-		BGMt = (std::min)(BGMt + 0.1f,1.0f);
+		BGMt = (std::min)(BGMt + 0.002f,1.0f);
 		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
 
 		// プレイヤーが生きているとき
