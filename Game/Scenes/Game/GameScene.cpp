@@ -22,12 +22,12 @@ void GameScene::Initialize()
 	player_->SetScene(this);
 
 	// 地面
-	ground.LoadFile("ground/ground.obj");
-	ground.transform.translation.y = -0.5f;
-	ground.transform.scale = { 10.0f,0.1f, 10.0f };
-	ground.name = "Ground";
-	ground.material.enableLighting = true;
-	ground.material.uvTransform.scale = { 20,20,0 };
+	ground.LoadShortPath("ground/ground.obj");
+	ground.worldTF.translation.y = -0.5f;
+	ground.worldTF.scale = { 10.0f,0.1f, 10.0f };
+	//ground.name = "Ground";
+	ground.materials[0].enableLighting = true;
+	ground.materials[0].uvTransform.scale = {20,20,0};
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->SetCameraAddress(&mainCamera);

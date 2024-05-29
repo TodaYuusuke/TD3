@@ -7,10 +7,10 @@ void DashBoss::Init()
 {
 	// 当たり判定のインスタンス生成
 	models_.emplace_back();
-	models_[0].LoadFile("NormalEnemy/NormalEnemy.obj");
+	models_[0].LoadShortPath("NormalEnemy/NormalEnemy.obj");
 
 	// 大きさ
-	models_[0].transform.scale = { 2,3,2 };
+	models_[0].worldTF.scale = { 2,3,2 };
 	// 当たり判定を有効化
 	isActive_ = true;
 
@@ -23,8 +23,8 @@ void DashBoss::Init()
 	currentFrame_ = 0;
 
 	// 攻撃前のモーション
-	preAttackMotion_.Add(&models_[0].transform.scale, lwp::Vector3{ -1,-1,-1 }, 0, 0.3f, LWP::Utility::Easing::Type::OutQuart)
-		.Add(&models_[0].transform.scale, lwp::Vector3{ 1,1,1 }, 1.4f, 0.2f, LWP::Utility::Easing::Type::OutQuart);
+	preAttackMotion_.Add(&models_[0].worldTF.scale, lwp::Vector3{ -1,-1,-1 }, 0, 0.3f, LWP::Utility::Easing::Type::OutQuart)
+		.Add(&models_[0].worldTF.scale, lwp::Vector3{ 1,1,1 }, 1.4f, 0.2f, LWP::Utility::Easing::Type::OutQuart);
 
 	// HP を設定
 	hp_ = 60;
@@ -161,7 +161,7 @@ void DashBoss::Update()
 
 	if (preAttackMotion_.isEnd()) {
 		isOutBlowOff_ = true;
-		models_[0].transform.scale = { 2,3,2 };
+		models_[0].worldTF.scale = { 2,3,2 };
 	}
 	else {
 		isOutBlowOff_ = false;
@@ -171,23 +171,23 @@ void DashBoss::Update()
 	Move();
 
 	// スケールが極端な数値にならないように上限下限を設ける
-	models_[0].transform.scale.x = std::clamp<float>(models_[0].transform.scale.x, 1, 2);
-	models_[0].transform.scale.y = std::clamp<float>(models_[0].transform.scale.y, 1, 3);
-	models_[0].transform.scale.z = std::clamp<float>(models_[0].transform.scale.z, 1, 2);
+	models_[0].worldTF.scale.x = std::clamp<float>(models_[0].worldTF.scale.x, 1, 2);
+	models_[0].worldTF.scale.y = std::clamp<float>(models_[0].worldTF.scale.y, 1, 3);
+	models_[0].worldTF.scale.z = std::clamp<float>(models_[0].worldTF.scale.z, 1, 2);
 }
 
 void DashBoss::SetPosition(lwp::Vector3 pos)
 {
-	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	models_[0].worldTF.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 	// 出現時にパーティクルを出す
-	SetSpawnEffect(models_[0].transform.translation);
+	SetSpawnEffect(models_[0].worldTF.translation);
 }
 
 void DashBoss::Move()
 {
 	dirVel_ = GetDirectVel();
 	dirVel_.y = 0.0f;
-	models_[0].transform.translation += dirVel_ * 2.0f * LWP::Info::GetDeltaTimeF();
+	models_[0].worldTF.translation += dirVel_ * 2.0f * LWP::Info::GetDeltaTimeF();
 }
 
 void DashBoss::Attack()
@@ -197,7 +197,7 @@ void DashBoss::Attack()
 
 bool DashBoss::CheckAttackRange() {
 	// 自機との距離
-	float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
+	float distance = (models_[0].worldTF.translation - player_->GetWorldTransform()->translation).Length();
 	if (distance <= kAttackRange) {
 		return true;
 	}
@@ -210,12 +210,12 @@ void DashBoss::Aim()
 	LWP::Math::Vector3 targetVel = GetDirectVel();
 	// 狙う対象に身体を向ける
 	float radian = atan2(targetVel.x, targetVel.z);
-	models_[0].transform.rotation.y = radian;
+	models_[0].worldTF.rotation.y = radian;
 }
 
 void DashBoss::B_RootInit() {
 	attackWaitTime_ = kAttackWaitTime;
-	models_[0].transform.scale = { 2,3,2 };
+	models_[0].worldTF.scale = { 2,3,2 };
 	currentFrame_ = 0;
 }
 
@@ -246,7 +246,7 @@ void DashBoss::B_PreDashUpdate() {
 	// パーティクルを出す時間
 	if (currentFrame_ <= 60 && isActive_) {
 		if (currentFrame_ % 2 == 0) {
-			accumulateEffect_(16, models_[0].transform.translation);
+			accumulateEffect_(16, models_[0].worldTF.translation);
 		}
 
 	}
@@ -273,7 +273,7 @@ void DashBoss::B_DashInit() {
 
 void DashBoss::B_DashUpdate() {
 	// 突進攻撃
-	models_[0].transform.translation += dashVel_ * kDashSpeedCoefficient;
+	models_[0].worldTF.translation += dashVel_ * kDashSpeedCoefficient;
 
 	// 既定の時間を過ぎたら攻撃終了
 	if (currentFrame_ >= kDashAttackAllFrame) {
@@ -284,7 +284,7 @@ void DashBoss::B_DashUpdate() {
 }
 
 LWP::Math::Vector3 DashBoss::GetDirectVel() {
-	return (player_->GetWorldTransform()->translation - models_[0].transform.translation).Normalize();
+	return (player_->GetWorldTransform()->translation - models_[0].worldTF.translation).Normalize();
 }
 
 //std::function<void(int, lwp::Vector3)> DashBoss::accumulateEffect_ = nullptr;

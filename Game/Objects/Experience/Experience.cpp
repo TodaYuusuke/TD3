@@ -30,14 +30,14 @@ Experience::~Experience() {}
 void Experience::Update()
 {
 	// モデルの回転
-	model_.transform.rotation.y += rotateSpeed_;
-	if (model_.transform.rotation.y < -3.14f)
+	model_.worldTF.rotation.y += rotateSpeed_;
+	if (model_.worldTF.rotation.y < -3.14f)
 	{
-		model_.transform.rotation.y += 3.14f;
+		model_.worldTF.rotation.y += 3.14f;
 	}
-	else if (3.14f < model_.transform.rotation.y)
+	else if (3.14f < model_.worldTF.rotation.y)
 	{
-		model_.transform.rotation.y -= 3.14f;
+		model_.worldTF.rotation.y -= 3.14f;
 	}
 	// 発生してから数秒は判定を付与しない
 	if (isDisable_)
@@ -65,13 +65,13 @@ void Experience::Update()
 		lwp::Vector3 move = *lvPosition_ - collider_.position;
 		float t = std::clamp(time_ / kAnimationTime_, 0.0f, 1.0f);
 		// タメがあるような移動
-		model_.transform.translation = collider_.position + Utility::Easing::InBack(t) * move;
+		model_.worldTF.translation = collider_.position + Utility::Easing::InBack(t) * move;
 		// 1.0f ~ 0.0f に再計算
 		t = (1.0f - LWP::Utility::Easing::InExpo(t));
 		// 一定以下なら 0.0f にする(描画しない)
 		t = 0.2 < t ? t : 0.0f;
 		// このイージングでないとよく見えなかった
-		model_.transform.scale = lwp::Vector3(kSize_,kSize_,kSize_) * t;
+		model_.worldTF.scale = lwp::Vector3(kSize_,kSize_,kSize_) * t;
 		// 時間を加算
 		time_ += lwp::GetDefaultDeltaTimeF();
 	}
@@ -80,17 +80,17 @@ void Experience::Update()
 void Experience::Initialize(const lwp::Vector3& pos)
 {
 	// モデル読み込み
-	model_.LoadFile("Exp/Exp.obj");
+	model_.LoadShortPath("Exp/Exp.obj");
 	// 設定
 	model_.isActive = true;
-	model_.name = "EXP";
+	//model_.name = "EXP";
 	// 場所を設定
-	model_.transform.translation = pos;
-	model_.transform.scale = lwp::Vector3(kSize_, kSize_, kSize_);
+	model_.worldTF.translation = pos;
+	model_.worldTF.scale = lwp::Vector3(kSize_, kSize_, kSize_);
 	// 色
-	model_.commonColor = new Utility::Color(0x7CFC00FF);
+	model_.materials[0].color = Utility::Color(0x7CFC00FF);
 
-	model_.material.enableLighting = true;
+	model_.materials[0].enableLighting = true;
 
 	// 場所を設定
 	collider_.Create(pos);

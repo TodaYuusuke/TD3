@@ -136,5 +136,13 @@
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\EXLifeFlag.h" />
     <ClInclude Include="Game\Objects\Player\Level\ExpBar.h" />
     <ClInclude Include="Game\SceneTransition\SceneTransition.h" />
+    <ClInclude Include="Game\Particle\DamageParticle.h" />
+    <ClInclude Include="Game\Particle\DeadParticle.h" />
+    <ClInclude Include="Game\Particle\SpawnParticle.h" />
+    <ClInclude Include="Game\Particle\AccumulateParticle.h" />
+    <ClInclude Include="Game\Particle\SoilSplashParticle.h" />
+    <ClInclude Include="Game\Particle\PlayerDeadParticle.h" />
+    <ClInclude Include="Game\Particle\MissileContrailParticle.h" />
+    <ClInclude Include="Game\Particle\CursorParticle.h" />
   </ItemGroup>
 </Project>

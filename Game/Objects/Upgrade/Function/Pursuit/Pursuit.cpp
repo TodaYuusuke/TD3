@@ -25,10 +25,10 @@ bool Pursuit::Execution()
 				continue;
 			}
 			models_.emplace_back();
-			models_[It].LoadFile("cube/cube.obj");
-			models_[It].name = "pursuit";
-			models_[It].transform.translation = enemys_[It]->GetPosition();
-			models_[It].transform.translation.y += 1.0f;
+			models_[It].LoadShortPath("cube/cube.obj");
+			//models_[It].name = "pursuit";
+			models_[It].worldTF.translation = enemys_[It]->GetPosition();
+			models_[It].worldTF.translation.y += 1.0f;
 		}
 		interval--;
 		return true;

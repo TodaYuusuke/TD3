@@ -21,7 +21,7 @@ public:
 	//*** Setter ***//
 	void SetIsCollision(bool isActive) { aabb_.isActive = isActive; }
 	// 向きを設定
-	void SetRotate(LWP::Math::Vector3 rotate) { model_.transform.rotation = rotate; }
+	void SetRotate(LWP::Math::Vector3 rotate) { model_.worldTF.rotation = rotate; }
 	// 速度を設定
 	void SetVelocity(LWP::Math::Vector3 velocity) { velocity_ = velocity; }
 
@@ -37,7 +37,7 @@ private:// 定数
 
 private:
 	// 矢のモデル
-	LWP::Primitive::Mesh model_;
+	LWP::Resource::RigidModel model_;
 
 	// AABB判定
 	AABB aabb_;

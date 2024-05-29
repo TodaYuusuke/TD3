@@ -74,7 +74,7 @@ private:
 	Player* player_;
 
 	// 矢のモデル
-	LWP::Primitive::Mesh model_;
+	LWP::Resource::RigidModel model_;
 
 	// AABB判定
 	AABB aabb_;

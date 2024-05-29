@@ -146,7 +146,7 @@ public: //*** パブリック関数 ***//
 public:	//*** セッター,ゲッター ***//
 
 	PlayerParameter* GetPlayerParameter() { return &parameter_; }
-	lwp::TransformEuler* GetWorldTransform() { return &demoModel_.transform; }
+	lwp::TransformEuler* GetWorldTransform() { return &demoModel_.worldTF; }
 	bool GetIsJustSlashing() { return flag_.isJustSlashing_; }
 	bool GetIsSlash() { return behavior_ == IStatus::Behavior::Slash; }
 	bool GetIsEnemyKnockBack() { return isEnemyKnockBack_; }
@@ -279,7 +279,7 @@ public: //*** プライベート変数 ***//
 	std::list<IStatus::Behavior> commands_;
 
 	// プレイヤーのモデル
-	LWP::Primitive::Mesh demoModel_;
+	LWP::Resource::RigidModel demoModel_;
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
 

@@ -4,6 +4,7 @@
 
 #include "Game/Objects/Experience/ExpManager.h"
 
+
 struct MotionWork
 {
 	lwp::Vector3 targetpoint;//目標地点
@@ -84,13 +85,13 @@ public: //*** ゲッターセッター ***//
 	/// <returns></returns>
 	bool GetIsActive() const { return isActive_; }
 	bool GetIsDeath() const { return IsDead_; }
-	const lwp::Vector3& GetPosition() { return models_[0].transform.translation; }
+	const lwp::Vector3& GetPosition() { return models_[0].worldTF.translation; }
 
-	lwp::Vector3 GetPosition()const { return models_[0].transform.translation; }
+	lwp::Vector3 GetPosition()const { return models_[0].worldTF.translation; }
 
 	// 狙う対象をセット(今回は自機をセットする)
 	virtual void SetTarget(Player* player) { player_ = player; }
-	virtual void SetPosition(lwp::Vector3 pos) { models_[0].transform.translation = pos; }
+	virtual void SetPosition(lwp::Vector3 pos) { models_[0].worldTF.translation = pos; }
 	void SetHP(int HP) { hp_ = HP; }
 	// カメラのアドレスを設定
 	virtual void SetCamera(FollowCamera* camera) { followCamera_ = camera; }
@@ -98,13 +99,13 @@ public: //*** ゲッターセッター ***//
 	void SetSpawnEffect(lwp::Vector3 pos) {
 		// 出現時にパーティクルを出す
 #ifdef DEMO
-		spawnEffect_(8, models_[0].transform.translation);
+		spawnEffect_(8, models_[0].worldTF.translation);
 #else
-		spawnEffect_(kNumSpawnParticle, models_[0].transform.translation);
+		spawnEffect_(kNumSpawnParticle, models_[0].worldTF.translation);
 #endif // !DEMO
 
 
-		lightPillar_.transform.translation = pos;
+		lightPillar_.worldTF.translation = pos;
 		lightPillarMotion_.Start();
 	}
 
@@ -155,7 +156,7 @@ protected:// 定数
 	const float kNumSpawnParticle = 16;
 
 protected:
-	std::vector<LWP::Primitive::Mesh> models_;
+	std::vector<LWP::Resource::RigidModel> models_;
 
 	// 追従カメラのアドレスを受け取る
 	FollowCamera* followCamera_;
@@ -235,6 +236,6 @@ protected:
 	static std::function<void(int, lwp::Vector3)> accumulateEffect_;
 
 	// 出現時の光の柱
-	LWP::Primitive::Cube lightPillar_;
+	LWP::Resource::Cube lightPillar_;
 	LWP::Resource::Motion lightPillarMotion_;
 };

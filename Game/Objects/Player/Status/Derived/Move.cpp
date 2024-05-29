@@ -37,12 +37,12 @@ void Move::Update()
 	lwp::Vector3 moveVector = player_->GetVectorTranspose(player_->destinate_);
 
 	// モデル回転
-	player_->demoModel_.transform.rotation.y = std::atan2f(moveVector.x, moveVector.z);
+	player_->demoModel_.worldTF.rotation.y = std::atan2f(moveVector.x, moveVector.z);
 
 	// パラメータも使う
 	moveVector *= player_->parameter_.Speed.move_ * lwp::GetDeltaTimeF();
 
-	player_->demoModel_.transform.translation += moveVector;
+	player_->demoModel_.worldTF.translation += moveVector;
 	// 滑らか用
 	//player_->rootData_.velocity_ = moveVector.Length() != 0.0f ? moveVector : player_->rootData_.velocity_;
 

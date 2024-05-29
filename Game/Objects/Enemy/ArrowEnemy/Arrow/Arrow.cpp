@@ -5,13 +5,13 @@
 void Arrow::Init(lwp::TransformEuler transform)
 {
 	// モデルの作成
-	model_.LoadFile("Arrow/Arrow.obj");
-	model_.commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::WHITE);
-	model_.transform.translation = transform.translation;
-	model_.transform.rotation = transform.rotation;
-	model_.transform.scale = { 5.0f,5.0f,2.0f };
-	model_.name = "Arrow!!";
-	model_.material.enableLighting = true;
+	model_.LoadShortPath("Arrow/Arrow.obj");
+	model_.materials[0].color = LWP::Utility::Color(LWP::Utility::ColorPattern::WHITE);
+	model_.worldTF.translation = transform.translation;
+	model_.worldTF.rotation = transform.rotation;
+	model_.worldTF.scale = { 5.0f,5.0f,2.0f };
+	//model_.name = "Arrow!!";
+	model_.materials[0].enableLighting = true;
 
 	lwp::Vector3 point = { 0.0f,0.0f,1.0f };
 	attackWork.targetpoint = point * lwp::Matrix4x4::CreateRotateXYZMatrix(transform.rotation);
@@ -53,13 +53,13 @@ void Arrow::Attack()
 {
 	// 弾が向いている方向に動く処理
 	LWP::Math::Vector3 velocity = { 0,0,1 };
-	LWP::Math::Matrix4x4 rotateMatrix = LWP::Math::Matrix4x4::CreateRotateXYZMatrix(model_.transform.rotation);
+	LWP::Math::Matrix4x4 rotateMatrix = LWP::Math::Matrix4x4::CreateRotateXYZMatrix(model_.worldTF.rotation);
 	velocity = velocity * rotateMatrix;
 	velocity_ = velocity.Normalize();
 	velocity_ *= kNormalSpeed;
 
 	// 加算
-	model_.transform.translation += velocity_ * LWP::Info::GetDeltaTime();
+	model_.worldTF.translation += velocity_ * LWP::Info::GetDeltaTime();
 
 	attackWork.flag = true;
 }

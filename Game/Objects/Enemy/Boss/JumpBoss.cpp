@@ -10,23 +10,23 @@ void JumpBoss::Init()
 	// 当たり判定のインスタンス生成
 	models_.reserve(3);
 	models_.emplace_back();
-	models_[0].LoadFile("cube/cube.obj");
+	models_[0].LoadShortPath("cube/cube.obj");
 	models_.emplace_back();
-	models_[1].LoadFile("L_arm/L_arm.obj");
+	models_[1].LoadShortPath("L_arm/L_arm.obj");
 	models_.emplace_back();
-	models_[2].LoadFile("R_arm/R_arm.obj");
+	models_[2].LoadShortPath("R_arm/R_arm.obj");
 
 	// 手のモデルをペアレント
-	models_[1].transform.Parent(&models_[0].transform);
-	models_[2].transform.Parent(&models_[0].transform);
+	models_[1].worldTF.Parent(&models_[0].worldTF);
+	models_[2].worldTF.Parent(&models_[0].worldTF);
 	// 手のモデルの位置を設定
-	models_[1].transform.translation = { -1.0f, 0.25f, 0.5f };
-	models_[2].transform.translation = { 1.0f, 0.25f, 0.5f };
+	models_[1].worldTF.translation = { -1.0f, 0.25f, 0.5f };
+	models_[2].worldTF.translation = { 1.0f, 0.25f, 0.5f };
 
 	// 色
-	models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::RED);
+	models_[0].materials[0].color = LWP::Utility::Color(LWP::Utility::ColorPattern::RED);
 	// 大きさ
-	models_[0].transform.scale = kBossSize;
+	models_[0].worldTF.scale = kBossSize;
 	// 当たり判定を有効化
 	isActive_ = true;
 
@@ -40,14 +40,14 @@ void JumpBoss::Init()
 
 	// ジャンプモーションを追加
 	jumpMotion_[BODY]
-		.Add(&models_[BODY].transform.scale, -1 * kBossSize, 0, 0.05f)
-		.Add(&models_[BODY].transform.scale, kBossSize, 0.05f, 0.1f);
+		.Add(&models_[BODY].worldTF.scale, -1 * kBossSize, 0, 0.05f)
+		.Add(&models_[BODY].worldTF.scale, kBossSize, 0.05f, 0.1f);
 	jumpMotion_[L_ARM]
-		.Add(&models_[L_ARM].transform.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
-		.Add(&models_[L_ARM].transform.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
+		.Add(&models_[L_ARM].worldTF.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
+		.Add(&models_[L_ARM].worldTF.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
 	jumpMotion_[R_ARM]
-		.Add(&models_[R_ARM].transform.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
-		.Add(&models_[R_ARM].transform.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
+		.Add(&models_[R_ARM].worldTF.scale, LWP::Math::Vector3{ -1.0f, -1.0f, -1.0f }, 0, 0.05f)
+		.Add(&models_[R_ARM].worldTF.scale, LWP::Math::Vector3{ 1.0f, 1.0f, 1.0f }, 0.05f, 0.1f);
 }
 
 void JumpBoss::Update()
@@ -95,7 +95,7 @@ void JumpBoss::Update()
 	}
 
 	// 衝撃波の当たり判定を作成
-	waveAttackCollider_.Create(models_[0].transform.translation);
+	waveAttackCollider_.Create(models_[0].worldTF.translation);
 	// 衝撃波の広がる処理
 	if (isWaveAttack_) {
 		WaveAttackSpread();
@@ -104,20 +104,20 @@ void JumpBoss::Update()
 
 void JumpBoss::SetPosition(lwp::Vector3 pos)
 {
-	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	models_[0].worldTF.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 	// 出現時にパーティクルを出す
-	SetSpawnEffect(models_[0].transform.translation);
+	SetSpawnEffect(models_[0].worldTF.translation);
 }
 
 LWP::Math::Vector3 JumpBoss::GetDirectVel() {
-	return (player_->GetWorldTransform()->translation - models_[0].transform.translation).Normalize();
+	return (player_->GetWorldTransform()->translation - models_[0].worldTF.translation).Normalize();
 }
 
 void JumpBoss::Move()
 {
 	lwp::Vector3 MoveVec = GetDirectVel();
 	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec / 20/* * 2.0f * LWP::Info::GetDeltaTime()*/;
+	models_[0].worldTF.translation += MoveVec / 20/* * 2.0f * LWP::Info::GetDeltaTime()*/;
 }
 
 void JumpBoss::Attack()
@@ -181,7 +181,7 @@ void JumpBoss::WaveAttackSpread() {
 
 bool JumpBoss::CheckAttackRange() {
 	// 自機との距離
-	float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
+	float distance = (models_[0].worldTF.translation - player_->GetWorldTransform()->translation).Length();
 	if (distance <= kAttackRange) {
 		return true;
 	}
@@ -194,7 +194,7 @@ void JumpBoss::Aim()
 	LWP::Math::Vector3 targetVel = GetDirectVel();
 	// 狙う対象に身体を向ける
 	float radian = atan2(targetVel.x, targetVel.z);
-	models_[0].transform.rotation.y = radian;
+	models_[0].worldTF.rotation.y = radian;
 }
 
 void JumpBoss::B_RootInit() {
@@ -225,7 +225,7 @@ void JumpBoss::B_JumpInit() {
 	currentFrame_ = 0;
 	
 	// ジャンプ開始座標を取得
-	jumpEase_.start = { models_[0].transform.translation };
+	jumpEase_.start = { models_[0].worldTF.translation };
 	// ジャンプの目標座標を取得
 	jumpEase_.end = { player_->GetWorldTransform()->translation };
 	jumpEase_.end.y += kJumpHighestPoint;
@@ -239,7 +239,7 @@ void JumpBoss::B_JumpUpdate() {
 	float t = Utility::Easing::OutQuint(currentFrame_ / kJumpAllFrame);
 
 	// ジャンプ挙動
-	models_[0].transform.translation = LWP::Math::Vector3::Lerp(jumpEase_.start, jumpEase_.end, t);
+	models_[0].worldTF.translation = LWP::Math::Vector3::Lerp(jumpEase_.start, jumpEase_.end, t);
 
 	// 既定の時間を過ぎたら攻撃開始
 	if (currentFrame_ >= kJumpAllFrame) {
@@ -260,13 +260,13 @@ void JumpBoss::B_WaveAttackUpdate() {
 		float t = Utility::Easing::InQuint(currentFrame_ / kWaveAttackPreFrame);
 
 		// だんだん上に行く
-		models_[0].transform.translation.y = Lerp(jumpEase_.end.y, jumpEase_.end.y + kJumpDirY,t);
+		models_[0].worldTF.translation.y = Lerp(jumpEase_.end.y, jumpEase_.end.y + kJumpDirY,t);
 		// モデルを回転
-		models_[0].transform.rotation.y += Lerp(0, 2, t);
+		models_[0].worldTF.rotation.y += Lerp(0, 2, t);
 	}
 	else {
 		// 衝撃波開始
-		models_[0].transform.translation.y = 0;
+		models_[0].worldTF.translation.y = 0;
 		isWaveAttack_ = true;
 		waveAttackCollider_.isActive = true;
 	}

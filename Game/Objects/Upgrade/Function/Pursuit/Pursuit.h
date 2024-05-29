@@ -17,5 +17,5 @@ private:
 	int damage_ = 10;
 	const int kInterval = 30;
 	int interval = 30;
-	std::vector<LWP::Primitive::Mesh> models_;
+	std::vector<LWP::Resource::RigidModel> models_;
 };

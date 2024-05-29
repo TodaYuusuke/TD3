@@ -6,9 +6,9 @@ using namespace LWP::Object::Collider;
 void ShieldEnemy::Init()
 {
 	models_.emplace_back();
-	models_[0].LoadFile("SheldEnemy/SheldEnemy.obj");
-	models_[0].name = "SheldEnemy!!";
-	models_[0].material.enableLighting = true;
+	models_[0].LoadShortPath("SheldEnemy/SheldEnemy.obj");
+	//models_[0].name = "SheldEnemy!!";
+	models_[0].materials[0].enableLighting = true;
 
 	isActive_ = true;
 
@@ -63,17 +63,17 @@ void ShieldEnemy::Update()
 
 void ShieldEnemy::SetPosition(lwp::Vector3 pos)
 {
-	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	models_[0].worldTF.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 	// 出現時にパーティクルを出す
-	SetSpawnEffect(models_[0].transform.translation);
+	SetSpawnEffect(models_[0].worldTF.translation);
 }
 
 void ShieldEnemy::Move()
 {
-	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;
+	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].worldTF.translation;
 	MoveVec = MoveVec.Normalize();
 	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTimeF();
+	models_[0].worldTF.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTimeF();
 }
 
 void ShieldEnemy::Attack()
@@ -81,7 +81,7 @@ void ShieldEnemy::Attack()
 	if (attackWaitTime_ <= 0) {
 		attackWork.flag = true;
 			lwp::Vector3 point{ 0.0f,0.0f,-1.0f };
-		attackWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0].transform.rotation))/*ベクトルを反転*/;
+		attackWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0].worldTF.rotation))/*ベクトルを反転*/;
 		attackWork.targetpoint = attackWork.targetpoint.Normalize();
 		attackEndWork.targetpoint = attackWork.targetpoint * -1/*ベクトルを反転*/;
 		attackWaitTime_ = kAttackWaitTime;
@@ -95,7 +95,7 @@ void ShieldEnemy::AttackAnimation()
 	if (attackWork.flag) {
 		if (attackWork.t < 1.0f) {
 			attackWork.t += attackWork.speed;
-			models_[0].transform.translation += attackWork.targetpoint * LWP::Info::GetDeltaTimeF();
+			models_[0].worldTF.translation += attackWork.targetpoint * LWP::Info::GetDeltaTimeF();
 		}
 		else if (attackWork.t >= 1.0f) {
 			attackWork.flag = false;
@@ -118,7 +118,7 @@ void ShieldEnemy::AttackAnimation()
 		if (attackEndWork.t < 1.0f) {
 			attackEndWork.t += attackEndWork.speed;
 
-			models_[0].transform.translation += attackEndWork.targetpoint * LWP::Info::GetDeltaTimeF() * 10.0f;
+			models_[0].worldTF.translation += attackEndWork.targetpoint * LWP::Info::GetDeltaTimeF() * 10.0f;
 		}
 		else if (attackEndWork.t >= 1.0f) {
 			attackEndWork.flag = false;
@@ -132,7 +132,7 @@ void ShieldEnemy::AttackAnimation()
 
 bool ShieldEnemy::CheckAttackRange() {
 	// 自機との距離
-	float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
+	float distance = (models_[0].worldTF.translation - player_->GetWorldTransform()->translation).Length();
 	if (distance <= kAttackRange) {
 		return true;
 	}
@@ -142,6 +142,6 @@ bool ShieldEnemy::CheckAttackRange() {
 void ShieldEnemy::Aim()
 {
 	// 狙う対象に身体を向ける
-	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0].transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0].transform.translation.z);
-	models_[0].transform.rotation.y = radian;
+	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0].worldTF.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0].worldTF.translation.z);
+	models_[0].worldTF.rotation.y = radian;
 }

@@ -4,6 +4,9 @@
 #include "../ArrowEnemy/Arrow/HomingArrow.h"
 #include "../../FollowCamera/FollowCamera.h"
 
+
+#include "../../../Particle/MissileContrailParticle.h"
+
 class ArrowBoss : public IEnemy
 {
 private:// 構造体
@@ -122,5 +125,5 @@ private:// プライベートな変数
 
 
 	// パーティクル
-	LWP::Object::Particle missileContrail_;
+	MissileContrailParticle missileContrail_;
 };

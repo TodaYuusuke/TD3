@@ -6,9 +6,9 @@ void NormalEnemy::Init()
 {
 	models_.reserve(1);
 	models_.emplace_back();
-	models_[Model::Body].LoadFile("NormalEnemy/NormalEnemy.obj");
-	models_[Model::Body].name = "Normal";
-	models_[Model::Body].material.enableLighting = true;
+	models_[Model::Body].LoadShortPath("NormalEnemy/NormalEnemy.obj");
+	//models_[Model::Body].name = "Normal";
+	models_[Model::Body].materials[0].enableLighting = true;
 
 	attackWaitTime_ = kAttackWaitTime;
 
@@ -69,17 +69,17 @@ void NormalEnemy::Update()
 
 void NormalEnemy::SetPosition(lwp::Vector3 pos)
 {
-	models_[Model::Body].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	models_[Model::Body].worldTF.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 	// 出現時にパーティクルを出す
-	SetSpawnEffect(models_[0].transform.translation);
+	SetSpawnEffect(models_[0].worldTF.translation);
 }
 
 void NormalEnemy::Move()
 {
-	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[Model::Body].transform.translation;
+	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[Model::Body].worldTF.translation;
 	MoveVec = MoveVec.Normalize();
 	MoveVec.y = 0.0f;
-	models_[Model::Body].transform.translation += MoveVec * kMove * LWP::Info::GetDeltaTimeF();
+	models_[Model::Body].worldTF.translation += MoveVec * kMove * LWP::Info::GetDeltaTimeF();
 }
 
 void NormalEnemy::Attack()
@@ -95,7 +95,7 @@ void NormalEnemy::Attack()
 		attackRotWork.targetpoint.y += -3.14f;
 
 		lwp::Vector3 point{ 0.0f,0.0f,-1.0f };
-		attackMoveWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0].transform.rotation))/*ベクトルを反転*/;
+		attackMoveWork.targetpoint = (point * lwp::Matrix4x4::CreateRotateXYZMatrix(models_[0].worldTF.rotation))/*ベクトルを反転*/;
 		attackMoveWork.targetpoint = attackMoveWork.targetpoint.Normalize();
 		attackMoveEndWork.targetpoint = attackMoveWork.targetpoint * -1/*ベクトルを反転*/;
 #pragma endregion Body
@@ -115,9 +115,9 @@ void NormalEnemy::AttackAnimation()
 			// 回転
 			attackRotWork.t += attackRotWork.speed;
 			point = lwp::Vector3::Lerp(Rot, attackRotWork.targetpoint, attackRotWork.t);
-			models_[Model::Body].transform.rotation = point;
+			models_[Model::Body].worldTF.rotation = point;
 			// 後ろに移動
-			models_[Model::Body].transform.translation += attackMoveWork.targetpoint * LWP::Info::GetDeltaTime() * 10.0f;
+			models_[Model::Body].worldTF.translation += attackMoveWork.targetpoint * LWP::Info::GetDeltaTime() * 10.0f;
 
 		}
 		else if (attackRotWork.t >= 1.0f)
@@ -146,9 +146,9 @@ void NormalEnemy::AttackAnimation()
 		{
 			attackEndWork.t += attackEndWork.speed;
 			point = lwp::Vector3::Lerp(EndRot, Rot, attackEndWork.t);
-			models_[Model::Body].transform.rotation = point;
+			models_[Model::Body].worldTF.rotation = point;
 			// 突進
-			models_[Model::Body].transform.translation += attackMoveEndWork.targetpoint * LWP::Info::GetDeltaTime() * 30.0f;
+			models_[Model::Body].worldTF.translation += attackMoveEndWork.targetpoint * LWP::Info::GetDeltaTime() * 30.0f;
 
 
 		}
@@ -166,7 +166,7 @@ void NormalEnemy::AttackAnimation()
 bool NormalEnemy::CheckAttackRange()
 {
 	// 自機との距離
-	float distance = (models_[Model::Body].transform.translation - player_->GetWorldTransform()->translation).Length();
+	float distance = (models_[Model::Body].worldTF.translation - player_->GetWorldTransform()->translation).Length();
 	if (distance <= kAttackRange)
 	{
 		return true;
@@ -177,6 +177,6 @@ bool NormalEnemy::CheckAttackRange()
 void NormalEnemy::Aim()
 {
 	// 狙う対象に身体を向ける
-	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[Model::Body].transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[Model::Body].transform.translation.z);
-	models_[Model::Body].transform.rotation.y = radian;
+	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[Model::Body].worldTF.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[Model::Body].worldTF.translation.z);
+	models_[Model::Body].worldTF.rotation.y = radian;
 }

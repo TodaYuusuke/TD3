@@ -8,9 +8,9 @@ void ArrowEnemy::Init()
 {
 	// これでできる
 	models_.emplace_back();
-	models_[0].LoadFile("ArrowEnemy/ArrowEnemy.obj");
-	models_[0].name = "ArrowEnemy!!";
-	models_[0].material.enableLighting = true;
+	models_[0].LoadShortPath("ArrowEnemy/ArrowEnemy.obj");
+	//models_[0].name = "ArrowEnemy!!";
+	models_[0].materials[0].enableLighting = true;
 
 	// 最初から描画
 	isActive_ = true;
@@ -88,17 +88,17 @@ void ArrowEnemy::Update()
 
 void ArrowEnemy::SetPosition(lwp::Vector3 pos)
 {
-	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	models_[0].worldTF.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 	// 出現時にパーティクルを出す
-	SetSpawnEffect(models_[0].transform.translation);
+	SetSpawnEffect(models_[0].worldTF.translation);
 }
 
 void ArrowEnemy::Move()
 {
-	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;
+	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].worldTF.translation;
 	MoveVec = MoveVec.Normalize();
 	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTimeF();
+	models_[0].worldTF.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTimeF();
 }
 
 void ArrowEnemy::Attack()
@@ -108,7 +108,7 @@ void ArrowEnemy::Attack()
 	{
 		Aim();
 		Arrow* arrow = new Arrow();
-		arrow->Init(models_[0].transform);
+		arrow->Init(models_[0].worldTF);
 		arrows_.push_back(arrow);
 		attackWaitTime_ = kAttackWaitTime;
 		isAttack = false;
@@ -118,15 +118,15 @@ void ArrowEnemy::Attack()
 void ArrowEnemy::Aim()
 {
 	// 狙う対象に身体を向ける
-	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0].transform.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0].transform.translation.z);
+	float radian = atan2(player_->GetWorldTransform()->GetWorldPosition().x - models_[0].worldTF.translation.x, player_->GetWorldTransform()->GetWorldPosition().z - models_[0].worldTF.translation.z);
 
-	models_[0].transform.rotation.y = LerpShortAngle(models_[0].transform.rotation.y, radian, 0.5f);
+	models_[0].worldTF.rotation.y = LerpShortAngle(models_[0].worldTF.rotation.y, radian, 0.5f);
 }
 
 bool ArrowEnemy::CheckAttackRange()
 {
 	// 自機との距離
-	float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
+	float distance = (models_[0].worldTF.translation - player_->GetWorldTransform()->translation).Length();
 	if (distance <= kAttackRange)
 	{
 		return true;

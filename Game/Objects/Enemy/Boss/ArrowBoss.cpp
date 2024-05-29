@@ -1,6 +1,7 @@
 #include "ArrowBoss.h"
 #include "Game/Objects/Player/Player.h"
 
+
 using namespace LWP;
 using namespace LWP::Utility;
 using namespace LWP::Object::Collider;
@@ -23,7 +24,7 @@ void ArrowBoss::Init()
 	// 当たり判定のインスタンス生成
 	//models_.reserve(3);
 	models_.emplace_back();
-	models_[0].LoadFile("ArrowEnemy/ArrowEnemy.obj");
+	models_[0].LoadShortPath("ArrowEnemy/ArrowEnemy.obj");
 	//models_.emplace_back();
 	//models_[1].LoadFile("L_arm/L_arm.obj");
 	//models_.emplace_back();
@@ -39,7 +40,7 @@ void ArrowBoss::Init()
 	// 色
 	//models_[0].commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::YELLOW);
 	// 大きさ
-	models_[0].transform.scale = {2,3,2};
+	models_[0].worldTF.scale = {2,3,2};
 	// 当たり判定を有効化
 	isActive_ = true;
 
@@ -47,40 +48,7 @@ void ArrowBoss::Init()
 
 #pragma region ミサイル起動パーティクル
 	// 形を決定
-	missileContrail_.SetPrimitive<Primitive::Cube>();
-	missileContrail_.P()->material.enableLighting = true;
-	// 初期化処理
-	missileContrail_.initFunction =
-		[](Primitive::IPrimitive* primitive) {
-		Object::ParticleData data;
-		data.wtf.translation = primitive->transform.GetWorldPosition();
-		data.wtf.rotation = primitive->transform.rotation;
-		// 大きさをランダムにする
-		float scale = Utility::GenerateRandamNum<int>(45, 50);
-		data.wtf.rotation = { scale, scale, scale };
-		data.wtf.scale = { scale / 100.0f, scale / 100.0f, scale / 100.0f };
-
-		// データを返す
-		return data;
-	};
-	// 更新処理
-	missileContrail_.updateFunction =
-		[](Object::ParticleData* data) {
-		// 経過フレーム追加
-		data->elapsedFrame++;
-
-		data->wtf.translation.y += 0.0001f * data->elapsedFrame;
-		//data->wtf.scale *= 0.92f;
-		float f = 0.05f;
-		data->wtf.scale -= { f,f,f };
-		
-		// 速度は徐々に落とす
-		data->velocity *= 0.9f;
-
-		// 180フレーム経ったら削除
-		if (data->wtf.scale.x <= 0.001f) { return true; }
-		return data->elapsedFrame > 240 ? true : false;
-	};
+	missileContrail_.model.materials[0].enableLighting = true;
 	missileContrail_.isActive = true;
 #pragma endregion
 
@@ -156,20 +124,20 @@ void ArrowBoss::Update()
 
 void ArrowBoss::SetPosition(lwp::Vector3 pos)
 {
-	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
+	models_[0].worldTF.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 	// 出現時にパーティクルを出す
-	SetSpawnEffect(models_[0].transform.translation);
+	SetSpawnEffect(models_[0].worldTF.translation);
 }
 
 LWP::Math::Vector3 ArrowBoss::GetDirectVel() {
-	return (player_->GetWorldTransform()->translation - models_[0].transform.translation).Normalize();
+	return (player_->GetWorldTransform()->translation - models_[0].worldTF.translation).Normalize();
 }
 
 void ArrowBoss::Move()
 {
 	lwp::Vector3 MoveVec = GetDirectVel();
 	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTimeF();
+	models_[0].worldTF.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTimeF();
 }
 
 void ArrowBoss::Attack()
@@ -184,7 +152,7 @@ void ArrowBoss::Attack()
 			HomingArrow* homingArrow = new HomingArrow(
 				[this](Math::Vector3 pos) {
 					// 座標を変更してパーティクルを一つ生成
-					*missileContrail_.Transform() = pos;
+					missileContrail_.model.worldTF = pos;
 					missileContrail_.Add(1);
 				}
 			);
@@ -198,7 +166,7 @@ void ArrowBoss::Attack()
 			homingArrow->SetPlayer(player_);
 
 			// 初期化
-			homingArrow->Init(models_[0].transform);
+			homingArrow->Init(models_[0].worldTF);
 
 			homingArrows_.push_back(homingArrow);
 		}
@@ -209,7 +177,7 @@ void ArrowBoss::Attack()
 			HomingArrow* homingArrow = new HomingArrow(
 				[this](Math::Vector3 pos) {
 					// 座標を変更してパーティクルを一つ生成
-					*missileContrail_.Transform() = pos;
+					missileContrail_.model.worldTF = pos;
 					missileContrail_.Add(1);
 				}
 			);
@@ -223,7 +191,7 @@ void ArrowBoss::Attack()
 			homingArrow->SetPlayer(player_);
 
 			// 初期化
-			homingArrow->Init(models_[0].transform);
+			homingArrow->Init(models_[0].worldTF);
 
 			homingArrows_.push_back(homingArrow);
 		}
@@ -236,7 +204,7 @@ void ArrowBoss::Attack()
 		HomingArrow* homingArrow = new HomingArrow(
 			[this](Math::Vector3 pos) {
 				// 座標を変更してパーティクルを一つ生成
-				*missileContrail_.Transform() = pos;
+				missileContrail_.model.worldTF = pos;
 				missileContrail_.Add(1);
 			}
 		);
@@ -248,7 +216,7 @@ void ArrowBoss::Attack()
 		homingArrow->SetPlayer(player_);
 
 		// 初期化
-		homingArrow->Init(models_[0].transform);
+		homingArrow->Init(models_[0].worldTF);
 
 		homingArrows_.push_back(homingArrow);
 	}
@@ -288,7 +256,7 @@ void ArrowBoss::ArrowsUpdate() {
 
 bool ArrowBoss::CheckAttackRange() {
 	// 自機との距離
-	float distance = (models_[0].transform.translation - player_->GetWorldTransform()->translation).Length();
+	float distance = (models_[0].worldTF.translation - player_->GetWorldTransform()->translation).Length();
 	if (distance <= kAttackRange) {
 		return true;
 	}
@@ -301,7 +269,7 @@ void ArrowBoss::Aim()
 	LWP::Math::Vector3 targetVel = GetDirectVel();
 	// 狙う対象に身体を向ける
 	float radian = atan2(targetVel.x, targetVel.z);
-	models_[0].transform.rotation.y = radian;
+	models_[0].worldTF.rotation.y = radian;
 }
 
 LWP::Math::Vector3 ArrowBoss::RandomShootingAngle() {

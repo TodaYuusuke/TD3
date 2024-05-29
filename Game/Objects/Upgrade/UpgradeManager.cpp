@@ -6,6 +6,8 @@
 #include "Game/Objects/Upgrade/SkDerved/SkillList.h"
 #pragma endregion
 
+#include "../../Particle/CursorParticle.h"
+
 using namespace LWP;
 using namespace LWP::Math;
 
@@ -436,48 +438,13 @@ void L::UpgradeManager::Apply(Player* player)
 
 void L::UpgradeManager::CursorParticleInit()
 {
-	static LWP::Object::Particle CursorParticle_;
-	CursorParticle_.SetPrimitive<Primitive::Cube>();
-	CursorParticle_.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
-	CursorParticle_.P()->material.shininess = 100.0f;
-	CursorParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::GREEN);
-	CursorParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
-		// 円周上に置く
-		lwp::Vector3 pos = randomOnCircle();
-		pos *= 1.5f;
-		float dir1 = Utility::GenerateRandamNum<int>(-50, 50);
-		dir1 = dir1 / 100.0f;
-		float dir2 = Utility::GenerateRandamNum<int>(-50, 50);
-		dir2 = dir2 / 100.0f;
-		pos.x += dir1;
-		pos.y += dir2;
-
-		Object::ParticleData newData{};
-		newData.wtf.translation = pos + primitive->transform.GetWorldPosition();
-		newData.wtf.rotation = primitive->transform.rotation;
-		newData.wtf.scale = { 0.25f,0.25f, 0.25f };
-
-		// 中心までのベクトル
-		newData.velocity = newData.wtf.translation;
-		// パーティクル追加
-		return newData;
-	};
-	CursorParticle_.updateFunction = [this](Object::ParticleData* data) {
-		// 経過フレーム追加
-		data->elapsedFrame++;
-		lwp::Vector3 direction = data->velocity - centerPoint;
-
-
-		data->wtf.translation -= direction / 10.0f;    // 速度ベクトルを加算
-		data->wtf.rotation += data->velocity;    // ついでに回転させとく
-
-		return data->elapsedFrame > 10 ? true : false;
-	};
+	static CursorParticle CursorParticle_;
+	CursorParticle_.model.worldTF.scale = { 0.0001f,0.0001f, 0.0001f };
+	CursorParticle_.model.materials[0].shininess = 100.0f;
+	CursorParticle_.model.materials[0].color = Utility::Color(Utility::ColorPattern::GREEN);
 	CursorParticle_.isActive = true;
-
 	CursorEffect_ = [&](int i, lwp::Vector3 pos) {
-
-		CursorParticle_.P()->transform = pos;
+		CursorParticle_.model.worldTF.translation = pos;
 		CursorParticle_.Add(i);
 	};
 }

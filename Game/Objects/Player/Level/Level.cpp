@@ -14,7 +14,7 @@ Level::~Level()
 void Level::Initialize(Player* p)
 {
 	player_ = p;
-	prePos_ = player_->demoModel_.transform.translation;
+	prePos_ = player_->demoModel_.worldTF.translation;
 	prePos_.y += 0.01f;
 	// 経験値初期化
 	exp_ = 0.0f;
@@ -28,7 +28,7 @@ void Level::Initialize(Player* p)
  	CreateCollision();
 	// 場所を設定
 	//collider_->Create(position, position);
-	collider_.Create(prePos_, player_->demoModel_.transform.translation, collider_.radius);
+	collider_.Create(prePos_, player_->demoModel_.worldTF.translation, collider_.radius);
 }
 
 void Level::Update()
@@ -36,9 +36,9 @@ void Level::Update()
 	// 当たり判定を 1 フレーム毎に更新
 	//collider_->start = collider_->end;
 	//collider_->end = position;
-	collider_.Create(prePos_, player_->demoModel_.transform.translation, collider_.radius);
+	collider_.Create(prePos_, player_->demoModel_.worldTF.translation, collider_.radius);
 
-	prePos_ = player_->demoModel_.transform.translation;
+	prePos_ = player_->demoModel_.worldTF.translation;
 	prePos_.y += 0.01f;
 
 	bar_->Update(reqEXP_, exp_);
@@ -52,7 +52,7 @@ void Level::Update()
 
 void Level::CreateCollision()
 {
-	collider_.Create(prePos_, player_->demoModel_.transform.translation, collider_.radius);
+	collider_.Create(prePos_, player_->demoModel_.worldTF.translation, collider_.radius);
 	// マスク
 	collider_.mask.SetBelongFrag(GameMask::ExpGetter());
 	// 経験値
