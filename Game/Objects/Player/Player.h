@@ -120,11 +120,6 @@ public: //*** パブリック関数 ***//
 	// 更新
 	void Update();
 
-	// ジャスト終了
-	void StartJust();
-	// ジャスト終了
-	void EndJust();
-
 	// 体力を回復する
 	void IncreaseHP();
 	// 体力が減少する
@@ -203,8 +198,6 @@ private: //*** Behavior 管理に使う関数 ***//
 	void OnCollisionPlayer(lwp::Collider::HitData& data);
 	// 武器の OnCollision
 	void OnCollisionWeapon(lwp::Collider::HitData& data);
-	// ジャスト抜刀の OnCollision
-	void OnCollisionJust(lwp::Collider::HitData& data);
 
 #pragma endregion
 
@@ -353,10 +346,9 @@ private: //*** アップデート関連クラス ***//
 
 
 public: //*** 音 ***//
-	void SetAudio(lwp::Audio* input) {
-		attack = input;
-	};
+
+	void SetSE(std::vector<LWP::Resource::Audio*> input) { audio = input; };
 private:
-	lwp::Audio* attack;
+	std::vector<LWP::Resource::Audio*> audio;
 	float soundVolume = 1.0f;
 };

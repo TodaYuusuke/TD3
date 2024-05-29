@@ -57,9 +57,10 @@ void EnemyManager::Update()
 	DebugWindow();
 #endif
 
-	enemys_.remove_if([](IEnemy* enemy) {
+	enemys_.remove_if([this](IEnemy* enemy) {
 		if (!enemy->GetIsActive())
 		{
+			audio[1]->Play();
 			//TODO　:　ここにSEを挿入すれば死亡時に音が出せる
 			delete enemy;
 			return true;

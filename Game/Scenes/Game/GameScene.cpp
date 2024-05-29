@@ -22,7 +22,12 @@ void GameScene::Initialize()
 	player_->SetScene(this);
 	atack = std::make_unique<LWP::Resource::Audio>();
 	atack->Load("Attack/patternA.mp3");
-	player_->SetAudio(atack.get());
+	PlayerDead = std::make_unique<LWP::Resource::Audio>();
+	PlayerDead->Load("Attack/patternA.mp3");
+	PlayerAlive = std::make_unique<LWP::Resource::Audio>();
+	PlayerAlive->Load("Attack/patternA.mp3");
+	std::vector<LWP::Resource::Audio*> PlayeraudioSet{ atack.get(),PlayerDead.get(),PlayerAlive.get() };
+	player_->SetSE(PlayeraudioSet);
 	// 天球
 	skydome.LoadFile("skydome/skydome.obj");
 	skydome.transform.scale = { 0.5f,0.5f, 0.5f };
@@ -56,11 +61,11 @@ void GameScene::Initialize()
 	EnemyDamege = std::make_unique<LWP::Resource::Audio>();
 	EnemyDamege->Load("Slash/patternA.mp3");
 	EnemyDead = std::make_unique<LWP::Resource::Audio>();
-	EnemyDead->Load("Slash/patternA.mp3");
+	EnemyDead->Load("Slash/patternB.mp3");
 	// 経験値マネージャーをエネミーマネージャーに設定
 	enemyManager_->SetExpManager(expManager_.get());
-	std::vector<LWP::Resource::Audio*> audioSet{ EnemyDamege.get(),EnemyDead.get() };
-	enemyManager_->SetSE(audioSet);
+	std::vector<LWP::Resource::Audio*> EnemyaudioSet{ EnemyDamege.get(),EnemyDead.get() };
+	enemyManager_->SetSE(EnemyaudioSet);
 	enemyManager_->Init();
 
 	// アップグレード
@@ -110,15 +115,11 @@ void GameScene::Initialize()
 // 更新
 void GameScene::Update()
 {
-	ImGui::Begin("Skydome");
-	ImGui::DragFloat3("Scale",&scale.x);
-	skydome.transform.scale = scale;
-	ImGui::End();
 
 	//だんだん音が上がる
 	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
 		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
-		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
+		BGMvolume = Lerp(BGMvolume, 0.8f, BGMt);
 	}
 	else if(IsSceneChangeEnd == true) {
 		IsSceneChangeEnd = false;
@@ -194,7 +195,6 @@ void GameScene::Update()
 		time_ += lwp::GetDeltaTimeF();
 		if (cTIMESLOW_ <= time_)
 		{
-			player_->EndJust();
 			EndJustSlash();
 		}
 	}

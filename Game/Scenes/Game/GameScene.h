@@ -97,6 +97,8 @@ private:
 	float BGMvolume = 0.2f;
 	float BGMt = 0.0f;
 	std::unique_ptr<LWP::Resource::Audio> atack;
+	std::unique_ptr<LWP::Resource::Audio> PlayerDead;
+	std::unique_ptr<LWP::Resource::Audio> PlayerAlive;
 	std::unique_ptr<LWP::Resource::Audio> EnemyDamege;
 	std::unique_ptr<LWP::Resource::Audio> EnemyDead;
 };

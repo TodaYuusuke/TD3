@@ -21,7 +21,6 @@ void Moment::Reset()
 	//EndTime_ = player_->config_.Time_.MOMENTBASE_ + (player_->momentData_.relationSlash_ * player_->config_.Time_.MOMENTINCREMENT_);
 	EndTime_ = player_->config_.Time_.MOMENTBASE_;
 	// デルタタイム変更
-	player_->EndJust();
 	player_->momentData_.relationSlash_ = player_->slashData_.relationSlash_;
 	// 回数分フレームを加算
 	player_->momentData_.maxTime_ = player_->config_.Time_.MOMENTBASE_ + (player_->momentData_.relationSlash_ * player_->config_.Time_.MOMENTINCREMENT_);

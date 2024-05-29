@@ -181,34 +181,6 @@ void Player::Update()
 	demoModel_.transform.translation.z = std::clamp<float>(demoModel_.transform.translation.z, -70.0f, 70.0f);
 }
 
-void Player::StartJust()
-{
-	// ジャスト判定の一瞬のみを取得している
-	flag_.isJustSlashing_ = true;
-	// 無敵時間を加算
-	maxInvincibleTime_ += config_.Time_.JUSTINVINCIBLEADD_;
-	// ここをゲームシーンに変える
-	pScene_->StartJustSlash();
-	// 居合回数獲得(一回のみ)
-	//if (slashData_.maxRelation_ <= slashData_.cMAXRELATION_)
-	// パラメータによって上限を増やしてもいい
-	if (slashData_.maxRelation_ <= (uint32_t)parameter_.Attack.slashNum_)
-	{
-		slashData_.maxRelation_++;
-		slashPanel_->Just();
-	}
-}
-
-void Player::EndJust()
-{
-	//isJustSlashing_ = false;
-	flag_.isJustSlashing_ = false;
-	// 無敵切れは次の居合時にもなる
-	colliders_.player_.isActive = true;
-	// 終了したことを通知
-	pScene_->EndJustSlash();
-}
-
 void Player::IncreaseHP()
 {
 	parameter_.IncreaseHP();
@@ -255,6 +227,7 @@ bool Player::GameOverAnime()
 			deadEffect_(64, demoModel_.transform.translation);
 			demoModel_.isActive = false;
 			weapon_->SetIsActive(false);
+			audio[1]->Play();
 		}
 	}
 	else
@@ -350,16 +323,6 @@ void Player::OnCollisionWeapon(lwp::Collider::HitData& data)
 {
 	// 攻撃が当たった時のアニメーション？
 	data;
-}
-
-void Player::OnCollisionJust(lwp::Collider::HitData& data)
-{
-	if (!(data.state == OnCollisionState::None) &&
-		!flag_.isJustSlashing_ && data.hit &&
-		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
-	{
-		StartJust();
-	}
 }
 
 #pragma endregion
@@ -609,7 +572,7 @@ void Player::CheckBehavior()
 				reqBehavior_ = Behavior::Slash;
 				slashPanel_->Slash();
 				soilSplashEffect_(16, demoModel_.transform.translation);
-				attack->Play(soundVolume);
+				audio[0]->Play(soundVolume);
 			}
 			break;
 		case Behavior::Moment:

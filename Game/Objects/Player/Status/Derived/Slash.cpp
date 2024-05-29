@@ -29,7 +29,6 @@ void Slash::Reset()
 	player_->slashData_.vector_ = player_->GetVectorTranspose(player_->destinate_);
 
 	// デルタタイム変更
-	player_->EndJust();
 	//slashData_.maxTime_ = slashData_.cBASETIME;
 	player_->slashData_.maxTime_ = player_->config_.Time_.SLASHBASE_;
 	player_->weapon_->SetBehavior(Weapon::Behavior::Slash);
