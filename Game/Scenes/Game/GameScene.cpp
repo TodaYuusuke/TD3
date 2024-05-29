@@ -55,9 +55,12 @@ void GameScene::Initialize()
 	enemyManager_->SetCamera(followCamera_.get());
 	EnemyDamege = std::make_unique<LWP::Resource::Audio>();
 	EnemyDamege->Load("Slash/patternA.mp3");
+	EnemyDead = std::make_unique<LWP::Resource::Audio>();
+	EnemyDead->Load("Slash/patternA.mp3");
 	// 経験値マネージャーをエネミーマネージャーに設定
 	enemyManager_->SetExpManager(expManager_.get());
-	enemyManager_->SetSE(EnemyDamege.get());
+	std::vector<LWP::Resource::Audio*> audioSet{ EnemyDamege.get(),EnemyDead.get() };
+	enemyManager_->SetSE(audioSet);
 	enemyManager_->Init();
 
 	// アップグレード

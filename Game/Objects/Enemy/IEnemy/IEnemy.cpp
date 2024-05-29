@@ -219,11 +219,6 @@ void IEnemy::CheckFlags()
 		invincibleTime_ - lwp::GetDeltaTimeF() :
 		0.0f;
 
-	if (isInvincible_)
-	{
-
-	}
-
 	// 無敵なら当たり判定も消す
 	collider_.isActive = !isInvincible_;
 

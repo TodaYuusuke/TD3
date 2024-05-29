@@ -99,4 +99,5 @@ private:
 	float BGMt = 0.0f;
 	std::unique_ptr<LWP::Resource::Audio> atack;
 	std::unique_ptr<LWP::Resource::Audio> EnemyDamege;
+	std::unique_ptr<LWP::Resource::Audio> EnemyDead;
 };

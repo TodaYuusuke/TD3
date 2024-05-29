@@ -103,8 +103,8 @@ private: //*** プライベート関数 ***//
 	void DebugWindow();
 
 public:
-	void SetSE(LWP::Resource::Audio* input) { damege = input; };
+	void SetSE(std::vector<LWP::Resource::Audio*> input) { audio = input; };
 private:
-	LWP::Resource::Audio* damege;
+	std::vector<LWP::Resource::Audio*> audio;
 	
 };

@@ -22,7 +22,7 @@ void EnemyManager::Init()
 	tutorialEnemy_->SetIsTutorial(true);
 	tutorialEnemy_->SetHP(10);
 	tutorialEnemy_->SetManager(exp_);
-	tutorialEnemy_->SetSE(damege);
+	tutorialEnemy_->SetSE(audio[0]);
 	enemys_.push_back(tutorialEnemy_);
 }
 
@@ -60,6 +60,7 @@ void EnemyManager::Update()
 	enemys_.remove_if([](IEnemy* enemy) {
 		if (!enemy->GetIsActive())
 		{
+			//TODO　:　ここにSEを挿入すれば死亡時に音が出せる
 			delete enemy;
 			return true;
 		}
@@ -159,7 +160,7 @@ void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos)
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
-	enemy->SetSE(damege);
+	enemy->SetSE(audio[0]);
 	enemys_.push_back(enemy);
 }
 void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos)
@@ -170,7 +171,7 @@ void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos)
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
-	enemy->SetSE(damege);
+	enemy->SetSE(audio[0]);
 	enemys_.push_back(enemy);
 }
 void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos)
@@ -181,7 +182,7 @@ void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos)
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
-	enemy->SetSE(damege);
+	enemy->SetSE(audio[0]);
 	enemys_.push_back(enemy);
 }
 
@@ -192,7 +193,7 @@ void EnemyManager::DashBossSpawn(lwp::Vector3 pos) {
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
-	boss->SetSE(damege);
+	boss->SetSE(audio[0]);
 	enemys_.push_back(boss);
 }
 
@@ -203,7 +204,7 @@ void EnemyManager::ArrowBossSpawn(lwp::Vector3 pos) {
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
-	boss->SetSE(damege);
+	boss->SetSE(audio[0]);
 	enemys_.push_back(boss);
 }
 
@@ -214,7 +215,7 @@ void EnemyManager::JumpBossSpawn(lwp::Vector3 pos) {
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
-	boss->SetSE(damege);
+	boss->SetSE(audio[0]);
 	enemys_.push_back(boss);
 }
 
