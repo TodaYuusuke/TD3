@@ -97,7 +97,7 @@ void GameScene::Initialize()
 	sceneTransition_->Initialize();
 
 	BGM = std::make_unique<LWP::Resource::Audio>();
-	BGM->Load("fanfare.wav");
+	BGM->Load("BGM/Undation_SIX.mp3");
 	BGMvolume = 0.2f;
 	BGM->Play(BGMvolume,255);
 	BGMt = 0.0f;
@@ -110,7 +110,7 @@ void GameScene::Update()
 	//だんだん音が上がる
 	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
 		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
-		BGMvolume = Lerp(BGMvolume, 0.5f, BGMt);
+		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
 	}
 	else {
 		IsSceneChangeEnd = false;
@@ -132,7 +132,7 @@ void GameScene::Update()
 	// タイマーのカウントが終了したとき
 	if (gameTimer_->isEnd_){
 		//だんだん音が下がる
-		BGMt = (std::min)(BGMt + 0.01f,1.0f);
+		BGMt = (std::min)(BGMt + 0.1f,1.0f);
 		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
 
 		// プレイヤーが生きているとき

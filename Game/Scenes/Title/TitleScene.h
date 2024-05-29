@@ -42,5 +42,8 @@ private: //*** 変数群 ***//
 	float BGMt = 0.0f;
 
 	std::unique_ptr<LWP::Resource::Audio> chooseSE;
+
+	//読み込みが終わったかどうか
+	bool IsloadEnd = true;
 };
 

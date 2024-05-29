@@ -25,23 +25,27 @@ void TitleScene::Initialize()
 	//BGM
 	BGM = std::make_unique<LWP::Resource::Audio>();
 	BGM->Load("BGM/Pop_Step.mp3");
-	BGM->Play(BGMvolume, 255);
-	BGMvolume = 0.2f;
+	BGMvolume = 0.0f;
 
 	BGMt = 0.0f;
 	IsSceneChangeBegin = false;
 	IsSceneChangeEnd = true;
 
 	chooseSE = std::make_unique<LWP::Resource::Audio>();
-	chooseSE->Load("Attack/patternA.mp3");
+	chooseSE->Load("menu/patternA.mp3");
 }
 
 // 更新
 void TitleScene::Update()
 {
+	if (IsloadEnd) {
+		BGM->Play(BGMvolume, 255);
+		IsloadEnd = false;
+	}
+
 	//だんだん音が上がる
 	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
-		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		BGMt = (std::min)(BGMt + 0.001f, 1.0f);
 		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
 	}
 	else {

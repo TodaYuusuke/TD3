@@ -61,9 +61,9 @@ void ClearScene::Initialize()
 	IsSceneChangeEnd = true;
 
 	serectSE = std::make_unique<LWP::Resource::Audio>();
-	serectSE->Load("fanfare.wav");
+	serectSE->Load("menu/cursor.mp3");
 	chooseSE = std::make_unique<LWP::Resource::Audio>();
-	chooseSE->Load("fanfare.wav");
+	chooseSE->Load("menu/patternA.mp3");
 }
 
 // 更新
@@ -107,6 +107,9 @@ void ClearScene::Update()
 	if (Keyboard::GetTrigger(DIK_SPACE) ||
 		Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
+		if (IsSceneChangeBegin == false) {
+			chooseSE->Play();
+		}
 		sceneTransition_->Start();
 		IsSceneChangeBegin = true;
 	}
@@ -123,12 +126,12 @@ void ClearScene::Update()
 	if (sceneTransition_->GetIsSceneChange()) {
 		if (choise_ == 0) {
 			BGM->Stop();
-			chooseSE->Play();
+			chooseSE->Stop();
 			nextSceneFunction = []() {return new TitleScene; };
 		}
 		else {
 			BGM->Stop();
-			chooseSE->Play();
+			chooseSE->Stop();
 			nextSceneFunction = []() {return new GameScene; };
 		}
 	}
