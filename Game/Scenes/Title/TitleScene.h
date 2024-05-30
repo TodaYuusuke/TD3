@@ -38,8 +38,7 @@ private: //*** 変数群 ***//
 
 	// 
 	float titleNameAnimFrame_;
-};
-
+	
 	float Lerp(const float& v1, const float& v2, float t) {
 		float result = v1 + (v2 - v1) * t;
 		return result;
@@ -56,4 +55,3 @@ private: //*** 変数群 ***//
 	//読み込みが終わったかどうか
 	bool IsloadEnd = true;
 };
-
