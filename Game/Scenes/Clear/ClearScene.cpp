@@ -13,14 +13,17 @@ using namespace LWP::Utility;
 void ClearScene::Initialize()
 {
 	// 画面全体
-	backSprite_.texture = Resource::LoadTexture("GameClear.png");
-	backSprite_.isUI = true;
-	backSprite_.isActive = true;
+	backSprite_[0].texture = Resource::LoadTexture("backGround.png");
+	backSprite_[1].texture = Resource::LoadTexture("Text/GameClear.png");
+	for (int i = 0; i < 2; i++) {
+		backSprite_[i].isUI = true;
+		backSprite_[i].isActive = true;
+	}
 	// 適当にサイズを画面全体に拡げる
-	Vector2 spSize = backSprite_.texture.t.GetSize();
-	backSprite_.transform.scale.x = 1.0f / spSize.x * 1980.0f;
-	backSprite_.transform.scale.y = 1.0f / spSize.y * 1080.0f;
-
+	//Vector2 spSize = backSprite_.texture.t.GetSize();
+	//backSprite_.transform.scale.x = 1.0f / spSize.x * 1980.0f;
+	//backSprite_.transform.scale.y = 1.0f / spSize.y * 1080.0f;
+	
 	// ボタン選択
 	toTitleSprite_.texture = Resource::LoadTexture("Text/BackForTitle.png");
 	toTitleSprite_.anchorPoint = { 0.5f,0.5f };
@@ -46,6 +49,7 @@ void ClearScene::Initialize()
 	cursolSprite_.isActive = true;
 	cursolSprite_.transform.translation.x = 1980.0f / 2.0f - 450;
 	cursolSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
+	cursolSprite_.transform.rotation.z = -std::numbers::pi / 2.0f;
 	cursolSprite_.transform.scale = { 0.5f,0.5f };
 	cursolSprite_.commonColor = new Color(0xAAAAAAFF);
 

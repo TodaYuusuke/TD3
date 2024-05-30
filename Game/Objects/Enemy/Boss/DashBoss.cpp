@@ -23,75 +23,11 @@ void DashBoss::Init()
 	currentFrame_ = 0;
 
 	// 攻撃前のモーション
-	preAttackMotion_.Add(&models_[0].transform.scale, lwp::Vector3{ -1,-1,-1 }, 0, 0.3f, LWP::Utility::Easing::Type::OutQuart)
+	preAttackMotion_.Add(&models_[0].transform.scale, lwp::Vector3{ -1,-1,-1 }, 0, 1.4f, LWP::Utility::Easing::Type::OutQuart)
 		.Add(&models_[0].transform.scale, lwp::Vector3{ 1,1,1 }, 1.4f, 0.2f, LWP::Utility::Easing::Type::OutQuart);
 
-	// HP を設定
+	// HPを設定
 	hp_ = 60;
-
-#pragma region パーティクル
-	//// 攻撃前
-	//static LWP::Object::Particle accumulateParticle_;
-	//accumulateParticle_.SetPrimitive<Primitive::Cube>();
-	//accumulateParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::YELLOW);
-	//accumulateParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
-	//	Object::ParticleData newData{};
-	//	newData.wtf.translation = lwp::Vector3{ 0,-0.5f,0 } + primitive->transform.GetWorldPosition();
-	//	newData.wtf.rotation = primitive->transform.rotation;
-	//	newData.wtf.scale = { 0.5f,0.5f, 0.5f };
-
-	//	// 速度ベクトルを生成
-	//	int dir1 = Utility::GenerateRandamNum<int>(-10, 10);
-	//	int dir2 = Utility::GenerateRandamNum<int>(-1, 5);
-	//	int dir3 = Utility::GenerateRandamNum<int>(-10, 10);
-	//	// 発射のベクトル
-	//	Math::Vector3 dir{ dir1 / 100.0f,dir2 / 200.0f, dir3 / 100.0f };
-	//	float multiply = Utility::GenerateRandamNum<int>(10, 50) / 100.0f;
-	//	newData.velocity = dir.Normalize() * multiply;
-
-	//	// パーティクル追加
-	//	return newData;
-	//};
-	//accumulateParticle_.updateFunction = [&](Object::ParticleData* data) {
-	//	if (Info::GetDeltaTime() == 0.0f) {
-	//		return false;
-	//	}
-
-	//	// 経過フレーム追加
-	//	data->elapsedFrame++;
-
-	//	//// 方向ベクトル
-	//	//lwp::Vector3 dirVel{};
-	//	//// 方向ベクトルを算出(ただしy成分は除外)
-	//	//dirVel = (data->wtf.translation - models_[0].transform.translation).Normalize() * 0.1f;
-	//	//dirVel.y = data->velocity.y;
-	//	// 速度ベクトルを弱める
-	//	data->velocity.x *= 0.9f;
-	//	data->velocity.z *= 0.9f;
-	//
-	//	//// パーティクルを外側へ飛ばす
-	//	//if (isOutBlowOff_) {
-	//	//	data->velocity = dirVel;
-	//	//	// だんだん上昇速度を上げる
-	//	//	data->velocity.x *= 1.5f;
-	//	//	data->velocity.z *= 1.5f;
-	//	//}
-
-	//	// 重力を加算
-	//	data->velocity.y += 9.8f / 2000.0f;
-
-	//	// 速度ベクトルを加算
-	//	data->wtf.translation += data->velocity;
-	//	data->wtf.rotation += data->velocity;
-
-	//	return data->elapsedFrame > 120 ? true : false;
-	//};
-	//accumulateParticle_.isActive = true;
-	//accumulateEffect_ = [&](int i, lwp::Vector3 pos) {
-	//	accumulateParticle_.P()->transform = pos;
-	//	accumulateParticle_.Add(i);
-	//};
-#pragma endregion
 }
 
 void DashBoss::Update()
@@ -159,21 +95,18 @@ void DashBoss::Update()
 		break;
 	}
 
-	if (preAttackMotion_.isEnd()) {
-		isOutBlowOff_ = true;
-		models_[0].transform.scale = { 2,3,2 };
-	}
-	else {
-		isOutBlowOff_ = false;
+	if (preAttackMotion_.isEnd() && isPreAttack_) {
+		isPreAttack_ = false;
+		animEndCount_++;
+		// 二つのアニメーションが終了しているのならスケールを初期化
+		if (animEndCount_ >= 2) {
+			models_[0].transform.scale = { 2,3,2 };
+			animEndCount_ = 0;
+		}
 	}
 
 	// 移動処理
 	Move();
-
-	// スケールが極端な数値にならないように上限下限を設ける
-	models_[0].transform.scale.x = std::clamp<float>(models_[0].transform.scale.x, 1, 2);
-	models_[0].transform.scale.y = std::clamp<float>(models_[0].transform.scale.y, 1, 3);
-	models_[0].transform.scale.z = std::clamp<float>(models_[0].transform.scale.z, 1, 2);
 }
 
 void DashBoss::SetPosition(lwp::Vector3 pos)
@@ -185,13 +118,9 @@ void DashBoss::SetPosition(lwp::Vector3 pos)
 
 void DashBoss::Move()
 {
-	dirVel_ += GetDirectVel() * 0.5f;
+	dirVel_ = GetDirectVel();
 	dirVel_.y = 0.0f;
-	dirVel_.x = std::clamp<float>(dirVel_.x, -2, 2);
-	dirVel_.z = std::clamp<float>(dirVel_.z, -2, 2);
-	dirVel_.x /= 1.01f;
-	dirVel_.z /= 1.01f;
-	models_[0].transform.translation += dirVel_ * 2.0f * LWP::Info::GetDeltaTimeF();
+	models_[0].transform.translation += dirVel_ * 5.0f * LWP::Info::GetDeltaTimeF();
 }
 
 void DashBoss::Attack()
@@ -243,6 +172,7 @@ void DashBoss::B_RootUpdate() {
 
 void DashBoss::B_PreDashInit() {
 	currentFrame_ = 0;
+	isPreAttack_ = true;
 	preAttackMotion_.Start();
 }
 
@@ -252,10 +182,6 @@ void DashBoss::B_PreDashUpdate() {
 		if (currentFrame_ % 2 == 0) {
 			accumulateEffect_(16, models_[0].transform.translation);
 		}
-
-	}
-	else if (currentFrame_ >= 60) {
-		isOutBlowOff_ = true;
 	}
 
 	if (currentFrame_ >= 110) {
@@ -290,5 +216,3 @@ void DashBoss::B_DashUpdate() {
 LWP::Math::Vector3 DashBoss::GetDirectVel() {
 	return (player_->GetWorldTransform()->translation - models_[0].transform.translation).Normalize();
 }
-
-//std::function<void(int, lwp::Vector3)> DashBoss::accumulateEffect_ = nullptr;
