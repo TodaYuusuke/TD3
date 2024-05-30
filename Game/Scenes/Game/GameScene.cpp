@@ -23,7 +23,7 @@ void GameScene::Initialize()
 	atack = std::make_unique<LWP::Resource::Audio>();
 	atack->Load("Attack/patternA.mp3");
 	PlayerDead = std::make_unique<LWP::Resource::Audio>();
-	PlayerDead->Load("Attack/patternA.mp3");
+	PlayerDead->Load("Player/Dead.mp3");
 	PlayerAlive = std::make_unique<LWP::Resource::Audio>();
 	PlayerAlive->Load("Attack/patternA.mp3");
 	std::vector<LWP::Resource::Audio*> PlayeraudioSet{ atack.get(),PlayerDead.get(),PlayerAlive.get() };
@@ -61,7 +61,7 @@ void GameScene::Initialize()
 	EnemyDamege = std::make_unique<LWP::Resource::Audio>();
 	EnemyDamege->Load("Slash/patternA.mp3");
 	EnemyDead = std::make_unique<LWP::Resource::Audio>();
-	EnemyDead->Load("Slash/patternB.mp3");
+	EnemyDead->Load("Enemy/Dead.mp3");
 	// 経験値マネージャーをエネミーマネージャーに設定
 	enemyManager_->SetExpManager(expManager_.get());
 	std::vector<LWP::Resource::Audio*> EnemyaudioSet{ EnemyDamege.get(),EnemyDead.get() };
@@ -105,7 +105,7 @@ void GameScene::Initialize()
 	sceneTransition_->Initialize();
 
 	BGM = std::make_unique<LWP::Resource::Audio>();
-	BGM->Load("BGM/Undation_SIX.mp3");
+	BGM->Load("BGM/GameScene.mp3");
 	BGMvolume = 0.2f;
 	BGM->Play(BGMvolume,255);
 	BGMt = 0.0f;

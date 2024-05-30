@@ -55,7 +55,7 @@ void GameOverScene::Initialize()
 
 	//BGM
 	BGM = std::make_unique<LWP::Resource::Audio>();
-	BGM->Load("fanfare.wav");
+	BGM->Load("BGM/GameOver.mp3");
 	BGMvolume = 0.2f;
 	BGM->Play(BGMvolume, 255);
 	BGMt = 0.0f;

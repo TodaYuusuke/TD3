@@ -24,7 +24,7 @@ void TitleScene::Initialize()
 	sceneTransition_->Initialize();
 	//BGM
 	BGM = std::make_unique<LWP::Resource::Audio>();
-	BGM->Load("BGM/Pop_Step.mp3");
+	BGM->Load("BGM/TitleScene.mp3");
 	BGMvolume = 0.0f;
 
 	BGMt = 0.0f;
