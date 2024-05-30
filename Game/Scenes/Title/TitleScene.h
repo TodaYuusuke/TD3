@@ -54,6 +54,6 @@ private: //*** 変数群 ***//
 
 	//読み込みが終わったかどうか
 	bool IsloadEnd = true;
-};
+
 	float animFrame_;
 };
