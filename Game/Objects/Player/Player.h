@@ -277,12 +277,17 @@ public: //*** プライベート変数 ***//
 	// レベルアップ機能
 	std::unique_ptr<Level> level_;
 
-	MotionWork ClearMotion = {
+	MotionWork ClearYUpMotion = {
 		.t = 0.0f,
 		.speed = 1.0f,
 		.flag = false,
 	};
-	const float kClearMotionEnd = 60.0f;
+	MotionWork ClearZUpMotion = {
+		.t = 0.0f,
+		.speed = 1.0f,
+		.flag = false,
+	};
+	const float kClearMotionEnd = 30.0f;
 	// ゲームオーバーのアニメーション
 	LWP::Resource::Motion gameOverMotion_;
 	bool isGameOver_;
@@ -344,6 +349,14 @@ private: //*** アップデート関連クラス ***//
 	// Pursuitを管理するフラグ
 	bool eXLifeFlag = false;
 
+	float Lerp(const float& v1, const float& v2, float t) {
+		float result = v1 + (v2 - v1) * t;
+		return result;
+	}
+
+	//光の柱
+	LWP::Primitive::Billboard2D lightPillar_;
+	LWP::Resource::Motion lightPillarMotion_;
 
 public: //*** 音 ***//
 

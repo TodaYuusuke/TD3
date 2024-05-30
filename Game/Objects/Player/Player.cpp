@@ -16,7 +16,6 @@ using namespace LWP;
 using namespace LWP::Utility;
 using namespace LWP::Object::Collider;
 
-
 void Player::Initialize()
 {
 	// モデル読み込み
@@ -86,6 +85,15 @@ void Player::Initialize()
 		.Add(&demoModel_.transform.rotation, lwp::Vector3{ 0, 15, 0 }, 0, 2.0f, LWP::Utility::Easing::Type::InQuint);
 	// 土飛沫のパーティクル
 	InitStaticVariable();
+
+	// 光の柱
+	lightPillarMotion_.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ 1.5f,1.5f,1.5f }, 0, 0.1f)
+		.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ -1.5f,-1.5f,-1.5f }, 0.1f, 0.1f);
+	// 出現時の光の柱
+	lightPillar_.texture = LWP::Resource::LoadTexture("particle/lightPillar.png");
+	lightPillar_.name = "LightPillar";
+	lightPillar_.transform.scale = { 1,100,1 };
+	lightPillar_.isActive = false;
 }
 
 void Player::Update()
@@ -205,14 +213,28 @@ void Player::ApplyUpgrade(const UpgradeParameter& para)
 
 bool Player::ClearAnime()
 {
-	ClearMotion.t += ClearMotion.speed;
-	demoModel_.transform.translation.y += (ClearMotion.speed + (ClearMotion.t - 1) * 2) * LWP::Info::GetDefaultDeltaTimeF();
-
-	if (ClearMotion.t > kClearMotionEnd)
-	{
-		return true;
+	if (ClearYUpMotion.t == 0.0f) {
+		lightPillar_.transform.translation = demoModel_.transform.translation;
+		lightPillar_.isActive = true;
+		lightPillarMotion_.Start();
 	}
 
+	if (ClearYUpMotion.t == 1.0f)
+	{
+		ClearZUpMotion.t = (std::min)(ClearZUpMotion.t + 0.04f, 1.0f);
+		demoModel_.transform.scale.x = Lerp(demoModel_.transform.scale.y, 0.0f, ClearZUpMotion.t);
+		demoModel_.transform.scale.y = Lerp(demoModel_.transform.scale.x, 0.0f, ClearZUpMotion.t);
+		demoModel_.transform.scale.z = Lerp(demoModel_.transform.scale.z, 0.0f, ClearZUpMotion.t);
+		if (ClearZUpMotion.t == 1.0f) {
+			return true;
+		}
+	}
+	else {
+		ClearYUpMotion.t = (std::min)(ClearYUpMotion.t + 0.05f,1.0f);
+		demoModel_.transform.translation.y = Lerp(demoModel_.transform.translation.y,5.0f, ClearYUpMotion.t);
+
+		ClearZUpMotion.targetpoint.y = demoModel_.transform.scale.y;
+	}
 
 	return false;
 }

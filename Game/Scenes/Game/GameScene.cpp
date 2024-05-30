@@ -90,8 +90,8 @@ void GameScene::Initialize()
 	backSprite_.transform.translation = { 1600.0f,100.f,0.0f };
 	backSprite_.commonColor = new Color(0xAAAAAAFF);
 
-	// いったん五分
-	gameTimer_->Reset(180);
+	// いったん3分
+	gameTimer_->Reset(10);
 	// ゲームが始まってから計測開始
 	gameTimer_->Start();
 
