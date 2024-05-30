@@ -29,6 +29,7 @@ public: //*** 関数群 ***//
 private: //*** 変数群 ***//
 	// 画面全体の画像
 	LWP::Primitive::Sprite backSprite_[2];
+	float animFrame_;
 	// 選択の画像
 	LWP::Primitive::Sprite toTitleSprite_;
 	LWP::Primitive::Sprite toGameSprite_;

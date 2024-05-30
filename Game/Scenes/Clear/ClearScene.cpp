@@ -73,6 +73,10 @@ void ClearScene::Initialize()
 // 更新
 void ClearScene::Update()
 {
+	animFrame_ += lwp::GetDefaultDeltaTimeF() * 60;
+	// タイトル名を上下に動かす
+	backSprite_[1].transform.translation.y += sinf(animFrame_ * M_PI / 60) * 0.1f;
+
 #ifdef DEMO
 
 	ImGui::Begin("Scene");

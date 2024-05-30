@@ -44,9 +44,9 @@ void TitleScene::Initialize()
 // 更新
 void TitleScene::Update()
 {
-	titleNameAnimFrame_ += lwp::GetDefaultDeltaTimeF() * 60;
+	animFrame_ += lwp::GetDefaultDeltaTimeF() * 60;
 	// タイトル名を上下に動かす
-	backSprite_[Text_TitleName].transform.translation.y += sinf(titleNameAnimFrame_ * M_PI / 150) * 0.1f;
+	backSprite_[Text_TitleName].transform.translation.y += sinf(animFrame_ * M_PI / 60) * 0.1f;
 
 	if (IsloadEnd) {
 		BGM->Play(BGMvolume, 255);
