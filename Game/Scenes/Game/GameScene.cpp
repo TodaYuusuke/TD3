@@ -12,6 +12,12 @@ using namespace LWP::Utility;
 // 初期化
 void GameScene::Initialize()
 {
+	Info::ChangeShowDebugGUI();
+
+	//mainCamera.pp.use = true;
+	//mainCamera.pp.vignetting.use = true;
+	//mainCamera.pp.CreateShaderFile();
+
 	// タイマー
 	gameTimer_ = GameTimer::GetInstance();
 	gameTimer_->Initialize();
@@ -47,7 +53,6 @@ void GameScene::Initialize()
 	followCamera_->SetTarget(player_->GetWorldTransform());
 	followCamera_->SetPlayer(player_.get());
 	// カメラを少し上に上げる
-	followCamera_->pCamera_->transform.rotation.x = 0.3f;
 	player_->SetCameraPointer(followCamera_.get());
 
 	// 経験値タンク
