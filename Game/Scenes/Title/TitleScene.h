@@ -37,5 +37,5 @@ private: //*** 変数群 ***//
 	std::unique_ptr<SceneTransition> sceneTransition_;
 
 	// 
-	float titleNameAnimFrame_;
+	float animFrame_;
 };

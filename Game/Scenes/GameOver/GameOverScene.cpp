@@ -13,13 +13,16 @@ using namespace LWP::Utility;
 void GameOverScene::Initialize()
 {
 	// 画面全体
-	backSprite_.texture = Resource::LoadTexture("GameOver.png");
-	backSprite_.isUI = true;
-	backSprite_.isActive = true;
-	// 適当にサイズを画面全体に拡げる
-	Vector2 spSize = backSprite_.texture.t.GetSize();
-	backSprite_.transform.scale.x = 1.0f / spSize.x * 1980.0f;
-	backSprite_.transform.scale.y = 1.0f / spSize.y * 1080.0f;
+	backSprite_[0].texture = Resource::LoadTexture("backGround.png");
+	backSprite_[1].texture = Resource::LoadTexture("Text/gameOver.png");
+	for (int i = 0; i < 2; i++) {
+		backSprite_[i].isUI = true;
+		backSprite_[i].isActive = true;
+	}
+	//// 適当にサイズを画面全体に拡げる
+	//Vector2 spSize = backSprite_.texture.t.GetSize();
+	//backSprite_.transform.scale.x = 1.0f / spSize.x * 1980.0f;
+	//backSprite_.transform.scale.y = 1.0f / spSize.y * 1080.0f;
 
 	// ボタン選択
 	toTitleSprite_.texture = Resource::LoadTexture("Text/BackForTitle.png");
@@ -58,6 +61,10 @@ void GameOverScene::Initialize()
 // 更新
 void GameOverScene::Update()
 {
+	animFrame_ += lwp::GetDefaultDeltaTimeF() * 60;
+	// タイトル名を上下に動かす
+	backSprite_[1].transform.translation.y += sinf(animFrame_ * M_PI / 60) * 0.1f;
+
 #ifdef DEMO
 
 	ImGui::Begin("Scene");
