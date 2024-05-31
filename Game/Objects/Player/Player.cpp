@@ -36,6 +36,8 @@ void Player::Initialize()
 	//InitDatas();
 	behavior_ = Behavior::Root;
 
+	SlashPanel::InitParticle();
+
 	// 居合攻撃の UI
 	slashPanel_.reset(new SlashPanel);
 	slashPanel_->Initialize();
