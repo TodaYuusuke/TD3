@@ -35,25 +35,6 @@ private: //*** サブクラス ***//
 
 #pragma region Behavior
 
-	//*** 各 Behavior で使う情報 ***//
-
-	// 共通データ
-	// まったくもって参照できないからつかわん
-	// 絶対に継承した先のインスタンスを使う
-	//struct BaseData
-	//{
-	//	//float cBASETIME = 0.0f;	// 状態の基本時間 : 基本となる秒数
-	//	//float maxTime_ = 0.0f;	// 状態の最大時間 : 条件で抜けるときもあるかもしれない
-	//};
-
-	//struct RootData : public BaseData
-	//{
-	//};
-
-	//struct MoveData : public BaseData
-	//{
-	//};
-
 	// 居合攻撃で使うデータ
 	struct SlashData //: public BaseData
 	{
@@ -61,19 +42,6 @@ private: //*** サブクラス ***//
 		uint32_t relationSlash_;	// 連続居合回数
 		uint32_t maxRelation_;		// 最大居合回数(実際の数)(増減しちゃう) 
 	};
-
-
-	//// 後隙で使うデータ
-	//struct MomentData : public BaseData
-	//{
-	//	uint32_t relationSlash_;	// 連続居合回数 : 二回以降+1
-	//};
-
-	//// 被弾
-	//struct DamageData : public BaseData
-	//{
-
-	//};
 
 #pragma endregion
 
@@ -100,8 +68,6 @@ private: //*** サブクラス ***//
 		lwp::Collider::AABB player_;
 		// 武器の当たり判定
 		lwp::Collider::Capsule weapon_;
-		// ジャスト抜刀したいときの大きめの判定
-		lwp::Collider::Capsule justSlash_;
 	};
 
 #pragma endregion

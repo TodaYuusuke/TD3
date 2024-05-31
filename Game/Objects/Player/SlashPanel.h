@@ -41,6 +41,22 @@ private: //*** プライベート変数 ***//
 	// メインアイコン
 	LWP::Primitive::Sprite mainSprite_;
 
+	// 画像の色
+	LWP::Utility::Color color1_ = 0x888888FF;
+	LWP::Utility::Color color2_ = 0x555555FF;
+
+	// 画像の中心
+	lwp::Vector3 msCenter_;
+
+
+	// 数秒に一回パーティクル
+	float time_ = 0.0f;
+	const float kTIME_ = 0.5f;
+
+
+	// パーティクル画像の中心までの補正
+	static lwp::Vector3 psCollect_;
+
 	// 居合が回復したときのエフェクト
 	static std::function<void(int, lwp::Vector3)> slashResetEffect_;
 
