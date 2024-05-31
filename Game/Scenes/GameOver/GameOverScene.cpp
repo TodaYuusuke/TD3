@@ -100,17 +100,21 @@ void GameOverScene::Update()
 	}
 	
 	// 選択肢を与える
-	// 左
-	if (Keyboard::GetTrigger(DIK_W) || Keyboard::GetTrigger(DIK_UP) ||
-		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_UP))
+	// 上
+	if (Keyboard::GetTrigger(DIK_W) ||
+		Keyboard::GetTrigger(DIK_UP) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_UP) ||
+		0.0f < Pad::GetLStick().y)
 	{
 		choise_ = 0;
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
 		serectSE->Play();
 	}
-	//　右
-	else if (Keyboard::GetTrigger(DIK_S) || Keyboard::GetTrigger(DIK_DOWN) ||
-		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN))
+	//　下
+	else if (Keyboard::GetTrigger(DIK_S) ||
+		Keyboard::GetTrigger(DIK_DOWN) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN) ||
+		Pad::GetLStick().y < 0.0f)
 	{
 		choise_ = 1;
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f + spriteWidth + spriteOffset;
