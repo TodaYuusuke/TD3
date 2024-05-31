@@ -16,7 +16,7 @@ public: //*** パブリック関数 ***//
 	void Update();
 
 	// 生成
-	//static Experience* Create(const lwp::Vector3& pos);
+	static void InitParticle();
 
 private: //*** プライベート関数 ***//
 
@@ -51,7 +51,7 @@ private: //*** プライベート変数 ***//
 	bool isDisable_ = true;
 
 	// アニメーションする時間
-	const float kAnimationTime_ = 0.2f;
+	const float kAnimationTime_ = 0.5f;
 	
 	// 判定を付与するまでの時間
 	const float kToEnableTime_ = 1.0f;
@@ -65,5 +65,9 @@ private: //*** プライベート変数 ***//
 	// モデルの回転力
 	float rotateSpeed_ = 0.3f;
 	float kRotateGetSpeed_ = 0.7f;
+
+
+	// パーティクル関係
+	static std::function<void(int, lwp::Vector3)> expGetEffect_;
 
 };
