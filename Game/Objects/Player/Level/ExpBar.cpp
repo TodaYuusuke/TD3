@@ -59,7 +59,7 @@ void ExpBar::Initialize()
 	mainSprite.Update();
 }
 
-void ExpBar::Update(uint32_t exp, uint32_t num)
+void ExpBar::Update(float exp, uint32_t num)
 {
 	//#ifdef DEMO
 	//

@@ -112,8 +112,8 @@ void IEnemy::DyingAnimation()
 
 	models_[0].transform.rotation.y += deadAnime.speed;
 
-	models_[0].transform.translation.x = deadAnime.targetpoint.x + addx * LWP::Info::GetDeltaTime();
-	models_[0].transform.translation.z = deadAnime.targetpoint.z + addz * LWP::Info::GetDeltaTime();
+	models_[0].transform.translation.x = deadAnime.targetpoint.x + addx * LWP::Info::GetDeltaTimeF();
+	models_[0].transform.translation.z = deadAnime.targetpoint.z + addz * LWP::Info::GetDeltaTimeF();
 
 	deadFlame++;
 }

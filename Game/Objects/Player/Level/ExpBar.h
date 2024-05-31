@@ -36,7 +36,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update(uint32_t exp, uint32_t num);
+	void Update(float exp, uint32_t num);
 
 	void SetPosition(const lwp::Vector3& pos)
 	{

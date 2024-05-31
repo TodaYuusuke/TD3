@@ -96,7 +96,7 @@ public: //*** ゲッターセッター ***//
 	/// <para>段階ごとに HP を分ける</para>
 	/// </summary>
 	/// <param name="stage">0 ~ n 最大は後で決める</param>
-	virtual void SetEnemyHP(int stage) { hp_ = 20 * (1 + (stage * 0.5f)); }
+	virtual void SetEnemyHP(int stage) { hp_ = 20 * (1 + (int)(stage * 0.5f)); }
 
 	// 狙う対象をセット(今回は自機をセットする)
 	virtual void SetTarget(Player* player) { player_ = player; }

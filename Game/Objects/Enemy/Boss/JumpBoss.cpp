@@ -34,7 +34,7 @@ void JumpBoss::Init()
 	isWaveAttack_ = false;
 
 	// 攻撃のクールタイム
-	attackWaitTime_ = kAttackWaitTime;
+	attackWaitTime_ = (int)kAttackWaitTime;
 	// 現在の時間
 	currentFrame_ = 0;
 
@@ -198,7 +198,7 @@ void JumpBoss::Aim()
 }
 
 void JumpBoss::B_RootInit() {
-	attackWaitTime_ = kAttackWaitTime;
+	attackWaitTime_ = (int)kAttackWaitTime;
 	currentFrame_ = 0;
 	isAttack = false;
 }

@@ -49,7 +49,7 @@ void ClearScene::Initialize()
 	cursolSprite_.isActive = true;
 	cursolSprite_.transform.translation.x = 1980.0f / 2.0f - 450;
 	cursolSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
-	cursolSprite_.transform.rotation.z = -std::numbers::pi / 2.0f;
+	cursolSprite_.transform.rotation.z = -(float)std::numbers::pi / 2.0f;
 	cursolSprite_.transform.scale = { 0.5f,0.5f };
 	cursolSprite_.commonColor = new Color(0xAAAAAAFF);
 

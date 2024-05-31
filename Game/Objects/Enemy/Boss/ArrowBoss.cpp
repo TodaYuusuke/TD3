@@ -354,7 +354,7 @@ void ArrowBoss::B_RootUpdate() {
 void ArrowBoss::B_AimingInit() {
 	// 自機狙い状態開始
 	isAiming_ = true;
-	attackWaitTime_ = kAimAllFrame;
+	attackWaitTime_ = (int)kAimAllFrame;
 }
 void ArrowBoss::B_AimingUpdate() {
 	// 体を自機に向ける
