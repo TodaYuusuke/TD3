@@ -19,10 +19,6 @@ void GameOverScene::Initialize()
 		backSprite_[i].isUI = true;
 		backSprite_[i].isActive = true;
 	}
-	//// 適当にサイズを画面全体に拡げる
-	//Vector2 spSize = backSprite_.texture.t.GetSize();
-	//backSprite_.transform.scale.x = 1.0f / spSize.x * 1980.0f;
-	//backSprite_.transform.scale.y = 1.0f / spSize.y * 1080.0f;
 
 	// ボタン選択
 	toTitleSprite_.texture = Resource::LoadTexture("Text/BackForTitle.png");
@@ -106,9 +102,12 @@ void GameOverScene::Update()
 		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_UP) ||
 		0.0f < Pad::GetLStick().y)
 	{
+
+		if (choise_ == 1) {
+			serectSE->Play();
+		}
 		choise_ = 0;
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
-		serectSE->Play();
 	}
 	//　下
 	else if (Keyboard::GetTrigger(DIK_S) ||
@@ -116,9 +115,12 @@ void GameOverScene::Update()
 		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN) ||
 		Pad::GetLStick().y < 0.0f)
 	{
+
+		if (choise_ == 0) {
+			serectSE->Play();
+		}
 		choise_ = 1;
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f + spriteWidth + spriteOffset;
-		serectSE->Play();
 	}
 
 	if (Keyboard::GetTrigger(DIK_SPACE) ||

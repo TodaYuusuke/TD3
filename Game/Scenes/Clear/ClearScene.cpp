@@ -102,24 +102,25 @@ void ClearScene::Update()
 
 	// 選択肢を与える
 	// 上
-	if (Keyboard::GetTrigger(DIK_W) ||
-		Keyboard::GetTrigger(DIK_UP) ||
-		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_UP) ||
-		0.0f < Pad::GetLStick().y)
-	{
+	if (Keyboard::GetTrigger(DIK_W) || Keyboard::GetTrigger(DIK_UP) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_UP) || 0.0f < Pad::GetLStick().y){
+
+		if(choise_ == 1){
+			serectSE->Play();
+		}
 		choise_ = 0;
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
-		serectSE->Play();
+
+
 	}
 	//　下
-	else if (Keyboard::GetTrigger(DIK_S) ||
-		Keyboard::GetTrigger(DIK_DOWN) ||
-		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN) ||
-		Pad::GetLStick().y < 0.0f)
-	{
+	else if (Keyboard::GetTrigger(DIK_S) || Keyboard::GetTrigger(DIK_DOWN) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN) || Pad::GetLStick().y < 0.0f){
+		if (choise_ == 0) {
+			serectSE->Play();
+		}
 		choise_ = 1;
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f + spriteWidth + spriteOffset;
-		serectSE->Play();
 	}
 
 
