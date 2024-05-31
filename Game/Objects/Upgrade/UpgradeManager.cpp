@@ -336,7 +336,6 @@ void L::UpgradeManager::Selecting(Player* player)
 	}
 	// 場所
 	Vector2 pos{ 0.0f,625.0f };
-	sprite_.isActive = true;
 	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
 	// 抽選されたアップグレードを更新
 	attackUpgrades_[candidata_[0]]->BaseUpdate();
@@ -466,13 +465,13 @@ void L::UpgradeManager::Selected()
 	if (choiceIndex_ == 0){
 		attackUpgrades_[candidata_[choiceIndex_]]->isApplied = true;
 		upgradedConut_++;
-		sprite_.isActive = false;
+		
 	}
 	else {
 		escapeUpgrades_[candidata_[choiceIndex_]]->isApplied = true;
 		upgradedConut_++;
-		sprite_.isActive = false;
 	}
+	sprite_.isActive = false;
 }
 
 void L::UpgradeManager::Apply(Player* player)
