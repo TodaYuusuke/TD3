@@ -148,31 +148,26 @@ void EnemyManager::BossSpawn()
 
 	// 30秒
 	// ダッシュボスを出現
-	if (gameTimer_->GetCurrentSecond() == 30 && !isBossSpawn_) {
-	if (gameTimer_->GetCurrentSecond() == 01 && !isBossSpawn_)
-	{
+	if (gameTimer_->GetCurrentSecond() == 30 && !isBossSpawn_){
 		DashBossSpawn(pos);
 		//ArrowBossSpawn(pos);
 		isBossSpawn_ = true;
 	}
 	// 1分
-	else if (gameTimer_->GetCurrentSecond() == 60 && isBossSpawn_) {
+	else if (gameTimer_->GetCurrentSecond() == 60 && isBossSpawn_){
 		DashBossSpawn(pos);
 		//ArrowBossSpawn(pos);
 		isBossSpawn_ = false;
 	}
 	// 2分
 	// ホーミング弾を撃つボスを出現
-	else if (gameTimer_->GetCurrentSecond() == 120 && !isBossSpawn_) {
-	else if (gameTimer_->GetCurrentSecond() == 120 && isBossSpawn_)
-	{
+	else if (gameTimer_->GetCurrentSecond() == 120 && isBossSpawn_){
 		ArrowBossSpawn(pos);
 		isBossSpawn_ = true;
 	}
 }
 
-void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos)
-{
+void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos){
 	NormalEnemy* enemy = new NormalEnemy();
 	enemy->Initialize();
 	enemy->SetCamera(followCamera_);
@@ -183,8 +178,7 @@ void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos)
 	enemy->SetEnemyHP(GetCurrentStage());
 	enemys_.push_back(enemy);
 }
-void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos)
-{
+void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos){
 	ShieldEnemy* enemy = new ShieldEnemy();
 	enemy->Initialize();
 	enemy->SetCamera(followCamera_);
@@ -195,8 +189,7 @@ void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos)
 	enemy->SetEnemyHP(GetCurrentStage());
 	enemys_.push_back(enemy);
 }
-void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos)
-{
+void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos){
 	ArrowEnemy* enemy = new ArrowEnemy();
 	enemy->Initialize();
 	enemy->SetCamera(followCamera_);
@@ -208,8 +201,7 @@ void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos)
 	enemys_.push_back(enemy);
 }
 
-void EnemyManager::DashBossSpawn(lwp::Vector3 pos)
-{
+void EnemyManager::DashBossSpawn(lwp::Vector3 pos){
 	DashBoss* boss = new DashBoss();
 	boss->Initialize();
 	boss->SetCamera(followCamera_);
@@ -221,8 +213,7 @@ void EnemyManager::DashBossSpawn(lwp::Vector3 pos)
 	enemys_.push_back(boss);
 }
 
-void EnemyManager::ArrowBossSpawn(lwp::Vector3 pos)
-{
+void EnemyManager::ArrowBossSpawn(lwp::Vector3 pos){
 	ArrowBoss* boss = new ArrowBoss();
 	boss->Initialize();
 	boss->SetCamera(followCamera_);
