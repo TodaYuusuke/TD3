@@ -17,6 +17,7 @@ ExpManager::~ExpManager()
 
 void ExpManager::Initialize()
 {
+	Experience::InitParticle();
 	// リストの初期化
 	exps_.clear();
 }

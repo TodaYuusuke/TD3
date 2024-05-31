@@ -6,15 +6,8 @@ using namespace LWP;
 using namespace LWP::Resource;
 using namespace LWP::Object::Collider;
 
-//Experience* Experience::Create(const lwp::Vector3& pos)
-//{
-//	// 新規生成
-//	Experience* data = new Experience;
-//	// 初期化
-//	data->Initialize(pos);
-//	// 作ったものを返す
-//	return data;
-//}
+
+std::function<void(int, lwp::Vector3)> Experience::expGetEffect_;
 
 Experience::Experience() : Experience({ 0.0f,0.0f,0.0f })
 {
@@ -58,6 +51,7 @@ void Experience::Update()
 		if (kAnimationTime_ <= time_)
 		{
 			isDead_ = true;
+			//expGetEffect_(16, model_.transform.translation);
 			model_.isActive = false;
 			return;
 		}
@@ -71,10 +65,73 @@ void Experience::Update()
 		// 一定以下なら 0.0f にする(描画しない)
 		t = 0.2 < t ? t : 0.0f;
 		// このイージングでないとよく見えなかった
-		model_.transform.scale = lwp::Vector3(kSize_,kSize_,kSize_) * t;
+		model_.transform.scale = lwp::Vector3(kSize_, kSize_, kSize_) * t;
 		// 時間を加算
 		time_ += lwp::GetDefaultDeltaTimeF();
 	}
+}
+
+void Experience::InitParticle()
+{
+	static Object::Particle expGetParticle;
+	expGetParticle.SetPrimitive<Primitive::Cube>();
+	expGetParticle.P()->material.enableLighting = true;
+	expGetParticle.name = "EXPParticle";
+	//expGetParticle.P()->transform.scale = { 0.0001f,0.0001f, 0.0001f };
+	expGetParticle.P()->commonColor = new Utility::Color(0xAAAA55FF);
+	expGetParticle.initFunction = [](Primitive::IPrimitive* primitive) {
+		Object::ParticleData newData{};
+
+		newData.wtf = primitive->transform;
+		newData.wtf.scale = { 0.3f,0.3f,0.3f };
+
+		// 方向ベクトルを生成
+		int dirX = Utility::GenerateRandamNum<int>(-200, 200);
+		int dirY = Utility::GenerateRandamNum<int>(-200, 200);
+		int dirZ = Utility::GenerateRandamNum<int>(-200, 200);
+		// 速度ベクトル
+		Math::Vector3 dir{ dirX * 0.01f, dirY * 0.01f, dirZ * 0.01f };
+		float multiply = Utility::GenerateRandamNum<int>(10, 30) * 0.05f;
+		newData.velocity = dir.Normalize() * multiply;
+
+		//for (size_t i = 0; i < primitive->vertices.size(); i++)
+		//{
+		//	primitive[i].transform.translation.z = -10.0f;
+		//}
+
+		// パーティクル追加
+		return newData;
+		};
+	// パーティクルの更新処理
+	expGetParticle.updateFunction = [](Object::ParticleData* data) {
+		if (Info::GetDeltaTimeF() == 0.0f)
+		{
+			return false;
+		}
+
+		// 経過秒数追加
+		data->elapsedFrame++;
+
+		// 速度ベクトルを加算
+		data->wtf.translation += data->velocity;
+
+		// 奥方向に加算
+		//data->wtf.translation.z += -9.8f / 80.0f;
+
+		// 少しづつ小さくする
+		data->wtf.scale *= 0.92f;
+		data->velocity.y += 0.07f;
+		// 速度ベクトルを弱める
+		data->velocity *= 0.9f;
+
+		// 一定時間経ったら消す
+		return 20 <= data->elapsedFrame ? true : false;
+		};
+	expGetParticle.isActive = true;
+	expGetEffect_ = [&](int i, lwp::Vector3 pos) {
+		expGetParticle.P()->transform = pos;
+		expGetParticle.Add(i);
+		};
 }
 
 void Experience::Initialize(const lwp::Vector3& pos)
@@ -138,5 +195,6 @@ void Experience::OnCollision(const lwp::Collider::HitData& data)
 		collider_.isActive = false;
 		// 取得時に回転スピードを上げる
 		rotateSpeed_ = kRotateGetSpeed_;
+		expGetEffect_(16, model_.transform.translation);
 	}
 }
