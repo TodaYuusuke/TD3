@@ -174,8 +174,8 @@ void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos){
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
-	enemy->SetSE(audio[0]);
 	enemy->SetEnemyHP(GetCurrentStage());
+	enemy->SetSE(audio[0]);
 	enemys_.push_back(enemy);
 }
 void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos){
@@ -185,8 +185,8 @@ void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos){
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
-	enemy->SetSE(audio[0]);
 	enemy->SetEnemyHP(GetCurrentStage());
+	enemy->SetSE(audio[0]);
 	enemys_.push_back(enemy);
 }
 void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos){
@@ -196,8 +196,8 @@ void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos){
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
-	enemy->SetSE(audio[0]);
 	enemy->SetEnemyHP(GetCurrentStage());
+	enemy->SetSE(audio[0]);
 	enemys_.push_back(enemy);
 }
 
@@ -208,8 +208,8 @@ void EnemyManager::DashBossSpawn(lwp::Vector3 pos){
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
-	boss->SetSE(audio[0]);
 	boss->SetEnemyHP(GetCurrentStage());
+	boss->SetSE(audio[0]);
 	enemys_.push_back(boss);
 }
 
@@ -220,8 +220,8 @@ void EnemyManager::ArrowBossSpawn(lwp::Vector3 pos){
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
-	boss->SetSE(audio[0]);
 	boss->SetEnemyHP(GetCurrentStage());
+	boss->SetSE(audio[0]);
 	enemys_.push_back(boss);
 }
 

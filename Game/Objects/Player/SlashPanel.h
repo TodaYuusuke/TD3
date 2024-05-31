@@ -2,16 +2,16 @@
 
 #include "Adapter.h"
 
-#include "Game/Objects/UIPanel/UIPanel.h"
-
 /// <summary>
-/// プレイヤーの居合を可視化する UI 管理クラス
+/// プレイヤーの居合を可視化する管理クラス
 /// </summary>
 class SlashPanel
 {
 private:
 
-	const static int32_t kWINDOW_WIDTH_HALF_ = 1980 / 2;
+	const int32_t kWINDOW_WIDTH_HALF_ = 1980 / 2;
+	const float kSPRITEPOSX = kWINDOW_WIDTH_HALF_ + 730.0f;
+	const float kSPRITEPOSY = 880.0f;
 
 public:
 
@@ -24,25 +24,47 @@ public:
 	// 更新
 	void Update();
 
-public: //*** 外部からセット ***//
+	// パーティクルを初期化
+	static void InitParticle();
 
-	// 一つ消費
+public: //*** 外部から参照できる ***//
+
+	// 消費
 	void Slash();
-	// 全部リセット
+	// リセット
 	void Reset();
-	// ジャストを検知
-	void Just();
 
 private: //*** プライベート変数 ***//
 
-	// 刀アイコン
-	std::vector<UIPanel*> katanaPanels_;
-	// 鞘アイコン
-	std::vector<UIPanel*> sayaPanels_;
+	// サブアイコン
+	LWP::Primitive::Sprite subSprite_;
+	// メインアイコン
+	LWP::Primitive::Sprite mainSprite_;
 
-	// 添え字
-	// 常にプラス一で計算したい
-	size_t index_ = 1u;
+	// 画像の色
+	LWP::Utility::Color color1_ = 0x888888FF;
+	LWP::Utility::Color color2_ = 0x555555FF;
+
+	// 画像の中心
+	lwp::Vector3 msCenter_;
+
+
+	// 数秒に一回パーティクル
+	float time_ = 0.0f;
+	const float kTIME_ = 0.5f;
+
+
+	// パーティクル画像の中心までの補正
+	static lwp::Vector3 psCollect_;
+
+	// 居合が回復したときのエフェクト
+	static std::function<void(int, lwp::Vector3)> slashResetEffect_;
+
+	// パーティクル
+	//LWP::Object::Particle slashResetParticle_;
+
+private: // プライベート関数
+
 
 };
 

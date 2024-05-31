@@ -249,15 +249,15 @@ protected:
 	LWP::Primitive::Billboard2D lightPillar_;
 	LWP::Resource::Motion lightPillarMotion_;
 
+	// 敵が何番目かを取得できるようにする
+	static uint32_t staticIndex_;
+	uint32_t index_ = 0u;
+
+
 	//音
 public:
 	void SetSE(LWP::Resource::Audio* input) { damege = input; };
 private:
 	LWP::Resource::Audio* damege;
 	float soundVolume = 1.0f;
-
-	// 敵が何番目かを取得できるようにする
-	static uint32_t staticIndex_;
-	uint32_t index_ = 0u;
-
 };

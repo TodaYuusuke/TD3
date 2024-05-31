@@ -28,8 +28,6 @@ void Idol::Reset()
 	//slashData_.maxRelation_ = slashData_.cMAXRELATION_;
 	//player_->slashData_.maxRelation_ = player_->config_.Count_.SLASHRELATIONMAX_;
 	player_->weapon_->SetBehavior(Weapon::Behavior::Root);
-	// UI に反映
-	player_->slashPanel_->Reset();
 
 	// アニメーション作成
 	//CreateMotions();

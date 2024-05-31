@@ -18,9 +18,7 @@ void Moment::Init(Player* p)
 void Moment::Reset()
 {
 	elapsedTime_ = 0.0f;
-
 	EndTime_ = player_->parameter_.Time.momentTime_;
-
 	player_->weapon_->SetBehavior(Weapon::Behavior::Moment);
 	// 武器の判定を消す
 	player_->colliders_.weapon_.isActive = false;
@@ -53,6 +51,8 @@ void Moment::Update()
 	if (EndTime_ <= elapsedTime_)
 	{
 		player_->RegistStatus(Behavior::Root);
+		// UI に反映
+		player_->slashPanel_->Reset();
 	}
 }
 

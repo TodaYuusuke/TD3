@@ -155,6 +155,7 @@ void IEnemy::OnCollision(const HitData& data)
 			damege->Play(soundVolume);
 			// 攻撃に当たっているので当たったことを通知
 			player_->GetHitCheckPtr()->AddHitEnemy(this);
+
 			return;
 		}
 	}
