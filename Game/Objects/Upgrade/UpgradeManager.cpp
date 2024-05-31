@@ -22,7 +22,44 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	// フラグ初期化
 	isLevelUpping = false;
 
+
+	// すべて削除
+	for (size_t i = 0; i < attackUpgrades_.size(); i++)
+	{
+		delete attackUpgrades_[i];
+	}
+
+	// すべて削除
+	for (size_t i = 0; i < escapeUpgrades_.size(); i++)
+	{
+		delete escapeUpgrades_[i];
+	}
 	attackUpgrades_.clear();
+	escapeUpgrades_.clear();
+#ifdef DEMO
+	// アップグレードをすべて取得
+	// 最大 4 つ
+	// 攻撃
+	attackUpgrades_.push_back(new Skill_PursuitFlag);
+	attackUpgrades_.push_back(new Skill_PowerUp1);
+	attackUpgrades_.push_back(new Skill_PowerUp2);
+	attackUpgrades_.push_back(new Skill_PowerUp3);
+	attackUpgrades_.push_back(new Skill_AttackRangeUp);
+	attackUpgrades_.push_back(new Skill_BlowOffFlag);
+	attackUpgrades_.push_back(new Skill_BurningFlag);
+
+	// 逃走
+	escapeUpgrades_.push_back(new Skill_DamageInvincibleAdd);
+	escapeUpgrades_.push_back(new Skill_RadiusLevelUp);
+	escapeUpgrades_.push_back(new Skill_MomentTimeDown1);
+	escapeUpgrades_.push_back(new Skill_MomentTimeDown2);
+	escapeUpgrades_.push_back(new Skill_EXLifeFlag);
+	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
+	//取得していると他のアップグレードを取得したときにも適応される
+	escapeUpgrades_.push_back(new Skill_HPUp);
+
+#else
+	// 製品版
 	// アップグレードをすべて取得
 	// 最大 4 つ
 	// 攻撃
@@ -36,6 +73,7 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	escapeUpgrades_.push_back(new Skill_EXLifeFlag);
 	escapeUpgrades_.push_back(new Skill_BlowOffFlag);
 	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
+#endif // DEMO
 
 	// すべてを初期化する
 	for (size_t i = 0; i < attackUpgrades_.size(); i++)
@@ -89,8 +127,29 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 
 void L::UpgradeManager::Update(Player* player)
 {
-	// 新規で取得するアップグレードを選択する
-	Selecting(player);
+
+	// すべて更新
+	for (size_t i = 0; i < attackUpgrades_.size(); i++)
+	{
+		// 描画を消す
+		attackUpgrades_[i]->BaseUpdate();
+		// 選択されているものだけ適応
+		if (attackUpgrades_[i]->isApplied)
+		{
+			attackUpgrades_[i]->BaseUpdate();
+		}
+	}
+	// すべて更新
+	for (size_t i = 0; i < escapeUpgrades_.size(); i++)
+	{
+		// 描画を消す
+		escapeUpgrades_[i]->BaseUpdate();
+		// 選択されているものだけ適応
+		if (escapeUpgrades_[i]->isApplied)
+		{
+			escapeUpgrades_[i]->BaseUpdate();
+		}
+	}
 }
 
 void L::UpgradeManager::LevelUp()
@@ -107,23 +166,21 @@ void L::UpgradeManager::DebugWindow(Player* player)
 
 	ImGui::Begin("UpgradeManager");
 
-
-	if (ImGui::Button("isLevelUpFlag") &&
-		isLevelUpping == false)
-	{
-		isLevelUpping = true;
-		// 押された瞬間
-		LevelUp();
-	}
 	if (ImGui::Button("ReApply"))
 	{
 		Apply(player);
+	}
+	if (ImGui::Button("Random"))
+	{
+		RandomUpgrade();
 	}
 	ImGui::Separator();
 
 	ImGui::Text("upgrade: %d", kUpgradNum_);
 	ImGui::Text("cursor : %d", cursorIndex_);
 	ImGui::Text("choice : %d", choiceIndex_);
+	ImGui::Text("Attack : %d", attackUpgrades_.size());
+	ImGui::Text("Escape : %d", escapeUpgrades_.size());
 	ImGui::Separator();
 
 	ImGui::Text("ChoseUpgrade : %d", candidata_.size());
@@ -135,25 +192,40 @@ void L::UpgradeManager::DebugWindow(Player* player)
 	}
 
 	ImGui::Separator();
-	ImGui::Text("Nums : %d", attackUpgrades_.size());
-	if (ImGui::TreeNode("All"))
+	ImGui::Text("AttackUpgrade : %d", attackUpgrades_.size());
+	if (ImGui::TreeNode("Attack"))
 	{
-
-		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
+		//ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
 
 		for (size_t i = 0; i < attackUpgrades_.size(); i++)
 		{
 			attackUpgrades_[i]->DebugTree();
 		}
 
-		ImGui::EndChild();
+		//ImGui::EndChild();
 		ImGui::TreePop();
 		ImGui::Separator();
 	}
-	ImGui::Text("Nums : %d", upgradedConut_);
+	ImGui::Separator();
+	ImGui::Text("EscapeUpgrade : %d", attackUpgrades_.size());
+	if (ImGui::TreeNode("Escape"))
+	{
+		//ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 100));
+
+		for (size_t i = 0; i < escapeUpgrades_.size(); i++)
+		{
+			escapeUpgrades_[i]->DebugTree();
+		}
+
+		//ImGui::EndChild();
+		ImGui::TreePop();
+		ImGui::Separator();
+	}
+	ImGui::Separator();
+	ImGui::Text("NowUpgrade : %d", upgradedConut_);
 	if (ImGui::TreeNode("Selected"))
 	{
-		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 70));
+		//ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 70));
 
 		for (size_t i = 0; i < attackUpgrades_.size(); i++)
 		{
@@ -162,9 +234,9 @@ void L::UpgradeManager::DebugWindow(Player* player)
 				attackUpgrades_[i]->DebugTree();
 			}
 		}
-		ImGui::EndChild();
+		//ImGui::EndChild();
 		ImGui::Separator();
-		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 70));
+		//ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(0, 70));
 
 		for (size_t i = 0; i < escapeUpgrades_.size(); i++)
 		{
@@ -174,7 +246,7 @@ void L::UpgradeManager::DebugWindow(Player* player)
 			}
 		}
 
-		ImGui::EndChild();
+		//ImGui::EndChild();
 		ImGui::TreePop();
 		ImGui::Separator();
 	}
@@ -272,15 +344,15 @@ void L::UpgradeManager::Selecting(Player* player)
 	}
 	// 場所
 	Vector2 pos{ 0.0f,625.0f };
-	sprite_.isActive = false;
+	sprite_.isActive = true;
 	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2);
 	// 抽選されたアップグレードを更新
-	attackUpgrades_[candidata_[0]]->Update();
+	attackUpgrades_[candidata_[0]]->BaseUpdate();
 	attackUpgrades_[candidata_[0]]->ShowUI(pos);
 	// 
 	pos.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2) * 2;
 	// 抽選されたアップグレードを更新
-	escapeUpgrades_[candidata_[1]]->Update();
+	escapeUpgrades_[candidata_[1]]->BaseUpdate();
 	escapeUpgrades_[candidata_[1]]->ShowUI(pos);
 
 	// カーソルUI
@@ -339,6 +411,12 @@ void L::UpgradeManager::Selecting(Player* player)
 	if (isPress_ && !isSelected_)
 	{
 		pressTime_ += lwp::GetDefaultDeltaTimeF();
+
+		// 押している間はカーソルにモーションをつける
+		if (selectMotion_.isEnd())
+		{
+
+		}
 
 		if (kPressTime_ <= pressTime_)
 		{
@@ -399,11 +477,11 @@ void L::UpgradeManager::Apply(Player* player)
 	// アップグレード内容を作る
 	UpgradeParameter para;
 
-	// すべて更新
+	// すべて適応
 	for (size_t i = 0; i < attackUpgrades_.size(); i++)
 	{
 		// 描画を消す
-		attackUpgrades_[i]->Update();
+		attackUpgrades_[i]->BaseUpdate();
 		// 選択されているものだけ適応
 		if (attackUpgrades_[i]->isApplied)
 		{
@@ -414,7 +492,7 @@ void L::UpgradeManager::Apply(Player* player)
 	for (size_t i = 0; i < escapeUpgrades_.size(); i++)
 	{
 		// 描画を消す
-		escapeUpgrades_[i]->Update();
+		escapeUpgrades_[i]->BaseUpdate();
 		// 選択されているものだけ適応
 		if (escapeUpgrades_[i]->isApplied)
 		{

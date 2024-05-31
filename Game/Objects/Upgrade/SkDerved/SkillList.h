@@ -10,3 +10,8 @@
 #include "Skill_HPUp.h"
 #include "EXLifeFlag.h"
 #include "BlowOffFlag.h"
+#include "Skill_MomentTimeDown1.h"
+#include "Skill_MomentTimeDown2.h"
+#include "Skill_PenetrationFlag.h"
+#include "Skill_RadiusLevelUp.h"
+#include "Skill_BurningFlag.h"

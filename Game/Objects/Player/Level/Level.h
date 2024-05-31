@@ -39,6 +39,12 @@ private: //*** プライベート関数 ***//
 	// レベルアップ
 	void LevelUp();
 
+	// レベルアップ時の必要経験値量を計算する関数
+	float GetRequestEXP() const
+	{
+		return 5.0f + (lv_ - 1) * 2;
+	}
+
 #ifdef DEMO
 
 	void DebugWindow();

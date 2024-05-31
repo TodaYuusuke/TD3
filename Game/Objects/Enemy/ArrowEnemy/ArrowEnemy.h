@@ -24,6 +24,7 @@ public:// パブリックなメンバ関数
 	/// Getter
 
 	/// Setter
+	void SetEnemyHP(int stage) override;
 
 private:// プライベートなメンバ関数
 

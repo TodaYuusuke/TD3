@@ -13,7 +13,7 @@ void NormalEnemy::Init()
 	attackWaitTime_ = kAttackWaitTime;
 
 	// HP を設定
-	hp_ = 20;
+	hp_ = 40;
 }
 
 void NormalEnemy::Update()
@@ -72,6 +72,11 @@ void NormalEnemy::SetPosition(lwp::Vector3 pos)
 	models_[Model::Body].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 	// 出現時にパーティクルを出す
 	SetSpawnEffect(models_[0].transform.translation);
+}
+
+void NormalEnemy::SetEnemyHP(int stage)
+{
+	hp_ = 40 * (1 + (stage * 0.5f));
 }
 
 void NormalEnemy::Move()

@@ -10,7 +10,7 @@ namespace L
 	{
 	private:
 		// 変化させる値
-		float var = 0.0f;
+		Paramete var = 0.0f;
 	public:
 		/// <summary>
 		/// 純粋な攻撃距離アップ！（定数）
@@ -18,7 +18,8 @@ namespace L
 		/// <para>受け取った値によって読み込む画像を変えたい</para>
 		/// </summary>
 		/// <param name="v">プラスでもマイナスでもいい</param>
-		AttackLengthDelta(float v = 2.0f) : var(v) {};
+		AttackLengthDelta(float b = 0.0f, float per = 0.0f) : var(b, per) {};
+		AttackLengthDelta(Paramete v) : var(v) {};
 
 
 
@@ -27,12 +28,12 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->Attack.slashLengthDelta.base += var;
+			para->Attack.slashLengthDelta += var;
 		}
 
-		std::string GetUpgradeName() override
+		void GetUpgradeName() override
 		{
-			return "AttackLengthDelta : " + std::to_string(var);
+			ImGui::Text("AttackLength : %.2f, %.2f", var.base, var.percent);
 		}
 	};
 }

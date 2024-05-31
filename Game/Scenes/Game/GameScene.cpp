@@ -90,8 +90,8 @@ void GameScene::Initialize()
 	backSprite_.transform.translation = { 1600.0f,100.f,0.0f };
 	backSprite_.commonColor = new Color(0xAAAAAAFF);
 
-	// いったん3分
-	gameTimer_->Reset(10);
+	// いったん三分
+	gameTimer_->Reset(180);
 	// ゲームが始まってから計測開始
 	gameTimer_->Start();
 
@@ -214,6 +214,9 @@ void GameScene::Update()
 
 		//mainCamera->transform = followCamera_->camera_.transform;
 
+		// アップグレード関係は敵の前に更新させる
+		upgradeManager_->Update(player_.get());
+
 		enemyManager_->Update();
 
 		// 敵が死んだときに出てくるので敵の更新の後
@@ -223,7 +226,8 @@ void GameScene::Update()
 	}
 	else
 	{
-		upgradeManager_->Update(player_.get());
+		// アップグレード選択中
+		upgradeManager_->Selecting(player_.get());
 	}
 }
 

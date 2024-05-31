@@ -17,10 +17,12 @@ void L::ISkill::Init()
 	isApplied = false;
 }
 
-void L::ISkill::Update()
+void L::ISkill::BaseUpdate()
 {
 	// スプライトの描画を消す
 	sprite_.isActive = false;
+	// 継承されているものを呼び出す
+	Update();
 }
 
 void L::ISkill::ShowUI(const LWP::Math::Vector2& pos)
@@ -37,7 +39,8 @@ void L::ISkill::DebugTree()
 	{
 		for (IUpgrade* up : attackUpgrades_)
 		{
-			ImGui::Text(up->GetUpgradeName().c_str());
+			//ImGui::Text(up->GetUpgradeName().c_str());
+			up->GetUpgradeName();
 		}
 		ImGui::TreePop();
 		ImGui::Separator();

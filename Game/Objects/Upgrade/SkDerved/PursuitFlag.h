@@ -26,12 +26,12 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->pursuitFlag = true;
+			para->Flag.pursuitFlag = true;
 		}
 
 		std::string GetTexturePass() override
 		{
-			return "powerUp/Pursuit.png";
+			return "Skill/Pursuit.png";
 		}
 
 		std::string GetUpgradeName() override

@@ -155,7 +155,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game\Objects\Player\Level\ExpBar.cpp" />
+    <ClCompile Include="Game\Objects\Upgrade\Function\Burning\Burning.cpp" />
     <ClCompile Include="Game\Objects\Upgrade\Function\EXLife\EXLife.cpp" />
+    <ClCompile Include="Game\Objects\Player\HitCheck\HitCheck.cpp" />
+    <ClCompile Include="Game\Objects\Upgrade\Function\Penetration\Penetration.cpp" />
     <ClCompile Include="Game\Scenes\GameOver\GameOverScene.cpp" />
     <ClCompile Include="Game\Scenes\Clear\ClearScene.cpp" />
     <ClCompile Include="Game\Scenes\Game\GameScene.cpp" />
@@ -198,16 +201,32 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Objects\Player\Level\ExpBar.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Function\Burning\Burning.h" />
     <ClInclude Include="Game\Objects\Upgrade\Function\EXLife\EXLife.h" />
+    <ClInclude Include="Game\Objects\Player\HitCheck\HitCheck.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Function\FuncList.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Function\IFunction.h" />
+    <ClInclude Include="Game\Objects\Upgrade\Function\Penetration\Penetration.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\BlowOffFlag.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\EXLifeFlag.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\PursuitFlag.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_AttackLengthUp.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_AttackRangeUp.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_BurningFlag.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_DamageInvincibleAdd.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_HPUp.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_MomentTimeDown1.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_MomentTimeDown2.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PenetrationFlag.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp2.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp3.h" />
+    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_RadiusLevelUp.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\AttackLengthDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\BurningPowerDelta.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\InvincibleDamageDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\MomentTimeDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\PursuitPowerDelta.h" />
+    <ClInclude Include="Game\Objects\Upgrade\UpDerved\RadiusLevelDelta.h" />
     <ClInclude Include="Game\Scenes\GameOver\GameOverScene.h" />
     <ClInclude Include="Game\Scenes\Clear\ClearScene.h" />
     <ClInclude Include="Game\Scenes\Game\GameScene.h" />
@@ -231,13 +250,9 @@
     <ClInclude Include="Game\Objects\Player\Status\Derived\Moment.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Slash.h" />
     <ClInclude Include="Game\Objects\Player\Status\IStatus.h" />
-    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp3.h" />
-    <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp2.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\Skill_PowerUp1.h" />
     <ClInclude Include="Game\Objects\Upgrade\SkDerved\SkillList.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\AllSpeedDelta.h" />
-    <ClInclude Include="Game\Objects\Upgrade\UpDerved\AllSpeedPerDelta.h" />
-    <ClInclude Include="Game\Objects\Upgrade\UpDerved\PowerPerDelta.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\PowerDelta.h" />
     <ClInclude Include="Game\Objects\Player\Motion\IStatus.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpDerved\AttackRangeDelta.h" />

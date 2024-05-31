@@ -10,6 +10,7 @@ void PlayerConfig::Initialize()
 	InitCount();
 	InitParcentage();
 	InitPower();
+	InitOther();
 }
 
 void PlayerConfig::InitSpeed()
@@ -46,6 +47,7 @@ void PlayerConfig::InitCount()
 	Count_.SLASHRELATIONBASE_ = 1u;
 	Count_.BASEHP_ = 5u;
 	Count_.MAXHP_ = 5u;
+	Count_.UPGRADEPENETORATIONNUM_ = 5u;
 }
 
 void PlayerConfig::InitParcentage()
@@ -55,5 +57,12 @@ void PlayerConfig::InitParcentage()
 
 void PlayerConfig::InitPower()
 {
-	Power_.BASEPOWER_ = 10.0f;
+	Power_.BASEPOWER_ = 20.0f;
+	Power_.BASEBURNING = 2.0f;
+	Power_.BASEPURSUIT = 20.0f;
+}
+
+void PlayerConfig::InitOther()
+{
+	Other_.RADIUSLEVEL_ = 4.0f;
 }

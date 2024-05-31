@@ -43,8 +43,8 @@ void ExpBar::Initialize()
 	subSprite1.transform.scale.x = (kBarSize_.x + 20.0f) / preSize_.x;
 	subSprite1.transform.scale.y = (kBarSize_.y + 20.0f) / preSize_.y;
 	//subSprite2.transform.scale = size * subScale;
-	subSprite2.transform.scale.x = (kBarSize_.x + 10.0f) / preSize_.x;
-	subSprite2.transform.scale.y = (kBarSize_.y + 10.0f) / preSize_.y;
+	subSprite2.transform.scale.x = (kBarSize_.x) / preSize_.x;
+	subSprite2.transform.scale.y = (kBarSize_.y) / preSize_.y;
 	mainSprite.transform.scale = size;
 	mainSprite.transform.scale.x = 0.0f;
 

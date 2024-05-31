@@ -18,35 +18,6 @@ public:
 		_COUNT,		// カウント用
 	};
 
-private:
-
-	struct Range
-	{
-		lwp::Vector3 start_;
-		lwp::Vector3 end_;
-	};
-
-	// 共通データ
-	struct BaseData
-	{
-		Range scale_;
-		Range rotate_;
-		Range translate_;
-	};
-
-	struct RootData : public BaseData
-	{
-
-	};
-	struct SlashData : public BaseData
-	{
-
-	};
-	struct MomentData : public BaseData
-	{
-
-	};
-
 public: //*** パブリック関数 ***//
 
 	// コンストラクタ
@@ -65,7 +36,7 @@ public:	//*** セッター,ゲッター ***//
 	void SetParent(lwp::TransformEuler* p) { demoModel_.transform.Parent(p); }
 
 	void SetIsActive(bool flag) { demoModel_.isActive = flag; }
-	void SetTPointer(float* p) { pT_ = p; }
+	//void SetTPointer(float* p) { pT_ = p; }
 
 	void SetBehavior(Behavior b) { reqBehavior_ = b; }
 
@@ -82,19 +53,7 @@ private: //*** プライベート関数 ***//
 	void UpdateSlash();
 	void UpdateMoment();
 
-	void InitDatas();
-	void InitRootData();
-	void InitSlashData();
-	void InitMomentData();
-
 private: //*** プライベート変数 ***//
-
-	//*** 外部からのデータ ***//
-
-	// 状態のデータ
-	RootData rootData_;
-	SlashData slashData_;
-	MomentData momentData_;
 
 
 	//*** 計算用 ***//
@@ -102,9 +61,10 @@ private: //*** プライベート変数 ***//
 	// モデル
 	lwp::Mesh demoModel_;
 
+	lwp::Vector3 prePos_ = { 0.0f,0.0f,0.0f };
+
 	// イージング用
-	// 外部からの T を参照
-	float* pT_ = nullptr;
+	float t_ = 0.0f;
 
 	// 状態
 	Behavior behavior_ = Behavior::Root;

@@ -18,7 +18,8 @@ class IEnemy
 {
 protected:
 	// 体のパーツ
-	enum BodyParts {
+	enum BodyParts
+	{
 		BODY,
 		L_ARM,
 		R_ARM,
@@ -88,6 +89,15 @@ public: //*** ゲッターセッター ***//
 
 	lwp::Vector3 GetPosition()const { return models_[0].transform.translation; }
 
+	// 敵の添え字
+	uint32_t GetIndex() const { return index_; }
+	/// <summary>
+	/// 敵の HP を設定する
+	/// <para>段階ごとに HP を分ける</para>
+	/// </summary>
+	/// <param name="stage">0 ~ n 最大は後で決める</param>
+	virtual void SetEnemyHP(int stage) { hp_ = 20 * (1 + (stage * 0.5f)); }
+
 	// 狙う対象をセット(今回は自機をセットする)
 	virtual void SetTarget(Player* player) { player_ = player; }
 	virtual void SetPosition(lwp::Vector3 pos) { models_[0].transform.translation = pos; }
@@ -95,7 +105,8 @@ public: //*** ゲッターセッター ***//
 	// カメラのアドレスを設定
 	virtual void SetCamera(FollowCamera* camera) { followCamera_ = camera; }
 	void SetManager(ExpManager* p) { manager_ = p; }
-	void SetSpawnEffect(lwp::Vector3 pos) {
+	void SetSpawnEffect(lwp::Vector3 pos)
+	{
 		// 出現時にパーティクルを出す
 #ifdef DEMO
 		spawnEffect_(8, models_[0].transform.translation);
@@ -194,7 +205,7 @@ protected:
 	// 初期化の時に設定する
 	// 今のフェーズ数とかを参照できれば可変にできる？
 	// 初期値を 20 くらいにしといて、プレイヤーの攻撃力が上がっても対応させるようにしたい
-	int hp_ = 1;
+	int hp_ = 20;
 
 
 	// 攻撃に当たった時の無敵時間(活動できない)を発生させる
@@ -237,6 +248,11 @@ protected:
 	// 出現時の光の柱
 	LWP::Primitive::Billboard2D lightPillar_;
 	LWP::Resource::Motion lightPillarMotion_;
+
+	// 敵が何番目かを取得できるようにする
+	static uint32_t staticIndex_;
+	uint32_t index_ = 0u;
+
 
 	//音
 public:

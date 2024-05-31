@@ -26,6 +26,7 @@ public:// パブリックなメンバ関数
 	// 自機との方向ベクトルを算出(返り値は正規化している)
 	LWP::Math::Vector3 GetDirectVel();
 
+	void SetEnemyHP(int stage) override;
 private:// プライベートなメンバ関数
 	//*** 純粋仮想関数 ***//
 	// 移動

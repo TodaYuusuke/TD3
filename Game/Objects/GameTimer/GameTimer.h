@@ -53,7 +53,16 @@ public: //*** パブリック関数 ***//
 	/// <summary>
 	/// 経過秒数を取得
 	/// </summary>
-	uint32_t GetCurrentSecond() { return currentSec_; }
+	uint32_t GetCurrentSecond() const { return currentSec_; }
+	/// <summary>
+	/// 耐久秒数を取得
+	/// </summary>
+	uint32_t GetLimitSecond() const { return limitSec_; }
+	/// <summary>
+	/// 耐久する時間と経過した時間で t を得る
+	/// </summary>
+	/// <returns>t : 0.0f ~ 1.0f</returns>
+	float GetSecondT() const { return (float)currentSec_ / (float)limitSec_; }
 
 private: //*** プライベート変数 ***//
 
@@ -95,7 +104,7 @@ private: //*** プライベート関数 ***//
 	void DebugWindow();
 
 
-	
+
 
 
 };

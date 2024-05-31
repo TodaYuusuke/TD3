@@ -26,12 +26,12 @@ namespace L
 		/// </summary>
 		void Apply(UpgradeParameter* para) override
 		{
-			para->BlowOffFlag = true;
+			para->Flag.BlowOffFlag = true;
 		}
 
 		std::string GetTexturePass() override
 		{
-			return "powerUp/BlowOff.png";
+			return "Skill/BlowOff.png";
 		}
 
 		std::string GetUpgradeName() override

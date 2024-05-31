@@ -15,7 +15,7 @@ void ShieldEnemy::Init()
 	attackWaitTime_ = kAttackWaitTime;
 
 	// HP を設定
-	hp_ = 30;
+	hp_ = 60;
 }
 
 void ShieldEnemy::Update()
@@ -66,6 +66,11 @@ void ShieldEnemy::SetPosition(lwp::Vector3 pos)
 	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 	// 出現時にパーティクルを出す
 	SetSpawnEffect(models_[0].transform.translation);
+}
+
+void ShieldEnemy::SetEnemyHP(int stage)
+{
+	hp_ = 60 * (1 + (stage * 0.5f));
 }
 
 void ShieldEnemy::Move()

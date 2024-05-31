@@ -19,7 +19,7 @@ void ArrowEnemy::Init()
 	attackWaitTime_ = kAttackWaitTime;
 
 	// HP を設定
-	hp_ = 10;
+	hp_ = 20;
 }
 
 void ArrowEnemy::Update()
@@ -91,6 +91,11 @@ void ArrowEnemy::SetPosition(lwp::Vector3 pos)
 	models_[0].transform.translation = pos + player_->GetWorldTransform()->GetWorldPosition();
 	// 出現時にパーティクルを出す
 	SetSpawnEffect(models_[0].transform.translation);
+}
+
+void ArrowEnemy::SetEnemyHP(int stage)
+{
+	hp_ = 20 * (1 + (stage * 0.5f));
 }
 
 void ArrowEnemy::Move()

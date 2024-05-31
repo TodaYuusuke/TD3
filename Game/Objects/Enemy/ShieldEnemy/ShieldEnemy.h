@@ -8,6 +8,7 @@ public:
 	void Update()override;
 	void SetPosition(lwp::Vector3 pos)override;
 
+	void SetEnemyHP(int stage) override;
 private:
 	void Move()override;
 	void Attack()override;
