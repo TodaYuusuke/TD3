@@ -273,15 +273,13 @@ public: //*** プライベート変数 ***//
 	// これは通常移動くらいでしか使わない
 	LWP::Math::Vector3 destinate_ = { 0.0f,0.0f,1.0f };
 
-	// 秒数
-	float t = 0.0f;
-	// イージング
-	float easeT_ = 0.0f;
 	// 無敵時間まで加算
 	float invincibleTime_ = 0.0f;
 	// 全体の無敵時間
 	float maxInvincibleTime_ = 0.0f;
 
+	//移動制御
+	static float MoveMax;
 
 	// 居合攻撃を描画
 	std::unique_ptr<SlashPanel> slashPanel_;

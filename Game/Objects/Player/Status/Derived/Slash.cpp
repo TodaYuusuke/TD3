@@ -58,16 +58,19 @@ void Slash::Reset()
 
 void Slash::Update()
 {
-	// ジャスト中に居合をするか
-	if (player_->flag_.isInputSlash_ && player_->flag_.isJustSlashing_)
-	{
-		player_->RegistStatus(Behavior::Slash);
-	}
 	// 一定方向を向く
 	lwp::Vector3 moveVector = player_->slashData_.vector_ *
 		player_->parameter_.Speed.slash_ * lwp::GetDefaultDeltaTimeF();
 
-	player_->demoModel_.transform.translation += moveVector;
+	lwp::Vector3 nextPoint = player_->demoModel_.transform.translation + moveVector;
+	float length = sqrt(nextPoint.x * nextPoint.x + nextPoint.z * nextPoint.z);
+	if (length < Player::MoveMax) {
+		player_->demoModel_.transform.translation += moveVector;
+	}
+	else if (length > Player::MoveMax) {
+		nextPoint = nextPoint.Normalize();
+		player_->demoModel_.transform.translation = nextPoint * Player::MoveMax;
+	}
 
 	// 武器の判定を伸ばす
 	player_->colliders_.weapon_.end =

@@ -25,21 +25,13 @@ void Idol::Reset()
 	// 最大数もリセット
 	player_->slashData_.maxRelation_ = player_->parameter_.Attack.slashNum_;
 
-	//slashData_.maxRelation_ = slashData_.cMAXRELATION_;
-	//player_->slashData_.maxRelation_ = player_->config_.Count_.SLASHRELATIONMAX_;
 	player_->weapon_->SetBehavior(Weapon::Behavior::Root);
 
 	// アニメーション作成
-	//CreateMotions();
 }
 
 void Idol::Update()
 {
-	// 移動に向かう
-	/*if (player_->flag_.isInputMove_)
-	{
-		player_->RegistStatus(Behavior::Move);
-	}*/
 	// 居合するか
 	if (player_->flag_.isInputSlash_)
 	{
@@ -56,14 +48,20 @@ void Idol::Update()
 
 		// パラメータも使う
 		moveVector *= player_->parameter_.Speed.move_ * lwp::GetDeltaTimeF();
-
-		player_->demoModel_.transform.translation += moveVector;
+		lwp::Vector3 nextPoint = player_->demoModel_.transform.translation + moveVector;
+		float length = sqrt(nextPoint.x * nextPoint.x + nextPoint.z * nextPoint.z);
+		if (length < Player::MoveMax) {
+			player_->demoModel_.transform.translation += moveVector;
+		}
+		else if (length > Player::MoveMax) {
+			nextPoint = nextPoint.Normalize();
+			player_->demoModel_.transform.translation = nextPoint * Player::MoveMax;
+		}
 	}
 
 	// 経過時間を加算
 	elapsedTime_ += lwp::GetDeltaTimeF();
-	if (EndTime_ <= elapsedTime_)
-	{
+	if (EndTime_ <= elapsedTime_){
 		player_->RegistStatus(Behavior::Root);
 	}
 	

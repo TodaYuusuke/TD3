@@ -43,7 +43,15 @@ void Moment::Update()
 		// パラメータも使う
 		moveVector *= player_->parameter_.Speed.moment_ * (float)lwp::GetDeltaTime();
 
-		player_->demoModel_.transform.translation += moveVector;
+		lwp::Vector3 nextPoint = player_->demoModel_.transform.translation + moveVector;
+		float length = sqrt(nextPoint.x * nextPoint.x + nextPoint.z * nextPoint.z);
+		if (length < Player::MoveMax) {
+			player_->demoModel_.transform.translation += moveVector;
+		}
+		else if (length > Player::MoveMax) {
+			nextPoint = nextPoint.Normalize();
+			player_->demoModel_.transform.translation = nextPoint * Player::MoveMax;
+		}
 	}
 
 	// 経過時間を加算

@@ -101,4 +101,6 @@ private:
 	std::unique_ptr<LWP::Resource::Audio> PlayerAlive;
 	std::unique_ptr<LWP::Resource::Audio> EnemyDamege;
 	std::unique_ptr<LWP::Resource::Audio> EnemyDead;
+
+	float UVscale = 1.0f;
 };

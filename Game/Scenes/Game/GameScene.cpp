@@ -45,7 +45,7 @@ void GameScene::Initialize()
 	ground.transform.scale = { 10.0f,0.1f, 10.0f };
 	ground.name = "Ground";
 	ground.material.enableLighting = true;
-	ground.material.uvTransform.scale = { 20,20,0 };
+	ground.material.uvTransform.scale = { 1.0f,1.0f,0 };
 
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
@@ -102,8 +102,8 @@ void GameScene::Initialize()
 
 	// 点光源
 	sun_.transform.translation.y = 30.0f;
-	sun_.intensity = 2.0f;
-	sun_.radius = 120.0f;
+	sun_.intensity = 1.0f;
+	sun_.radius = 105.0f;
 	sun_.decay = 0.58f;
 
 	sceneTransition_ = std::make_unique<SceneTransition>();
@@ -120,6 +120,14 @@ void GameScene::Initialize()
 // 更新
 void GameScene::Update()
 {
+
+	ImGui::Begin("GraundScale");
+	UVscale = ground.material.uvTransform.scale.x;
+	ImGui::DragFloat("UVscale",&UVscale);
+	ground.material.uvTransform.scale.x = UVscale;
+	ground.material.uvTransform.scale.y = UVscale;
+
+	ImGui::End();
 
 	//だんだん音が上がる
 	if (BGMt != 1.0f && IsSceneChangeEnd == true) {

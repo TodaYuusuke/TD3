@@ -195,7 +195,6 @@
     <ClCompile Include="Game\Objects\UIPanel\UIPanel.cpp" />
     <ClCompile Include="Game\Objects\Player\SlashPanel.cpp" />
     <ClCompile Include="Game\Objects\Upgrade\UpgradeManager.cpp" />
-    <ClCompile Include="Game\Objects\Player\Status\Derived\Move.cpp" />
     <ClCompile Include="Game\Objects\Player\HP\PlayerHP.cpp" />
     <ClCompile Include="Game\Objects\Enemy\Boss\JumpBoss.cpp" />
     <ClCompile Include="Game\SceneTransition\SceneTransition.cpp" />
@@ -275,7 +274,6 @@
     <ClInclude Include="Game\Objects\Upgrade\IUpgrade.h" />
     <ClInclude Include="Game\Objects\Upgrade\UpgradeManager.h" />
     <ClInclude Include="Game\Objects\Player\Status\Derived\Idol.h" />
-    <ClInclude Include="Game\Objects\Player\Status\Derived\Move.h" />
     <ClInclude Include="Game\Objects\Player\HP\PlayerHP.h" />
     <ClInclude Include="Game\Objects\Player\HP\HPSprite.h" />
     <ClInclude Include="Game\Objects\Enemy\ArrowEnemy\Arrow\HomingArrow.h" />

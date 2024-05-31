@@ -6,7 +6,6 @@
 #include "Game/Objects/GameMask.h"
 
 #include "Status/Derived/Idol.h"
-#include "Status/Derived/Move.h"
 #include "Status/Derived/Slash.h"
 #include "Status/Derived/Moment.h"
 #include "Status/Derived/Damage.h"
@@ -15,6 +14,7 @@ using Behavior = IStatus::Behavior;
 using namespace LWP;
 using namespace LWP::Utility;
 using namespace LWP::Object::Collider;
+float Player::MoveMax = 100.0f;
 
 void Player::Initialize()
 {
@@ -137,15 +137,12 @@ void Player::Update()
 	if (reqBehavior_)
 	{
 		behavior_ = reqBehavior_.value();
-		t = 0.0f;
-		easeT_ = 0.0f;
 		currStatus_ = statuses_[static_cast<size_t>(behavior_)];
 		currStatus_->Reset();
 		reqBehavior_ = std::nullopt;
 	}
 	// 状態の更新
 	currStatus_->Update();
-	t += (float)lwp::GetDeltaTime();
 	weapon_->Update();
 	slashPanel_->Update();
 
@@ -164,10 +161,8 @@ void Player::Update()
 		eXLifeFlag = eXLife_->Update();
 	}
 
-
 	// 経験値が更新された後かと思ったけど別にプレイヤーの更新が終わった後ならどこでもいい
 	level_->Update();
-
 
 	//*** ここから下はフラグによって管理されている ***//
 
@@ -193,10 +188,6 @@ void Player::Update()
 	}
 	// 無敵なのかどうか判断
 	colliders_.player_.isActive = !flag_.isInvincible_;
-
-	// 移動制限
-	demoModel_.transform.translation.x = std::clamp<float>(demoModel_.transform.translation.x, -70.0f, 70.0f);
-	demoModel_.transform.translation.z = std::clamp<float>(demoModel_.transform.translation.z, -70.0f, 70.0f);
 }
 
 void Player::IncreaseHP()
@@ -209,7 +200,7 @@ void Player::DecreaseHP()
 	if (parameter_.DecreaseHP())
 	{
 		flag_.isAlive_ = false;
-		GameTimer::GetInstance()->isEnd_ = true;;
+		GameTimer::GetInstance()->isEnd_ = true;
 		demoModel_.isActive = true;
 		flag_.isInvincible_ = false;
 		gameOverMotion_.Start();
@@ -738,8 +729,6 @@ void Player::DebugBehavior()
 		default:
 			break;
 		}
-
-		ImGui::Text("t : %.3f", t);
 
 		ImGui::TreePop();
 		ImGui::Separator();

@@ -65,6 +65,6 @@ protected: // ** 派生先用のメンバ変数 ** //
 	// この行動に入ってからの時間
 	float elapsedTime_ = 0.0f;
 	// この行動が終わる時間
-	float EndTime_ = 0.0f;
+	float EndTime_ = 100.0f;
 
 };
