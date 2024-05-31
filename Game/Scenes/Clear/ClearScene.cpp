@@ -15,7 +15,8 @@ void ClearScene::Initialize()
 	// 画面全体
 	backSprite_[0].texture = Resource::LoadTexture("backGround.png");
 	backSprite_[1].texture = Resource::LoadTexture("Text/GameClear.png");
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 2; i++)
+	{
 		backSprite_[i].isUI = true;
 		backSprite_[i].isActive = true;
 	}
@@ -23,7 +24,7 @@ void ClearScene::Initialize()
 	//Vector2 spSize = backSprite_.texture.t.GetSize();
 	//backSprite_.transform.scale.x = 1.0f / spSize.x * 1980.0f;
 	//backSprite_.transform.scale.y = 1.0f / spSize.y * 1080.0f;
-	
+
 	// ボタン選択
 	toTitleSprite_.texture = Resource::LoadTexture("Text/BackForTitle.png");
 	toTitleSprite_.anchorPoint = { 0.5f,0.5f };
@@ -89,23 +90,33 @@ void ClearScene::Update()
 #endif // DEMO
 
 	//だんだん音が上がる
-	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
+	if (BGMt != 1.0f && IsSceneChangeEnd == true)
+	{
 		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
 		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
 	}
-	else {
+	else
+	{
 		IsSceneChangeEnd = false;
 	}
 
 	// 選択肢を与える
-	// 左
-	if (Keyboard::GetTrigger(DIK_W) || Keyboard::GetTrigger(DIK_UP) || Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_UP)){
+	// 上
+	if (Keyboard::GetTrigger(DIK_W) ||
+		Keyboard::GetTrigger(DIK_UP) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_UP) ||
+		0.0f < Pad::GetLStick().y)
+	{
 		choise_ = 0;
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
 		serectSE->Play();
 	}
-	//　右
-	else if (Keyboard::GetTrigger(DIK_S) || Keyboard::GetTrigger(DIK_DOWN) || Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN)){
+	//　下
+	else if (Keyboard::GetTrigger(DIK_S) ||
+		Keyboard::GetTrigger(DIK_DOWN) ||
+		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN) ||
+		Pad::GetLStick().y < 0.0f)
+	{
 		choise_ = 1;
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f + spriteWidth + spriteOffset;
 		serectSE->Play();
@@ -115,13 +126,15 @@ void ClearScene::Update()
 	if (Keyboard::GetTrigger(DIK_SPACE) ||
 		Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
-		if (IsSceneChangeBegin == false) {
+		if (IsSceneChangeBegin == false)
+		{
 			chooseSE->Play();
 		}
 		sceneTransition_->Start();
 		IsSceneChangeBegin = true;
 	}
-	if (IsSceneChangeBegin == true) {
+	if (IsSceneChangeBegin == true)
+	{
 		//だんだん音が下がる
 		BGMt = (std::min)(BGMt + 0.05f, 1.0f);
 		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
@@ -131,13 +144,16 @@ void ClearScene::Update()
 
 	sceneTransition_->Update();
 
-	if (sceneTransition_->GetIsSceneChange()) {
-		if (choise_ == 0) {
+	if (sceneTransition_->GetIsSceneChange())
+	{
+		if (choise_ == 0)
+		{
 			BGM->Stop();
 			chooseSE->Stop();
 			nextSceneFunction = []() {return new TitleScene; };
 		}
-		else {
+		else
+		{
 			BGM->Stop();
 			chooseSE->Stop();
 			nextSceneFunction = []() {return new GameScene; };
