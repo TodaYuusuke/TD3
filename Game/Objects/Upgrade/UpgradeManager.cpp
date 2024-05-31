@@ -120,9 +120,9 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 
 	//SE
 	serectSE = std::make_unique<LWP::Resource::Audio>();
-	serectSE->Load("fanfare.wav");
+	serectSE->Load("menu/cursor.mp3");
 	chooseSE = std::make_unique<LWP::Resource::Audio>();
-	chooseSE->Load("fanfare.wav");
+	chooseSE->Load("menu/PatternA.mp3");
 }
 
 void L::UpgradeManager::Update(Player* player)
@@ -317,15 +317,6 @@ int L::UpgradeManager::ChooseOnce(bool f)
 			// 既に選択しているものは出ない
 			isFind = escapeUpgrades_[rand]->isApplied;
 
-			// 被りが発生しても無理
-			//for (size_t i = 0; i < candidata_.size(); i++)
-			/*{
-				if (candidata_.size() == 2 && candidata_[1] == rand)
-				{
-					isFind = true;
-					break;
-				}
-			}*/
 			// 重なっていたらもう一度抽選
 			if (isFind)
 			{
@@ -369,8 +360,8 @@ void L::UpgradeManager::Selecting(Player* player)
 		if (0 < cursorIndex_ &&
 			(Input::Keyboard::GetTrigger(DIK_A) ||
 				Input::Keyboard::GetTrigger(DIK_LEFT) ||
-				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_LEFT ||
-					0.0f < stick.x)))
+				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_LEFT) ||
+					0.0f > stick.x))
 		{
 			serectSE->Play();
 			cursorIndex_--;
@@ -379,8 +370,8 @@ void L::UpgradeManager::Selecting(Player* player)
 		if (cursorIndex_ < kUpgradNum_ &&
 			(Input::Keyboard::GetTrigger(DIK_D) ||
 				Input::Keyboard::GetTrigger(DIK_RIGHT) ||
-				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_RIGHT ||
-					stick.x < 0.0f)))
+				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_RIGHT) ||
+					stick.x > 0.0f))
 		{
 			serectSE->Play();
 			cursorIndex_++;
@@ -407,10 +398,6 @@ void L::UpgradeManager::Selecting(Player* player)
 	}
 	else
 	{
-		////だんだん音が下がる
-		//BGMt = (std::min)(BGMt + 0.01f, 1.0f);
-		//SEvolume = Lerp(SEvolume, 0.0f, BGMt);
-		//chooseSE->SetVolume(SEvolume);
 		isPress_ = false;
 		pressTime_ = 0.0f;
 		sprite_.transform.scale = { 1,1,1 };
@@ -435,7 +422,7 @@ void L::UpgradeManager::Selecting(Player* player)
 				selectedMotion_.Start();
 			}
 			isSelected_ = true;
-			sprite_.isActive = false;
+         	sprite_.isActive = false;
 			pressTime_ = 0.0f;
 		}
 	}
@@ -475,12 +462,17 @@ void L::UpgradeManager::Selecting(Player* player)
 void L::UpgradeManager::Selected()
 {
 	// 選択されたアップグレードを適応させる
-	if (choiceIndex_ == 0)
+	
+	if (choiceIndex_ == 0){
 		attackUpgrades_[candidata_[choiceIndex_]]->isApplied = true;
-	else
+		upgradedConut_++;
+		sprite_.isActive = false;
+	}
+	else {
 		escapeUpgrades_[candidata_[choiceIndex_]]->isApplied = true;
-	upgradedConut_++;
-	sprite_.isActive = false;
+		upgradedConut_++;
+		sprite_.isActive = false;
+	}
 }
 
 void L::UpgradeManager::Apply(Player* player)
