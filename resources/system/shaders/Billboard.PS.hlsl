@@ -14,7 +14,7 @@ float32_t4 main(VertexShaderOutput input) : SV_TARGET
     output = input.color * gTexture[t].Sample(gSampler, transformUV.xy);
 
     // 透明なら消す
-    if (output.a <= 0.5f) { discard; }
+    if (output.a <= 0.0f) { discard; }
 
     return output;
 }
