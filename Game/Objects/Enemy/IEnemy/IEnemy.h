@@ -246,8 +246,15 @@ protected:
 	static std::function<void(int, lwp::Vector3)> accumulateEffect_;
 
 	// 出現時の光の柱
-	LWP::Primitive::Billboard3D lightPillar_;
+	LWP::Primitive::Billboard2D lightPillar_;
 	LWP::Resource::Motion lightPillarMotion_;
+
+	//音
+public:
+	void SetSE(LWP::Resource::Audio* input) { damege = input; };
+private:
+	LWP::Resource::Audio* damege;
+	float soundVolume = 1.0f;
 
 	// 敵が何番目かを取得できるようにする
 	static uint32_t staticIndex_;

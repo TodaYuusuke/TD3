@@ -422,7 +422,6 @@ void ArrowBoss::B_HomingShotUpdate() {
 	// 既定の時間を過ぎたら攻撃終了
 	if (shotFrame_ <= 0) {
 		behaviorRequest_ = Behavior::kRoot;
-		//followCamera_->EndEffectFov();
 	}
 
 	shotDelay_--;

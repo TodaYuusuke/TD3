@@ -22,6 +22,7 @@ void EnemyManager::Init()
 	tutorialEnemy_->SetIsTutorial(true);
 	tutorialEnemy_->SetHP(10);
 	tutorialEnemy_->SetManager(exp_);
+	tutorialEnemy_->SetSE(audio[0]);
 	enemys_.push_back(tutorialEnemy_);
 }
 
@@ -61,9 +62,11 @@ void EnemyManager::Update()
 	DebugWindow();
 #endif
 
-	enemys_.remove_if([](IEnemy* enemy) {
+	enemys_.remove_if([this](IEnemy* enemy) {
 		if (!enemy->GetIsActive())
 		{
+			audio[1]->Play();
+			//TODO　:　ここにSEを挿入すれば死亡時に音が出せる
 			delete enemy;
 			return true;
 		}
@@ -143,20 +146,28 @@ void EnemyManager::BossSpawn()
 	float PtoE = distribution2(randomEngine);
 	lwp::Vector3 pos = { PtoE * divideX , 1.5f , PtoE * divideZ * signY };
 
-	// 1分
+	// 30秒
 	// ダッシュボスを出現
+	if (gameTimer_->GetCurrentSecond() == 30 && !isBossSpawn_) {
 	if (gameTimer_->GetCurrentSecond() == 01 && !isBossSpawn_)
 	{
 		DashBossSpawn(pos);
 		//ArrowBossSpawn(pos);
 		isBossSpawn_ = true;
 	}
+	// 1分
+	else if (gameTimer_->GetCurrentSecond() == 60 && isBossSpawn_) {
+		DashBossSpawn(pos);
+		//ArrowBossSpawn(pos);
+		isBossSpawn_ = false;
+	}
 	// 2分
 	// ホーミング弾を撃つボスを出現
+	else if (gameTimer_->GetCurrentSecond() == 120 && !isBossSpawn_) {
 	else if (gameTimer_->GetCurrentSecond() == 120 && isBossSpawn_)
 	{
 		ArrowBossSpawn(pos);
-		isBossSpawn_ = false;
+		isBossSpawn_ = true;
 	}
 }
 
@@ -168,6 +179,7 @@ void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos)
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
+	enemy->SetSE(audio[0]);
 	enemy->SetEnemyHP(GetCurrentStage());
 	enemys_.push_back(enemy);
 }
@@ -179,6 +191,7 @@ void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos)
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
+	enemy->SetSE(audio[0]);
 	enemy->SetEnemyHP(GetCurrentStage());
 	enemys_.push_back(enemy);
 }
@@ -190,6 +203,7 @@ void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos)
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
 	enemy->SetManager(exp_);
+	enemy->SetSE(audio[0]);
 	enemy->SetEnemyHP(GetCurrentStage());
 	enemys_.push_back(enemy);
 }
@@ -202,6 +216,7 @@ void EnemyManager::DashBossSpawn(lwp::Vector3 pos)
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
+	boss->SetSE(audio[0]);
 	boss->SetEnemyHP(GetCurrentStage());
 	enemys_.push_back(boss);
 }
@@ -214,6 +229,7 @@ void EnemyManager::ArrowBossSpawn(lwp::Vector3 pos)
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
+	boss->SetSE(audio[0]);
 	boss->SetEnemyHP(GetCurrentStage());
 	enemys_.push_back(boss);
 }
@@ -226,6 +242,7 @@ void EnemyManager::JumpBossSpawn(lwp::Vector3 pos)
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
 	boss->SetManager(exp_);
+	boss->SetSE(audio[0]);
 	enemys_.push_back(boss);
 }
 

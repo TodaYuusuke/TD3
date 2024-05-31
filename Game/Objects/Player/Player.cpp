@@ -16,7 +16,6 @@ using namespace LWP;
 using namespace LWP::Utility;
 using namespace LWP::Object::Collider;
 
-
 void Player::Initialize()
 {
 	// モデル読み込み
@@ -91,6 +90,15 @@ void Player::Initialize()
 		.Add(&demoModel_.transform.rotation, lwp::Vector3{ 0, 15, 0 }, 0, 2.0f, LWP::Utility::Easing::Type::InQuint);
 	// 土飛沫のパーティクル
 	InitStaticVariable();
+
+	// 光の柱
+	lightPillarMotion_.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ 1.5f,1.5f,1.5f }, 0, 0.1f)
+		.Add(&lightPillar_.transform.scale, LWP::Math::Vector3{ -1.5f,-1.5f,-1.5f }, 0.1f, 0.1f);
+	// 出現時の光の柱
+	lightPillar_.texture = LWP::Resource::LoadTexture("particle/lightPillar.png");
+	lightPillar_.name = "LightPillar";
+	lightPillar_.transform.scale = { 1,100,1 };
+	lightPillar_.isActive = false;
 }
 
 void Player::Update()
@@ -134,7 +142,6 @@ void Player::Update()
 		reqBehavior_ = std::nullopt;
 	}
 	// 状態の更新
-	//statuses_[static_cast<size_t>(behavior_)]->Update();
 	currStatus_->Update();
 	t += (float)lwp::GetDeltaTime();
 	weapon_->Update();
@@ -190,34 +197,6 @@ void Player::Update()
 	demoModel_.transform.translation.z = std::clamp<float>(demoModel_.transform.translation.z, -70.0f, 70.0f);
 }
 
-void Player::StartJust()
-{
-	// ジャスト判定の一瞬のみを取得している
-	flag_.isJustSlashing_ = true;
-	// 無敵時間を加算
-	maxInvincibleTime_ += config_.Time_.JUSTINVINCIBLEADD_;
-	// ここをゲームシーンに変える
-	pScene_->StartJustSlash();
-	// 居合回数獲得(一回のみ)
-	//if (slashData_.maxRelation_ <= slashData_.cMAXRELATION_)
-	// パラメータによって上限を増やしてもいい
-	if (slashData_.maxRelation_ <= (uint32_t)parameter_.Attack.slashNum_)
-	{
-		slashData_.maxRelation_++;
-		slashPanel_->Just();
-	}
-}
-
-void Player::EndJust()
-{
-	//isJustSlashing_ = false;
-	flag_.isJustSlashing_ = false;
-	// 無敵切れは次の居合時にもなる
-	colliders_.player_.isActive = true;
-	// 終了したことを通知
-	pScene_->EndJustSlash();
-}
-
 void Player::IncreaseHP()
 {
 	parameter_.IncreaseHP();
@@ -233,11 +212,6 @@ void Player::DecreaseHP()
 		flag_.isInvincible_ = false;
 		gameOverMotion_.Start();
 	}
-	/*parameter_.Hp.hp_--;
-	if (parameter_.Hp.hp_ <= 0u)
-	{
-		flag_.isAlive_ = false;
-	}*/
 }
 
 void Player::ApplyUpgrade(const UpgradeParameter& para)
@@ -247,14 +221,28 @@ void Player::ApplyUpgrade(const UpgradeParameter& para)
 
 bool Player::ClearAnime()
 {
-	ClearMotion.t += ClearMotion.speed;
-	demoModel_.transform.translation.y += (ClearMotion.speed + (ClearMotion.t - 1) * 2) * LWP::Info::GetDefaultDeltaTimeF();
-
-	if (ClearMotion.t > kClearMotionEnd)
-	{
-		return true;
+	if (ClearYUpMotion.t == 0.0f) {
+		lightPillar_.transform.translation = demoModel_.transform.translation;
+		lightPillar_.isActive = true;
+		lightPillarMotion_.Start();
 	}
 
+	if (ClearYUpMotion.t == 1.0f)
+	{
+		ClearZUpMotion.t = (std::min)(ClearZUpMotion.t + 0.04f, 1.0f);
+		demoModel_.transform.scale.x = Lerp(demoModel_.transform.scale.x, 0.0f, ClearZUpMotion.t);
+		demoModel_.transform.scale.y = Lerp(demoModel_.transform.scale.y, 0.0f, ClearZUpMotion.t);
+		demoModel_.transform.scale.z = Lerp(demoModel_.transform.scale.z, 0.0f, ClearZUpMotion.t);
+		if (ClearZUpMotion.t == 1.0f) {
+			return true;
+		}
+	}
+	else {
+		ClearYUpMotion.t = (std::min)(ClearYUpMotion.t + 0.05f,1.0f);
+		demoModel_.transform.translation.y = Lerp(demoModel_.transform.translation.y,5.0f, ClearYUpMotion.t);
+
+		ClearZUpMotion.targetpoint.y = demoModel_.transform.scale.y;
+	}
 
 	return false;
 }
@@ -269,6 +257,7 @@ bool Player::GameOverAnime()
 			deadEffect_(64, demoModel_.transform.translation);
 			demoModel_.isActive = false;
 			weapon_->SetIsActive(false);
+			audio[1]->Play();
 		}
 	}
 	else
@@ -304,7 +293,6 @@ lwp::Vector3 Player::GetVectorTranspose(const lwp::Vector3& vec)
 
 void Player::CreateCollisions()
 {
-	//CreateJustCollision();
 	CreatePlayerCollision();
 	CreateWeaponCollision();
 }
@@ -346,25 +334,6 @@ void Player::CreateWeaponCollision()
 #endif
 }
 
-void Player::CreateJustCollision()
-{
-	//	// ジャスト居合
-	//	//colliders_.justSlash_ = new LWP::Object::Collider::Capsule();
-	//	colliders_.justSlash_.Create(demoModel_.transform.translation, demoModel_.transform.translation);
-	//	// マスク
-	//	colliders_.justSlash_.mask.SetBelongFrag(GameMask::Player());
-	//	colliders_.justSlash_.mask.SetHitFrag(GameMask::EnemyAttack());
-	//	// ジャスト居合したことを通知
-	//	// 別個で用意した当たった時の関数
-	//	colliders_.justSlash_.SetOnCollisionLambda([this](lwp::Collider::HitData data) {OnCollisionJust(data); });
-	//	// フラグオフ
-	//	colliders_.justSlash_.isActive = false;
-	//
-	//#ifdef DEMO
-	//	colliders_.justSlash_.name = "Just";
-	//#endif
-}
-
 #pragma region OnCollisionFunc
 
 void Player::OnCollisionPlayer(lwp::Collider::HitData& data)
@@ -386,18 +355,7 @@ void Player::OnCollisionWeapon(lwp::Collider::HitData& data)
 	data;
 }
 
-void Player::OnCollisionJust(lwp::Collider::HitData& data)
-{
-	if (!(data.state == OnCollisionState::None) &&
-		!flag_.isJustSlashing_ && data.hit &&
-		(data.hit->mask.GetBelongFrag() & data.self->mask.GetHitFrag()))
-	{
-		StartJust();
-	}
-}
-
 #pragma endregion
-
 
 #pragma endregion
 
@@ -432,6 +390,10 @@ void Player::InitStaticVariable()
 		return newData;
 		};
 	soilSplashParticle_.updateFunction = [](Object::ParticleData* data) {
+		if (Info::GetDeltaTime() == 0.0f) {
+			return false;
+		}
+
 		// 経過フレーム追加
 		data->elapsedFrame++;
 
@@ -600,7 +562,6 @@ void Player::CheckInputSlash()
 		flag_.isInputSlash_ = false;
 }
 
-
 void Player::CheckBehavior()
 {
 	std::optional<Behavior> command = std::nullopt;
@@ -634,24 +595,14 @@ void Player::CheckBehavior()
 		case Behavior::Root:
 			reqBehavior_ = Behavior::Root;
 			break;
-			//case Behavior::Move:
-			//	// 移動は待機状態からの派生とか
-			//	if (behavior_ == Behavior::Root ||
-			//		behavior_ == Behavior::Move)
-			//	{
-			//		reqBehavior_ = Behavior::Move;
-			//	}
-			//	break;
 		case Behavior::Slash:
 			// 居合に入る条件を記述
 			// 最大回数に達していないか
-			if (slashData_.relationSlash_ < slashData_.maxRelation_)
-				// if ((behavior_ != Behavior::Slash || flag_.isJustSlashing_) &&
-				//	slashData_.relationSlash_ < slashData_.maxRelation_)
-			{
+			if (slashData_.relationSlash_ < slashData_.maxRelation_){
 				reqBehavior_ = Behavior::Slash;
 				slashPanel_->Slash();
 				soilSplashEffect_(16, demoModel_.transform.translation);
+				audio[0]->Play(soundVolume);
 			}
 			break;
 		case Behavior::Moment:

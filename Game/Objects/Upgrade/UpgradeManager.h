@@ -128,6 +128,22 @@ namespace L
 		// アップグレードを選択するときのアニメーション
 		LWP::Resource::Motion selectMotion_;
 		float cursorAnimFrame_;
+
+		float Lerp(const float& v1, const float& v2, float t) {
+			float result = v1 + (v2 - v1) * t;
+			return result;
+		}
+		//SE
+		std::unique_ptr<LWP::Resource::Audio> serectSE;
+		std::unique_ptr<LWP::Resource::Audio> chooseSE;
+		float SEvolume = 1.0f;
+		float BGMt = 0.0f;
+
+		// 選択されたときのアニメーション
+		// 0がattackUpgrade,1がescapeUpgrade
+		LWP::Resource::Motion selectedMotion_;
+		lwp::Vector3 selectedAnimPos_;
+		bool isSelected_;
 	};
 }
 lwp::Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);

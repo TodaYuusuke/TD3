@@ -80,9 +80,7 @@ private:// 定数
 private:// プライベートな変数
 	// ダッシュの方向ベクトル
 	LWP::Math::Vector3 dashVel_;
-
-	// 前のフレームでは攻撃可能か
-	bool isPreAttack_;
+	lwp::Vector3 dirVel_;
 
 	// 現在のフレーム
 	int currentFrame_;
@@ -94,11 +92,8 @@ private:// プライベートな変数
 
 	// 攻撃前アニメーション
 	LWP::Resource::Motion preAttackMotion_;
-
-	// 突進攻撃前のエフェクト
-	//std::function<void(int, lwp::Vector3)> accumulateEffect_;
-
-	// パーティクルを外側に飛ばす
-	bool isOutBlowOff_;
-	lwp::Vector3 dirVel_;
+	// 攻撃前モーションに移行しているか
+	bool isPreAttack_;
+	// アニメーションが終了した回数
+	int animEndCount_;
 };

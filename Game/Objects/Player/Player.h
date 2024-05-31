@@ -122,11 +122,6 @@ public: //*** パブリック関数 ***//
 	// 更新
 	void Update();
 
-	// ジャスト終了
-	void StartJust();
-	// ジャスト終了
-	void EndJust();
-
 	// 体力を回復する
 	void IncreaseHP();
 	// 体力が減少する
@@ -190,8 +185,6 @@ private: //*** Behavior 管理に使う関数 ***//
 	void CreatePlayerCollision();
 	// 武器
 	void CreateWeaponCollision();
-	// ジャスト居合の生成
-	void CreateJustCollision();
 
 #pragma endregion
 
@@ -210,8 +203,6 @@ private: //*** Behavior 管理に使う関数 ***//
 	void OnCollisionPlayer(lwp::Collider::HitData& data);
 	// 武器の OnCollision
 	void OnCollisionWeapon(lwp::Collider::HitData& data);
-	// ジャスト抜刀の OnCollision
-	void OnCollisionJust(lwp::Collider::HitData& data);
 
 #pragma endregion
 
@@ -291,12 +282,17 @@ public: //*** プライベート変数 ***//
 	// レベルアップ機能
 	std::unique_ptr<Level> level_;
 
-	MotionWork ClearMotion = {
+	MotionWork ClearYUpMotion = {
 		.t = 0.0f,
 		.speed = 1.0f,
 		.flag = false,
 	};
-	const float kClearMotionEnd = 60.0f;
+	MotionWork ClearZUpMotion = {
+		.t = 0.0f,
+		.speed = 1.0f,
+		.flag = false,
+	};
+	const float kClearMotionEnd = 30.0f;
 	// ゲームオーバーのアニメーション
 	LWP::Resource::Motion gameOverMotion_;
 	bool isGameOver_;
@@ -357,6 +353,22 @@ private: //*** アップデート関連クラス ***//
 	EXLife* eXLife_;
 	// Pursuitを管理するフラグ
 	bool eXLifeFlag = false;
+
+	float Lerp(const float& v1, const float& v2, float t) {
+		float result = v1 + (v2 - v1) * t;
+		return result;
+	}
+
+	//光の柱
+	LWP::Primitive::Billboard2D lightPillar_;
+	LWP::Resource::Motion lightPillarMotion_;
+
+public: //*** 音 ***//
+
+	void SetSE(std::vector<LWP::Resource::Audio*> input) { audio = input; };
+private:
+	std::vector<LWP::Resource::Audio*> audio;
+	float soundVolume = 1.0f;
 
 	// 攻撃した後の敵を登録して、そのあとの追加効果を発生させる
 	L::HitCheck hitCheck_;

@@ -13,14 +13,17 @@ using namespace LWP::Utility;
 void ClearScene::Initialize()
 {
 	// 画面全体
-	backSprite_.texture = Resource::LoadTexture("GameClear.png");
-	backSprite_.isUI = true;
-	backSprite_.isActive = true;
+	backSprite_[0].texture = Resource::LoadTexture("backGround.png");
+	backSprite_[1].texture = Resource::LoadTexture("Text/GameClear.png");
+	for (int i = 0; i < 2; i++) {
+		backSprite_[i].isUI = true;
+		backSprite_[i].isActive = true;
+	}
 	// 適当にサイズを画面全体に拡げる
-	Vector2 spSize = backSprite_.texture.t.GetSize();
-	backSprite_.transform.scale.x = 1.0f / spSize.x * 1980.0f;
-	backSprite_.transform.scale.y = 1.0f / spSize.y * 1080.0f;
-
+	//Vector2 spSize = backSprite_.texture.t.GetSize();
+	//backSprite_.transform.scale.x = 1.0f / spSize.x * 1980.0f;
+	//backSprite_.transform.scale.y = 1.0f / spSize.y * 1080.0f;
+	
 	// ボタン選択
 	toTitleSprite_.texture = Resource::LoadTexture("Text/BackForTitle.png");
 	toTitleSprite_.anchorPoint = { 0.5f,0.5f };
@@ -46,16 +49,34 @@ void ClearScene::Initialize()
 	cursolSprite_.isActive = true;
 	cursolSprite_.transform.translation.x = 1980.0f / 2.0f - 450;
 	cursolSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
+	cursolSprite_.transform.rotation.z = -std::numbers::pi / 2.0f;
 	cursolSprite_.transform.scale = { 0.5f,0.5f };
 	cursolSprite_.commonColor = new Color(0xAAAAAAFF);
 
 	sceneTransition_ = std::make_unique<SceneTransition>();
 	sceneTransition_->Initialize();
+	//BGM
+	BGM = std::make_unique<LWP::Resource::Audio>();
+	BGM->Load("fanfare.wav");
+	BGMvolume = 0.2f;
+	BGM->Play(BGMvolume, 255);
+	BGMt = 0.0f;
+	IsSceneChangeBegin = false;
+	IsSceneChangeEnd = true;
+
+	serectSE = std::make_unique<LWP::Resource::Audio>();
+	serectSE->Load("menu/cursor.mp3");
+	chooseSE = std::make_unique<LWP::Resource::Audio>();
+	chooseSE->Load("menu/patternA.mp3");
 }
 
 // 更新
 void ClearScene::Update()
 {
+	animFrame_ += lwp::GetDefaultDeltaTimeF() * 60;
+	// タイトル名を上下に動かす
+	backSprite_[1].transform.translation.y += sinf(animFrame_ * M_PI / 60) * 0.1f;
+
 #ifdef DEMO
 
 	ImGui::Begin("Scene");
@@ -67,34 +88,59 @@ void ClearScene::Update()
 
 #endif // DEMO
 
+	//だんだん音が上がる
+	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
+		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
+	}
+	else {
+		IsSceneChangeEnd = false;
+	}
+
 	// 選択肢を与える
 	// 左
-	if (Keyboard::GetTrigger(DIK_W) || Keyboard::GetTrigger(DIK_UP) ||
-		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_UP))
-	{
+	if (Keyboard::GetTrigger(DIK_W) || Keyboard::GetTrigger(DIK_UP) || Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_UP)){
 		choise_ = 0;
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f - spriteWidth + spriteOffset;
+		serectSE->Play();
 	}
 	//　右
-	else if (Keyboard::GetTrigger(DIK_S) || Keyboard::GetTrigger(DIK_DOWN) ||
-		Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN))
-	{
+	else if (Keyboard::GetTrigger(DIK_S) || Keyboard::GetTrigger(DIK_DOWN) || Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN)){
 		choise_ = 1;
 		cursolSprite_.transform.translation.y = 1080.0f / 2.0f + spriteWidth + spriteOffset;
+		serectSE->Play();
 	}
 
 
 	if (Keyboard::GetTrigger(DIK_SPACE) ||
 		Pad::GetTrigger(XINPUT_GAMEPAD_A))
 	{
+		if (IsSceneChangeBegin == false) {
+			chooseSE->Play();
+		}
 		sceneTransition_->Start();
+		IsSceneChangeBegin = true;
 	}
+	if (IsSceneChangeBegin == true) {
+		//だんだん音が下がる
+		BGMt = (std::min)(BGMt + 0.05f, 1.0f);
+		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
+	}
+
+	BGM->SetVolume(BGMvolume);
+
 	sceneTransition_->Update();
 
 	if (sceneTransition_->GetIsSceneChange()) {
-		if (choise_ == 0)
+		if (choise_ == 0) {
+			BGM->Stop();
+			chooseSE->Stop();
 			nextSceneFunction = []() {return new TitleScene; };
-		else
+		}
+		else {
+			BGM->Stop();
+			chooseSE->Stop();
 			nextSceneFunction = []() {return new GameScene; };
+		}
 	}
 }

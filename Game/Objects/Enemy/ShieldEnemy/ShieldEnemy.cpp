@@ -76,7 +76,7 @@ void ShieldEnemy::SetEnemyHP(int stage)
 void ShieldEnemy::Move()
 {
 	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;
-	MoveVec = MoveVec.Normalize();
+	MoveVec = MoveVec.Normalize() * kMove;
 	MoveVec.y = 0.0f;
 	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTimeF();
 }

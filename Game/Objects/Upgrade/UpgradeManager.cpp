@@ -103,8 +103,26 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 		.Add(&sprite_.transform.scale, lwp::Vector3{ 0.2f,0.0f,0 }, 0.1f, 0.15f, LWP::Utility::Easing::Type::InQuart)
 		.Add(&sprite_.transform.scale, lwp::Vector3{ -0.2f,-0.5f,0 }, 0.25f, 0.15f, LWP::Utility::Easing::Type::OutQuart);
 
+	// 画面中央へ行くために必要な移動量
+	lwp::Vector3 centerVelocity = { 0,-70.0f,0 };
+	// 選択後のアニメーション
+	selectedMotion_.Add(&selectedAnimPos_, centerVelocity,
+						0, 0.2f,
+						LWP::Utility::Easing::Type::OutQuart)
+				   .Add(&selectedAnimPos_, lwp::Vector3{ -1000,0.0f,0 },
+						0.5f, 0.3f,
+						LWP::Utility::Easing::Type::InQuart);
+
+	selectedMotion_.DisableDeltaTimeMultiply();
+
 	// 選択中のパーティクル
 	CursorParticleInit();
+
+	//SE
+	serectSE = std::make_unique<LWP::Resource::Audio>();
+	serectSE->Load("fanfare.wav");
+	chooseSE = std::make_unique<LWP::Resource::Audio>();
+	chooseSE->Load("fanfare.wav");
 }
 
 void L::UpgradeManager::Update(Player* player)
@@ -145,6 +163,7 @@ void L::UpgradeManager::LevelUp()
 void L::UpgradeManager::DebugWindow(Player* player)
 {
 #ifdef DEMO
+
 	ImGui::Begin("UpgradeManager");
 
 	if (ImGui::Button("ReApply"))
@@ -319,7 +338,10 @@ int L::UpgradeManager::ChooseOnce(bool f)
 
 void L::UpgradeManager::Selecting(Player* player)
 {
-	LWP::Info::SetDeltaTimeMultiply(0.0f);
+	if (!isSelected_) {
+		LWP::Info::SetDeltaTimeMultiply(0.0f);
+		sprite_.isActive = true;
+	}
 	// 場所
 	Vector2 pos{ 0.0f,625.0f };
 	sprite_.isActive = true;
@@ -337,7 +359,7 @@ void L::UpgradeManager::Selecting(Player* player)
 	sprite_.transform.translation.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2) * (cursorIndex_ + 1);
 
 	// 選択中は移動不可
-	if (!isPress_)
+	if (!isPress_ && !isSelected_)
 	{
 		// カーソル移動
 		if (0 < cursorIndex_ &&
@@ -345,6 +367,7 @@ void L::UpgradeManager::Selecting(Player* player)
 				Input::Keyboard::GetTrigger(DIK_LEFT) ||
 				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_LEFT)))
 		{
+			serectSE->Play();
 			cursorIndex_--;
 		}
 		// 最後の添え字は決定
@@ -353,6 +376,7 @@ void L::UpgradeManager::Selecting(Player* player)
 				Input::Keyboard::GetTrigger(DIK_RIGHT) ||
 				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_RIGHT)))
 		{
+			serectSE->Play();
 			cursorIndex_++;
 		}
 	}
@@ -362,6 +386,10 @@ void L::UpgradeManager::Selecting(Player* player)
 		Input::Keyboard::GetPress(DIK_RETURN) ||
 		Input::Pad::GetPress(XINPUT_GAMEPAD_A))
 	{
+		if (isPress_ == false) {
+			SEvolume = 1.0f;
+			chooseSE->Play(SEvolume);
+		}
 		isPress_ = true;
 		
 		CursorEffect_(10, sprite_.transform.translation);
@@ -372,11 +400,15 @@ void L::UpgradeManager::Selecting(Player* player)
 	}
 	else
 	{
+		//だんだん音が下がる
+		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		SEvolume = Lerp(SEvolume, 0.0f, BGMt);
+		chooseSE->SetVolume(SEvolume);
 		isPress_ = false;
 		pressTime_ = 0.0f;
 		sprite_.transform.scale = { 1,1,1 };
 	}
-	if (isPress_)
+	if (isPress_ && !isSelected_)
 	{
 		pressTime_ += lwp::GetDefaultDeltaTimeF();
 
@@ -393,12 +425,35 @@ void L::UpgradeManager::Selecting(Player* player)
 			if (kUpgradNum_ != 0)
 			{
 				Selected();
+				selectedMotion_.Start();
 			}
+			isSelected_ = true;
+			sprite_.isActive = false;
+			pressTime_ = 0.0f;
+		}
+	}
+
+	if (isSelected_) {
+		Vector2 attackUpgradeAnimPos = { LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2), 625.0f };
+		Vector2 escapeUpgradeAnimPos = { LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2) * 2, 625.0f };
+		if (choiceIndex_ == 0) {
+			attackUpgrades_[candidata_[0]]->ShowUI(attackUpgradeAnimPos + lwp::Vector2{ selectedAnimPos_.x, selectedAnimPos_.y });
+			escapeUpgrades_[candidata_[1]]->ShowUI(lwp::Vector2{ -1000,0 });
+		}
+		else{ 
+			escapeUpgrades_[candidata_[1]]->ShowUI(escapeUpgradeAnimPos + lwp::Vector2{ -selectedAnimPos_.x, selectedAnimPos_.y });
+ 			attackUpgrades_[candidata_[0]]->ShowUI(lwp::Vector2{ -1000,0 });
+		}
+		// アップグレード選択時のアニメーション終了
+		if (selectedMotion_.isEnd()) {
+			lwp::SetDeltaTimeMultiply(1.0f);
 			// アップグレードが残ってなかったら適用のみ
 			Apply(player);
 			cursorIndex_ = 0;
 			choiceIndex_ = 0;
 			pressTime_ = 0.0f;
+			selectedAnimPos_ = { 0,0 };
+			isSelected_ = false;
 		}
 	}
 	// カーソルのスプライトを上下に揺らす
@@ -415,7 +470,6 @@ void L::UpgradeManager::Selected()
 		escapeUpgrades_[candidata_[choiceIndex_]]->isApplied = true;
 	upgradedConut_++;
 	sprite_.isActive = false;
-	LWP::Info::SetDeltaTimeMultiply(1.0f);
 }
 
 void L::UpgradeManager::Apply(Player* player)
@@ -496,7 +550,7 @@ void L::UpgradeManager::CursorParticleInit()
 			data->wtf.translation += direction / 10.0f;    // 速度ベクトルを加算
 
 		return data->elapsedFrame > 10 ? true : false;
-		};
+	};
 	CursorParticle_.isActive = true;
 
 	CursorEffect_ = [&](int i, lwp::Vector3 pos)

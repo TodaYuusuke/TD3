@@ -91,9 +91,9 @@ private:// 定数
 	const int kMaxHomingShotCount = 9;
 
 	// 攻撃する範囲
-	const float kAttackRange = 40.0f;
+	const float kAttackRange = 60.0f;
 
-	// 大技を行うときの視野角
+	// 大技を行うときのカメラの視野角
 	const float kEffectFov = 120;
 
 private:// プライベートな変数

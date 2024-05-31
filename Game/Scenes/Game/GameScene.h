@@ -1,4 +1,6 @@
 #pragma once
+#include <algorithm>
+
 #include <scene/IScene.h>
 
 #pragma region GameInclude
@@ -69,7 +71,6 @@ private: //*** 変数群 ***//
 	lwp::Mesh ground;
 	// 天球
 	lwp::Mesh skydome;
-	lwp::Vector3 pos;
 	lwp::Vector3 scale = { 1.0f,1.0f,1.0f };
 	// 太陽
 	lwp::PointLight sun_;
@@ -82,4 +83,22 @@ private: //*** 変数群 ***//
 
 	// シーン遷移
 	std::unique_ptr<SceneTransition> sceneTransition_;
+	//BGM
+public:
+	float Lerp(const float& v1, const float& v2, float t) {
+		float result = v1 + (v2 - v1) * t;
+		return result;
+	}
+private:
+
+	//SE
+	bool IsSceneChangeEnd = false;
+	std::unique_ptr<LWP::Resource::Audio> BGM;
+	float BGMvolume = 0.2f;
+	float BGMt = 0.0f;
+	std::unique_ptr<LWP::Resource::Audio> atack;
+	std::unique_ptr<LWP::Resource::Audio> PlayerDead;
+	std::unique_ptr<LWP::Resource::Audio> PlayerAlive;
+	std::unique_ptr<LWP::Resource::Audio> EnemyDamege;
+	std::unique_ptr<LWP::Resource::Audio> EnemyDead;
 };

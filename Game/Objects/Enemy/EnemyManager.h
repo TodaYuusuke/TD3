@@ -102,6 +102,11 @@ private: //*** プライベート関数 ***//
 
 	void DebugWindow();
 
+public:
+	void SetSE(std::vector<LWP::Resource::Audio*> input) { audio = input; };
+private:
+	std::vector<LWP::Resource::Audio*> audio;
+	
 	/// <summary>
 	/// 経過時点でのステージを取得する
 	/// </summary>

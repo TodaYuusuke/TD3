@@ -73,5 +73,9 @@ private: //*** プライベート変数 ***//
 	//lwp::Collider::Capsule* collider_ = nullptr;
 	lwp::Collider::Capsule collider_;
 
+
+	//se
+	std::unique_ptr<LWP::Resource::Audio> getEXP;
+	float soundVolume = 0.5f;
 };
 
