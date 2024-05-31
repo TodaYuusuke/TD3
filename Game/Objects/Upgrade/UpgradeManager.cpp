@@ -107,11 +107,11 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	lwp::Vector3 centerVelocity = { 0,-70.0f,0 };
 	// 選択後のアニメーション
 	selectedMotion_.Add(&selectedAnimPos_, centerVelocity,
-						0, 0.2f,
-						LWP::Utility::Easing::Type::OutQuart)
-				   .Add(&selectedAnimPos_, lwp::Vector3{ -1000,0.0f,0 },
-						0.5f, 0.3f,
-						LWP::Utility::Easing::Type::InQuart);
+		0, 0.2f,
+		LWP::Utility::Easing::Type::OutQuart)
+		.Add(&selectedAnimPos_, lwp::Vector3{ -1000,0.0f,0 },
+			0.5f, 0.3f,
+			LWP::Utility::Easing::Type::InQuart);
 
 	selectedMotion_.DisableDeltaTimeMultiply();
 
@@ -338,7 +338,8 @@ int L::UpgradeManager::ChooseOnce(bool f)
 
 void L::UpgradeManager::Selecting(Player* player)
 {
-	if (!isSelected_) {
+	if (!isSelected_)
+	{
 		LWP::Info::SetDeltaTimeMultiply(0.0f);
 		sprite_.isActive = true;
 	}
@@ -358,6 +359,9 @@ void L::UpgradeManager::Selecting(Player* player)
 	// カーソルUI
 	sprite_.transform.translation.x = LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2) * (cursorIndex_ + 1);
 
+
+	lwp::Vector2 stick = LWP::Input::Controller::GetLStick();
+
 	// 選択中は移動不可
 	if (!isPress_ && !isSelected_)
 	{
@@ -365,7 +369,8 @@ void L::UpgradeManager::Selecting(Player* player)
 		if (0 < cursorIndex_ &&
 			(Input::Keyboard::GetTrigger(DIK_A) ||
 				Input::Keyboard::GetTrigger(DIK_LEFT) ||
-				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_LEFT)))
+				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_LEFT ||
+					0.0f < stick.x)))
 		{
 			serectSE->Play();
 			cursorIndex_--;
@@ -374,7 +379,8 @@ void L::UpgradeManager::Selecting(Player* player)
 		if (cursorIndex_ < kUpgradNum_ &&
 			(Input::Keyboard::GetTrigger(DIK_D) ||
 				Input::Keyboard::GetTrigger(DIK_RIGHT) ||
-				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_RIGHT)))
+				Input::Pad::GetTrigger(XINPUT_GAMEPAD_DPAD_RIGHT ||
+					stick.x < 0.0f)))
 		{
 			serectSE->Play();
 			cursorIndex_++;
@@ -386,12 +392,13 @@ void L::UpgradeManager::Selecting(Player* player)
 		Input::Keyboard::GetPress(DIK_RETURN) ||
 		Input::Pad::GetPress(XINPUT_GAMEPAD_A))
 	{
-		if (isPress_ == false) {
+		if (isPress_ == false)
+		{
 			SEvolume = 1.0f;
 			chooseSE->Play(SEvolume);
 		}
 		isPress_ = true;
-		
+
 		CursorEffect_(10, sprite_.transform.translation);
 
 		// カーソルをつぶしたり伸ばしたりする
@@ -433,19 +440,23 @@ void L::UpgradeManager::Selecting(Player* player)
 		}
 	}
 
-	if (isSelected_) {
+	if (isSelected_)
+	{
 		Vector2 attackUpgradeAnimPos = { LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2), 625.0f };
 		Vector2 escapeUpgradeAnimPos = { LWP::Info::GetWindowWidth() / float(kUpgradNum_ + 2) * 2, 625.0f };
-		if (choiceIndex_ == 0) {
+		if (choiceIndex_ == 0)
+		{
 			attackUpgrades_[candidata_[0]]->ShowUI(attackUpgradeAnimPos + lwp::Vector2{ selectedAnimPos_.x, selectedAnimPos_.y });
 			escapeUpgrades_[candidata_[1]]->ShowUI(lwp::Vector2{ -1000,0 });
 		}
-		else{ 
+		else
+		{
 			escapeUpgrades_[candidata_[1]]->ShowUI(escapeUpgradeAnimPos + lwp::Vector2{ -selectedAnimPos_.x, selectedAnimPos_.y });
- 			attackUpgrades_[candidata_[0]]->ShowUI(lwp::Vector2{ -1000,0 });
+			attackUpgrades_[candidata_[0]]->ShowUI(lwp::Vector2{ -1000,0 });
 		}
 		// アップグレード選択時のアニメーション終了
-		if (selectedMotion_.isEnd()) {
+		if (selectedMotion_.isEnd())
+		{
 			lwp::SetDeltaTimeMultiply(1.0f);
 			// アップグレードが残ってなかったら適用のみ
 			Apply(player);
@@ -521,11 +532,10 @@ void L::UpgradeManager::CursorParticleInit()
 	CursorParticle_.P()->isUI = true;
 	CursorParticle_.P()->material.shininess = 100.0f;
 	CursorParticle_.P()->commonColor = new Utility::Color(Utility::ColorPattern::GREEN);
-	CursorParticle_.initFunction = [](Primitive::IPrimitive* primitive)
-	{
+	CursorParticle_.initFunction = [](Primitive::IPrimitive* primitive) {
 		// 円周上に置く
 		lwp::Vector3 pos = randomOnCircle();
-		
+
 		float dir1 = Utility::GenerateRandamNum<int>(-100, 100);
 		float dir2 = Utility::GenerateRandamNum<int>(-100, 100);
 		pos.x += dir1;
@@ -539,24 +549,22 @@ void L::UpgradeManager::CursorParticleInit()
 		newData.velocity = newData.wtf.translation;
 		// パーティクル追加
 		return newData;
-	};
-	CursorParticle_.updateFunction = [this](Object::ParticleData* data)
-		{
-			// 経過フレーム追加
-			data->elapsedFrame++;
-			lwp::Vector3 direction = sprite_.transform.translation - data->velocity;
+		};
+	CursorParticle_.updateFunction = [this](Object::ParticleData* data) {
+		// 経過フレーム追加
+		data->elapsedFrame++;
+		lwp::Vector3 direction = sprite_.transform.translation - data->velocity;
 
 
-			data->wtf.translation += direction / 10.0f;    // 速度ベクトルを加算
+		data->wtf.translation += direction / 10.0f;    // 速度ベクトルを加算
 
 		return data->elapsedFrame > 10 ? true : false;
-	};
+		};
 	CursorParticle_.isActive = true;
 
-	CursorEffect_ = [&](int i, lwp::Vector3 pos)
-		{
-			CursorParticle_.P()->transform = pos;
-			CursorParticle_.Add(i);
+	CursorEffect_ = [&](int i, lwp::Vector3 pos) {
+		CursorParticle_.P()->transform = pos;
+		CursorParticle_.Add(i);
 		};
 }
 
