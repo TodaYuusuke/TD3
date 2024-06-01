@@ -110,7 +110,7 @@ private:/// 定数
 	// 視点移動の滑らかさ(0~1の間で設定)
 	const float kRotationSmoothness = 0.2f;
 	// カメラの後追い速度(0~1の間で設定)
-	const float kFollowRate = 0.25f;
+	const float kFollowRate = 1.0f;
 
 	// 追従対象との距離
 	const LWP::Math::Vector3 kTargetDist = { 0.0f,0.0f,-60.0f };

@@ -505,8 +505,6 @@ void Player::InitStaticVariable()
 		deadParticle_.Add(i);
 		};
 }
-
-//std::function<void(int, lwp::Vector3)> Player::soilSplashEffect_ = nullptr;
 #pragma endregion
 
 void Player::CheckInputMove()

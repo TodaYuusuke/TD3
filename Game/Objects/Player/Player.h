@@ -217,12 +217,7 @@ public: //*** プライベート変数 ***//
 	//*** 各状態毎のデータ ***//
 
 	// 固定されているデータを外部から取得
-	//RootData rootData_;
-	//MoveData moveData_;
 	SlashData slashData_;
-	//MomentData momentData_;
-	//DamageData damageData_;
-
 
 	//*** プログラム内だけど外部のやつ ***//
 	// カメラ
