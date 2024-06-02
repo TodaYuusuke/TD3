@@ -80,7 +80,7 @@ void GameScene::Initialize()
 	tutorialSprite1.texture = Resource::LoadTexture("Text/tutorial1.png");
 	tutorialSprite1.isUI = true;
 	tutorialSprite1.isActive = true;
-	tutorialSprite1.transform.translation.y = 120.0f;
+	tutorialSprite1.transform.translation.y = 100.0f;
 	tutorialSprite2.texture = Resource::LoadTexture("Text/tutorial2.png");
 	tutorialSprite2.isUI = true;
 	tutorialSprite2.isActive = true;
