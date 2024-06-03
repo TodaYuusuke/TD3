@@ -12,12 +12,6 @@ using namespace LWP::Utility;
 // 初期化
 void GameScene::Initialize()
 {
-	Info::ChangeShowDebugGUI();
-
-	//mainCamera.pp.use = true;
-	//mainCamera.pp.vignetting.use = true;
-	//mainCamera.pp.CreateShaderFile();
-
 	// タイマー
 	gameTimer_ = GameTimer::GetInstance();
 	gameTimer_->Initialize();
@@ -120,7 +114,7 @@ void GameScene::Initialize()
 // 更新
 void GameScene::Update()
 {
-
+#ifdef DEMO
 	ImGui::Begin("GraundScale");
 	UVscale = ground.material.uvTransform.scale.x;
 	ImGui::DragFloat("UVscale",&UVscale);
@@ -128,7 +122,7 @@ void GameScene::Update()
 	ground.material.uvTransform.scale.y = UVscale;
 
 	ImGui::End();
-
+#endif
 	//だんだん音が上がる
 	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
 		BGMt = (std::min)(BGMt + 0.01f, 1.0f);

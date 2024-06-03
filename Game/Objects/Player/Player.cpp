@@ -20,7 +20,6 @@ void Player::Initialize()
 {
 	// モデル読み込み
 	demoModel_.LoadFile("Player/Player.obj");
-	//demoModel_->transform.Parent(&world_);
 	demoModel_.isActive = true;
 	demoModel_.name = "Player";
 

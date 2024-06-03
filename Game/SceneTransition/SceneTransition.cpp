@@ -5,7 +5,7 @@ using namespace LWP::Utility;
 
 void SceneTransition::Initialize() {
 	// UI
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 2; i++) {
 		// シーン切り替え前の演出
 		preSceneTransition_[i].texture = lwp::LoadTexture("white.png");
 		preSceneTransition_[i].isActive = false;
@@ -22,14 +22,27 @@ void SceneTransition::Initialize() {
 		postSceneTransition_[i].transform.translation.x = 0.0f;
 		postSceneTransition_[i].transform.scale = { 7.5f,5,0 };
 	}
+	// シーン切り替え前の演出
+	preSceneTransition_[2].texture = lwp::LoadTexture("Transition.png");
+	preSceneTransition_[2].isActive = false;
+	preSceneTransition_[2].name = "SceneTransition";
+	preSceneTransition_[2].isUI = true;
+	preSceneTransition_[2].transform.translation.x = 1980.0f;
+
+	// シーン切り替え後の演出
+	postSceneTransition_[2].texture = lwp::LoadTexture("Transition.png");
+	postSceneTransition_[2].isActive = false;
+	postSceneTransition_[2].name = "SceneTransition";
+	postSceneTransition_[2].isUI = true;
+	postSceneTransition_[2].transform.translation.x = 0.0f;
 
 #pragma region 色の設定
 	// シーン遷移前の
-	preSceneTransition_[2].commonColor = new Utility::Color(Utility::ColorPattern::GREEN);
+	//preSceneTransition_[2].commonColor = new Utility::Color(Utility::ColorPattern::GREEN);
 	preSceneTransition_[1].commonColor = new Utility::Color(Utility::ColorPattern::CYAN);
 	preSceneTransition_[0].commonColor = new Utility::Color(Utility::ColorPattern::BLUE);
 
-	postSceneTransition_[2].commonColor = new Utility::Color(Utility::ColorPattern::GREEN);
+	//postSceneTransition_[2].commonColor = new Utility::Color(Utility::ColorPattern::GREEN);
 	postSceneTransition_[1].commonColor = new Utility::Color(Utility::ColorPattern::CYAN);
 	postSceneTransition_[0].commonColor = new Utility::Color(Utility::ColorPattern::BLUE);
 #pragma endregion
