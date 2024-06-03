@@ -9,7 +9,6 @@ void Arrow::Init(lwp::TransformEuler transform)
 	model_.commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::WHITE);
 	model_.transform.translation = transform.translation;
 	model_.transform.rotation = transform.rotation;
-	model_.transform.scale = { 5.0f,5.0f,2.0f };
 	model_.name = "Arrow!!";
 	model_.material.enableLighting = true;
 

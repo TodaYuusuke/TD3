@@ -195,7 +195,7 @@ void DashBoss::B_PreDashUpdate() {
 		dashVel_.y = 0;
 	}
 
-	if (currentFrame_ >= 140) {
+	if (currentFrame_ >= 130) {
 		behaviorRequest_ = Behavior::kDash;
 	}
 	currentFrame_++;
