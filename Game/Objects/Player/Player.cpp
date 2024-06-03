@@ -221,7 +221,7 @@ bool Player::ClearAnime()
 
 	if (ClearYUpMotion.t == 1.0f)
 	{
-		ClearZUpMotion.t = (std::min)(ClearZUpMotion.t + 0.04f, 1.0f);
+		ClearZUpMotion.t = (std::min)(ClearZUpMotion.t + 0.01f, 1.0f);
 		demoModel_.transform.scale.x = Lerp(demoModel_.transform.scale.x, 0.0f, ClearZUpMotion.t);
 		demoModel_.transform.scale.y = Lerp(demoModel_.transform.scale.y, 0.0f, ClearZUpMotion.t);
 		demoModel_.transform.scale.z = Lerp(demoModel_.transform.scale.z, 0.0f, ClearZUpMotion.t);
@@ -230,7 +230,7 @@ bool Player::ClearAnime()
 		}
 	}
 	else {
-		ClearYUpMotion.t = (std::min)(ClearYUpMotion.t + 0.05f,1.0f);
+		ClearYUpMotion.t = (std::min)(ClearYUpMotion.t + 0.01f,1.0f);
 		demoModel_.transform.translation.y = Lerp(demoModel_.transform.translation.y,5.0f, ClearYUpMotion.t);
 
 		ClearZUpMotion.targetpoint.y = demoModel_.transform.scale.y;

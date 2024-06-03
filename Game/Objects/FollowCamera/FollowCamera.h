@@ -102,7 +102,7 @@ private:/// 定数
 	/// 
 
 	// x軸の最低値
-	const float kMinAxisX = 0.06f;
+	const float kMinAxisX = 0.2f;
 	// x軸の最大値
 	const float kMaxAxisX = 0.4f;
 	// 入力感度
@@ -116,7 +116,7 @@ private:/// 定数
 	const LWP::Math::Vector3 kTargetDist = { 0.0f,0.0f,-60.0f };
 
 	// 初期角度 
-	LWP::Math::Vector3 kStartAngle = { 0.2f, 0.0f, 0.0f };
+	LWP::Math::Vector3 kStartAngle = { 0.3f, 0.0f, 0.0f };
 
 	///
 	/// ジャスト抜刀時のFov設定

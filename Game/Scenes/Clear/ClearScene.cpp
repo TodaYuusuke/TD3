@@ -54,7 +54,7 @@ void ClearScene::Initialize()
 	sceneTransition_->Initialize();
 	//BGM
 	BGM = std::make_unique<LWP::Resource::Audio>();
-	BGM->Load("fanfare.wav");
+	BGM->Load("BGM/GameClear.mp3");
 	BGMvolume = 0.2f;
 	BGM->Play(BGMvolume, 255);
 	BGMt = 0.0f;
@@ -88,7 +88,7 @@ void ClearScene::Update()
 	//だんだん音が上がる
 	if (BGMt != 1.0f && IsSceneChangeEnd == true)
 	{
-		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		BGMt = (std::min)(BGMt + 0.001f, 1.0f);
 		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
 	}
 	else

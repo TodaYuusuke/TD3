@@ -90,7 +90,7 @@ void GameScene::Initialize()
 	backSprite_.commonColor = new Color(0xAAAAAAFF);
 
 	// いったん三分
-	gameTimer_->Reset(180);
+	gameTimer_->Reset(10);
 	// ゲームが始まってから計測開始
 	gameTimer_->Start();
 
@@ -125,7 +125,7 @@ void GameScene::Update()
 #endif
 	//だんだん音が上がる
 	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
-		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		BGMt = (std::min)(BGMt + 0.001f, 1.0f);
 		BGMvolume = Lerp(BGMvolume, 0.8f, BGMt);
 	}
 	else if(IsSceneChangeEnd == true) {
@@ -150,7 +150,7 @@ void GameScene::Update()
 		//だんだん音が下がる
 		BGMt = (std::min)(BGMt + 0.002f,1.0f);
 		BGMvolume = Lerp(BGMvolume, 0.0f, BGMt);
-
+		BGM->SetVolume(BGMvolume);
 		// プレイヤーが生きているとき
 		if (player_->flag_.isAlive_) {
 			// クリアしたときの処理

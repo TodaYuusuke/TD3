@@ -55,7 +55,7 @@ void TitleScene::Update()
 
 	//だんだん音が上がる
 	if (BGMt != 1.0f && IsSceneChangeEnd == true) {
-		BGMt = (std::min)(BGMt + 0.01f, 1.0f);
+		BGMt = (std::min)(BGMt + 0.001f, 1.0f);
 		BGMvolume = Lerp(BGMvolume, 1.0f, BGMt);
 	}
 	else {
