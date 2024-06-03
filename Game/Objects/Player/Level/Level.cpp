@@ -113,7 +113,7 @@ void Level::LevelUp()
 	{
 		return;
 	}
-	reqEXP_ = GetRequestEXP();
+ 	reqEXP_ = GetRequestEXP();
 	lv_++;
 	// ここでアップデートする関数を呼び出す
 	L::UpgradeManager::LevelUp();

@@ -118,7 +118,7 @@ void DashBoss::SetPosition(lwp::Vector3 pos)
 
 void DashBoss::SetEnemyHP(int stage)
 {
-	hp_ = 200 * (1 + (stage * 0.1f));
+	hp_ = 70 * (1 + (stage * 0.1f));
 }
 
 void DashBoss::Move()
@@ -195,7 +195,7 @@ void DashBoss::B_PreDashUpdate() {
 		dashVel_.y = 0;
 	}
 
-	if (currentFrame_ >= 120) {
+	if (currentFrame_ >= 140) {
 		behaviorRequest_ = Behavior::kDash;
 	}
 	currentFrame_++;

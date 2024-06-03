@@ -167,7 +167,7 @@ LWP::Math::Vector3 ArrowBoss::GetDirectVel() {
 
 void ArrowBoss::SetEnemyHP(int stage)
 {
-	hp_ = 200 * (1 + (stage * 0.1f));
+	hp_ = 100 * (1 + (stage * 0.1f));
 }
 
 void ArrowBoss::Move()

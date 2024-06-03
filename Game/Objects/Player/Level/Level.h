@@ -42,7 +42,7 @@ private: //*** プライベート関数 ***//
 	// レベルアップ時の必要経験値量を計算する関数
 	float GetRequestEXP() const
 	{
-		return 5.0f + (lv_ - 1) * 2;
+		return 5.0f + (lv_ - 1) * 5;
 	}
 
 #ifdef DEMO

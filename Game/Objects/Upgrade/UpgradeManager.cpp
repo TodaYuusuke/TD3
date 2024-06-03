@@ -36,44 +36,25 @@ void L::UpgradeManager::Init(LWP::Object::Camera* cameraptr)
 	}
 	attackUpgrades_.clear();
 	escapeUpgrades_.clear();
-#ifdef DEMO
+
 	// アップグレードをすべて取得
 	// 最大 4 つ
 	// 攻撃
 	attackUpgrades_.push_back(new Skill_PursuitFlag);
 	attackUpgrades_.push_back(new Skill_PowerUp1);
-	attackUpgrades_.push_back(new Skill_PowerUp2);
-	attackUpgrades_.push_back(new Skill_PowerUp3);
+	attackUpgrades_.push_back(new Skill_PowerUp1);
 	attackUpgrades_.push_back(new Skill_AttackRangeUp);
 	attackUpgrades_.push_back(new Skill_BlowOffFlag);
 	attackUpgrades_.push_back(new Skill_BurningFlag);
 
 	// 逃走
 	escapeUpgrades_.push_back(new Skill_DamageInvincibleAdd);
+	escapeUpgrades_.push_back(new Skill_EXLifeFlag);
 	escapeUpgrades_.push_back(new Skill_RadiusLevelUp);
 	escapeUpgrades_.push_back(new Skill_MomentTimeDown1);
 	escapeUpgrades_.push_back(new Skill_MomentTimeDown2);
-	escapeUpgrades_.push_back(new Skill_EXLifeFlag);
 	escapeUpgrades_.push_back(new Skill_PenetrationFlag);
-	//取得していると他のアップグレードを取得したときにも適応される
 	escapeUpgrades_.push_back(new Skill_HPUp);
-
-#else
-	// 製品版
-	// アップグレードをすべて取得
-	// 最大 4 つ
-	// 攻撃
-	attackUpgrades_.push_back(new Skill_PursuitFlag);
-	attackUpgrades_.push_back(new Skill_PowerUp1);
-	attackUpgrades_.push_back(new Skill_PowerUp1);
-	attackUpgrades_.push_back(new Skill_AttackRangeUp);
-
-	// 逃走
-	escapeUpgrades_.push_back(new Skill_DamageInvincibleAdd);
-	escapeUpgrades_.push_back(new Skill_EXLifeFlag);
-	escapeUpgrades_.push_back(new Skill_BlowOffFlag);
-	escapeUpgrades_.push_back(new Skill_AttackLengthUp);
-#endif // DEMO
 
 	// すべてを初期化する
 	for (size_t i = 0; i < attackUpgrades_.size(); i++)

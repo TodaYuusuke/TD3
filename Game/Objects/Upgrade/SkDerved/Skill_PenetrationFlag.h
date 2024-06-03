@@ -4,7 +4,7 @@
 namespace L
 {
 	/// <summary>
-	/// 敵を複数倒したときに回復するようになる
+	/// 敵を15体数倒したときに回復するようになる
 	/// </summary>
 	class Skill_PenetrationFlag : public ISkill
 	{
@@ -29,7 +29,7 @@ namespace L
 
 		std::string GetTexturePass() override
 		{
-			return "Skill/white.png";
+			return "Skill/Penetration.png";
 		}
 
 		std::string GetUpgradeName() override
