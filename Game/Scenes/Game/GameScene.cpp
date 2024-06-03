@@ -39,7 +39,7 @@ void GameScene::Initialize()
 	ground.transform.scale = { 10.0f,0.1f, 10.0f };
 	ground.name = "Ground";
 	ground.material.enableLighting = true;
-	ground.material.uvTransform.scale = { 1.0f,1.0f,0 };
+	ground.material.uvTransform.scale = { 10.0f,10.0f,0 };
 
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
