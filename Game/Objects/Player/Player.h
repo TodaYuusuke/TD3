@@ -40,7 +40,7 @@ private: //*** サブクラス ***//
 	{
 		lwp::Vector3 vector_ = { 0.0f,0.0f,1.0f };		// 向かう方向
 		uint32_t relationSlash_;	// 連続居合回数
-		uint32_t maxRelation_;		// 最大居合回数(実際の数)(増減しちゃう) 
+		uint32_t maxRelation_ = 1;		// 最大居合回数(実際の数)(増減しちゃう) 
 	};
 
 #pragma endregion
