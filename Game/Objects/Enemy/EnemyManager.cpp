@@ -66,7 +66,6 @@ void EnemyManager::Update()
 		if (!enemy->GetIsActive())
 		{
 			audio[1]->Play();
-			//TODO　:　ここにSEを挿入すれば死亡時に音が出せる
 			delete enemy;
 			return true;
 		}
