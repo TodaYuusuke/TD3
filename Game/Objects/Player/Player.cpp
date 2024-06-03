@@ -19,7 +19,7 @@ float Player::MoveMax = 100.0f;
 void Player::Initialize()
 {
 	// モデル読み込み
-	demoModel_.LoadFile("cube/cube.obj");
+	demoModel_.LoadFile("Player/Player.obj");
 	//demoModel_->transform.Parent(&world_);
 	demoModel_.isActive = true;
 	demoModel_.name = "Player";

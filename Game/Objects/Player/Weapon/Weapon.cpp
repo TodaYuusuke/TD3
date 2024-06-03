@@ -2,13 +2,11 @@
 void Weapon::Initialize()
 {
 	// モデル読み込み
-	demoModel_.LoadFile("cube/cube.obj");
-	//demoModel_->transform.Parent(&world_);
+	demoModel_.LoadFile("Weapon/Weapon.obj");
 	demoModel_.isActive = true;
 	demoModel_.name = "PlayerWeapon";
 
 	demoModel_.transform.translation.z = 1.0f;
-	demoModel_.transform.scale = { 0.5f,0.5f,0.8f };
 	demoModel_.material.enableLighting = true;
 
 	behavior_ = Behavior::Root;
