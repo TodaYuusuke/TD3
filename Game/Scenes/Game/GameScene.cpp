@@ -90,7 +90,7 @@ void GameScene::Initialize()
 	backSprite_.commonColor = new Color(0xAAAAAAFF);
 
 	// いったん三分
-	gameTimer_->Reset(10);
+	gameTimer_->Reset(180);
 	// ゲームが始まってから計測開始
 	gameTimer_->Start();
 

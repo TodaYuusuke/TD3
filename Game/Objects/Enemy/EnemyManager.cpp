@@ -160,7 +160,7 @@ void EnemyManager::BossSpawn()
 	}
 	// 2分
 	// ホーミング弾を撃つボスを出現
-	else if (gameTimer_->GetCurrentSecond() == 120 && isBossSpawn_){
+	else if (gameTimer_->GetCurrentSecond() == 120 && !isBossSpawn_){
 		ArrowBossSpawn(pos);
 		isBossSpawn_ = true;
 	}

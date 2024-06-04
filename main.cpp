@@ -6,10 +6,9 @@
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-	LWP::System::StartUp(L"斬り斬り舞");
+	LWP::System::StartUp(L"3122_斬り斬り舞");
 #ifdef DEMO
 #else
-	//LWP::Window::ChangeFullScreenMode();
 	LWP::Window::ChangeFullScreenMode();
 #endif
 	LWP::System::Run(new TitleScene);
