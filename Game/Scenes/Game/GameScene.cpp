@@ -12,6 +12,11 @@ using namespace LWP::Utility;
 // 初期化
 void GameScene::Initialize()
 {
+	mainCamera.pp.use = true;
+	//mainCamera.pp.bloom.use = true;
+	////mainCamera.pp.vignetting.use = true;
+	//mainCamera.pp.CreateShaderFile();
+
 	// タイマー
 	gameTimer_ = GameTimer::GetInstance();
 	gameTimer_->Initialize();

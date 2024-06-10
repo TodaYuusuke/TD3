@@ -12,8 +12,7 @@
 #include <numbers>
 
 class Player;
-class EnemyManager
-{
+class EnemyManager {
 public:
 	/// 
 	/// Default Method
@@ -69,6 +68,8 @@ public:
 private:// 定数
 	// 敵発生頻度
 	const int kSpawnFrequency = 120;
+	// ボス発生のクールタイム
+	const int kSpawnBossCoolTime = 60;
 
 private:
 	// ゲームタイマー
@@ -93,10 +94,20 @@ private:
 
 	int SpawnNum = 0;
 
-	// ボスのスポーンフラグ
-	bool isBossSpawn_;
 	// チュートリアルフラグ
 	bool isTutorial_;
+
+	// ボスのスポーンフラグ
+	bool isBossSpawn_;
+	// 出現するボスのタイプ
+	enum class SpawnBoss {
+		NONE,
+		DASH,
+		ARROW
+	};
+	int spawnBoss_;
+	// ボス発生のクールタイム(既定の時間が過ぎるまでボスが湧かないようにする)
+	int spawnBossCoolTime_;
 
 private: //*** プライベート関数 ***//
 

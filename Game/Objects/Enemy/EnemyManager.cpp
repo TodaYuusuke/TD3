@@ -7,6 +7,9 @@ void EnemyManager::Init()
 
 	// ボスの発生フラグ
 	isBossSpawn_ = false;
+	// ボス発生のクールタイムを初期化
+	spawnBossCoolTime_ = kSpawnBossCoolTime;
+
 	// チュートリアルフラグ
 	isTutorial_ = true;
 
@@ -144,29 +147,54 @@ void EnemyManager::BossSpawn()
 	std::uniform_real_distribution<float> distribution2(8.0f, 10.0f);
 	float PtoE = distribution2(randomEngine);
 	lwp::Vector3 pos = { PtoE * divideX , 1.5f , PtoE * divideZ * signY };
+	switch (spawnBoss_) {
+	case (int)SpawnBoss::NONE:
+		if (!isBossSpawn_) {
+			// 30秒
+			// ダッシュボスを出現
+			if (gameTimer_->GetCurrentSecond() == 0 && !isBossSpawn_) {
+				spawnBoss_ = (int)SpawnBoss::DASH;
+				//DashBossSpawn(pos);
+				isBossSpawn_ = true;
+			}
+			// 1分
+			else if (gameTimer_->GetCurrentSecond() == 1 && !isBossSpawn_) {
+				//DashBossSpawn(pos);
+				spawnBoss_ = (int)SpawnBoss::DASH;
+				isBossSpawn_ = true;
+			}
+			// 2分
+			// ホーミング弾を撃つボスを出現
+			else if (gameTimer_->GetCurrentSecond() == 2 && !isBossSpawn_) {
+				//ArrowBossSpawn(pos);
+				isBossSpawn_ = true;
+				spawnBoss_ = (int)SpawnBoss::ARROW;
+			}
 
-	// 30秒
-	// ダッシュボスを出現
-	if (gameTimer_->GetCurrentSecond() == 30 && !isBossSpawn_){
+		}
+		else {
+			spawnBossCoolTime_--;
+			if (spawnBossCoolTime_ <= 0) {
+				isBossSpawn_ = false;
+				// ボス発生のクールタイムを初期化
+				spawnBossCoolTime_ = kSpawnBossCoolTime;
+			}
+		}
+
+		break;
+	case (int)SpawnBoss::DASH:
 		DashBossSpawn(pos);
-		//ArrowBossSpawn(pos);
-		isBossSpawn_ = true;
-	}
-	// 1分
-	else if (gameTimer_->GetCurrentSecond() == 60 && isBossSpawn_){
-		DashBossSpawn(pos);
-		//ArrowBossSpawn(pos);
-		isBossSpawn_ = false;
-	}
-	// 2分
-	// ホーミング弾を撃つボスを出現
-	else if (gameTimer_->GetCurrentSecond() == 120 && !isBossSpawn_){
+		spawnBoss_ = (int)SpawnBoss::NONE;
+
+		break;
+	case (int)SpawnBoss::ARROW:
 		ArrowBossSpawn(pos);
-		isBossSpawn_ = true;
+		spawnBoss_ = (int)SpawnBoss::NONE;
+		break;
 	}
 }
 
-void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos){
+void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos) {
 	NormalEnemy* enemy = new NormalEnemy();
 	enemy->Initialize();
 	enemy->SetCamera(followCamera_);
@@ -177,7 +205,7 @@ void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos){
 	enemy->SetSE(audio[0]);
 	enemys_.push_back(enemy);
 }
-void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos){
+void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos) {
 	ShieldEnemy* enemy = new ShieldEnemy();
 	enemy->Initialize();
 	enemy->SetCamera(followCamera_);
@@ -188,7 +216,7 @@ void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos){
 	enemy->SetSE(audio[0]);
 	enemys_.push_back(enemy);
 }
-void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos){
+void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos) {
 	ArrowEnemy* enemy = new ArrowEnemy();
 	enemy->Initialize();
 	enemy->SetCamera(followCamera_);
@@ -200,7 +228,7 @@ void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos){
 	enemys_.push_back(enemy);
 }
 
-void EnemyManager::DashBossSpawn(lwp::Vector3 pos){
+void EnemyManager::DashBossSpawn(lwp::Vector3 pos) {
 	DashBoss* boss = new DashBoss();
 	boss->Initialize();
 	boss->SetCamera(followCamera_);
@@ -212,7 +240,7 @@ void EnemyManager::DashBossSpawn(lwp::Vector3 pos){
 	enemys_.push_back(boss);
 }
 
-void EnemyManager::ArrowBossSpawn(lwp::Vector3 pos){
+void EnemyManager::ArrowBossSpawn(lwp::Vector3 pos) {
 	ArrowBoss* boss = new ArrowBoss();
 	boss->Initialize();
 	boss->SetCamera(followCamera_);
@@ -262,9 +290,9 @@ void EnemyManager::DebugWindow()
 
 			ImGui::TreePop();
 			ImGui::Separator();
-		}
-		index++;
 	}
+		index++;
+}
 
 	ImGui::EndChild();
 
