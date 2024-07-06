@@ -152,20 +152,20 @@ void EnemyManager::BossSpawn()
 		if (!isBossSpawn_) {
 			// 30秒
 			// ダッシュボスを出現
-			if (gameTimer_->GetCurrentSecond() == 0 && !isBossSpawn_) {
+			if (gameTimer_->GetCurrentSecond() == 30 && !isBossSpawn_) {
 				spawnBoss_ = (int)SpawnBoss::DASH;
 				//DashBossSpawn(pos);
 				isBossSpawn_ = true;
 			}
 			// 1分
-			else if (gameTimer_->GetCurrentSecond() == 1 && !isBossSpawn_) {
+			else if (gameTimer_->GetCurrentSecond() == 60 && !isBossSpawn_) {
 				//DashBossSpawn(pos);
 				spawnBoss_ = (int)SpawnBoss::DASH;
 				isBossSpawn_ = true;
 			}
 			// 2分
 			// ホーミング弾を撃つボスを出現
-			else if (gameTimer_->GetCurrentSecond() == 2 && !isBossSpawn_) {
+			else if (gameTimer_->GetCurrentSecond() == 120 && !isBossSpawn_) {
 				//ArrowBossSpawn(pos);
 				isBossSpawn_ = true;
 				spawnBoss_ = (int)SpawnBoss::ARROW;
