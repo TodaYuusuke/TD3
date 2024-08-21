@@ -69,7 +69,7 @@ private:// 定数
 	// 敵発生頻度
 	const int kSpawnFrequency = 120;
 	// ボス発生のクールタイム
-	const int kSpawnBossCoolTime = 60;
+	const int kSpawnBossCoolTime = 120;
 
 private:
 	// ゲームタイマー
@@ -91,6 +91,7 @@ private:
 
 	// 現在のフレーム
 	int currentFrame_ = 0;
+	int spawnFrequency_ = 0;
 
 	int SpawnNum = 0;
 

@@ -42,7 +42,7 @@ private:// 定数
 	const int kAttackWaitTime = 180;
 
 	// 移動の定数
-	const float kMove = 4.0f;
+	const float kMove = 5.0f;
 
 private:
 	lwp::Vector3 Rot;

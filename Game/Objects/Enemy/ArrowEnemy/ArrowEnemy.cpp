@@ -103,7 +103,7 @@ void ArrowEnemy::Move()
 	lwp::Vector3 MoveVec = player_->GetWorldTransform()->translation - models_[0].transform.translation;
 	MoveVec = MoveVec.Normalize();
 	MoveVec.y = 0.0f;
-	models_[0].transform.translation += MoveVec * 2.0f * LWP::Info::GetDeltaTimeF();
+	models_[0].transform.translation += MoveVec * 3.0f * LWP::Info::GetDeltaTimeF();
 }
 
 void ArrowEnemy::Attack()

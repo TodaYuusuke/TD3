@@ -11,7 +11,7 @@ namespace L
 		// 燃えるダメージ
 		//const float kBurningDamage_ = 1.0f;
 		// ダメージを与える間隔
-		const int kBurningInterval_ = 10;
+		const int kBurningInterval_ = 180;
 	public:
 		// 初期化
 		void Init() override;

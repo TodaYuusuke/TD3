@@ -8,6 +8,7 @@
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	LWP::System::StartUp("3122_斬り斬り舞");
 #ifdef DEMO
+	LWP::Window::ChangeWindowMode();
 #else
 	LWP::Window::ChangeFullScreenMode();
 #endif

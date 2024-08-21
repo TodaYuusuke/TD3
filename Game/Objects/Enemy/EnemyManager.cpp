@@ -6,7 +6,7 @@ void EnemyManager::Init()
 	gameTimer_ = GameTimer::GetInstance();
 
 	// ボスの発生フラグ
-	isBossSpawn_ = false;
+	isBossSpawn_ = true;
 	// ボス発生のクールタイムを初期化
 	spawnBossCoolTime_ = kSpawnBossCoolTime;
 
@@ -27,6 +27,8 @@ void EnemyManager::Init()
 	tutorialEnemy_->SetManager(exp_);
 	tutorialEnemy_->SetSE(audio[0]);
 	enemys_.push_back(tutorialEnemy_);
+
+	spawnFrequency_ = 0;
 }
 
 void EnemyManager::Update()
@@ -47,7 +49,7 @@ void EnemyManager::Update()
 			{
 				EnemySpawn();
 			}
-			currentFrame_ = 0;
+			currentFrame_ = spawnFrequency_;
 		}
 		// ボスキャラの出現
 		BossSpawn();
@@ -60,6 +62,21 @@ void EnemyManager::Update()
 			isTutorial_ = false;
 		}
 	}
+
+	//ゲームの経過時間で敵を増やす
+	if (gameTimer_->GetCurrentSecond() == 50) {
+		spawnFrequency_ = 70;
+	}
+	if (gameTimer_->GetCurrentSecond() == 90) {
+		spawnFrequency_ = 0;
+	}
+	if (gameTimer_->GetCurrentSecond() == 120) {
+		spawnFrequency_ = 70;
+	}
+	if (gameTimer_->GetCurrentSecond() == 140) {
+		spawnFrequency_ = 0;
+	}
+
 
 #ifdef DEMO
 	DebugWindow();
@@ -118,7 +135,6 @@ void EnemyManager::EnemySpawn()
 	if (number <= 0.5f)
 	{
 		NormalEnemySpawn(pos);
-		//ArrowEnemySpawn(pos);
 	}
 	else if (number <= 0.8f)
 	{
@@ -127,7 +143,6 @@ void EnemyManager::EnemySpawn()
 	else
 	{
 		ShieldEnemySpawn(pos);
-		//NormalEnemySpawn(pos);
 	}
 
 }
@@ -147,51 +162,35 @@ void EnemyManager::BossSpawn()
 	std::uniform_real_distribution<float> distribution2(8.0f, 10.0f);
 	float PtoE = distribution2(randomEngine);
 	lwp::Vector3 pos = { PtoE * divideX , 1.5f , PtoE * divideZ * signY };
-	switch (spawnBoss_) {
-	case (int)SpawnBoss::NONE:
-		if (!isBossSpawn_) {
-			// 30秒
-			// ダッシュボスを出現
-			if (gameTimer_->GetCurrentSecond() == 30 && !isBossSpawn_) {
-				spawnBoss_ = (int)SpawnBoss::DASH;
-				//DashBossSpawn(pos);
-				isBossSpawn_ = true;
-			}
-			// 1分
-			else if (gameTimer_->GetCurrentSecond() == 60 && !isBossSpawn_) {
-				//DashBossSpawn(pos);
-				spawnBoss_ = (int)SpawnBoss::DASH;
-				isBossSpawn_ = true;
-			}
-			// 2分
-			// ホーミング弾を撃つボスを出現
-			else if (gameTimer_->GetCurrentSecond() == 120 && !isBossSpawn_) {
-				//ArrowBossSpawn(pos);
-				isBossSpawn_ = true;
-				spawnBoss_ = (int)SpawnBoss::ARROW;
-			}
-
+	// 30秒
+	// ダッシュボスを出現
+	if (isBossSpawn_) {
+		if (gameTimer_->GetCurrentSecond() == 30) {
+			DashBossSpawn(pos);
+			isBossSpawn_ = false;
 		}
-		else {
-			spawnBossCoolTime_--;
-			if (spawnBossCoolTime_ <= 0) {
-				isBossSpawn_ = false;
-				// ボス発生のクールタイムを初期化
-				spawnBossCoolTime_ = kSpawnBossCoolTime;
-			}
+		// 1分
+		else if (gameTimer_->GetCurrentSecond() == 60){
+			DashBossSpawn(pos);
+			isBossSpawn_ = false;
+		}
+		// 2分
+		// ホーミング弾を撃つボスを出現
+		else if (gameTimer_->GetCurrentSecond() == 120) {
+			ArrowBossSpawn(pos);
+			isBossSpawn_ = false;
 		}
 
-		break;
-	case (int)SpawnBoss::DASH:
-		DashBossSpawn(pos);
-		spawnBoss_ = (int)SpawnBoss::NONE;
-
-		break;
-	case (int)SpawnBoss::ARROW:
-		ArrowBossSpawn(pos);
-		spawnBoss_ = (int)SpawnBoss::NONE;
-		break;
 	}
+	else {
+		spawnBossCoolTime_--;
+		if (spawnBossCoolTime_ == 0){
+			// ボス発生のクールタイムを初期化
+			spawnBossCoolTime_ = kSpawnBossCoolTime;
+			isBossSpawn_ = true;
+		}
+	}
+
 }
 
 void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos) {
@@ -267,6 +266,7 @@ void EnemyManager::JumpBossSpawn(lwp::Vector3 pos)
 void EnemyManager::DebugWindow()
 {
 	ImGui::Begin("EnemyManager");
+	ImGui::Text("%d", spawnFrequency_);
 	ImGui::InputInt("Spawn", &SpawnNum);
 	if (ImGui::Button("Create"))
 	{
@@ -276,6 +276,7 @@ void EnemyManager::DebugWindow()
 		}
 	}
 	ImGui::Text("%d", enemys_.size());
+
 
 	ImGui::BeginChild(ImGui::GetID((void*)0));
 

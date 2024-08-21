@@ -102,7 +102,7 @@ void GameScene::Initialize()
 	// 点光源
 	sun_.transform.translation.y = 30.0f;
 	sun_.intensity = 1.0f;
-	sun_.radius = 105.0f;
+	sun_.radius = 60.0f;
 	sun_.decay = 0.58f;
 
 	sceneTransition_ = std::make_unique<SceneTransition>();

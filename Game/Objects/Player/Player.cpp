@@ -14,7 +14,7 @@ using Behavior = IStatus::Behavior;
 using namespace LWP;
 using namespace LWP::Utility;
 using namespace LWP::Object::Collider;
-float Player::MoveMax = 100.0f;
+float Player::MoveMax = 50.0f;
 
 void Player::Initialize()
 {

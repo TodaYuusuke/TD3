@@ -118,7 +118,7 @@ void DashBoss::SetPosition(lwp::Vector3 pos)
 
 void DashBoss::SetEnemyHP(int stage)
 {
-	hp_ = 70 * (1 + (stage * 0.1f));
+	hp_ = 100 * (1 + (stage * 0.3f));
 }
 
 void DashBoss::Move()

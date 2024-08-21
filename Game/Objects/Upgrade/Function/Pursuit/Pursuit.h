@@ -17,7 +17,7 @@ private:
 	std::vector<IEnemy*> enemys_;
 	// 攻撃力
 	int* damage_ = nullptr;
-	const int kInterval = 30;
+	const int kInterval = 60;
 	int interval = 30;
 	std::vector<LWP::Primitive::Mesh> models_;
 };
