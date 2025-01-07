@@ -1,5 +1,6 @@
 #pragma once
 #include <scene/IScene.h>
+#include "Game/Objects/FollowCamera/FollowCamera.h"
 
 class Sample final
 	: public IScene {
@@ -33,6 +34,8 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 
 	// サブカメラ
 	LWP::Object::Camera* subCamera;
+	// 追従カメラ
+	std::unique_ptr<FollowCamera> followCamera_;
 
 	// パーティクル
 	LWP::Object::Particle* particle;
