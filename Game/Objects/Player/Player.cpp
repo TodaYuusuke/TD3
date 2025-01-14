@@ -38,8 +38,6 @@ void Player::Initialize()
 	weapon_->SetParent(&demoModel_.transform);
 	//weapon_->SetTPointer(&easeT_);
 
-	// 状態の情報を設定
-	//InitDatas();
 	behavior_ = Behavior::Root;
 
 	SlashPanel::InitParticle();

@@ -24,7 +24,7 @@ void EnemyManager::Init()
 	tutorialEnemy_->SetPosition(LWP::Math::Vector3{ 0,0.5f,10 });
 	tutorialEnemy_->SetIsTutorial(true);
 	tutorialEnemy_->SetHP(10);
-	tutorialEnemy_->SetManager(exp_);
+	tutorialEnemy_->SetEXPManager(exp_);
 	tutorialEnemy_->SetSE(audio[0]);
 	enemys_.push_back(tutorialEnemy_);
 
@@ -199,7 +199,7 @@ void EnemyManager::NormalEnemySpawn(lwp::Vector3 pos) {
 	enemy->SetCamera(followCamera_);
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
-	enemy->SetManager(exp_);
+	enemy->SetEXPManager(exp_);
 	enemy->SetEnemyHP(GetCurrentStage());
 	enemy->SetSE(audio[0]);
 	enemys_.push_back(enemy);
@@ -210,7 +210,7 @@ void EnemyManager::ShieldEnemySpawn(lwp::Vector3 pos) {
 	enemy->SetCamera(followCamera_);
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
-	enemy->SetManager(exp_);
+	enemy->SetEXPManager(exp_);
 	enemy->SetEnemyHP(GetCurrentStage());
 	enemy->SetSE(audio[0]);
 	enemys_.push_back(enemy);
@@ -221,7 +221,7 @@ void EnemyManager::ArrowEnemySpawn(lwp::Vector3 pos) {
 	enemy->SetCamera(followCamera_);
 	enemy->SetTarget(player_);
 	enemy->SetPosition(pos);
-	enemy->SetManager(exp_);
+	enemy->SetEXPManager(exp_);
 	enemy->SetEnemyHP(GetCurrentStage());
 	enemy->SetSE(audio[0]);
 	enemys_.push_back(enemy);
@@ -233,7 +233,7 @@ void EnemyManager::DashBossSpawn(lwp::Vector3 pos) {
 	boss->SetCamera(followCamera_);
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
-	boss->SetManager(exp_);
+	boss->SetEXPManager(exp_);
 	boss->SetEnemyHP(GetCurrentStage());
 	boss->SetSE(audio[0]);
 	enemys_.push_back(boss);
@@ -245,7 +245,7 @@ void EnemyManager::ArrowBossSpawn(lwp::Vector3 pos) {
 	boss->SetCamera(followCamera_);
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
-	boss->SetManager(exp_);
+	boss->SetEXPManager(exp_);
 	boss->SetEnemyHP(GetCurrentStage());
 	boss->SetSE(audio[0]);
 	enemys_.push_back(boss);
@@ -258,7 +258,7 @@ void EnemyManager::JumpBossSpawn(lwp::Vector3 pos)
 	boss->SetCamera(followCamera_);
 	boss->SetTarget(player_);
 	boss->SetPosition(pos);
-	boss->SetManager(exp_);
+	boss->SetEXPManager(exp_);
 	boss->SetSE(audio[0]);
 	enemys_.push_back(boss);
 }

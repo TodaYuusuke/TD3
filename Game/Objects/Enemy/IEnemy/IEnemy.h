@@ -104,7 +104,7 @@ public: //*** ゲッターセッター ***//
 	void SetHP(int HP) { hp_ = HP; }
 	// カメラのアドレスを設定
 	virtual void SetCamera(FollowCamera* camera) { followCamera_ = camera; }
-	void SetManager(ExpManager* p) { manager_ = p; }
+	void SetEXPManager(ExpManager* p) { manager_ = p; }
 	void SetSpawnEffect(lwp::Vector3 pos)
 	{
 		// 出現時にパーティクルを出す
